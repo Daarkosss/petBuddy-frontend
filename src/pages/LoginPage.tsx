@@ -6,9 +6,7 @@ const LoginPage: React.FC = () => {
   return (
     <div>
       <div className="sticky-header">
-        <h1 className='title'>
-            Pet Buddy
-        </h1>
+        <h1 className='title'>Pet Buddy</h1>
       </div>
       <div className="login-container">
         <LoginPanel />
