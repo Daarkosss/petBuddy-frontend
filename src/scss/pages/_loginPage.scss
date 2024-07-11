@@ -4,19 +4,24 @@
   justify-content: center;
   align-items: center;
   height: 90vh;
-}
 
-.login-panel {
-  width: 400px;
-  height: 300px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: $secondary-color;
-  gap: 50px;
-  border-radius: 20px;
-  box-shadow: 6px 8px 5px rgba(0, 0, 0, 0.24);
-  font-size: 42px;
-  border: 1px solid $primary-color;
+  .login-panel {
+    width: 400px;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: $secondary-color;
+    gap: 50px;
+    border-radius: 20px;
+    box-shadow: 6px 8px 5px rgba(0, 0, 0, 0.24);
+    border: 1px solid $primary-color;
+
+    .title {
+      color: $primary-color;
+      text-align: center;
+      font-size: 34px;
+    }
+  }
 }

@@ -9,7 +9,6 @@ const Home = () => {
     const fetchMessage = async () => {
       try {
         const response = await api.getTestMessage();
-        console.log('response' + response)
         setMessage(response);
       } catch (error) {
         setMessage('Failed to fetch message');
@@ -19,12 +18,11 @@ const Home = () => {
     fetchMessage();
   }, []);
 
-
   return (
     <div>
       <Header />
       <div className="home-container">
-        <h1>Welcome home with {message}</h1>
+        <h1>Welcome home, message from backend: {message}</h1>
       </div>
     </div>
   )
