@@ -23,6 +23,9 @@ dependencies:
   mobx:
     specifier: ^6.13.0
     version: 6.13.0
+  mobx-react-lite:
+    specifier: ^4.0.7
+    version: 4.0.7(mobx@6.13.0)(react-dom@18.3.1)(react@18.3.1)
   react:
     specifier: ^18.3.1
     version: 18.3.1
@@ -1788,6 +1791,25 @@ packages:
       brace-expansion: 2.0.1
     dev: true
 
+  /mobx-react-lite@4.0.7(mobx@6.13.0)(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-RjwdseshK9Mg8On5tyJZHtGD+J78ZnCnRaxeQDSiciKVQDUbfZcXhmld0VMxAwvcTnPEHZySGGewm467Fcpreg==}
+    peerDependencies:
+      mobx: ^6.9.0
+      react: ^16.8.0 || ^17 || ^18
+      react-dom: '*'
+      react-native: '*'
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
+      react-native:
+        optional: true
+    dependencies:
+      mobx: 6.13.0
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+      use-sync-external-store: 1.2.2(react@18.3.1)
+    dev: false
+
   /mobx@6.13.0:
     resolution: {integrity: sha512-1laWODrBWmB7mDJ8EClCjUQTyLwJ0ydJgE4FtK7t9r3JnjXgc9OhmYs2P4RtHrY1co5+4T6cKP2UswX2SU29mA==}
     dev: false
@@ -2250,6 +2272,14 @@ packages:
     dependencies:
       punycode: 2.3.1
     dev: true
+
+  /use-sync-external-store@1.2.2(react@18.3.1):
+    resolution: {integrity: sha512-PElTlVMwpblvbNqQ82d2n6RjStvdSoNe9FG28kNfz3WiXilJm4DdNkEzRhCZuIDwY8U08WVihhGR5iRqAwfDiw==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.3.1
+    dev: false
 
   /vite@5.3.3(sass@1.77.7):
     resolution: {integrity: sha512-NPQdeCU0Dv2z5fu+ULotpuq5yfCS1BzKUIPhNbP3YBfAMGJXbt2nS+sbTFu+qchaqWTD+H3JK++nRwr6XIcp6A==}
