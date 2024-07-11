@@ -1,8 +1,9 @@
 import { toast } from 'react-toastify';
+import keycloak from '../Keycloack';
 
 const backendHost = import.meta.env.VITE_BACKEND_HOST || window.location.hostname;
 const backendPort = import.meta.env.VITE_BACKEND_PORT || '8080';
-export const PATH_PREFIX = `https://${backendHost}:${backendPort}/`;
+export const PATH_PREFIX = `http://${backendHost}:${backendPort}/`;
 
 type Method = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
@@ -45,16 +46,31 @@ class API {
     path: string,
     body?: unknown
   ): Promise<T> {
-    // if (store.auth.user?.userToken) {
+    console.log('keycloak token while request: ' + localStorage.getItem('token'))
+    if (localStorage.getItem('token')) {
       return this.fetch<T>(
         method,
         path,
         body,
-        // { 'Authorization': `Bearer ${store.auth.user.userToken}` },
+        { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
       );
-    // } else {
-    //   return Promise.reject(new Error('No user token available'));
-    // }
+    } else {
+      return Promise.reject(new Error('No user token available'));
+    }
+  }
+
+  async getTestMessage(): Promise<string> {
+    try {
+      console.log('getting test message')
+      const response = await this.authorizedFetch<string>(
+        'GET',
+        'api/test'
+      )
+      console.log(response)
+      return response
+    } catch(error: unknown) {
+      return "brak"
+    }
   }
 
   async login(): Promise<User | null> {
