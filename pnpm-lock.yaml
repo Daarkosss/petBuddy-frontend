@@ -20,6 +20,9 @@ dependencies:
   keycloak-js:
     specifier: ^23.0.0
     version: 23.0.7
+  mobx:
+    specifier: ^6.13.0
+    version: 6.13.0
   react:
     specifier: ^18.3.1
     version: 18.3.1
@@ -1784,6 +1787,10 @@ packages:
     dependencies:
       brace-expansion: 2.0.1
     dev: true
+
+  /mobx@6.13.0:
+    resolution: {integrity: sha512-1laWODrBWmB7mDJ8EClCjUQTyLwJ0ydJgE4FtK7t9r3JnjXgc9OhmYs2P4RtHrY1co5+4T6cKP2UswX2SU29mA==}
+    dev: false
 
   /ms@2.1.2:
     resolution: {integrity: sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==}

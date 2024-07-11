@@ -1,4 +1,5 @@
 import { toast } from 'react-toastify';
+import store from '../store/RootStore';
 
 const backendHost = import.meta.env.VITE_BACKEND_HOST || window.location.hostname;
 const backendPort = import.meta.env.VITE_BACKEND_PORT || '8080';
@@ -45,13 +46,12 @@ class API {
     path: string,
     body?: unknown
   ): Promise<T> {
-    console.log('keycloak token while request: ' + localStorage.getItem('token'))
-    if (localStorage.getItem('token')) {
+    if (store.userToken) {
       return this.fetch<T>(
         method,
         path,
         body,
-        { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+        { 'Authorization': `Bearer ${store.userToken}` },
       );
     } else {
       return Promise.reject(new Error('No user token available'));
