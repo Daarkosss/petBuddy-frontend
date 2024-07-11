@@ -1,5 +1,4 @@
 import { toast } from 'react-toastify';
-import keycloak from '../Keycloack';
 
 const backendHost = import.meta.env.VITE_BACKEND_HOST || window.location.hostname;
 const backendPort = import.meta.env.VITE_BACKEND_PORT || '8080';
