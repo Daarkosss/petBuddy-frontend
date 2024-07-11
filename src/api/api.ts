@@ -65,7 +65,7 @@ class API {
         'GET',
         'api/test'
       )
-      console.log(response)
+      toast.success(JSON.stringify(response));
       return response
     } catch(error: unknown) {
       return "brak"

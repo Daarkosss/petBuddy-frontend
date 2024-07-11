@@ -4,11 +4,16 @@ import { ReactKeycloakProvider } from "@react-keycloak/web";
 import keycloak from "./Keycloack.ts";
 import { BrowserRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import App from './App.tsx'
 import './scss/main.scss';
 
+const keycloakInitOptions = {
+  onLoad: 'check-sso',
+};
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <ReactKeycloakProvider authClient={keycloak}>
+  <ReactKeycloakProvider authClient={keycloak} initOptions={keycloakInitOptions}>
     <BrowserRouter>
       <App />
       <ToastContainer
