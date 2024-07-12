@@ -2,7 +2,7 @@ import { toast } from 'react-toastify';
 import store from '../store/RootStore';
 
 const backendHost = import.meta.env.VITE_BACKEND_HOST || window.location.hostname;
-const backendPort = import.meta.env.VITE_BACKEND_PORT || '8080';
+const backendPort = import.meta.env.VITE_BACKEND_PORT || '8081';
 export const PATH_PREFIX = `http://${backendHost}:${backendPort}/`;
 
 type Method = 'GET' | 'POST' | 'PUT' | 'DELETE';
