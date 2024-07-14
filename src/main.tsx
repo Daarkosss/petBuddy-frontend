@@ -10,6 +10,7 @@ import './scss/main.scss';
 
 const keycloakInitOptions = {
   onLoad: 'check-sso',
+  pkceMethod: 'S256',
 };
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
