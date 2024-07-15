@@ -10,6 +10,7 @@ export interface UserProfile {
 }
 
 class RootStore {
+  xsrfToken: string | undefined;
 
   constructor() {
     makeAutoObservable(this);
@@ -18,6 +19,15 @@ class RootStore {
   get userToken(): string | undefined {
     return keycloak.token
   }
+
+  get getXsrfToken(): string | undefined {
+    return this.xsrfToken
+  }
+
+  setXsrfToken(token: string): void {
+    this.xsrfToken = token
+  }
+
 }
 
 export default new RootStore();

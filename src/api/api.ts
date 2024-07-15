@@ -25,9 +25,11 @@ class API {
       method,
       headers: {
         'Content-Type': 'application/json',
+        'X-XSRF-TOKEN': store.getXsrfToken,
         ...headers
       },
       body: body ? JSON.stringify(body) : undefined,
+      credentials: 'include'
     } as RequestInit
 
     const response = await fetch(`${PATH_PREFIX}${path}`, options)
@@ -69,6 +71,18 @@ class API {
       return response
     } catch(error: unknown) {
       return "brak"
+    }
+  }
+
+  async getXsrfToken(): Promise<void> {
+    try {
+      const response = await this.fetch<void>(
+        'GET',
+        'api/csrf'
+      )
+      return response
+    } catch(error: unknown) {
+      return;
     }
   }
 

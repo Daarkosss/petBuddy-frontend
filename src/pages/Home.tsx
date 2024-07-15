@@ -1,23 +1,33 @@
 import { useEffect, useState } from "react";
 import { api } from "../api/api";
 import { Header } from "../components/Header";
+import { getCookie } from 'typescript-cookie';
+import store from '../store/RootStore';
 
 const Home = () => {
   const [message, setMessage] = useState<string>('Loading...');
 
+  
   useEffect(() => {
-    const fetchMessage = async () => {
+    const getXsrfTokenAndGetHomeInfo = async () => {
       try {
+        await api.getXsrfToken()
+        
+        let xsrf = getCookie("XSRF-TOKEN")!
+        store.setXsrfToken(xsrf)
+        console.log("xsrf token: " + getCookie("XSRF-TOKEN")!)
+
         const response = await api.getTestMessage();
         setMessage(response);
-      } catch (error) {
-        setMessage('Failed to fetch message');
+
+      } catch(error) {
+        console.log(error)
       }
     }
+    getXsrfTokenAndGetHomeInfo();
+  }, [])  
 
-    fetchMessage();
-  }, []);
-
+  
   return (
     <div>
       <Header />
