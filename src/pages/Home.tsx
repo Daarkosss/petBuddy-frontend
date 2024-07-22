@@ -3,14 +3,12 @@ import { api } from "../api/api";
 import { Header } from "../components/Header";
 import { Button } from "react-bootstrap";
 
-
 const Home = () => {
   const [message, setMessage] = useState<string>('Loading...');
 
   useEffect(() => {
     const fetchMessage = async () => {
       try {
-        // await api.getXsrfToken();
         // const response = await api.getTestMessage();
         // setMessage(response);
       } catch (error) {
