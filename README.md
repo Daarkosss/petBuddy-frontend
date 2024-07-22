@@ -1,3 +1,5 @@
+# Pet Buddy - frontend
+
 ## How to run it?
 
 1. Install dependencies using `pnpm`
