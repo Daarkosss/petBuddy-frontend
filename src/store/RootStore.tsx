@@ -1,5 +1,6 @@
 import { makeAutoObservable } from "mobx";
 import keycloak from "../Keycloack";
+import { getCookie, removeCookie } from "typescript-cookie";
 
 export interface UserProfile {
   username?: string;
@@ -17,6 +18,14 @@ class RootStore {
 
   get userToken(): string | undefined {
     return keycloak.token
+  }
+
+  get xsrfToken(): string | undefined {
+    return getCookie("XSRF-TOKEN");
+  }
+
+  reset = () => {
+    removeCookie('XSRF-TOKEN');
   }
 }
 

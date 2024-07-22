@@ -21,13 +21,16 @@ class API {
     body?: unknown,
     headers: HeadersInit = {},
   ): Promise<T> {
+    
     const options = {
       method,
       headers: {
         'Content-Type': 'application/json',
+        'X-XSRF-TOKEN': store.xsrfToken,
         ...headers
       },
       body: body ? JSON.stringify(body) : undefined,
+      credentials: 'include'
     } as RequestInit
 
     const response = await fetch(`${PATH_PREFIX}${path}`, options)
@@ -72,20 +75,32 @@ class API {
     }
   }
 
-  async login(): Promise<User | null> {
+  async getXsrfToken(): Promise<void> {
     try {
-      console.log('login');
-      const response = await this.authorizedFetch<User>(
-        'POST',
-        'user/login',
-        // { email: store.auth.user?.email }
-      );
-      return response;
-    } catch (error: unknown) {
-      console.log(error);
-      return null;
+      const response = await this.fetch<void>(
+        'GET',
+        'api/csrf'
+      )
+      return response
+    } catch(error: unknown) {
+      return;
     }
   }
+
+  // async login(): Promise<User | null> {
+  //   try {
+  //     console.log('login');
+  //     const response = await this.authorizedFetch<User>(
+  //       'POST',
+  //       'user/login',
+  //       // { email: store.auth.user?.email }
+  //     );
+  //     return response;
+  //   } catch (error: unknown) {
+  //     console.log(error);
+  //     return null;
+  //   }
+  // }
 }
 
 export const api = new API();
