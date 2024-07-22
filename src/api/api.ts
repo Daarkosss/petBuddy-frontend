@@ -21,6 +21,7 @@ class API {
     body?: unknown,
     headers: HeadersInit = {},
   ): Promise<T> {
+    
     const options = {
       method,
       headers: {
@@ -86,21 +87,20 @@ class API {
     }
   }
 
-  async login(): Promise<User | null> {
-    try {
-      console.log('login');
-      const response = await this.authorizedFetch<User>(
-        'POST',
-        'user/login',
-        // { email: store.auth.user?.email }
-      );
-      await this.getXsrfToken();
-      return response;
-    } catch (error: unknown) {
-      console.log(error);
-      return null;
-    }
-  }
+  // async login(): Promise<User | null> {
+  //   try {
+  //     console.log('login');
+  //     const response = await this.authorizedFetch<User>(
+  //       'POST',
+  //       'user/login',
+  //       // { email: store.auth.user?.email }
+  //     );
+  //     return response;
+  //   } catch (error: unknown) {
+  //     console.log(error);
+  //     return null;
+  //   }
+  // }
 }
 
 export const api = new API();

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useKeycloak } from "@react-keycloak/web";
 import { Button } from 'react-bootstrap';
 
