@@ -25,7 +25,7 @@ class API {
       method,
       headers: {
         'Content-Type': 'application/json',
-        'X-XSRF-TOKEN': store.getXsrfToken,
+        'X-XSRF-TOKEN': store.xsrfToken,
         ...headers
       },
       body: body ? JSON.stringify(body) : undefined,
@@ -94,6 +94,7 @@ class API {
         'user/login',
         // { email: store.auth.user?.email }
       );
+      await this.getXsrfToken();
       return response;
     } catch (error: unknown) {
       console.log(error);
