@@ -26,9 +26,9 @@ const Home = () => {
       <Header />
       <div className="home-container">
         <h1>Welcome home, message from backend: {message}</h1>
-        <Button variant="outline-light" onClick={() => api.getTestMessage()}>Request message</Button>
-        <Button variant="outline-info" onClick={() => api.getXsrfToken()}>Fetch xsrf token</Button>
-        <Button variant="info" onClick={() => navigate('/caretaker/form')}>Change caretaker info</Button>
+        <Button variant="outline-dark" onClick={() => api.getTestMessage()}>Request message</Button>
+        <Button variant="outline-dark" onClick={() => api.getXsrfToken()}>Fetch xsrf token</Button>
+        <Button variant="dark" onClick={() => navigate('/caretaker/form')}>Change caretaker info</Button>
       </div>
     </div>
   )

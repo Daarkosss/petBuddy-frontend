@@ -12,7 +12,7 @@ const LoginPanel: React.FC = () => {
   return (
     <div className="login-panel">
       <div className="title">To proceed you must be logged in</div>
-      <Button size="lg" variant="dark" onClick={() => keycloak.login()}>
+      <Button size="lg" variant="light" onClick={() => keycloak.login()}>
         Login or register with Keycloack
       </Button>
     </div>

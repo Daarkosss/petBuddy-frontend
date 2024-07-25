@@ -12,14 +12,14 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: $secondary-color;
+    background-color: $primary-color;
     gap: 50px;
     border-radius: 20px;
     box-shadow: 6px 8px 5px rgba(0, 0, 0, 0.24);
     border: 1px solid $primary-color;
 
     .title {
-      color: $primary-color;
+      color: $secondary-color;
       text-align: center;
       font-size: 34px;
     }
