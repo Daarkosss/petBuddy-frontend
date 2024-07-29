@@ -64,28 +64,28 @@ const CaretakerForm: React.FC<CaregiverFormProps> = ({ onSubmit }) => {
       <div className='form-container'>
         <Form onSubmit={handleSubmit}>
           <Form.Group controlId="location" className='form-group'>
-            <Form.Label className='form-label'>{t('location')}</Form.Label>
+            <Form.Label className='form-label'>{t('caretakerForm.location')}</Form.Label>
             <Form.Control
               type="text"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
-              placeholder={t('enterCity')}
+              placeholder={t('caretakerForm.enterCity')}
               className='form-control'
             />
           </Form.Group>
 
           <Form.Group controlId="animalTypes" className='form-group'>
-            <Form.Label className='form-label'>{t('animalTypes')}</Form.Label>
+            <Form.Label className='form-label'>{t('caretakerForm.animalTypes')}</Form.Label>
             <Form.Check
               type="checkbox"
-              label={t('smallDog')}
+              label={t('caretakerForm.smallDog')}
               onChange={() => handleAnimalTypeChange('smallDog')}
               checked={animalTypes.includes('smallDog')}
               className='form-control'
             />
             <Form.Check
               type="checkbox"
-              label={t('mediumDog')}
+              label={t('caretakerForm.mediumDog')}
               onChange={() => handleAnimalTypeChange('mediumDog')}
               checked={animalTypes.includes('mediumDog')}
               className='form-control'
@@ -101,7 +101,7 @@ const CaretakerForm: React.FC<CaregiverFormProps> = ({ onSubmit }) => {
 
           {animalTypes.map((type) => (
             <Form.Group controlId={`price_${type}`} key={type} className='form-group'>
-              <Form.Label className='form-label'>{t('priceFor', { type: t(type) })}</Form.Label>
+              <Form.Label className='form-label'>{t('caretakerForm.priceFor', { type: t(type) })}</Form.Label>
               <Form.Control
                 type="number"
                 value={prices[type] || ''}
@@ -113,21 +113,21 @@ const CaretakerForm: React.FC<CaregiverFormProps> = ({ onSubmit }) => {
           ))}
 
           <Form.Group controlId="description" className='form-group'>
-            <Form.Label className='form-label'>{t('description')}</Form.Label>
+            <Form.Label className='form-label'>{t('caretakerForm.description')}</Form.Label>
             <Form.Control
               as="textarea"
               rows={3}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder={t('enterDescription')}
+              placeholder={t('caretakerForm.enterDescription')}
               className='form-label form-text-area'
             />
           </Form.Group>
 
           <Form.Group controlId="availability" className='form-group'>
-            <Form.Label className='form-label'>{t('availabilityCalendar')}</Form.Label>
+            <Form.Label className='form-label'>{t('caretakerForm.availabilityCalendar')}</Form.Label>
             <div>
-              <Form.Label className='form-label'>{t('startDate')}</Form.Label>
+              <Form.Label className='form-label'>{t('caretakerForm.startDate')}</Form.Label>
               <DatePicker
                 selected={availabilityStart}
                 onChange={(date: Date | null) => setAvailabilityStart(date)}
@@ -135,7 +135,7 @@ const CaretakerForm: React.FC<CaregiverFormProps> = ({ onSubmit }) => {
               />
             </div>
             <div>
-              <Form.Label className='form-label'>{t('endDate')}</Form.Label>
+              <Form.Label className='form-label'>{t('caretakerForm.endDate')}</Form.Label>
               <DatePicker
                 selected={availabilityEnd}
                 onChange={(date: Date | null) => setAvailabilityEnd(date)}
@@ -145,7 +145,7 @@ const CaretakerForm: React.FC<CaregiverFormProps> = ({ onSubmit }) => {
           </Form.Group>
 
           <Form.Group controlId="images" className='form-group'>
-            <Form.Label className='form-label'>{t('uploadImages')}</Form.Label>
+            <Form.Label className='form-label'>{t('caretakerForm.uploadImages')}</Form.Label>
             <div {...getRootProps({ className: 'dropzone' })}>
               <input {...getInputProps()} />
               <p>{t('dragDrop')}</p>
@@ -158,7 +158,7 @@ const CaretakerForm: React.FC<CaregiverFormProps> = ({ onSubmit }) => {
           </Form.Group>
 
           <Button variant="primary" type="submit" className='submit-button'>
-            {t('submit')}
+            {t('caretakerForm.submit')}
           </Button>
         </Form>
       </div>

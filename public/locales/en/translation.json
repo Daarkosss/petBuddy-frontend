@@ -1,4 +1,19 @@
 {
+  "logout": "Logout",
+
+  "loginPage": {
+    "proceedInfo": "To proceed you must be logged in",
+    "loginOrRegister": "Login or register with Keycloak"
+  },
+
+  "home": {
+    "title": "Welcome home, message from backend:",
+    "requestMessage": "Request message",
+    "fetchToken": "Fetch xsrf token",
+    "changeCaretakerForm": "Change caretaker form"
+  },
+
+  "caretakerForm": {
     "location": "Location",
     "enterCity": "Enter your city or district",
     "animalTypes": "Types of animals you care for",
@@ -15,4 +30,6 @@
     "submit": "Submit",
     "dragDrop": "Drag & drop some files here, or click to select files"
   }
+
+}
   

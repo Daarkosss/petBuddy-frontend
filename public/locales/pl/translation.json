@@ -1,4 +1,19 @@
 {
+  "logout": "Wyloguj",
+
+  "loginPage": {
+    "proceedInfo": "Aby kontynuować musisz być zalogowany",
+    "loginOrRegister": "Zaloguj się za pomocą Keycloaka"
+  },
+
+  "home": {
+    "title": "Witamy, wiadomość z backendu:",
+    "requestMessage": "Testowy request",
+    "fetchToken": "Pobierz token xsrf",
+    "changeCaretakerForm": "Zmien dane opiekuna"
+  },
+
+  "caretakerForm": {
     "location": "Lokalizacja",
     "enterCity": "Wpisz swoje miasto lub dzielnicę",
     "animalTypes": "Rodzaje zwierząt, którymi się opiekujesz",
@@ -15,4 +30,5 @@
     "submit": "Zatwierdź",
     "dragDrop": "Przeciągnij i upuść pliki tutaj lub kliknij, aby wybrać pliki"
   }
+}
   
