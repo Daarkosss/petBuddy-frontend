@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
-import { Form, Button, Container } from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
 import { useDropzone } from 'react-dropzone';
+import { useTranslation } from 'react-i18next';
+import { Header } from '../components/Header';
 
 interface CaregiverFormProps {
   onSubmit: (formData: FormData) => void;
 }
 
-const CaregiverForm: React.FC<CaregiverFormProps> = ({ onSubmit }) => {
+const CaretakerForm: React.FC<CaregiverFormProps> = ({ onSubmit }) => {
+  const { t } = useTranslation();
+
   const [location, setLocation] = useState('');
   const [animalTypes, setAnimalTypes] = useState<string[]>([]);
   const [prices, setPrices] = useState<{ [key: string]: number }>({});
@@ -56,102 +59,111 @@ const CaregiverForm: React.FC<CaregiverFormProps> = ({ onSubmit }) => {
   };
 
   return (
-    <Container>
-      <Form onSubmit={handleSubmit}>
-        <Form.Group controlId="location">
-          <Form.Label>Location</Form.Label>
-          <Form.Control
-            type="text"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            placeholder="Enter your city or district"
-          />
-        </Form.Group>
-
-        <Form.Group controlId="animalTypes">
-          <Form.Label>Types of animals you care for</Form.Label>
-          <Form.Check
-            type="checkbox"
-            label="Small Dog"
-            onChange={() => handleAnimalTypeChange('smallDog')}
-            checked={animalTypes.includes('smallDog')}
-          />
-          <Form.Check
-            type="checkbox"
-            label="Medium Dog"
-            onChange={() => handleAnimalTypeChange('mediumDog')}
-            checked={animalTypes.includes('mediumDog')}
-          />
-          <Form.Check
-            type="checkbox"
-            label="Cat"
-            onChange={() => handleAnimalTypeChange('cat')}
-            checked={animalTypes.includes('cat')}
-          />
-        </Form.Group>
-
-        {animalTypes.map((type) => (
-          <Form.Group controlId={`price_${type}`} key={type}>
-            <Form.Label>Price for {type}</Form.Label>
+    <div>
+      <Header />
+      <div className='form-container'>
+        <Form onSubmit={handleSubmit}>
+          <Form.Group controlId="location" className='form-group'>
+            <Form.Label className='form-label'>{t('location')}</Form.Label>
             <Form.Control
-              type="number"
-              value={prices[type] || ''}
-              onChange={(e) => handlePriceChange(type, parseFloat(e.target.value))}
-              placeholder={`Enter price for ${type}`}
+              type="text"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              placeholder={t('enterCity')}
+              className='form-control'
             />
           </Form.Group>
-        ))}
 
-        <Form.Group controlId="description">
-          <Form.Label>Description</Form.Label>
-          <Form.Control
-            as="textarea"
-            rows={3}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="Enter a brief description about yourself"
-          />
-        </Form.Group>
-
-        <Form.Group controlId="availability">
-          <Form.Label>Availability Calendar</Form.Label>
-          <div>
-            <Form.Label>Start Date</Form.Label>
-            <DatePicker
-              selected={availabilityStart}
-              onChange={(date: Date | null) => setAvailabilityStart(date)}
-              className="form-control"
+          <Form.Group controlId="animalTypes" className='form-group'>
+            <Form.Label className='form-label'>{t('animalTypes')}</Form.Label>
+            <Form.Check
+              type="checkbox"
+              label={t('smallDog')}
+              onChange={() => handleAnimalTypeChange('smallDog')}
+              checked={animalTypes.includes('smallDog')}
+              className='form-control'
             />
-          </div>
-          <div>
-            <Form.Label>End Date</Form.Label>
-            <DatePicker
-              selected={availabilityEnd}
-              onChange={(date: Date | null) => setAvailabilityEnd(date)}
-              className="form-control"
+            <Form.Check
+              type="checkbox"
+              label={t('mediumDog')}
+              onChange={() => handleAnimalTypeChange('mediumDog')}
+              checked={animalTypes.includes('mediumDog')}
+              className='form-control'
             />
-          </div>
-        </Form.Group>
+            <Form.Check
+              type="checkbox"
+              label={t('cat')}
+              onChange={() => handleAnimalTypeChange('cat')}
+              checked={animalTypes.includes('cat')}
+              className='form-control'
+            />
+          </Form.Group>
 
-        <Form.Group controlId="images">
-          <Form.Label>Upload Images</Form.Label>
-          <div {...getRootProps({ className: 'dropzone' })}>
-            <input {...getInputProps()} />
-            <p>Drag & drop some files here, or click to select files</p>
-          </div>
-          <div>
-            {images.map((file, index) => (
-              <div key={index}>{file.name}</div>
-            ))}
-          </div>
-        </Form.Group>
+          {animalTypes.map((type) => (
+            <Form.Group controlId={`price_${type}`} key={type} className='form-group'>
+              <Form.Label className='form-label'>{t('priceFor', { type: t(type) })}</Form.Label>
+              <Form.Control
+                type="number"
+                value={prices[type] || ''}
+                onChange={(e) => handlePriceChange(type, parseFloat(e.target.value))}
+                placeholder={t('priceFor', { type: t(type) })}
+                className='form-control'
+              />
+            </Form.Group>
+          ))}
 
-        <Button variant="primary" type="submit">
-          Submit
-        </Button>
-      </Form>
-    </Container>
+          <Form.Group controlId="description" className='form-group'>
+            <Form.Label className='form-label'>{t('description')}</Form.Label>
+            <Form.Control
+              as="textarea"
+              rows={3}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder={t('enterDescription')}
+              className='form-label form-text-area'
+            />
+          </Form.Group>
+
+          <Form.Group controlId="availability" className='form-group'>
+            <Form.Label className='form-label'>{t('availabilityCalendar')}</Form.Label>
+            <div>
+              <Form.Label className='form-label'>{t('startDate')}</Form.Label>
+              <DatePicker
+                selected={availabilityStart}
+                onChange={(date: Date | null) => setAvailabilityStart(date)}
+                className='form-control'
+              />
+            </div>
+            <div>
+              <Form.Label className='form-label'>{t('endDate')}</Form.Label>
+              <DatePicker
+                selected={availabilityEnd}
+                onChange={(date: Date | null) => setAvailabilityEnd(date)}
+                className='form-control'
+              />
+            </div>
+          </Form.Group>
+
+          <Form.Group controlId="images" className='form-group'>
+            <Form.Label className='form-label'>{t('uploadImages')}</Form.Label>
+            <div {...getRootProps({ className: 'dropzone' })}>
+              <input {...getInputProps()} />
+              <p>{t('dragDrop')}</p>
+            </div>
+            <div className='images-list'>
+              {images.map((file, index) => (
+                <div key={index}>{file.name}</div>
+              ))}
+            </div>
+          </Form.Group>
+
+          <Button variant="primary" type="submit" className='submit-button'>
+            {t('submit')}
+          </Button>
+        </Form>
+      </div>
+    </div>
   );
 };
 
-export default CaregiverForm;
+export default CaretakerForm;

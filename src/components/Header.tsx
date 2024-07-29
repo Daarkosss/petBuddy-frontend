@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import keycloak from "../Keycloack";
+import LanguageSwitcher from './LanguageSwitcher';
 
 export const Header: React.FC = () => {
   
@@ -12,6 +13,7 @@ export const Header: React.FC = () => {
           Logout
         </Button>
       }
+      <LanguageSwitcher />
     </div>
   );
 }
