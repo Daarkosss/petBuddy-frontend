@@ -1,11 +1,13 @@
+@use '../helpers/variables' as v;
+
 .sticky-header {
   position: sticky;
   top: 0;
   z-index: 100;
   padding: 10px 0;
   box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
-  background-color: $primary-color;
-  color: $secondary-color;
+  background-color: v.$primary-color;
+  color: v.$secondary-color;
 
   .title {
     font-size: 52px;
@@ -16,5 +18,11 @@
     position: absolute;
     top: 25px;
     right: 25px;
+  }
+
+  .language-switcher {
+    position: absolute;
+    top: 25px;
+    right: 120px;
   }
 }

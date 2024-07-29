@@ -1,8 +1,8 @@
-@import 'helpers/variables';
-@import 'base/typography';
-@import 'components/canvas';
-@import 'components/buttons';
-@import 'components/modals';
-@import 'components/header';
-@import 'pages/home';
-@import 'pages/loginPage';
+@use 'base/typography';
+@use 'components/buttons';
+@use 'components/modals';
+@use 'components/header';
+@use 'pages/home';
+@use 'pages/loginPage';
+@use 'pages/caretakerForm';
+@use 'vendors/vendors';
