@@ -1,0 +1,18 @@
+{
+    "location": "Location",
+    "enterCity": "Enter your city or district",
+    "animalTypes": "Types of animals you care for",
+    "smallDog": "Small Dog",
+    "mediumDog": "Medium Dog",
+    "cat": "Cat",
+    "priceFor": "Price for {{type}}",
+    "description": "Description",
+    "enterDescription": "Enter a brief description about yourself",
+    "availabilityCalendar": "Availability Calendar",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "uploadImages": "Upload Images",
+    "submit": "Submit",
+    "dragDrop": "Drag & drop some files here, or click to select files"
+  }
+  

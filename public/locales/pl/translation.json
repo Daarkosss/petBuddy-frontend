@@ -1,0 +1,18 @@
+{
+    "location": "Lokalizacja",
+    "enterCity": "Wpisz swoje miasto lub dzielnicę",
+    "animalTypes": "Rodzaje zwierząt, którymi się opiekujesz",
+    "smallDog": "Mały pies",
+    "mediumDog": "Średni pies",
+    "cat": "Kot",
+    "priceFor": "Cena za {{type}}",
+    "description": "Opis",
+    "enterDescription": "Wprowadź krótki opis o sobie",
+    "availabilityCalendar": "Kalendarz dostępności",
+    "startDate": "Data rozpoczęcia",
+    "endDate": "Data zakończenia",
+    "uploadImages": "Prześlij zdjęcia",
+    "submit": "Zatwierdź",
+    "dragDrop": "Przeciągnij i upuść pliki tutaj lub kliknij, aby wybrać pliki"
+  }
+  
