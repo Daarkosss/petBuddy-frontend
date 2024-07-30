@@ -8,7 +8,7 @@ const LoginPanel: React.FC = () => {
   const { t } = useTranslation();
 
   if (!initialized) {
-    return <div>Loading...</div>;
+    return <div>{t('loading')}.</div>;
   }
 
   return (

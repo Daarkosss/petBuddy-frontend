@@ -74,39 +74,39 @@ const CaretakerForm: React.FC<CaregiverFormProps> = ({ onSubmit }) => {
             />
           </Form.Group>
 
-          <Form.Group controlId="animalTypes" className='form-group'>
+          <Form.Group className='form-group'>
             <Form.Label className='form-label'>{t('caretakerForm.animalTypes')}</Form.Label>
             <Form.Check
               type="checkbox"
               label={t('caretakerForm.smallDog')}
               onChange={() => handleAnimalTypeChange('smallDog')}
               checked={animalTypes.includes('smallDog')}
-              className='form-control'
+              className='form-check'
             />
             <Form.Check
               type="checkbox"
               label={t('caretakerForm.mediumDog')}
               onChange={() => handleAnimalTypeChange('mediumDog')}
               checked={animalTypes.includes('mediumDog')}
-              className='form-control'
+              className='form-check'
             />
             <Form.Check
               type="checkbox"
-              label={t('cat')}
+              label={t('caretakerForm.cat')}
               onChange={() => handleAnimalTypeChange('cat')}
               checked={animalTypes.includes('cat')}
-              className='form-control'
+              className='form-check'
             />
           </Form.Group>
 
           {animalTypes.map((type) => (
             <Form.Group controlId={`price_${type}`} key={type} className='form-group'>
-              <Form.Label className='form-label'>{t('caretakerForm.priceFor', { type: t(type) })}</Form.Label>
+              <Form.Label className='form-label'>{t('caretakerForm.priceFor', { type: t(`caretakerForm.${type}`) })}</Form.Label>
               <Form.Control
                 type="number"
                 value={prices[type] || ''}
                 onChange={(e) => handlePriceChange(type, parseFloat(e.target.value))}
-                placeholder={t('priceFor', { type: t(type) })}
+                placeholder={t('caretakerForm.priceFor', { type: t(`caretakerForm.${type}`) })}
                 className='form-control'
               />
             </Form.Group>
@@ -148,7 +148,7 @@ const CaretakerForm: React.FC<CaregiverFormProps> = ({ onSubmit }) => {
             <Form.Label className='form-label'>{t('caretakerForm.uploadImages')}</Form.Label>
             <div {...getRootProps({ className: 'dropzone' })}>
               <input {...getInputProps()} />
-              <p>{t('dragDrop')}</p>
+              <p>{t('caretakerForm.dragDrop')}</p>
             </div>
             <div className='images-list'>
               {images.map((file, index) => (
@@ -157,7 +157,7 @@ const CaretakerForm: React.FC<CaregiverFormProps> = ({ onSubmit }) => {
             </div>
           </Form.Group>
 
-          <Button variant="primary" type="submit" className='submit-button'>
+          <Button variant="primary" type="submit">
             {t('caretakerForm.submit')}
           </Button>
         </Form>

@@ -1,5 +1,6 @@
 {
   "logout": "Logout",
+  "loading": "Loading...",
 
   "loginPage": {
     "proceedInfo": "To proceed you must be logged in",

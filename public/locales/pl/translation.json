@@ -1,5 +1,6 @@
 {
   "logout": "Wyloguj",
+  "loading": "Ładowanie...",
 
   "loginPage": {
     "proceedInfo": "Aby kontynuować musisz być zalogowany",

@@ -8,10 +8,9 @@ import { useTranslation } from "react-i18next";
 const Home = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [message, setMessage] = useState<string>('Loading...');
+  const [message, setMessage] = useState<string>(t('loading'));
 
   useEffect(() => {
-
     handleGetMessage();
   }, []);
 
