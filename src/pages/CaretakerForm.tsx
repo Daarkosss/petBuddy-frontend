@@ -76,41 +76,62 @@ const CaretakerForm: React.FC<CaregiverFormProps> = ({ onSubmit }) => {
 
           <Form.Group className='form-group'>
             <Form.Label className='form-label'>{t('caretakerForm.animalTypes')}</Form.Label>
-            <Form.Check
-              type="checkbox"
-              label={t('caretakerForm.smallDog')}
-              onChange={() => handleAnimalTypeChange('smallDog')}
-              checked={animalTypes.includes('smallDog')}
-              className='form-check'
-            />
-            <Form.Check
-              type="checkbox"
-              label={t('caretakerForm.mediumDog')}
-              onChange={() => handleAnimalTypeChange('mediumDog')}
-              checked={animalTypes.includes('mediumDog')}
-              className='form-check'
-            />
-            <Form.Check
-              type="checkbox"
-              label={t('caretakerForm.cat')}
-              onChange={() => handleAnimalTypeChange('cat')}
-              checked={animalTypes.includes('cat')}
-              className='form-check'
-            />
-          </Form.Group>
-
-          {animalTypes.map((type) => (
-            <Form.Group controlId={`price_${type}`} key={type} className='form-group'>
-              <Form.Label className='form-label'>{t('caretakerForm.priceFor', { type: t(`caretakerForm.${type}`) })}</Form.Label>
-              <Form.Control
-                type="number"
-                value={prices[type] || ''}
-                onChange={(e) => handlePriceChange(type, parseFloat(e.target.value))}
-                placeholder={t('caretakerForm.priceFor', { type: t(`caretakerForm.${type}`) })}
-                className='form-control'
+            <div className='animal-type'>
+              <Form.Check
+                type="checkbox"
+                label={t('caretakerForm.smallDog')}
+                onChange={() => handleAnimalTypeChange('smallDog')}
+                checked={animalTypes.includes('smallDog')}
+                className='form-check'
               />
-            </Form.Group>
-          ))}
+              {animalTypes.includes('smallDog') && (
+                <Form.Control
+                  type="number"
+                  pattern="/^\d+(\.\d{0,2})?$/"
+                  value={prices['smallDog'] || ''}
+                  onChange={(e) => handlePriceChange('smallDog', parseFloat(e.target.value))}
+                  placeholder={t('caretakerForm.priceFor', { type: t('caretakerForm.smallDog') })}
+                  className='form-control price-input'
+                />
+              )}
+            </div>
+            <div className='animal-type'>
+              <Form.Check
+                type="checkbox"
+                label={t('caretakerForm.mediumDog')}
+                onChange={() => handleAnimalTypeChange('mediumDog')}
+                checked={animalTypes.includes('mediumDog')}
+                className='form-check'
+              />
+              {animalTypes.includes('mediumDog') && (
+                <Form.Control
+                  pattern="\d+(\.\d{2})?"
+                  value={prices['mediumDog'] || ''}
+                  onChange={(e) => handlePriceChange('mediumDog', parseFloat(e.target.value))}
+                  placeholder={t('caretakerForm.priceFor', { type: t('caretakerForm.mediumDog') })}
+                  className='form-control price-input'
+                />
+              )}
+            </div>
+            <div className='animal-type'>
+              <Form.Check
+                type="checkbox"
+                label={t('caretakerForm.cat')}
+                onChange={() => handleAnimalTypeChange('cat')}
+                checked={animalTypes.includes('cat')}
+                className='form-check'
+              />
+              {animalTypes.includes('cat') && (
+                <Form.Control
+                  type="number"
+                  value={prices['cat'] || ''}
+                  onChange={(e) => handlePriceChange('cat', parseFloat(e.target.value))}
+                  placeholder={t('caretakerForm.priceFor', { type: t('caretakerForm.cat') })}
+                  className='form-control price-input'
+                />
+              )}
+            </div>
+          </Form.Group>
 
           <Form.Group controlId="description" className='form-group'>
             <Form.Label className='form-label'>{t('caretakerForm.description')}</Form.Label>
