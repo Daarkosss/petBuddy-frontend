@@ -1,19 +1,21 @@
 import React from 'react';
 import { useKeycloak } from "@react-keycloak/web";
 import { Button } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 
 const LoginPanel: React.FC = () => {
   const { keycloak, initialized } = useKeycloak();
+  const { t } = useTranslation();
 
   if (!initialized) {
-    return <div>Loading...</div>;
+    return <div>{t('loading')}.</div>;
   }
 
   return (
     <div className="login-panel">
-      <div className="title">To proceed you must be logged in</div>
-      <Button size="lg" variant="dark" onClick={() => keycloak.login()}>
-        Login or register with Keycloack
+      <div className="title">{t('loginPage.proceedInfo')}</div>
+      <Button size="lg" variant="light" onClick={() => keycloak.login()}>
+        {t('loginPage.loginOrRegister')}
       </Button>
     </div>
   );

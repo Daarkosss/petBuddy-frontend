@@ -26,7 +26,7 @@ class API {
       method,
       headers: {
         'Content-Type': 'application/json',
-        'X-XSRF-TOKEN': store.xsrfToken,
+        'X-XSRF-TOKEN': store.user.xsrfToken,
         ...headers
       },
       body: body ? JSON.stringify(body) : undefined,
@@ -49,12 +49,12 @@ class API {
     path: string,
     body?: unknown
   ): Promise<T> {
-    if (store.userToken) {
+    if (store.user.jwtToken) {
       return this.fetch<T>(
         method,
         path,
         body,
-        { 'Authorization': `Bearer ${store.userToken}` },
+        { 'Authorization': `Bearer ${store.user.jwtToken}` },
       );
     } else {
       return Promise.reject(new Error('No user token available'));

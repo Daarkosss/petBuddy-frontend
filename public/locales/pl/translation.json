@@ -1,0 +1,35 @@
+{
+  "logout": "Wyloguj",
+  "loading": "Ładowanie...",
+
+  "loginPage": {
+    "proceedInfo": "Aby kontynuować musisz być zalogowany",
+    "loginOrRegister": "Zaloguj się za pomocą Keycloaka"
+  },
+
+  "home": {
+    "title": "Witamy, wiadomość z backendu:",
+    "requestMessage": "Testowy request",
+    "fetchToken": "Pobierz token xsrf",
+    "changeCaretakerForm": "Zmien dane opiekuna"
+  },
+
+  "caretakerForm": {
+    "location": "Lokalizacja",
+    "enterCity": "Wpisz swoje miasto lub dzielnicę",
+    "animalTypes": "Rodzaje zwierząt, którymi się opiekujesz",
+    "smallDog": "Mały pies",
+    "mediumDog": "Średni pies",
+    "cat": "Kot",
+    "priceFor": "Cena za {{type}}",
+    "description": "Opis",
+    "enterDescription": "Wprowadź krótki opis o sobie",
+    "availabilityCalendar": "Kalendarz dostępności",
+    "startDate": "Data rozpoczęcia",
+    "endDate": "Data zakończenia",
+    "uploadImages": "Prześlij zdjęcia",
+    "submit": "Zatwierdź",
+    "dragDrop": "Przeciągnij i upuść pliki tutaj lub kliknij, aby wybrać pliki"
+  }
+}
+  

@@ -1,29 +1,43 @@
 import { useKeycloak } from "@react-keycloak/web";
 import { Route, Routes, Navigate } from 'react-router-dom';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { api } from './api/api';
 import Home from './pages/Home';
-import LoginPage from './pages/LoginPage'
+import CaretakerForm from './pages/CaretakerForm';
+import LoginPage from './pages/LoginPage';
 import store from './store/RootStore';
 
 function App() {
-  const { keycloak } = useKeycloak();
+  const { keycloak, initialized } = useKeycloak();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchXsrfToken = async () => {
       if (keycloak.authenticated && !store.xsrfToken) {
         await api.getXsrfToken();
       }
+      setIsLoading(false);
     };
 
-    fetchXsrfToken();
-  }, [keycloak.authenticated]);
+    if (initialized) {
+      if (keycloak.authenticated) {
+        fetchXsrfToken();
+      } else {
+        setIsLoading(false);
+      }
+    }
+  }, [initialized, keycloak.authenticated]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Routes>
       {keycloak.authenticated ? (
         <>
           <Route path="/home" element={<Home />} />
+          <Route path="/caretaker/form" element={<CaretakerForm onSubmit={() => {}} />} />
           <Route path="*" element={<Navigate to="/home" />} />
         </>
       ) : (
@@ -36,4 +50,4 @@ function App() {
   );
 }
 
-export default App
+export default App;

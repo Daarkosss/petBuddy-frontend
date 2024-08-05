@@ -1,32 +1,36 @@
 import { useEffect, useState } from "react";
 import { api } from "../api/api";
+import { useNavigate } from 'react-router-dom';
 import { Header } from "../components/Header";
 import { Button } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 
 const Home = () => {
-  const [message, setMessage] = useState<string>('Loading...');
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const [message, setMessage] = useState<string>(t('loading'));
 
   useEffect(() => {
-    const fetchMessage = async () => {
-      try {
-        // const response = await api.getTestMessage();
-        // setMessage(response);
-      } catch (error) {
-        setMessage('Failed to fetch message');
-      }
-    }
-
-    fetchMessage();
+    handleGetMessage();
   }, []);
 
+  const handleGetMessage = async () => {
+    try {
+      const response = await api.getTestMessage();
+      setMessage(response);
+    } catch (error) {
+      setMessage('Failed to fetch message');
+    }
+  }
   
   return (
     <div>
       <Header />
       <div className="home-container">
-        <h1>Welcome home, message from backend: {message}</h1>
-        <Button variant="light" onClick={() => api.getTestMessage()}>Request message</Button>
-        <Button variant="info" onClick={() => api.getXsrfToken()}>Fetch xsrf token</Button>
+        <h1>{t('home.title')} {message}</h1>
+        <Button variant="outline-dark" onClick={handleGetMessage}>{t('home.requestMessage')}</Button>
+        <Button variant="outline-dark" onClick={() => api.getXsrfToken()}>{t('home.fetchToken')}</Button>
+        <Button variant="dark" onClick={() => navigate('/caretaker/form')}>{t('home.changeCaretakerForm')}</Button>
       </div>
     </div>
   )
