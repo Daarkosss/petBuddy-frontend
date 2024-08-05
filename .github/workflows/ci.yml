@@ -3,10 +3,10 @@ name: CI
 on:
   push:
     branches:
-      - '**'  # Run on push to all branches
+      - '**'  # Run on all branches
   pull_request:
     branches:
-      - '**'  # Run on pull request to all branches
+      - '**'  # Run on pull requests to all branches
 
 jobs:
   build-and-test:
@@ -19,16 +19,20 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18.x'  # Use the latest node 18 version
+          node-version: '18.x'  # Use the latest Node.js 18
+          cache: 'pnpm'         # Enable caching for pnpm to speed up installs
+
+      - name: Install pnpm
+        run: npm install -g pnpm@latest
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile  # Use --frozen-lockfile to ensure lockfile integrity
 
       - name: Run lint
-        run: npm run lint
+        run: pnpm run lint
 
       - name: Run tests
-        run: npm test
+        run: pnpm test
 
       - name: Build project
-        run: npm run build
+        run: pnpm run build
