@@ -61,7 +61,7 @@ class API {
     }
   }
 
-  async getTestMessage(): Promise<any> {
+  async getTestMessage(): Promise<string> {
     try {
       console.log('getting test message')
       const response = await this.authorizedFetch<string>(
