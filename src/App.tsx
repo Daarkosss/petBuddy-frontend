@@ -13,7 +13,7 @@ function App() {
 
   useEffect(() => {
     const fetchXsrfToken = async () => {
-      if (keycloak.authenticated && !store.xsrfToken) {
+      if (keycloak.authenticated && !store.user.xsrfToken) {
         await api.getXsrfToken();
       }
       setIsLoading(false);
