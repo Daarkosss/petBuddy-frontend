@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - '**'  # Run on all branches
+  pull_request:
+    branches:
+      - '**'  # Run on pull requests to all branches
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'  # Use the latest Node.js 18
+
+      - name: Install pnpm
+        run: npm install -g pnpm@latest
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile  # Use --frozen-lockfile to ensure lockfile integrity
+
+      - name: Run lint
+        run: pnpm run lint
+
+      - name: Build project
+        run: pnpm run build
