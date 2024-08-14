@@ -13,6 +13,41 @@ export interface User {
   email: string;
 }
 
+export interface CaretakerDTO {
+  accountData: {
+    email: string;
+    name: string;
+    surname: string;
+  };
+  phoneNumber: string;
+  description: string;
+  address: {
+    id: number;
+    city: string;
+    zipCode: string;
+    voivodeship: string;
+    street: string;
+    buildingNumber: string;
+    apartmentNumber: string;
+  };
+  animalsTakenCareOf: string[];
+  avgRating: number | null;
+}
+
+interface CaretakerResponse {
+  content: CaretakerDTO[];
+  pageNumber: number;
+  pageSize: number;
+  totalPages: number;
+  totalElements: number;
+  size: number;
+  number: number;
+  pageable: {
+    pageNumber: number;
+    pageSize: number;
+  }
+}
+
 class API {
 
   async fetch<T>(
@@ -85,6 +120,39 @@ class API {
     } catch(error: unknown) {
       return;
     }
+  }
+
+  private buildQueryParams(params: Record<string, any>): string {
+    const query = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        value.forEach((v) => query.append(key, v));
+      } else if (value !== undefined && value !== null) {
+        query.append(key, value);
+      }
+    });
+    return query.toString();
+  }
+
+  async getCaretakers(
+    pagingParams: { page: number; size: number; sortBy?: string[]; sortDirection?: string },
+    filters: {
+      personalDataLike?: string;
+      cityLike?: string;
+      voivodeship?: string | null;
+      animalTypes?: string[];
+    }
+  ): Promise<CaretakerResponse> {
+    const params = {
+      ...pagingParams,
+      ...filters,
+    };
+  
+    const queryString = this.buildQueryParams(params);
+    return this.authorizedFetch<CaretakerResponse>(
+      'GET',
+      `api/caretaker?${queryString}`
+    );
   }
 
   // async login(): Promise<User | null> {

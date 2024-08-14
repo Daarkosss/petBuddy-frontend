@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import CaretakerForm from './pages/CaretakerForm';
 import LoginPage from './pages/LoginPage';
 import store from './store/RootStore';
+import CaretakerSearch from "./pages/CaretakerSearch";
 
 function App() {
   const { keycloak, initialized } = useKeycloak();
@@ -38,6 +39,7 @@ function App() {
         <>
           <Route path="/home" element={<Home />} />
           <Route path="/caretaker/form" element={<CaretakerForm onSubmit={() => {}} />} />
+          <Route path="/caretaker/search" element={<CaretakerSearch />} />
           <Route path="*" element={<Navigate to="/home" />} />
         </>
       ) : (
