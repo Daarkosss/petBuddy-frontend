@@ -4,7 +4,7 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  padding: 10px 0;
+  padding: 10px;
   box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
   background-color: v.$blue-medium;
   color: v.$white;
@@ -13,9 +13,9 @@
   align-items: center;
 
   .title {
-    font-size: 52px;
+    font-size: 3rem;
     color: white;
-    margin: auto; // Dodane
+    margin: auto;
 
     &:hover {
       cursor: pointer;

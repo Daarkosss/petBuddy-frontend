@@ -17,4 +17,4 @@ $blue-medium: #007EA7;
 $blue-dark: #003459;
 $blue-very-dark: #00171F;
 
-$home-background-gradient: linear-gradient(to right, $grey-very-light, $grey-light);
+$home-background-gradient: linear-gradient(to right, $blue-very-light, darken($blue-very-light, 3%));
