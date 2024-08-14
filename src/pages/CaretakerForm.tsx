@@ -4,8 +4,8 @@ import { useDropzone } from 'react-dropzone';
 import { useTranslation } from 'react-i18next';
 import { Header } from '../components/Header';
 import DatePicker, { Value } from 'react-multi-date-picker';
-import DatePanel from "react-multi-date-picker/plugins/date_panel"
-import weekends from "react-multi-date-picker/plugins/highlight_weekends"
+import DatePanel from "react-multi-date-picker/plugins/date_panel";
+import weekends from "react-multi-date-picker/plugins/highlight_weekends";
 
 interface CaregiverFormProps {
   onSubmit: (formData: FormData) => void;
@@ -79,7 +79,7 @@ const CaretakerForm: React.FC<CaregiverFormProps> = ({ onSubmit }) => {
   return (
     <div>
       <Header />
-      <div className='form-container'>
+      <div className='caretaker-form-container'>
         <Form onSubmit={handleSubmit}>
           <Form.Group controlId='location' className='form-group'>
             <Form.Label className='form-label'>{t('caretakerForm.location')}</Form.Label>
@@ -191,7 +191,9 @@ const CaretakerForm: React.FC<CaregiverFormProps> = ({ onSubmit }) => {
             </div>
             <div className='images-list'>
               {images.map((file, index) => (
-                <div key={index}>{file.name}</div>
+                <div key={index} className="image-item">
+                  <img src={URL.createObjectURL(file)} alt={`preview-${index}`} />
+                </div>
               ))}
             </div>
           </Form.Group>
