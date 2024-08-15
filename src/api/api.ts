@@ -122,20 +122,8 @@ class API {
     }
   }
 
-  private buildQueryParams(params: Record<string, any>): string {
-    const query = new URLSearchParams();
-    Object.entries(params).forEach(([key, value]) => {
-      if (Array.isArray(value)) {
-        value.forEach((v) => query.append(key, v));
-      } else if (value !== undefined && value !== null) {
-        query.append(key, value);
-      }
-    });
-    return query.toString();
-  }
-
   async getCaretakers(
-    pagingParams: { page: number; size: number; sortBy?: string[]; sortDirection?: string },
+    pagingParams: { page: number; size: number; sortBy?: string; sortDirection?: string },
     filters: {
       personalDataLike?: string;
       cityLike?: string;
@@ -143,12 +131,35 @@ class API {
       animalTypes?: string[];
     }
   ): Promise<CaretakerResponse> {
-    const params = {
-      ...pagingParams,
-      ...filters,
-    };
+    const queryParams = new URLSearchParams();
   
-    const queryString = this.buildQueryParams(params);
+    queryParams.append('page', pagingParams.page.toString());
+    queryParams.append('size', pagingParams.size.toString());
+  
+    if (pagingParams.sortBy) {
+      queryParams.append('sortBy', pagingParams.sortBy);
+    }
+    if (pagingParams.sortDirection) {
+      queryParams.append('sortDirection', pagingParams.sortDirection);
+    }
+  
+    if (filters.personalDataLike) {
+      queryParams.append('personalDataLike', filters.personalDataLike);
+    }
+    if (filters.cityLike) {
+      queryParams.append('cityLike', filters.cityLike);
+    }
+    if (filters.voivodeship) {
+      queryParams.append('voivodeship', filters.voivodeship);
+    }
+    if (filters.animalTypes && filters.animalTypes.length > 0) {
+      filters.animalTypes.forEach((type) => {
+        queryParams.append('animalTypes', type);
+      });
+    }
+  
+    const queryString = queryParams.toString();
+  
     return this.authorizedFetch<CaretakerResponse>(
       'GET',
       `api/caretaker?${queryString}`

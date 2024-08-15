@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Table, Select, Input, Button, Spin } from 'antd';
+import { SorterResult, TablePaginationConfig, FilterValue, ColumnsType } from 'antd/es/table/interface';
 import { api, CaretakerDTO } from '../api/api';
 import { Header } from '../components/Header';
 
@@ -13,6 +14,8 @@ const CaretakerList = () => {
   const [pagingParams, setPagingParams] = useState({
     page: 0,
     size: 10,
+    sortBy: 'avgRating',
+    sortDirection: 'DESC',
   });
 
   const [pagination, setPagination] = useState({
@@ -39,30 +42,37 @@ const CaretakerList = () => {
         pageSize: data.pageable.pageSize,
         total: data.totalElements,
       });
-    } catch (error: unknown) {
+    } catch (error) {
       setError(error instanceof Error ? error.message : 'Unknown error');
     } finally {
       setIsLoading(false);
     }
   };
-
+  
   useEffect(() => {
     fetchCaretakers();
-  }, []);
+  }, [pagingParams]);
 
+  const handleTableChange = (
+    pagination: TablePaginationConfig,
+    _filters: Record<string, FilterValue | null>,
+    sorter: SorterResult<CaretakerDTO> | SorterResult<CaretakerDTO>[]
+  ) => {
+    const singleSorter = Array.isArray(sorter) ? sorter[0] : sorter;
 
-  const handleTableChange = (pagination: any, _filters: any, sorter: any) => {
-    console.log(sorter.order);
     setPagingParams({
-      page: pagination.current - 1,
-      size: pagination.pageSize,
-      sortBy: sorter.field || 'avgRating',
-      sortDirection: sorter.order === 'ascend' ? 'ASC' : 'DESC',
+      page: (pagination.current || 1) - 1,
+      size: pagination.pageSize || 10,
+      sortBy: singleSorter.field as string || 'avgRating',
+      sortDirection: singleSorter.order === 'ascend' ? 'ASC' : 'DESC',
     });
-    fetchCaretakers();
   };
 
   const handleSearch = () => {
+    setPagingParams((prevParams) => ({
+      ...prevParams,
+      page: 0, // Reset to first page on search
+    }));
     fetchCaretakers();
   };
 
@@ -72,11 +82,11 @@ const CaretakerList = () => {
     }
   };
 
-  const columns = [
+  const columns: ColumnsType<CaretakerDTO> = [
     {
       title: 'Caretaker',
       key: 'caretaker',
-      render: (_: any, record: CaretakerDTO) => (
+      render: (_: unknown, record: CaretakerDTO) => (
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <img
             src="https://via.placeholder.com/150"
@@ -99,6 +109,7 @@ const CaretakerList = () => {
       dataIndex: 'avgRating',
       key: 'avgRating',
       sorter: true,
+      defaultSortOrder: pagingParams.sortDirection === 'ASC' ? 'ascend' : 'descend',
       render: (rating: number | null) => (rating ? rating.toFixed(1) : 'No ratings'),
     },
   ];
@@ -121,11 +132,7 @@ const CaretakerList = () => {
     <div>
       <Header />
       <div className="caretaker-search">
-        {isLoading && (
-          <div className="loading-overlay">
-            <Spin size="large" />
-          </div>
-        )}
+        <Spin spinning={isLoading} fullscreen />
         <div className='filters'>
           <Input
             placeholder="Search by Name/Email"
