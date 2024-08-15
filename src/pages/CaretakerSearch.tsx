@@ -74,7 +74,6 @@ const CaretakerList = () => {
       ...prevParams,
       page: 0, // Reset to first page on search
     }));
-    fetchCaretakers();
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -153,6 +152,7 @@ const CaretakerList = () => {
             placeholder="Voivodeship"
             style={{ width: 200, marginRight: 20 }}
             onChange={handleVoivodeshipChange}
+            allowClear
             value={filters.voivodeship}
             onKeyDown={handleKeyDown}
           >
@@ -196,7 +196,7 @@ const CaretakerList = () => {
             current: pagination.current,
             pageSize: pagination.pageSize,
             total: pagination.total,
-            showSizeChanger: false,
+            showSizeChanger: true,
           }}
           onChange={handleTableChange}
         />
