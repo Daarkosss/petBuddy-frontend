@@ -11,7 +11,8 @@
     "title": "Witamy, wiadomość z backendu:",
     "requestMessage": "Testowy request",
     "fetchToken": "Pobierz token xsrf",
-    "changeCaretakerForm": "Zmien dane opiekuna"
+    "changeCaretakerForm": "Zmien dane opiekuna",
+    "searchCaretakers": "Wyszukaj opiekunów"
   },
 
   "caretakerForm": {

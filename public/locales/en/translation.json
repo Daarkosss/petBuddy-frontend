@@ -11,7 +11,8 @@
     "title": "Welcome home, message from backend:",
     "requestMessage": "Request message",
     "fetchToken": "Fetch xsrf token",
-    "changeCaretakerForm": "Change caretaker form"
+    "changeCaretakerForm": "Change caretaker form",
+    "searchCaretakers": "Search caretakers"
   },
 
   "caretakerForm": {
