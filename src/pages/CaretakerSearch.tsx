@@ -51,6 +51,7 @@ const CaretakerList = () => {
   
   useEffect(() => {
     fetchCaretakers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagingParams]);
 
   const handleTableChange = (
