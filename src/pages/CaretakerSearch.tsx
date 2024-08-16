@@ -14,8 +14,8 @@ const CaretakerList = () => {
   const [pagingParams, setPagingParams] = useState({
     page: 0,
     size: 10,
-    sortBy: 'avgRating',
-    sortDirection: 'DESC',
+    sortBy: undefined as string | undefined,
+    sortDirection: undefined as string | undefined,
   });
 
   const [pagination, setPagination] = useState({
@@ -54,6 +54,14 @@ const CaretakerList = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagingParams]);
 
+  const mapSortDirection = (sorter: SorterResult<CaretakerDTO>) => {
+    if (sorter.order) {
+      return sorter.order === 'ascend' ? 'ASC' : 'DESC';
+    } else {
+      return undefined;
+    }
+  };
+
   const handleTableChange = (
     pagination: TablePaginationConfig,
     _filters: Record<string, FilterValue | null>,
@@ -61,11 +69,12 @@ const CaretakerList = () => {
   ) => {
     const singleSorter = Array.isArray(sorter) ? sorter[0] : sorter;
 
+    const isSorted = !!singleSorter.order
     setPagingParams({
       page: (pagination.current || 1) - 1,
       size: pagination.pageSize || 10,
-      sortBy: singleSorter.field as string || 'avgRating',
-      sortDirection: singleSorter.order === 'ascend' ? 'ASC' : 'DESC',
+      sortBy: isSorted ? singleSorter.field as string : undefined,
+      sortDirection: mapSortDirection(singleSorter),
     });
   };
 
@@ -109,7 +118,7 @@ const CaretakerList = () => {
       dataIndex: 'avgRating',
       key: 'avgRating',
       sorter: true,
-      defaultSortOrder: pagingParams.sortDirection === 'ASC' ? 'ascend' : 'descend',
+      // defaultSortOrder: pagingParams.sortDirection === 'ASC' ? 'ascend' : 'descend',
       render: (rating: number | null) => (rating ? rating.toFixed(1) : 'No ratings'),
     },
   ];
