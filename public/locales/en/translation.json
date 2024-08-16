@@ -1,6 +1,16 @@
 {
-  "logout": "Logout",
+  "dog": "Dog",
+  "cat": "Cat",
+  "bird": "Bird",
+  "search": "Search",
+  "rating": "Rating",
+  "noRatings": "No ratings",
+  "viewDetails": "View Details",
   "loading": "Loading...",
+  "logout": "Logout",
+  "caretaker": "Caretaker",
+  "city": "City",
+  "voivodeship": "Voivodeship",
 
   "loginPage": {
     "proceedInfo": "To proceed you must be logged in",
@@ -21,7 +31,6 @@
     "animalTypes": "Types of animals you care for",
     "smallDog": "Small Dog",
     "mediumDog": "Medium Dog",
-    "cat": "Cat",
     "priceFor": "Price for {{type}}",
     "description": "Description",
     "enterDescription": "Enter a brief description about yourself",
@@ -31,7 +40,10 @@
     "uploadImages": "Upload Images",
     "submit": "Submit",
     "dragDrop": "Drag & drop some files here, or click to select files"
-  }
-
-}
+  },
   
+  "caretakerSearch": {
+    "personalData": "Personal data",
+    "animalTypes": "Animal types"
+  }
+}

@@ -3,10 +3,13 @@ import { Table, Select, Input, Button, Spin } from 'antd';
 import { SorterResult, TablePaginationConfig, FilterValue, ColumnsType } from 'antd/es/table/interface';
 import { api, CaretakerDTO } from '../api/api';
 import { Header } from '../components/Header';
+import { useTranslation } from 'react-i18next';
 
 const { Option } = Select;
 
 const CaretakerList = () => {
+  const { t } = useTranslation();
+
   const [caretakers, setCaretakers] = useState<CaretakerDTO[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -43,7 +46,7 @@ const CaretakerList = () => {
         total: data.totalElements,
       });
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Unknown error');
+      setError(error instanceof Error ? error.message : t('unknownError'));
     } finally {
       setIsLoading(false);
     }
@@ -69,7 +72,7 @@ const CaretakerList = () => {
   ) => {
     const singleSorter = Array.isArray(sorter) ? sorter[0] : sorter;
 
-    const isSorted = !!singleSorter.order
+    const isSorted = !!singleSorter.order;
     setPagingParams({
       page: (pagination.current || 1) - 1,
       size: pagination.pageSize || 10,
@@ -93,7 +96,7 @@ const CaretakerList = () => {
 
   const columns: ColumnsType<CaretakerDTO> = [
     {
-      title: 'Caretaker',
+      title: t('caretaker'),
       key: 'caretaker',
       render: (_: unknown, record: CaretakerDTO) => (
         <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -107,19 +110,18 @@ const CaretakerList = () => {
             <p>{record.address.city}, {record.address.voivodeship}</p>
             <p>{record.description}</p>
             <Button href={`/caretakers/${record.accountData.email}`} type="primary">
-              View Details
+              {t('viewDetails')}
             </Button>
           </div>
         </div>
       ),
     },
     {
-      title: 'Rating',
+      title: t('rating'),
       dataIndex: 'avgRating',
       key: 'avgRating',
       sorter: true,
-      // defaultSortOrder: pagingParams.sortDirection === 'ASC' ? 'ascend' : 'descend',
-      render: (rating: number | null) => (rating ? rating.toFixed(1) : 'No ratings'),
+      render: (rating: number | null) => (rating ? rating.toFixed(1) : t('noRatings')),
     },
   ];
 
@@ -144,21 +146,21 @@ const CaretakerList = () => {
         <Spin spinning={isLoading} fullscreen />
         <div className='filters'>
           <Input
-            placeholder="Search by Name/Email"
+            placeholder={t('caretakerSearch.personalData')}
             value={filters.personalDataLike}
             onChange={(e) => handleSearchChange('personalDataLike', e.target.value)}
             style={{ width: 200, marginRight: 20 }}
             onKeyDown={handleKeyDown}
           />
           <Input
-            placeholder="Search by City"
+            placeholder={t('city')}
             value={filters.cityLike}
             onChange={(e) => handleSearchChange('cityLike', e.target.value)}
             style={{ width: 200, marginRight: 20 }}
             onKeyDown={handleKeyDown}
           />
           <Select
-            placeholder="Voivodeship"
+            placeholder={t('voivodeship')}
             style={{ width: 200, marginRight: 20 }}
             onChange={handleVoivodeshipChange}
             allowClear
@@ -184,17 +186,17 @@ const CaretakerList = () => {
           </Select>
           <Select
             mode="multiple"
-            placeholder="Animal Types"
+            placeholder={t('caretakerSearch.animalTypes')}
             style={{ width: 300 }}
             onChange={handleAnimalTypesChange}
             value={filters.animalTypes}
           >
-            <Option value="DOG">Dog</Option>
-            <Option value="CAT">Cat</Option>
-            <Option value="BIRD">Bird</Option>
+            <Option value="DOG">{t('dog')}</Option>
+            <Option value="CAT">{t('cat')}</Option>
+            <Option value="BIRD">{t('bird')}</Option>
           </Select>
           <Button type="primary" onClick={handleSearch} style={{ marginLeft: 20 }}>
-            Search
+            {t('search')}
           </Button>
         </div>
         <Table

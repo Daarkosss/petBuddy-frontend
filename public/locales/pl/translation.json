@@ -1,6 +1,16 @@
 {
-  "logout": "Wyloguj",
+  "dog": "Pies",
+  "cat": "Kot",
+  "bird": "Ptak",
+  "search": "Szukaj",
+  "rating": "Ocena",
+  "noRatings": "Brak ocen",
+  "viewDetails": "Zobacz Szczegóły",
   "loading": "Ładowanie...",
+  "logout": "Wyloguj",
+  "caretaker": "Opiekun",
+  "city": "Miasto",
+  "voivodeship": "Województwo",
 
   "loginPage": {
     "proceedInfo": "Aby kontynuować musisz być zalogowany",
@@ -11,7 +21,7 @@
     "title": "Witamy, wiadomość z backendu:",
     "requestMessage": "Testowy request",
     "fetchToken": "Pobierz token xsrf",
-    "changeCaretakerForm": "Zmien dane opiekuna",
+    "changeCaretakerForm": "Zmień dane opiekuna",
     "searchCaretakers": "Wyszukaj opiekunów"
   },
 
@@ -21,7 +31,6 @@
     "animalTypes": "Rodzaje zwierząt, którymi się opiekujesz",
     "smallDog": "Mały pies",
     "mediumDog": "Średni pies",
-    "cat": "Kot",
     "priceFor": "Cena za {{type}}",
     "description": "Opis",
     "enterDescription": "Wprowadź krótki opis o sobie",
@@ -31,6 +40,10 @@
     "uploadImages": "Prześlij zdjęcia",
     "submit": "Zatwierdź",
     "dragDrop": "Przeciągnij i upuść pliki tutaj lub kliknij, aby wybrać pliki"
+  },
+
+  "caretakerSearch": {
+    "personalData": "Dane personalne",
+    "animalTypes": "Rodzaje zwierząt"
   }
 }
-  
