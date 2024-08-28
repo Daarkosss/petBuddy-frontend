@@ -30,7 +30,12 @@
     "uploadImages": "Upload Images",
     "submit": "Submit",
     "dragDrop": "Drag & drop some files here, or click to select files"
-  }
+  },
 
+  "profileSelection": {
+    "title": "Choose your profile",
+    "client": "Client",
+    "caretaker": "Caretaker",
+    "createCaretaker": "Create caretaker profile"
+  }
 }
-  
