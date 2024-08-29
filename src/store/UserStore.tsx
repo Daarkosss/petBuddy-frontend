@@ -2,7 +2,7 @@ import { makeAutoObservable } from "mobx";
 import keycloak from "../Keycloack";
 import { getCookie, removeCookie } from "typescript-cookie";
 
-type Profile = "Client" | "Caretaker" | null;
+export type Profile = "Client" | "Caretaker" | null;
 
 export interface UserProfile {
   username?: string;
@@ -46,6 +46,12 @@ class UserStore {
       return JSON.parse(profile);
     } else {
       return null;
+    }
+  }
+
+  setSelectedProfile(selected_profile?: Profile) {
+    if (this.profile && selected_profile) {
+      this.profile.selected_profile = selected_profile;
     }
   }
 

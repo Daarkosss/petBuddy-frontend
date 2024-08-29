@@ -25,14 +25,15 @@ const ProfileSelection: React.FC = () => {
             icon={CgProfile}
             size={100}
             title={t("profileSelection.client")}
+            profile={"Client"}
           />
 
           {/*TODO: remember to add logic that allows to add caretaker profile if needed!*/}
-          {/* <h3 className="profile-title">{t("profileSelection.caretaker")}</h3> */}
           <ProfileSelectionBox
             icon={IoAddCircleOutline}
             size={100}
             title={t("profileSelection.createCaretaker")}
+            profile={null}
           />
         </div>
       </div>
