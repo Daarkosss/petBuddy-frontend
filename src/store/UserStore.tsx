@@ -2,12 +2,15 @@ import { makeAutoObservable } from "mobx";
 import keycloak from "../Keycloack";
 import { getCookie, removeCookie } from "typescript-cookie";
 
+type Profile = "Client" | "Caretaker" | null;
+
 export interface UserProfile {
   username?: string;
   email?: string;
   firstName?: string;
-  lastName?: string
+  lastName?: string;
   token?: string;
+  selected_profile: Profile;
 }
 
 class UserStore {
@@ -19,7 +22,7 @@ class UserStore {
   }
 
   get jwtToken(): string | undefined {
-    return keycloak.token
+    return keycloak.token;
   }
 
   get xsrfToken(): string | undefined {
@@ -29,7 +32,7 @@ class UserStore {
   saveProfileToStorage(profile?: UserProfile) {
     if (profile) {
       this.profile = profile;
-      localStorage.setItem('user', JSON.stringify(this.profile));
+      localStorage.setItem("user", JSON.stringify(this.profile));
     }
   }
 
@@ -38,7 +41,7 @@ class UserStore {
   }
 
   getProfileFromStorage() {
-    const profile = localStorage.getItem('profile');
+    const profile = localStorage.getItem("profile");
     if (profile) {
       return JSON.parse(profile);
     } else {
@@ -48,8 +51,8 @@ class UserStore {
 
   reset() {
     this.profile = null;
-    localStorage.removeItem('user');
-    removeCookie('XSRF-TOKEN');
+    localStorage.removeItem("user");
+    removeCookie("XSRF-TOKEN");
   }
 }
 
