@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Table, Select, Input, Button, Spin } from 'antd';
 import { SorterResult, TablePaginationConfig, FilterValue, ColumnsType } from 'antd/es/table/interface';
-import { api, CaretakerDTO } from '../api/api';
+import { api } from '../api/api';
+import { CaretakerDTO } from '../types';
 import { Header } from '../components/Header';
 import { useTranslation } from 'react-i18next';
 

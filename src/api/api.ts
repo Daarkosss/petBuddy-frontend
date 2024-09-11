@@ -1,5 +1,6 @@
 import { toast } from 'react-toastify';
 import store from '../store/RootStore';
+import { CaretakerResponse } from '../types';
 
 const backendHost = import.meta.env.VITE_BACKEND_HOST || window.location.hostname;
 const backendPort = import.meta.env.VITE_BACKEND_PORT || '8081';
@@ -7,45 +8,10 @@ export const PATH_PREFIX = `http://${backendHost}:${backendPort}/`;
 
 type Method = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
-export interface User {
+export type User = {
   _id: string;
   name: string;
   email: string;
-}
-
-export interface CaretakerDTO {
-  accountData: {
-    email: string;
-    name: string;
-    surname: string;
-  };
-  phoneNumber: string;
-  description: string;
-  address: {
-    id: number;
-    city: string;
-    zipCode: string;
-    voivodeship: string;
-    street: string;
-    buildingNumber: string;
-    apartmentNumber: string;
-  };
-  animalsTakenCareOf: string[];
-  avgRating: number | null;
-}
-
-interface CaretakerResponse {
-  content: CaretakerDTO[];
-  pageNumber: number;
-  pageSize: number;
-  totalPages: number;
-  totalElements: number;
-  size: number;
-  number: number;
-  pageable: {
-    pageNumber: number;
-    pageSize: number;
-  }
 }
 
 class API {
