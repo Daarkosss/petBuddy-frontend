@@ -105,7 +105,7 @@ class API {
       )
       toast.success(JSON.stringify(response));
       return response
-    } catch(error: unknown) {
+    } catch (error: unknown) {
       return "brak"
     }
   }
@@ -117,7 +117,7 @@ class API {
         'api/csrf'
       )
       return response
-    } catch(error: unknown) {
+    } catch (error: unknown) {
       return;
     }
   }
@@ -131,10 +131,10 @@ class API {
       animalTypes?: string[];
     }
   ): Promise<CaretakerResponse> {
-    const queryParams = new URLSearchParams();
-  
-    queryParams.append('page', pagingParams.page.toString());
-    queryParams.append('size', pagingParams.size.toString());
+    const queryParams = new URLSearchParams({
+      page: pagingParams.page.toString(),
+      size: pagingParams.size.toString()
+    });
   
     if (pagingParams.sortBy) {
       queryParams.append('sortBy', pagingParams.sortBy);
@@ -154,7 +154,7 @@ class API {
     }
     if (filters.animalTypes && filters.animalTypes.length > 0) {
       filters.animalTypes.forEach((type) => {
-        queryParams.append('animalTypes', type);
+        queryParams.append('offerSearchCriteria.animalTypes', type);
       });
     }
   
