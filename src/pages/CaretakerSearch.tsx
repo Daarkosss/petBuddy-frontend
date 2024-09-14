@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Table, Select, Input, Button, Spin } from 'antd';
+import { Table, Select, Input, Button, Spin, Rate } from 'antd';
 import { SorterResult, TablePaginationConfig, FilterValue, ColumnsType } from 'antd/es/table/interface';
 import { api } from '../api/api';
 import { CaretakerDTO } from '../types';
@@ -122,7 +122,21 @@ const CaretakerList = () => {
       dataIndex: 'avgRating',
       key: 'avgRating',
       sorter: true,
-      render: (rating: number | null) => (rating ? rating.toFixed(1) : t('noRatings')),
+      render: (rating: number | null) => (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', gap: 5 }}>
+          {rating ? (
+            <>
+              <Rate disabled allowHalf value={rating} />
+              <span style={{ marginLeft: 8 }}>{rating.toFixed(2)}</span>
+            </>
+          ) : (
+            <>
+              <Rate disabled allowHalf value={0} />
+              <p>{t('noRatings')}</p>
+            </>
+          )}
+        </div>
+      ),
     },
   ];
 
