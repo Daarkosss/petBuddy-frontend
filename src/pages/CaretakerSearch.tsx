@@ -208,7 +208,6 @@ const CaretakerList = () => {
             <Select
               mode="multiple"
               placeholder={t('caretakerSearch.animalTypes')}
-              style={{ width: '100%' }}
               onChange={handleAnimalTypesChange}
               value={filters.animalTypes}
             >
@@ -220,7 +219,6 @@ const CaretakerList = () => {
               mode="multiple"
               maxTagCount={3}
               placeholder={t('caretakerSearch.amenities')}
-              style={{ width: '100%' }}
               onChange={(value) => setFilters({ ...filters, amenities: value })}
               value={filters.amenities}
             >
@@ -249,7 +247,6 @@ const CaretakerList = () => {
             <Select
               mode="multiple"
               placeholder={t('sex')}
-              style={{ width: '100%' }}
               onChange={(value) => setFilters({ ...filters, gender: value })}
               value={filters.gender}
             >
@@ -260,9 +257,7 @@ const CaretakerList = () => {
             {(filters.animalTypes.includes('DOG') || filters.animalTypes.includes('CAT')) && (
               <Select
                 mode="multiple"
-                maxTagCount={2}
                 placeholder={t('size')}
-                style={{ width: '100%' }}
                 onChange={(value) => setFilters({ ...filters, size: value })}
                 value={filters.size}
               >
