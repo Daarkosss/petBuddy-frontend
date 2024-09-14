@@ -18,13 +18,13 @@ export type CaretakerDTO = {
 export type AddressDTO = {
   city: string;
   zipCode: string;
-  voivodeship: Voivodeship;
+  voivodeship: VoivodeshipDTO;
   street: string;
   buildingNumber: string;
   apartmentNumber: string;
 }
 
-export type Voivodeship =
+export type VoivodeshipDTO =
   | 'DOLNOSLASKIE'
   | 'KUJAWSKO_POMORSKIE'
   | 'LUBELSKIE'

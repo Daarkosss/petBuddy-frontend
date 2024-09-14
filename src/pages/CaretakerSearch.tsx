@@ -2,16 +2,14 @@ import { useState, useEffect } from 'react';
 import { Table, Select, Input, Button, Spin, Rate } from 'antd';
 import { SorterResult, TablePaginationConfig, FilterValue, ColumnsType } from 'antd/es/table/interface';
 import { api } from '../api/api';
-import { CaretakerDTO } from '../types';
 import { Header } from '../components/Header';
 import { useTranslation } from 'react-i18next';
-
-const { Option } = Select;
+import Caretaker from '../models/Caretaker';
 
 const CaretakerList = () => {
   const { t } = useTranslation();
 
-  const [caretakers, setCaretakers] = useState<CaretakerDTO[]>([]);
+  const [caretakers, setCaretakers] = useState<Caretaker[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -40,7 +38,7 @@ const CaretakerList = () => {
     setError(null);
     try {
       const data = await api.getCaretakers(pagingParams, filters);
-      setCaretakers(data.content);
+      setCaretakers(data.content.map((caretaker) => new Caretaker(caretaker)));
       setPagination({
         current: data.pageable.pageNumber + 1,
         pageSize: data.pageable.pageSize,
@@ -58,7 +56,7 @@ const CaretakerList = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagingParams]);
 
-  const mapSortDirection = (sorter: SorterResult<CaretakerDTO>) => {
+  const mapSortDirection = (sorter: SorterResult<Caretaker>) => {
     if (sorter.order) {
       return sorter.order === 'ascend' ? 'ASC' : 'DESC';
     } else {
@@ -69,7 +67,7 @@ const CaretakerList = () => {
   const handleTableChange = (
     pagination: TablePaginationConfig,
     _filters: Record<string, FilterValue | null>,
-    sorter: SorterResult<CaretakerDTO> | SorterResult<CaretakerDTO>[]
+    sorter: SorterResult<Caretaker> | SorterResult<Caretaker>[]
   ) => {
     const singleSorter = Array.isArray(sorter) ? sorter[0] : sorter;
 
@@ -95,11 +93,11 @@ const CaretakerList = () => {
     }
   };
 
-  const columns: ColumnsType<CaretakerDTO> = [
+  const columns: ColumnsType<Caretaker> = [
     {
       title: t('caretaker'),
       key: 'caretaker',
-      render: (_: unknown, record: CaretakerDTO) => (
+      render: (_: unknown, record: Caretaker) => (
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <img
             src="https://via.placeholder.com/150"
@@ -108,7 +106,7 @@ const CaretakerList = () => {
           />
           <div>
             <h4>{record.accountData.name} {record.accountData.surname}</h4>
-            <p>{record.address.city}, {record.address.voivodeship}</p>
+            <p>{record.address.city}, {record.address.voivodeship.toString()}</p>
             <p>{record.description}</p>
             <Button href={`/caretakers/${record.accountData.email}`} type="primary">
               {t('viewDetails')}
@@ -122,11 +120,14 @@ const CaretakerList = () => {
       dataIndex: 'avgRating',
       key: 'avgRating',
       sorter: true,
-      render: (rating: number | null) => (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', gap: 5 }}>
+      render: (rating: number | null, record: Caretaker) => (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', gap: 5}}>
           {rating ? (
             <>
-              <Rate disabled allowHalf value={rating} />
+              <div style={{ display: 'flex', gap: 5 }}>
+                <Rate disabled allowHalf value={rating} />
+                <span>({record.numberOfRatings})</span>
+              </div>
               <span style={{ marginLeft: 8 }}>{rating.toFixed(2)}</span>
             </>
           ) : (
@@ -182,22 +183,22 @@ const CaretakerList = () => {
             value={filters.voivodeship}
             onKeyDown={handleKeyDown}
           >
-            <Option value="DOLNOSLASKIE">Dolnośląskie</Option>
-            <Option value="KUJAWSKO_POMORSKIE">Kujawsko-Pomorskie</Option>
-            <Option value="LUBELSKIE">Lubelskie</Option>
-            <Option value="LUBUSKIE">Lubuskie</Option>
-            <Option value="LODZKIE">Łódzkie</Option>
-            <Option value="MALOPOLSKIE">Małopolskie</Option>
-            <Option value="MAZOWIECKIE">Mazowieckie</Option>
-            <Option value="OPOLSKIE">Opolskie</Option>
-            <Option value="PODKARPACKIE">Podkarpackie</Option>
-            <Option value="PODLASKIE">Podlaskie</Option>
-            <Option value="POMORSKIE">Pomorskie</Option>
-            <Option value="SLASKIE">Śląskie</Option>
-            <Option value="SWIETOKRZYSKIE">Świętokrzyskie</Option>
-            <Option value="WARMINSKO_MAZURSKIE">Warmińsko-Mazurskie</Option>
-            <Option value="WIELKOPOLSKIE">Wielkopolskie</Option>
-            <Option value="ZACHODNIOPOMORSKIE">Zachodniopomorskie</Option>
+            <Select value="DOLNOSLASKIE">Dolnośląskie</Select>
+            <Select value="KUJAWSKO_POMORSKIE">Kujawsko-Pomorskie</Select>
+            <Select value="LUBELSKIE">Lubelskie</Select>
+            <Select value="LUBUSKIE">Lubuskie</Select>
+            <Select value="LODZKIE">Łódzkie</Select>
+            <Select value="MALOPOLSKIE">Małopolskie</Select>
+            <Select value="MAZOWIECKIE">Mazowieckie</Select>
+            <Select value="OPOLSKIE">Opolskie</Select>
+            <Select value="PODKARPACKIE">Podkarpackie</Select>
+            <Select value="PODLASKIE">Podlaskie</Select>
+            <Select value="POMORSKIE">Pomorskie</Select>
+            <Select value="SLASKIE">Śląskie</Select>
+            <Select value="SWIETOKRZYSKIE">Świętokrzyskie</Select>
+            <Select value="WARMINSKO_MAZURSKIE">Warmińsko-Mazurskie</Select>
+            <Select value="WIELKOPOLSKIE">Wielkopolskie</Select>
+            <Select value="ZACHODNIOPOMORSKIE">Zachodniopomorskie</Select>
           </Select>
           <Select
             mode="multiple"
@@ -206,9 +207,9 @@ const CaretakerList = () => {
             onChange={handleAnimalTypesChange}
             value={filters.animalTypes}
           >
-            <Option value="DOG">{t('dog')}</Option>
-            <Option value="CAT">{t('cat')}</Option>
-            <Option value="BIRD">{t('bird')}</Option>
+            <Select value="DOG">{t('dog')}</Select>
+            <Select value="CAT">{t('cat')}</Select>
+            <Select value="BIRD">{t('bird')}</Select>
           </Select>
           <Button type="primary" onClick={handleSearch} style={{ marginLeft: 20 }}>
             {t('search')}
