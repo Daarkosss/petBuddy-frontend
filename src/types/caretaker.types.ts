@@ -76,9 +76,11 @@ export type CaretakerResponse = {
 export type CaretakerSearchFilters = {
   personalDataLike?: string;
   cityLike?: string;
-  voivodeship?: string | null;
-  animalTypes?: string[];
-  amenities?: string[];
-  minPrice: number | undefined;
-  maxPrice: number | undefined;
+  voivodeship?: string;
+  animalTypes: string[];
+  amenities: string[];
+  minPrice?: number;
+  maxPrice?: number;
+  gender?: 'MALE' | 'SHE'
+  size?: 'SMALL' | 'MEDIUM' | 'BIG'
 }

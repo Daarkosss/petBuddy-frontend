@@ -241,6 +241,32 @@ const CaretakerList = () => {
             onChange={(e) => setFilters({ ...filters, maxPrice: parseFloat(e.target.value) || undefined })}
             className="input-field"
           />
+          <Select
+            mode="multiple"
+            maxTagCount={2}
+            placeholder={t('sex')}
+            style={{ width: 200 }}
+            onChange={(value) => setFilters({ ...filters, gender: value })}
+            value={filters.gender}
+          >
+            <Select value="MALE">{t('male')}</Select>
+            <Select value="FEMALE">{t('she')}</Select>
+          </Select>
+
+          {(filters.animalTypes.includes('DOG') || filters.animalTypes.includes('CAT')) && (
+            <Select
+              mode="multiple"
+              maxTagCount={2}
+              placeholder={t('size')}
+              style={{ width: 200 }}
+              onChange={(value) => setFilters({ ...filters, size: value })}
+              value={filters.size}
+            >
+              <Select value="SMALL">{t('small')}</Select>
+              <Select value="MEDIUM">{t('medium')}</Select>
+              <Select value="BIG">{t('big')}</Select>
+            </Select>
+          )}
 
           <Button type="primary" onClick={handleSearch} className="button-search">
             {t('search')}

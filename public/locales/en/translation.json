@@ -2,6 +2,16 @@
   "dog": "Dog",
   "cat": "Cat",
   "bird": "Bird",
+
+  "sex": "Sex",
+  "male": "Male",
+  "she": "She",
+
+  "size": "Size",
+  "small": "Small",
+  "medium": "Medium",
+  "big": "Big",
+
   "search": "Search",
   "rating": "Rating",
   "noRatings": "No ratings",

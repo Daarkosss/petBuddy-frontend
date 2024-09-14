@@ -2,6 +2,16 @@
   "dog": "Pies",
   "cat": "Kot",
   "bird": "Ptak",
+
+  "sex": "Płeć",
+  "male": "Samiec",
+  "she": "Samiczka",
+
+  "size": "Wielkość",
+  "small": "Mały",
+  "medium": "Średni",
+  "big": "Duży",
+
   "search": "Szukaj",
   "rating": "Ocena",
   "noRatings": "Brak ocen",
