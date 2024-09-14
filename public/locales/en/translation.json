@@ -1,4 +1,7 @@
 {
+  "from": "From",
+  "to": "To",
+
   "dog": "Dog",
   "cat": "Cat",
   "bird": "Bird",
@@ -13,6 +16,8 @@
   "big": "Big",
 
   "search": "Search",
+  "filters": "Filters",
+  "price": "Price",
   "rating": "Rating",
   "noRatings": "No ratings",
   "viewDetails": "View Details",

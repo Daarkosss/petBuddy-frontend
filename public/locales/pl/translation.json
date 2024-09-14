@@ -1,4 +1,7 @@
 {
+  "from": "Od",
+  "to": "Do",
+
   "dog": "Pies",
   "cat": "Kot",
   "bird": "Ptak",
@@ -13,6 +16,8 @@
   "big": "Duży",
 
   "search": "Szukaj",
+  "filters": "Filtry",
+  "price": "Cena",
   "rating": "Ocena",
   "noRatings": "Brak ocen",
   "viewDetails": "Zobacz Szczegóły",

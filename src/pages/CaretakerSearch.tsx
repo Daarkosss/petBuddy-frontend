@@ -161,129 +161,137 @@ const CaretakerList = () => {
   return (
     <div>
       <Header />
-      <div className="caretaker-search">
+      <div className="caretaker-container">
         <Spin spinning={isLoading} fullscreen />
-        <div className='filters'>
-          <Input
-            placeholder={t('caretakerSearch.personalData')}
-            value={filters.personalDataLike}
-            onChange={(e) => handleSearchChange('personalDataLike', e.target.value)}
-            className="input-field"
-            onKeyDown={handleKeyDown}
-          />
-          <Input
-            placeholder={t('city')}
-            value={filters.cityLike}
-            onChange={(e) => handleSearchChange('cityLike', e.target.value)}
-            className="input-field"
-            onKeyDown={handleKeyDown}
-          />
-          <Select
-            placeholder={t('voivodeship')}
-            className="input-field"
-            onChange={handleVoivodeshipChange}
-            allowClear
-            value={filters.voivodeship}
-            onKeyDown={handleKeyDown}
-          >
-            <Select value="DOLNOSLASKIE">Dolnośląskie</Select>
-            <Select value="KUJAWSKO_POMORSKIE">Kujawsko-Pomorskie</Select>
-            <Select value="LUBELSKIE">Lubelskie</Select>
-            <Select value="LUBUSKIE">Lubuskie</Select>
-            <Select value="LODZKIE">Łódzkie</Select>
-            <Select value="MALOPOLSKIE">Małopolskie</Select>
-            <Select value="MAZOWIECKIE">Mazowieckie</Select>
-            <Select value="OPOLSKIE">Opolskie</Select>
-            <Select value="PODKARPACKIE">Podkarpackie</Select>
-            <Select value="PODLASKIE">Podlaskie</Select>
-            <Select value="POMORSKIE">Pomorskie</Select>
-            <Select value="SLASKIE">Śląskie</Select>
-            <Select value="SWIETOKRZYSKIE">Świętokrzyskie</Select>
-            <Select value="WARMINSKO_MAZURSKIE">Warmińsko-Mazurskie</Select>
-            <Select value="WIELKOPOLSKIE">Wielkopolskie</Select>
-            <Select value="ZACHODNIOPOMORSKIE">Zachodniopomorskie</Select>
-          </Select>
-          <Select
-            mode="multiple"
-            maxTagCount={2}
-            placeholder={t('caretakerSearch.animalTypes')}
-            style={{ width: 200 }}
-            onChange={handleAnimalTypesChange}
-            value={filters.animalTypes}
-          >
-            <Select value="DOG">{t('dog')}</Select>
-            <Select value="CAT">{t('cat')}</Select>
-            <Select value="BIRD">{t('bird')}</Select>
-          </Select>
-          <Select
-            mode="multiple"
-            maxTagCount={2}
-            placeholder={t('caretakerSearch.amenities')}
-            style={{ width: 300 }}
-            onChange={(value) => setFilters({ ...filters, amenities: value })}
-            value={filters.amenities}
-          >
-            <Select value="toys">{t('toys')}</Select>
-            <Select value="scratching post">{t('scratchingPost')}</Select>
-            <Select value="cage">{t('cage')}</Select>
-          </Select>
-          <Input
-            type="number"
-            placeholder={t('caretakerSearch.minPrice')}
-            value={filters.minPrice}
-            onChange={(e) => setFilters({ ...filters, minPrice: parseFloat(e.target.value) || undefined })}
-            className="input-field"
-          />
-          <Input
-            type="number"
-            placeholder={t('caretakerSearch.maxPrice')}
-            value={filters.maxPrice}
-            onChange={(e) => setFilters({ ...filters, maxPrice: parseFloat(e.target.value) || undefined })}
-            className="input-field"
-          />
-          <Select
-            mode="multiple"
-            maxTagCount={2}
-            placeholder={t('sex')}
-            style={{ width: 200 }}
-            onChange={(value) => setFilters({ ...filters, gender: value })}
-            value={filters.gender}
-          >
-            <Select value="MALE">{t('male')}</Select>
-            <Select value="FEMALE">{t('she')}</Select>
-          </Select>
-
-          {(filters.animalTypes.includes('DOG') || filters.animalTypes.includes('CAT')) && (
+        <div className="caretaker-sidebar">
+          <h2>{t('filters')}</h2>
+          <div className='filters'>
+            <Input
+              placeholder={t('caretakerSearch.personalData')}
+              value={filters.personalDataLike}
+              onChange={(e) => handleSearchChange('personalDataLike', e.target.value)}
+              className="input-field"
+              onKeyDown={handleKeyDown}
+            />
+            <Input
+              placeholder={t('city')}
+              value={filters.cityLike}
+              onChange={(e) => handleSearchChange('cityLike', e.target.value)}
+              className="input-field"
+              onKeyDown={handleKeyDown}
+            />
+            <Select
+              placeholder={t('voivodeship')}
+              className="input-field"
+              onChange={handleVoivodeshipChange}
+              allowClear
+              value={filters.voivodeship}
+              onKeyDown={handleKeyDown}
+            >
+              <Select value="DOLNOSLASKIE">Dolnośląskie</Select>
+              <Select value="KUJAWSKO_POMORSKIE">Kujawsko-Pomorskie</Select>
+              <Select value="LUBELSKIE">Lubelskie</Select>
+              <Select value="LUBUSKIE">Lubuskie</Select>
+              <Select value="LODZKIE">Łódzkie</Select>
+              <Select value="MALOPOLSKIE">Małopolskie</Select>
+              <Select value="MAZOWIECKIE">Mazowieckie</Select>
+              <Select value="OPOLSKIE">Opolskie</Select>
+              <Select value="PODKARPACKIE">Podkarpackie</Select>
+              <Select value="PODLASKIE">Podlaskie</Select>
+              <Select value="POMORSKIE">Pomorskie</Select>
+              <Select value="SLASKIE">Śląskie</Select>
+              <Select value="SWIETOKRZYSKIE">Świętokrzyskie</Select>
+              <Select value="WARMINSKO_MAZURSKIE">Warmińsko-Mazurskie</Select>
+              <Select value="WIELKOPOLSKIE">Wielkopolskie</Select>
+              <Select value="ZACHODNIOPOMORSKIE">Zachodniopomorskie</Select>
+            </Select>
             <Select
               mode="multiple"
-              maxTagCount={2}
-              placeholder={t('size')}
-              style={{ width: 200 }}
-              onChange={(value) => setFilters({ ...filters, size: value })}
-              value={filters.size}
+              placeholder={t('caretakerSearch.animalTypes')}
+              style={{ width: '100%' }}
+              onChange={handleAnimalTypesChange}
+              value={filters.animalTypes}
             >
-              <Select value="SMALL">{t('small')}</Select>
-              <Select value="MEDIUM">{t('medium')}</Select>
-              <Select value="BIG">{t('big')}</Select>
+              <Select value="DOG">{t('dog')}</Select>
+              <Select value="CAT">{t('cat')}</Select>
+              <Select value="BIRD">{t('bird')}</Select>
             </Select>
-          )}
+            <Select
+              mode="multiple"
+              maxTagCount={3}
+              placeholder={t('caretakerSearch.amenities')}
+              style={{ width: '100%' }}
+              onChange={(value) => setFilters({ ...filters, amenities: value })}
+              value={filters.amenities}
+            >
+              <Select value="toys">{t('toys')}</Select>
+              <Select value="scratching post">{t('scratchingPost')}</Select>
+              <Select value="cage">{t('cage')}</Select>
+            </Select>
+            <div className='prices'>
+              <div>{t('price')}</div>
+              <Input
+                type="number"
+                placeholder={t('from')}
+                value={filters.minPrice}
+                onChange={(e) => setFilters({ ...filters, minPrice: parseFloat(e.target.value) || undefined })}
+                className="input-field"
+              />
+              <Input
+                type="number"
+                placeholder={t('to')}
+                value={filters.maxPrice}
+                onChange={(e) => setFilters({ ...filters, maxPrice: parseFloat(e.target.value) || undefined })}
+                className="input-field"
+              />
+              <div>zł</div>
+            </div>
+            <Select
+              mode="multiple"
+              placeholder={t('sex')}
+              style={{ width: '100%' }}
+              onChange={(value) => setFilters({ ...filters, gender: value })}
+              value={filters.gender}
+            >
+              <Select value="MALE">{t('male')}</Select>
+              <Select value="FEMALE">{t('she')}</Select>
+            </Select>
 
-          <Button type="primary" onClick={handleSearch} className="button-search">
-            {t('search')}
-          </Button>
+            {(filters.animalTypes.includes('DOG') || filters.animalTypes.includes('CAT')) && (
+              <Select
+                mode="multiple"
+                maxTagCount={2}
+                placeholder={t('size')}
+                style={{ width: '100%' }}
+                onChange={(value) => setFilters({ ...filters, size: value })}
+                value={filters.size}
+              >
+                <Select value="SMALL">{t('small')}</Select>
+                <Select value="MEDIUM">{t('medium')}</Select>
+                <Select value="BIG">{t('big')}</Select>
+              </Select>
+            )}
+
+            <Button type="primary" onClick={handleSearch} className="button-search">
+              {t('search')}
+            </Button>
+          </div>
         </div>
-        <Table
-          columns={columns}
-          dataSource={caretakers}
-          rowKey={(record) => record.accountData.email}
-          pagination={{
-            current: pagination.current,
-            pageSize: pagination.pageSize,
-            total: pagination.total,
-            showSizeChanger: true,
-          }}
-          onChange={handleTableChange}
-        />
+
+        <div className="caretaker-content">
+          <Table
+            columns={columns}
+            dataSource={caretakers}
+            rowKey={(record) => record.accountData.email}
+            pagination={{
+              current: pagination.current,
+              pageSize: pagination.pageSize,
+              total: pagination.total,
+              showSizeChanger: true,
+            }}
+            onChange={handleTableChange}
+          />
+        </div>
       </div>
     </div>
   );

@@ -1,22 +1,39 @@
 @use '../helpers/variables' as v;
 
-.caretaker-search {
-  width: 90vw;
-  margin: 5vh auto;
+.caretaker-container {
+  margin: 3vh auto;
   padding: 20px;
-  border-radius: 8px;
+  display: flex;
+  gap: 30px;
+
+  .caretaker-sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    width: 300px;
+    height: max-content;
+    padding: 20px;
+    border: 1px solid v.$grey-light;
+    background-color: v.$white;
+    border-radius: 10px;
+  }
   
   .filters {
     display: flex;
-    align-items: space-evenly;
-    gap: 20px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-    height: min-content;
+    flex-direction: column;
+    gap: 15px;
+
+    .prices {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+    }
   }
 
-  .input-field, .button-search {
-    height: 40px;
+  .caretaker-content {
+    flex-grow: 1;
   }
 
   .caretaker-list-item {
@@ -45,14 +62,5 @@
 
   .caretaker-rating-value {
     margin-left: 8px;
-  }
-
-  .input-field {
-    width: 200px;
-    margin-right: 20px;
-  }
-
-  .button-search {
-    margin-left: 20px;
   }
 }
