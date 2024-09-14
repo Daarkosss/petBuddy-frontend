@@ -98,11 +98,10 @@ const CaretakerList = () => {
       title: t('caretaker'),
       key: 'caretaker',
       render: (_: unknown, record: Caretaker) => (
-        <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div className="caretaker-list-item">
           <img
             src="https://via.placeholder.com/150"
             alt="avatar"
-            style={{ width: 150, height: 150, marginRight: 20 }}
           />
           <div>
             <h4>{record.accountData.name} {record.accountData.surname}</h4>
@@ -121,14 +120,14 @@ const CaretakerList = () => {
       key: 'avgRating',
       sorter: true,
       render: (rating: number | null, record: Caretaker) => (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', gap: 5}}>
+        <div className="caretaker-rating">
           {rating ? (
             <>
-              <div style={{ display: 'flex', gap: 5 }}>
+              <div className="caretaker-rating-stars">
                 <Rate disabled allowHalf value={rating} />
                 <span>({record.numberOfRatings})</span>
               </div>
-              <span style={{ marginLeft: 8 }}>{rating.toFixed(2)}</span>
+              <span className="caretaker-rating-value">{rating.toFixed(2)}</span>
             </>
           ) : (
             <>
@@ -165,19 +164,19 @@ const CaretakerList = () => {
             placeholder={t('caretakerSearch.personalData')}
             value={filters.personalDataLike}
             onChange={(e) => handleSearchChange('personalDataLike', e.target.value)}
-            style={{ width: 200, marginRight: 20 }}
+            className="input-field"
             onKeyDown={handleKeyDown}
           />
           <Input
             placeholder={t('city')}
             value={filters.cityLike}
             onChange={(e) => handleSearchChange('cityLike', e.target.value)}
-            style={{ width: 200, marginRight: 20 }}
+            className="input-field"
             onKeyDown={handleKeyDown}
           />
           <Select
             placeholder={t('voivodeship')}
-            style={{ width: 200, marginRight: 20 }}
+            className="input-field"
             onChange={handleVoivodeshipChange}
             allowClear
             value={filters.voivodeship}
@@ -211,7 +210,7 @@ const CaretakerList = () => {
             <Select value="CAT">{t('cat')}</Select>
             <Select value="BIRD">{t('bird')}</Select>
           </Select>
-          <Button type="primary" onClick={handleSearch} style={{ marginLeft: 20 }}>
+          <Button type="primary" onClick={handleSearch} className="button-search">
             {t('search')}
           </Button>
         </div>
