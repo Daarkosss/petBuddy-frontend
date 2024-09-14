@@ -44,6 +44,9 @@
   
   "caretakerSearch": {
     "personalData": "Personal data",
-    "animalTypes": "Animal types"
+    "animalTypes": "Animal types",
+    "amenities": "Amenities",
+    "minPrice": "Min price",
+    "maxPrice": "Max price"
   }
 }

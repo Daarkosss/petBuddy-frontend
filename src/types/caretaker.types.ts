@@ -72,3 +72,13 @@ export type CaretakerResponse = {
   numberOfElements: number;
   empty: boolean;
 }
+
+export type CaretakerSearchFilters = {
+  personalDataLike?: string;
+  cityLike?: string;
+  voivodeship?: string | null;
+  animalTypes?: string[];
+  amenities?: string[];
+  minPrice: number | undefined;
+  maxPrice: number | undefined;
+}

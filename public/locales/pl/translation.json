@@ -44,6 +44,9 @@
 
   "caretakerSearch": {
     "personalData": "Dane personalne",
-    "animalTypes": "Rodzaje zwierząt"
+    "animalTypes": "Rodzaje zwierząt",
+    "amenities": "Udogodnienia",
+    "minPrice": "Minimalna cena",
+    "maxPrice": "Maksymalna cena"
   }
 }

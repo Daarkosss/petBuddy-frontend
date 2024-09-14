@@ -5,6 +5,7 @@ import { api } from '../api/api';
 import { Header } from '../components/Header';
 import { useTranslation } from 'react-i18next';
 import Caretaker from '../models/Caretaker';
+import { CaretakerSearchFilters } from '../types';
 
 const CaretakerList = () => {
   const { t } = useTranslation();
@@ -26,11 +27,14 @@ const CaretakerList = () => {
     total: 0,
   });
 
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<CaretakerSearchFilters>({
     personalDataLike: '',
     cityLike: '',
-    voivodeship: undefined as string | undefined,
-    animalTypes: [] as string[],
+    voivodeship: undefined,
+    animalTypes: [],
+    amenities: [],
+    minPrice: undefined,
+    maxPrice: undefined,
   });
 
   const fetchCaretakers = async () => {
@@ -106,7 +110,7 @@ const CaretakerList = () => {
           <div>
             <h4>{record.accountData.name} {record.accountData.surname}</h4>
             <p>{record.address.city}, {record.address.voivodeship.toString()}</p>
-            <p>{record.description}</p>
+            <p>{record.description.substring(0, 100)}{record.description.length > 100 && <span>...</span>}</p>
             <Button href={`/caretakers/${record.accountData.email}`} type="primary">
               {t('viewDetails')}
             </Button>
@@ -201,8 +205,9 @@ const CaretakerList = () => {
           </Select>
           <Select
             mode="multiple"
+            maxTagCount={2}
             placeholder={t('caretakerSearch.animalTypes')}
-            style={{ width: 300 }}
+            style={{ width: 200 }}
             onChange={handleAnimalTypesChange}
             value={filters.animalTypes}
           >
@@ -210,6 +215,33 @@ const CaretakerList = () => {
             <Select value="CAT">{t('cat')}</Select>
             <Select value="BIRD">{t('bird')}</Select>
           </Select>
+          <Select
+            mode="multiple"
+            maxTagCount={2}
+            placeholder={t('caretakerSearch.amenities')}
+            style={{ width: 300 }}
+            onChange={(value) => setFilters({ ...filters, amenities: value })}
+            value={filters.amenities}
+          >
+            <Select value="toys">{t('toys')}</Select>
+            <Select value="scratching post">{t('scratchingPost')}</Select>
+            <Select value="cage">{t('cage')}</Select>
+          </Select>
+          <Input
+            type="number"
+            placeholder={t('caretakerSearch.minPrice')}
+            value={filters.minPrice}
+            onChange={(e) => setFilters({ ...filters, minPrice: parseFloat(e.target.value) || undefined })}
+            className="input-field"
+          />
+          <Input
+            type="number"
+            placeholder={t('caretakerSearch.maxPrice')}
+            value={filters.maxPrice}
+            onChange={(e) => setFilters({ ...filters, maxPrice: parseFloat(e.target.value) || undefined })}
+            className="input-field"
+          />
+
           <Button type="primary" onClick={handleSearch} className="button-search">
             {t('search')}
           </Button>

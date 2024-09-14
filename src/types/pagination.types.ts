@@ -14,4 +14,11 @@ export type PageableDTO = {
   pageNumber: number;
   unpaged: boolean;
 }
+
+export type PagingParams = {
+  page: number;
+  size: number;
+  sortBy?: string;
+  sortDirection?: string;
+}
   

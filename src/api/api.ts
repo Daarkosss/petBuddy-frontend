@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify';
 import store from '../store/RootStore';
-import { CaretakerResponse } from '../types';
+import { CaretakerResponse, CaretakerSearchFilters, PagingParams } from '../types';
 
 const backendHost = import.meta.env.VITE_BACKEND_HOST || window.location.hostname;
 const backendPort = import.meta.env.VITE_BACKEND_PORT || '8081';
@@ -89,13 +89,8 @@ class API {
   }
 
   async getCaretakers(
-    pagingParams: { page: number; size: number; sortBy?: string; sortDirection?: string },
-    filters: {
-      personalDataLike?: string;
-      cityLike?: string;
-      voivodeship?: string | null;
-      animalTypes?: string[];
-    }
+    pagingParams: PagingParams,
+    filters: CaretakerSearchFilters
   ): Promise<CaretakerResponse> {
     const queryParams = new URLSearchParams({
       page: pagingParams.page.toString(),
@@ -122,6 +117,17 @@ class API {
       filters.animalTypes.forEach((type) => {
         queryParams.append('offerSearchCriteria.animalTypes', type);
       });
+    }
+    if (filters.amenities && filters.amenities.length > 0) {
+      filters.amenities.forEach((amenity) => {
+        queryParams.append('offerSearchCriteria.amenity', amenity);
+      });
+    }
+    if (filters.minPrice) {
+      queryParams.append('offerSearchCriteria.minPrice', filters.minPrice.toString());
+    }
+    if (filters.maxPrice) {
+      queryParams.append('offerSearchCriteria.maxPrice', filters.maxPrice.toString());
     }
   
     const queryString = queryParams.toString();
