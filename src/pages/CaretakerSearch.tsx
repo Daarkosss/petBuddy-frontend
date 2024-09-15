@@ -104,19 +104,21 @@ const CaretakerList = () => {
         },
       }));
 
-      return {
+      const newAnimalFilters = {
         ...prevFilters,
         [animalType]: updatedConfigs,
       };
-    });
 
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      animals: Object.keys(animalFilters).map((type) => ({
-        animalType: type,
-        offerConfigurations: animalFilters[type],
-      })),
-    }));
+      setFilters((prevFilters) => ({
+        ...prevFilters,
+        animals: Object.keys(newAnimalFilters).map((type) => ({
+          animalType: type,
+          offerConfigurations: newAnimalFilters[type],
+        })),
+      }));
+
+      return newAnimalFilters;
+    });
   };
 
   const handleAnimalTypesChange = (selectedAnimalTypes: string[]) => {
