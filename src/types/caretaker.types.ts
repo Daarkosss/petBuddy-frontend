@@ -77,10 +77,23 @@ export type CaretakerSearchFilters = {
   personalDataLike?: string;
   cityLike?: string;
   voivodeship?: string;
-  animalTypes: string[];
-  amenities: string[];
+  animals?: AnimalFilter[];
+}
+
+export type AnimalSex = 'MALE' | 'SHE';
+export type AnimalSize = 'SMALL' | 'MEDIUM' | 'BIG'; 
+
+export type OfferConfiguration = {
+  attributes?: {
+    SIZE?: AnimalSize[];
+    SEX?: AnimalSex[];
+  };
   minPrice?: number;
   maxPrice?: number;
-  gender?: 'MALE' | 'SHE'
-  size?: 'SMALL' | 'MEDIUM' | 'BIG'
-}
+  amenities?: string[];
+};
+
+export type AnimalFilter = {
+  animalType: string;
+  offerConfigurations: OfferConfiguration[];
+};

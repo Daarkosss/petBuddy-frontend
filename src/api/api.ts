@@ -113,28 +113,20 @@ class API {
     if (filters.voivodeship) {
       queryParams.append('voivodeship', filters.voivodeship);
     }
-    if (filters.animalTypes && filters.animalTypes.length > 0) {
-      filters.animalTypes.forEach((type) => {
-        queryParams.append('offerSearchCriteria.animalTypes', type);
-      });
-    }
-    if (filters.amenities && filters.amenities.length > 0) {
-      filters.amenities.forEach((amenity) => {
-        queryParams.append('offerSearchCriteria.amenity', amenity);
-      });
-    }
-    if (filters.minPrice) {
-      queryParams.append('offerSearchCriteria.minPrice', filters.minPrice.toString());
-    }
-    if (filters.maxPrice) {
-      queryParams.append('offerSearchCriteria.maxPrice', filters.maxPrice.toString());
-    }
+  
+    // if (filters.amenities && filters.amenities.length > 0) {
+    //   filters.amenities.forEach((amenity) => {
+    //     queryParams.append('offerSearchCriteria.amenity', amenity);
+    //   });
+    // }
   
     const queryString = queryParams.toString();
+    const requestBody = filters.animals;
   
     return this.authorizedFetch<CaretakerResponse>(
-      'GET',
-      `api/caretaker?${queryString}`
+      'POST',
+      `api/caretaker?${queryString}`,
+      requestBody
     );
   }
 

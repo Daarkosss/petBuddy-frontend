@@ -5,7 +5,7 @@ import { api } from '../api/api';
 import { Header } from '../components/Header';
 import { useTranslation } from 'react-i18next';
 import Caretaker from '../models/Caretaker';
-import { CaretakerSearchFilters } from '../types';
+import { CaretakerSearchFilters, OfferConfiguration, AnimalSize, AnimalSex } from '../types';
 
 const CaretakerList = () => {
   const { t } = useTranslation();
@@ -31,11 +31,10 @@ const CaretakerList = () => {
     personalDataLike: '',
     cityLike: '',
     voivodeship: undefined,
-    animalTypes: [],
-    amenities: [],
-    minPrice: undefined,
-    maxPrice: undefined,
+    animals: [],
   });
+
+  const [animalFilters, setAnimalFilters] = useState<Record<string, OfferConfiguration[]>>({});
 
   const fetchCaretakers = async () => {
     setIsLoading(true);
@@ -54,7 +53,7 @@ const CaretakerList = () => {
       setIsLoading(false);
     }
   };
-  
+
   useEffect(() => {
     fetchCaretakers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -79,7 +78,7 @@ const CaretakerList = () => {
     setPagingParams({
       page: (pagination.current || 1) - 1,
       size: pagination.pageSize || 10,
-      sortBy: isSorted ? singleSorter.field as string : undefined,
+      sortBy: isSorted ? (singleSorter.field as string) : undefined,
       sortDirection: mapSortDirection(singleSorter),
     });
   };
@@ -95,6 +94,34 @@ const CaretakerList = () => {
     if (e.key === 'Enter') {
       handleSearch();
     }
+  };
+
+  const handleAnimalFilterChange = (animalType: string, updatedConfig: Partial<OfferConfiguration>) => {
+    setAnimalFilters((prevFilters) => {
+      const existingConfigs = prevFilters[animalType] || [{}];
+
+      const updatedConfigs = existingConfigs.map((config) => ({
+        ...config,
+        ...updatedConfig,
+        attributes: {
+          ...config.attributes,
+          ...updatedConfig.attributes,
+        },
+      }));
+
+      return {
+        ...prevFilters,
+        [animalType]: updatedConfigs,
+      };
+    });
+
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      animals: Object.keys(animalFilters).map((type) => ({
+        animalType: type,
+        offerConfigurations: animalFilters[type],
+      })),
+    }));
   };
 
   const columns: ColumnsType<Caretaker> = [
@@ -144,16 +171,74 @@ const CaretakerList = () => {
     },
   ];
 
-  const handleSearchChange = (field: keyof typeof filters, value: string) => {
-    setFilters({ ...filters, [field]: value });
+  const handleAnimalTypesChange = (selectedAnimalTypes: string[]) => {
+    const newAnimalFilters: Record<string, OfferConfiguration[]> = {};
+    selectedAnimalTypes.forEach((animalType) => {
+      newAnimalFilters[animalType] = animalFilters[animalType] || [{}];
+    });
+
+    setAnimalFilters(newAnimalFilters);
+
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      animals: selectedAnimalTypes.map((animalType) => ({
+        animalType,
+        offerConfigurations: newAnimalFilters[animalType],
+      })),
+    }));
   };
 
-  const handleVoivodeshipChange = (value: string) => {
-    setFilters({ ...filters, voivodeship: value });
-  };
-
-  const handleAnimalTypesChange = (value: string[]) => {
-    setFilters({ ...filters, animalTypes: value });
+  const renderAnimalFilters = () => {
+    return filters.animals?.map((animal) => (
+      <div key={animal.animalType} className="animal-filter">
+        <h3>{t(animal.animalType)}</h3>
+        <div className='prices'>
+          <div>{t('price')}</div>
+          <Input
+            type="number"
+            placeholder={t('from')}
+            value={animalFilters[animal.animalType]?.[0]?.minPrice}
+            onChange={(e) =>
+              handleAnimalFilterChange(animal.animalType, { minPrice: parseFloat(e.target.value) || undefined })
+            }
+            className="input-field"
+          />
+          <Input
+            type="number"
+            placeholder={t('to')}
+            value={animalFilters[animal.animalType]?.[0]?.maxPrice}
+            onChange={(e) =>
+              handleAnimalFilterChange(animal.animalType, { maxPrice: parseFloat(e.target.value) || undefined })
+            }
+            className="input-field"
+          />
+          <div>zł</div>
+        </div>
+        <Select
+          mode="multiple"
+          placeholder={t('size')}
+          onChange={(value) =>
+            handleAnimalFilterChange(animal.animalType, { attributes: { SIZE: value as AnimalSize[] } })
+          }
+          value={animalFilters[animal.animalType]?.[0]?.attributes?.SIZE || []}
+        >
+          <Select.Option value="SMALL">{t('small')}</Select.Option>
+          <Select.Option value="MEDIUM">{t('medium')}</Select.Option>
+          <Select.Option value="BIG">{t('big')}</Select.Option>
+        </Select>
+        <Select
+          mode="multiple"
+          placeholder={t('sex')}
+          onChange={(value) =>
+            handleAnimalFilterChange(animal.animalType, { attributes: { SEX: value as AnimalSex[] } })
+          }
+          value={animalFilters[animal.animalType]?.[0]?.attributes?.SEX || []}
+        >
+          <Select.Option value="MALE">{t('male')}</Select.Option>
+          <Select.Option value="SHE">{t('she')}</Select.Option>
+        </Select>
+      </div>
+    ));
   };
 
   if (error) return <div>{error}</div>;
@@ -169,24 +254,24 @@ const CaretakerList = () => {
             <Input
               placeholder={t('caretakerSearch.personalData')}
               value={filters.personalDataLike}
-              onChange={(e) => handleSearchChange('personalDataLike', e.target.value)}
+              onChange={(e) => setFilters({ ...filters, personalDataLike: e.target.value })}
+              
               className="input-field"
               onKeyDown={handleKeyDown}
             />
             <Input
               placeholder={t('city')}
               value={filters.cityLike}
-              onChange={(e) => handleSearchChange('cityLike', e.target.value)}
+              onChange={(e) => setFilters({ ...filters, cityLike: e.target.value })}
               className="input-field"
               onKeyDown={handleKeyDown}
             />
             <Select
               placeholder={t('voivodeship')}
               className="input-field"
-              onChange={handleVoivodeshipChange}
+              onChange={(value) => setFilters({ ...filters, voivodeship: value })}
               allowClear
               value={filters.voivodeship}
-              onKeyDown={handleKeyDown}
             >
               <Select value="DOLNOSLASKIE">Dolnośląskie</Select>
               <Select value="KUJAWSKO_POMORSKIE">Kujawsko-Pomorskie</Select>
@@ -209,64 +294,13 @@ const CaretakerList = () => {
               mode="multiple"
               placeholder={t('caretakerSearch.animalTypes')}
               onChange={handleAnimalTypesChange}
-              value={filters.animalTypes}
+              value={filters.animals?.map((animal) => animal.animalType)}
             >
-              <Select value="DOG">{t('dog')}</Select>
-              <Select value="CAT">{t('cat')}</Select>
-              <Select value="BIRD">{t('bird')}</Select>
+              <Select.Option value="DOG">{t('dog')}</Select.Option>
+              <Select.Option value="CAT">{t('cat')}</Select.Option>
+              <Select.Option value="BIRD">{t('bird')}</Select.Option>
             </Select>
-            <Select
-              mode="multiple"
-              maxTagCount={3}
-              placeholder={t('caretakerSearch.amenities')}
-              onChange={(value) => setFilters({ ...filters, amenities: value })}
-              value={filters.amenities}
-            >
-              <Select value="toys">{t('toys')}</Select>
-              <Select value="scratching post">{t('scratchingPost')}</Select>
-              <Select value="cage">{t('cage')}</Select>
-            </Select>
-            <div className='prices'>
-              <div>{t('price')}</div>
-              <Input
-                type="number"
-                placeholder={t('from')}
-                value={filters.minPrice}
-                onChange={(e) => setFilters({ ...filters, minPrice: parseFloat(e.target.value) || undefined })}
-                className="input-field"
-              />
-              <Input
-                type="number"
-                placeholder={t('to')}
-                value={filters.maxPrice}
-                onChange={(e) => setFilters({ ...filters, maxPrice: parseFloat(e.target.value) || undefined })}
-                className="input-field"
-              />
-              <div>zł</div>
-            </div>
-            <Select
-              mode="multiple"
-              placeholder={t('sex')}
-              onChange={(value) => setFilters({ ...filters, gender: value })}
-              value={filters.gender}
-            >
-              <Select value="MALE">{t('male')}</Select>
-              <Select value="FEMALE">{t('she')}</Select>
-            </Select>
-
-            {(filters.animalTypes.includes('DOG') || filters.animalTypes.includes('CAT')) && (
-              <Select
-                mode="multiple"
-                placeholder={t('size')}
-                onChange={(value) => setFilters({ ...filters, size: value })}
-                value={filters.size}
-              >
-                <Select value="SMALL">{t('small')}</Select>
-                <Select value="MEDIUM">{t('medium')}</Select>
-                <Select value="BIG">{t('big')}</Select>
-              </Select>
-            )}
-
+            {renderAnimalFilters()}
             <Button type="primary" onClick={handleSearch} className="button-search">
               {t('search')}
             </Button>
