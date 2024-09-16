@@ -1,4 +1,3 @@
-// CaretakerFilters.tsx
 import React from 'react';
 import { Input, Select, Button } from 'antd';
 import { CaretakerSearchFilters, OfferConfiguration, AnimalSize, AnimalSex } from '../types';
@@ -32,28 +31,50 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
   const renderAnimalFilters = () => {
     return filters.animals?.map((animal) => (
       <div key={animal.animalType} className="animal-filter">
-        <h3>{t(animal.animalType)}</h3>
+        <h3>{t(animal.animalType.toLowerCase())}</h3>
         <div className='prices'>
           <div>{t('price')}</div>
-          <Input
-            type="number"
-            placeholder={t('from')}
-            value={animalFilters[animal.animalType]?.[0]?.minPrice}
-            onChange={(e) =>
-              onAnimalFiltersChange(animal.animalType, { minPrice: parseFloat(e.target.value) || undefined })
-            }
-            className="input-field"
-          />
-          <Input
-            type="number"
-            placeholder={t('to')}
-            value={animalFilters[animal.animalType]?.[0]?.maxPrice}
-            onChange={(e) =>
-              onAnimalFiltersChange(animal.animalType, { maxPrice: parseFloat(e.target.value) || undefined })
-            }
-            className="input-field"
-          />
-          <div>zł</div>
+            <Input
+              type="number"
+              placeholder={t('from')}
+              value={animalFilters[animal.animalType]?.[0]?.minPrice}
+              onInput={(e) => {
+                const input = e.target as HTMLInputElement;
+                const value = input.value;
+                const regex = /^\d{0,5}?$/;
+
+                if (regex.test(value)) {
+                  const minPrice = parseFloat(value) || undefined;
+                  if (minPrice === undefined || minPrice >= 0.01) {
+                    onAnimalFiltersChange(animal.animalType, { minPrice });
+                  }
+                } else {
+                  input.value = value.slice(0, -1);
+                }
+              }}
+              className="input-field"
+            />
+            <Input
+              type="number"
+              placeholder={t('to')}
+              value={animalFilters[animal.animalType]?.[0]?.maxPrice}
+              onInput={(e) => {
+                const input = e.target as HTMLInputElement;
+                const value = input.value;
+                const regex = /^\d{0,5}?$/;
+          
+                if (regex.test(value)) {
+                  const maxPrice = parseFloat(value) || undefined;
+                  if (maxPrice === undefined || maxPrice < 100000) {
+                    onAnimalFiltersChange(animal.animalType, { maxPrice });
+                  }
+                } else {
+                  input.value = value.slice(0, -1);
+                }
+              }}
+              className="input-field"
+            />
+            <div>zł</div>
         </div>
         <Select
           mode="multiple"
@@ -63,9 +84,9 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
           }
           value={animalFilters[animal.animalType]?.[0]?.attributes?.SIZE || []}
         >
-          <Select value="SMALL">{t('small')}</Select>
-          <Select value="MEDIUM">{t('medium')}</Select>
-          <Select value="BIG">{t('big')}</Select>
+          <Select.Option value="SMALL">{t('small')}</Select.Option>
+          <Select.Option value="MEDIUM">{t('medium')}</Select.Option>
+          <Select.Option value="BIG">{t('big')}</Select.Option>
         </Select>
         <Select
           mode="multiple"
@@ -75,8 +96,20 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
           }
           value={animalFilters[animal.animalType]?.[0]?.attributes?.SEX || []}
         >
-          <Select value="MALE">{t('male')}</Select>
-          <Select value="SHE">{t('she')}</Select>
+          <Select.Option value="MALE">{t('male')}</Select.Option>
+          <Select.Option value="SHE">{t('she')}</Select.Option>
+        </Select>
+        <Select
+          mode="multiple"
+          placeholder={t('amenities')}
+          onChange={(value) =>
+            onAnimalFiltersChange(animal.animalType, { amenities: value as string[] })
+          }
+          value={animalFilters[animal.animalType]?.[0]?.amenities || []}
+        >
+          <Select.Option value="toys">{t('toys')}</Select.Option>
+          <Select.Option value="scratching post">{t('scratchingPost')}</Select.Option>
+          <Select.Option value="cage">{t('cage')}</Select.Option>
         </Select>
       </div>
     ));
@@ -108,22 +141,22 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
           value={filters.voivodeship}
           onKeyDown={handleKeyDown}
         >
-          <Select value="DOLNOSLASKIE">Dolnośląskie</Select>
-          <Select value="KUJAWSKO_POMORSKIE">Kujawsko-Pomorskie</Select>
-          <Select value="LUBELSKIE">Lubelskie</Select>
-          <Select value="LUBUSKIE">Lubuskie</Select>
-          <Select value="LODZKIE">Łódzkie</Select>
-          <Select value="MALOPOLSKIE">Małopolskie</Select>
-          <Select value="MAZOWIECKIE">Mazowieckie</Select>
-          <Select value="OPOLSKIE">Opolskie</Select>
-          <Select value="PODKARPACKIE">Podkarpackie</Select>
-          <Select value="PODLASKIE">Podlaskie</Select>
-          <Select value="POMORSKIE">Pomorskie</Select>
-          <Select value="SLASKIE">Śląskie</Select>
-          <Select value="SWIETOKRZYSKIE">Świętokrzyskie</Select>
-          <Select value="WARMINSKO_MAZURSKIE">Warmińsko-Mazurskie</Select>
-          <Select value="WIELKOPOLSKIE">Wielkopolskie</Select>
-          <Select value="ZACHODNIOPOMORSKIE">Zachodniopomorskie</Select>        
+          <Select.Option value="DOLNOSLASKIE">Dolnośląskie</Select.Option>
+          <Select.Option value="KUJAWSKO_POMORSKIE">Kujawsko-Pomorskie</Select.Option>
+          <Select.Option value="LUBELSKIE">Lubelskie</Select.Option>
+          <Select.Option value="LUBUSKIE">Lubuskie</Select.Option>
+          <Select.Option value="LODZKIE">Łódzkie</Select.Option>
+          <Select.Option value="MALOPOLSKIE">Małopolskie</Select.Option>
+          <Select.Option value="MAZOWIECKIE">Mazowieckie</Select.Option>
+          <Select.Option value="OPOLSKIE">Opolskie</Select.Option>
+          <Select.Option value="PODKARPACKIE">Podkarpackie</Select.Option>
+          <Select.Option value="PODLASKIE">Podlaskie</Select.Option>
+          <Select.Option value="POMORSKIE">Pomorskie</Select.Option>
+          <Select.Option value="SLASKIE">Śląskie</Select.Option>
+          <Select.Option value="SWIETOKRZYSKIE">Świętokrzyskie</Select.Option>
+          <Select.Option value="WARMINSKO_MAZURSKIE">Warmińsko-Mazurskie</Select.Option>
+          <Select.Option value="WIELKOPOLSKIE">Wielkopolskie</Select.Option>
+          <Select.Option value="ZACHODNIOPOMORSKIE">Zachodniopomorskie</Select.Option>        
         </Select>
         <Select
           mode="multiple"
@@ -131,9 +164,11 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
           onChange={onAnimalTypesChange}
           value={filters.animals?.map((animal) => animal.animalType)}
         >
-          <Select value="DOG">{t('dog')}</Select>
-          <Select value="CAT">{t('cat')}</Select>
-          <Select value="BIRD">{t('bird')}</Select>
+          <Select.Option value="DOG">{t('dog')}</Select.Option>
+          <Select.Option value="CAT">{t('cat')}</Select.Option>
+          <Select.Option value="BIRD">{t('bird')}</Select.Option>
+          <Select.Option value="REPTILE">{t('reptile')}</Select.Option>
+          <Select.Option value="HORSE">{t('horse')}</Select.Option>
         </Select>
         {renderAnimalFilters()}
         <Button type="primary" onClick={onSearch} className="button-search">

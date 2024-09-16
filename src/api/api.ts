@@ -113,7 +113,7 @@ class API {
     if (filters.voivodeship) {
       queryParams.append('voivodeship', filters.voivodeship);
     }
-  
+
     // if (filters.amenities && filters.amenities.length > 0) {
     //   filters.amenities.forEach((amenity) => {
     //     queryParams.append('offerSearchCriteria.amenity', amenity);
@@ -121,7 +121,14 @@ class API {
     // }
   
     const queryString = queryParams.toString();
-    const requestBody = filters.animals;
+    const requestBody = filters.animals?.map((animal) => ({
+      animalType: animal.animalType,
+      offerConfigurations: animal.offerConfigurations.map((offer) => ({
+        ...offer,
+        minPrice: offer.minPrice ? offer.minPrice : 0.01,
+        maxPrice: offer.maxPrice ? offer.maxPrice : 99999
+      }))
+    }));
   
     return this.authorizedFetch<CaretakerResponse>(
       'POST',

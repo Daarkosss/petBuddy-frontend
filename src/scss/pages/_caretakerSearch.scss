@@ -7,8 +7,6 @@
   gap: 20px;
 
   .caretaker-sidebar {
-    position: sticky;
-    top: 8rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -25,12 +23,25 @@
     display: flex;
     flex-direction: column;
     gap: 15px;
+    width: 100%;
 
-    .prices {
+    .input-field, .ant-select, .ant-select-selector {
+      width: 100%;
+    }
+
+    .animal-filter {
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
       gap: 15px;
+      margin-top: 20px;
+
+      .prices {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+      }
     }
   }
 

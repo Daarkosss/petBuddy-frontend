@@ -5,6 +5,8 @@
   "dog": "Dog",
   "cat": "Cat",
   "bird": "Bird",
+  "reptile": "Reptile",
+  "horse": "Horse",
 
   "sex": "Sex",
   "male": "Male",
@@ -26,6 +28,7 @@
   "caretaker": "Caretaker",
   "city": "City",
   "voivodeship": "Voivodeship",
+  "amenities": "Amenities",
 
   "loginPage": {
     "proceedInfo": "To proceed you must be logged in",

@@ -5,6 +5,8 @@
   "dog": "Pies",
   "cat": "Kot",
   "bird": "Ptak",
+  "reptile": "Gad",
+  "horse": "Koń",
 
   "sex": "Płeć",
   "male": "Samiec",
@@ -26,6 +28,7 @@
   "caretaker": "Opiekun",
   "city": "Miasto",
   "voivodeship": "Województwo",
+  "amenities": "Udogodnienia",
 
   "loginPage": {
     "proceedInfo": "Aby kontynuować musisz być zalogowany",
