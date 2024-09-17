@@ -35,7 +35,7 @@ const CaretakerList = () => {
     animals: [],
   });
 
-  const [animalFilters, setAnimalFilters] = useState<Record<string, OfferConfiguration[]>>({});
+  const [animalFilters, setAnimalFilters] = useState<Record<string, OfferConfiguration>>({});
 
   const fetchCaretakers = async () => {
     setIsLoading(true);
@@ -93,27 +93,27 @@ const CaretakerList = () => {
 
   const handleAnimalFilterChange = (animalType: string, updatedConfig: Partial<OfferConfiguration>) => {
     setAnimalFilters((prevFilters) => {
-      const existingConfigs = prevFilters[animalType] || [{}];
+      const existingConfig = prevFilters[animalType] || {};
 
-      const updatedConfigs = existingConfigs.map((config) => ({
-        ...config,
+      const updatedConfigFull = {
+        ...existingConfig,
         ...updatedConfig,
         attributes: {
-          ...config.attributes,
+          ...existingConfig.attributes,
           ...updatedConfig.attributes,
         },
-      }));
+      };
 
       const newAnimalFilters = {
         ...prevFilters,
-        [animalType]: updatedConfigs,
+        [animalType]: updatedConfigFull,
       };
 
       setFilters((prevFilters) => ({
         ...prevFilters,
         animals: Object.keys(newAnimalFilters).map((type) => ({
           animalType: type,
-          offerConfigurations: newAnimalFilters[type],
+          offerConfigurations: [newAnimalFilters[type]],
         })),
       }));
 
@@ -122,9 +122,9 @@ const CaretakerList = () => {
   };
 
   const handleAnimalTypesChange = (selectedAnimalTypes: string[]) => {
-    const newAnimalFilters: Record<string, OfferConfiguration[]> = {};
+    const newAnimalFilters: Record<string, OfferConfiguration> = {};
     selectedAnimalTypes.forEach((animalType) => {
-      newAnimalFilters[animalType] = animalFilters[animalType] || [{}];
+      newAnimalFilters[animalType] = animalFilters[animalType] || {};
     });
 
     setAnimalFilters(newAnimalFilters);
@@ -133,7 +133,7 @@ const CaretakerList = () => {
       ...prevFilters,
       animals: selectedAnimalTypes.map((animalType) => ({
         animalType,
-        offerConfigurations: newAnimalFilters[animalType],
+        offerConfigurations: [newAnimalFilters[animalType]], // Każde zwierzę ma tylko jedną konfigurację
       })),
     }));
   };
