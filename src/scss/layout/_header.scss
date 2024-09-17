@@ -3,7 +3,7 @@
 .sticky-header {
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 1051; // 1 more than z-index of select
   padding: 10px;
   box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
   background-color: v.$blue-medium;
