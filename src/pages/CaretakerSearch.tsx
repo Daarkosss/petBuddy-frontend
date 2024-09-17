@@ -202,6 +202,12 @@ const CaretakerList = () => {
         <div className="caretaker-content">
           <Table
             columns={columns}
+            locale={{ 
+              emptyText: t('caretakerSearch.noCaretakers'),
+              triggerDesc: t('caretakerSearch.triggerDesc'),
+              triggerAsc: t('caretakerSearch.triggerAsc'),
+              cancelSort: t('caretakerSearch.cancelSort'),
+            }}
             dataSource={caretakers}
             rowKey={(record) => record.accountData.email}
             pagination={{
@@ -209,6 +215,9 @@ const CaretakerList = () => {
               pageSize: pagination.pageSize,
               total: pagination.total,
               showSizeChanger: true,
+              locale: {
+                items_per_page: t('perPage'),
+              }
             }}
             onChange={handleTableChange}
           />

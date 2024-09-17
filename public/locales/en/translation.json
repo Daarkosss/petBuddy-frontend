@@ -28,7 +28,15 @@
   "caretaker": "Caretaker",
   "city": "City",
   "voivodeship": "Voivodeship",
+
   "amenities": "Amenities",
+  "amenityTypes": {
+    "toys": "Toys",
+    "scratchingPost": "Scratching Post",
+    "cage": "Cage"
+  },
+  
+  "perPage": "per page",
 
   "loginPage": {
     "proceedInfo": "To proceed you must be logged in",
@@ -65,6 +73,10 @@
     "animalTypes": "Animal types",
     "amenities": "Amenities",
     "minPrice": "Min price",
-    "maxPrice": "Max price"
+    "maxPrice": "Max price",
+    "noCaretakers": "There are no caretakers for selected filters",
+    "triggerDesc": "Click to sort descending",
+    "triggerAsc": "Click to sort ascending",
+    "cancelSort": "Click to cancel sorting"
   }
 }

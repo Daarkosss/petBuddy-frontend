@@ -124,9 +124,9 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
           }
           value={animalFilters[animal.animalType]?.amenities || []}
         >
-          <Select.Option value="toys">{t('toys')}</Select.Option>
-          <Select.Option value="scratching post">{t('scratchingPost')}</Select.Option>
-          <Select.Option value="cage">{t('cage')}</Select.Option>
+          <Select.Option value="toys">{t('amenityTypes.toys')}</Select.Option>
+          <Select.Option value="scratching post">{t('amenityTypes.scratchingPost')}</Select.Option>
+          <Select.Option value="cage">{t('amenityTypes.cage')}</Select.Option>
         </Select>
       </div>
     ));

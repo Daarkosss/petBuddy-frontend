@@ -28,7 +28,15 @@
   "caretaker": "Opiekun",
   "city": "Miasto",
   "voivodeship": "Województwo",
+
   "amenities": "Udogodnienia",
+  "amenityTypes": {
+    "toys": "Zabawki",
+    "scratchingPost": "Drapak",
+    "cage": "Klatka"
+  },
+
+  "perPage": "na stronę",
 
   "loginPage": {
     "proceedInfo": "Aby kontynuować musisz być zalogowany",
@@ -65,6 +73,10 @@
     "animalTypes": "Rodzaje zwierząt",
     "amenities": "Udogodnienia",
     "minPrice": "Minimalna cena",
-    "maxPrice": "Maksymalna cena"
+    "maxPrice": "Maksymalna cena",
+    "noCaretakers": "Brak opiekunów dla podanych parametrów",
+    "triggerDesc": "Kliknij aby sortowac malejąco",
+    "triggerAsc": "Kliknij aby sortowac rosnąco",
+    "cancelSort": "Kliknij aby anulowac sortowanie"
   }
 }
