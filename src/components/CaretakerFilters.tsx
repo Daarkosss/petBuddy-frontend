@@ -1,11 +1,10 @@
-import React from 'react';
 import { Input, Select, Button } from 'antd';
 import { CaretakerSearchFilters, OfferConfiguration, AnimalSize, AnimalSex } from '../types';
 import { useTranslation } from 'react-i18next';
 
 interface CaretakerFiltersProps {
   filters: CaretakerSearchFilters;
-  animalFilters: Record<string, OfferConfiguration[]>;
+  animalFilters: Record<string, OfferConfiguration>;
   onFiltersChange: (filters: CaretakerSearchFilters) => void;
   onAnimalFiltersChange: (animalType: string, updatedConfig: Partial<OfferConfiguration>) => void;
   onAnimalTypesChange: (selectedAnimalTypes: string[]) => void;
@@ -28,6 +27,22 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
     }
   };
 
+  const checkAndSwapPrices = () => {
+    Object.keys(animalFilters).forEach((animalType) => {
+      const minPrice = animalFilters[animalType]?.minPrice;
+      const maxPrice = animalFilters[animalType]?.maxPrice;
+
+      if (minPrice && maxPrice && minPrice > maxPrice) {
+        onAnimalFiltersChange(animalType, { minPrice: maxPrice, maxPrice: minPrice });
+      }
+    });
+  };
+
+  const handleSearch = () => {
+    checkAndSwapPrices();
+    onSearch();
+  };
+
   const renderAnimalFilters = () => {
     return filters.animals?.map((animal) => (
       <div key={animal.animalType} className="animal-filter">
@@ -37,16 +52,17 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
             <Input
               type="number"
               placeholder={t('from')}
-              value={animalFilters[animal.animalType]?.[0]?.minPrice}
+              value={animalFilters[animal.animalType]?.minPrice}
+              onKeyDown={handleKeyDown}
               onInput={(e) => {
                 const input = e.target as HTMLInputElement;
                 const value = input.value;
                 const regex = /^\d{0,5}?$/;
 
                 if (regex.test(value)) {
-                  const minPrice = parseFloat(value) || undefined;
-                  if (minPrice === undefined || minPrice >= 0.01) {
-                    onAnimalFiltersChange(animal.animalType, { minPrice });
+                  const newPrice = parseFloat(value) || undefined;
+                  if (newPrice === undefined || newPrice >= 0.01) {
+                    onAnimalFiltersChange(animal.animalType, { minPrice: newPrice });
                   }
                 } else {
                   input.value = value.slice(0, -1);
@@ -57,16 +73,17 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
             <Input
               type="number"
               placeholder={t('to')}
-              value={animalFilters[animal.animalType]?.[0]?.maxPrice}
+              value={animalFilters[animal.animalType]?.maxPrice}
+              onKeyDown={handleKeyDown}
               onInput={(e) => {
                 const input = e.target as HTMLInputElement;
                 const value = input.value;
                 const regex = /^\d{0,5}?$/;
           
                 if (regex.test(value)) {
-                  const maxPrice = parseFloat(value) || undefined;
-                  if (maxPrice === undefined || maxPrice < 100000) {
-                    onAnimalFiltersChange(animal.animalType, { maxPrice });
+                  const newPrice = parseFloat(value) || undefined;
+                  if (newPrice === undefined || newPrice < 100000) {
+                    onAnimalFiltersChange(animal.animalType, { maxPrice: newPrice });
                   }
                 } else {
                   input.value = value.slice(0, -1);
@@ -82,7 +99,7 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
           onChange={(value) =>
             onAnimalFiltersChange(animal.animalType, { attributes: { SIZE: value as AnimalSize[] } })
           }
-          value={animalFilters[animal.animalType]?.[0]?.attributes?.SIZE || []}
+          value={animalFilters[animal.animalType]?.attributes?.SIZE || []}
         >
           <Select.Option value="SMALL">{t('small')}</Select.Option>
           <Select.Option value="MEDIUM">{t('medium')}</Select.Option>
@@ -94,7 +111,7 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
           onChange={(value) =>
             onAnimalFiltersChange(animal.animalType, { attributes: { SEX: value as AnimalSex[] } })
           }
-          value={animalFilters[animal.animalType]?.[0]?.attributes?.SEX || []}
+          value={animalFilters[animal.animalType]?.attributes?.SEX || []}
         >
           <Select.Option value="MALE">{t('male')}</Select.Option>
           <Select.Option value="SHE">{t('she')}</Select.Option>
@@ -105,7 +122,7 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
           onChange={(value) =>
             onAnimalFiltersChange(animal.animalType, { amenities: value as string[] })
           }
-          value={animalFilters[animal.animalType]?.[0]?.amenities || []}
+          value={animalFilters[animal.animalType]?.amenities || []}
         >
           <Select.Option value="toys">{t('toys')}</Select.Option>
           <Select.Option value="scratching post">{t('scratchingPost')}</Select.Option>
@@ -171,7 +188,7 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
           <Select.Option value="HORSE">{t('horse')}</Select.Option>
         </Select>
         {renderAnimalFilters()}
-        <Button type="primary" onClick={onSearch} className="button-search">
+        <Button type="primary" onClick={handleSearch} className="button-search">
           {t('search')}
         </Button>
       </div>
