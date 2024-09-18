@@ -74,8 +74,8 @@ const CaretakerList = () => {
     sorter: SorterResult<Caretaker> | SorterResult<Caretaker>[]
   ) => {
     const singleSorter = Array.isArray(sorter) ? sorter[0] : sorter;
-
     const isSorted = !!singleSorter.order;
+
     setPagingParams({
       page: (pagination.current || 1) - 1,
       size: pagination.pageSize || 10,
@@ -91,10 +91,9 @@ const CaretakerList = () => {
     }));
   };
 
-  const handleAnimalFilterChange = (animalType: string, updatedConfig: Partial<OfferConfiguration>) => {
+  const updateAnimalFilters = (animalType: string, updatedConfig: Partial<OfferConfiguration>) => {
     setAnimalFilters((prevFilters) => {
       const existingConfig = prevFilters[animalType] || {};
-
       const updatedConfigFull = {
         ...existingConfig,
         ...updatedConfig,
@@ -111,9 +110,9 @@ const CaretakerList = () => {
 
       setFilters((prevFilters) => ({
         ...prevFilters,
-        animals: Object.keys(newAnimalFilters).map((type) => ({
+        animals: Object.entries(newAnimalFilters).map(([type, config]) => ({
           animalType: type,
-          offerConfigurations: [newAnimalFilters[type]],
+          offerConfigurations: [config],
         })),
       }));
 
@@ -133,7 +132,7 @@ const CaretakerList = () => {
       ...prevFilters,
       animals: selectedAnimalTypes.map((animalType) => ({
         animalType,
-        offerConfigurations: [newAnimalFilters[animalType]], // Każde zwierzę ma tylko jedną konfigurację
+        offerConfigurations: [newAnimalFilters[animalType]],
       })),
     }));
   };
@@ -144,10 +143,7 @@ const CaretakerList = () => {
       key: 'caretaker',
       render: (_: unknown, record: Caretaker) => (
         <div className="caretaker-list-item">
-          <img
-            src="https://via.placeholder.com/150"
-            alt="avatar"
-          />
+          <img src="https://via.placeholder.com/150" alt="avatar" />
           <div>
             <h4>{record.accountData.name} {record.accountData.surname}</h4>
             <p>{record.address.city}, {record.address.voivodeship.toString()}</p>
@@ -184,6 +180,7 @@ const CaretakerList = () => {
       ),
     },
   ];
+
   if (error) return <div>{error}</div>;
 
   return (
@@ -195,7 +192,7 @@ const CaretakerList = () => {
           filters={filters}
           animalFilters={animalFilters}
           onFiltersChange={setFilters}
-          onAnimalFiltersChange={handleAnimalFilterChange}
+          onAnimalFiltersChange={updateAnimalFilters}
           onAnimalTypesChange={handleAnimalTypesChange}
           onSearch={handleSearch}
         />
