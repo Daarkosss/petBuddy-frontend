@@ -29,7 +29,7 @@ class UserStore {
     return getCookie("XSRF-TOKEN");
   }
 
-  saveProfileToStorage(profile?: UserProfile) {
+  saveProfileToStorage(profile?: UserProfile | null) {
     if (profile) {
       this.profile = profile;
       localStorage.setItem("user", JSON.stringify(this.profile));
