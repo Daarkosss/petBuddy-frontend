@@ -16,7 +16,21 @@ function App() {
   useEffect(() => {
     const fetchXsrfToken = async () => {
       if (keycloak.authenticated && !store.user.xsrfToken) {
-        const fetchedXsrfToken = await api.getXsrfToken();
+        await api.getXsrfToken();
+        try {
+          const userData = await keycloak.loadUserProfile();
+          const userProfileData = {
+            username: userData.username,
+            email: userData.email,
+            firstName: userData.firstName,
+            lastName: userData.lastName,
+            token: store.user.xsrfToken,
+            selected_profile: null,
+          };
+          store.user.saveProfileToStorage(userProfileData);
+        } catch (error) {
+          console.error(`Failed to load user profile: ${error}`);
+        }
         // setXsrfToken(fetchedXsrfToken)
       }
       setIsLoading(false);
@@ -30,29 +44,6 @@ function App() {
       }
     }
   }, [initialized, keycloak.authenticated]);
-
-  useEffect(() => {
-    const loadProfile = async () => {
-      if (keycloak.authenticated) {
-        try {
-          const userData = await keycloak.loadUserProfile();
-          const userProfileData = {
-            username: userData.username,
-            email: userData.email,
-            firstName: userData.firstName,
-            lastName: userData.lastName,
-            token: "",
-            selected_profile: null,
-          };
-          store.user.saveProfileToStorage(userProfileData);
-        } catch (error) {
-          console.error(`Failed to load user profile: ${error}`);
-        }
-      }
-    };
-
-    loadProfile();
-  }, [keycloak.authenticated]);
 
   if (isLoading) {
     return <div>Loading...</div>;
