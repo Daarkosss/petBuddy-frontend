@@ -26,6 +26,7 @@ const ProfileSelectionBox: React.FC<Image> = ({
       onClick={() => {
         if (profile) {
           store.user.setSelectedProfile(profile);
+          store.user.saveProfileToStorage(store.user.profile);
           navigate("/home");
         }
       }}
