@@ -11,11 +11,13 @@ import ProfileSelection from "./pages/ProfileSelection";
 function App() {
   const { keycloak, initialized } = useKeycloak();
   const [isLoading, setIsLoading] = useState(true);
+  // const [xsrfToken, setXsrfToken] = useState();
 
   useEffect(() => {
     const fetchXsrfToken = async () => {
       if (keycloak.authenticated && !store.user.xsrfToken) {
-        await api.getXsrfToken();
+        const fetchedXsrfToken = await api.getXsrfToken();
+        // setXsrfToken(fetchedXsrfToken)
       }
       setIsLoading(false);
     };
@@ -28,6 +30,29 @@ function App() {
       }
     }
   }, [initialized, keycloak.authenticated]);
+
+  useEffect(() => {
+    const loadProfile = async () => {
+      if (keycloak.authenticated) {
+        try {
+          const userData = await keycloak.loadUserProfile();
+          const userProfileData = {
+            username: userData.username,
+            email: userData.email,
+            firstName: userData.firstName,
+            lastName: userData.lastName,
+            token: "",
+            selected_profile: null,
+          };
+          store.user.saveProfileToStorage(userProfileData);
+        } catch (error) {
+          console.error(`Failed to load user profile: ${error}`);
+        }
+      }
+    };
+
+    loadProfile();
+  }, [keycloak.authenticated]);
 
   if (isLoading) {
     return <div>Loading...</div>;
