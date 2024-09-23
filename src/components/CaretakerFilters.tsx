@@ -28,7 +28,7 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
   };
 
   const handlePriceInput = (animalType: string, priceType: 'minPrice' | 'maxPrice', value: string) => {
-    const regex = /^\d{0,5}?$/;
+    const regex = /^\d{0,5}(\.\d{0,2})?$/;
     const parsedValue = parseFloat(value) || undefined;
     
     if (regex.test(value) && (parsedValue === undefined || parsedValue >= 0)) {

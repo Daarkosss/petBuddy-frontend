@@ -147,7 +147,6 @@ const CaretakerList = () => {
           <div>
             <h4>{record.accountData.name} {record.accountData.surname}</h4>
             <p>{record.address.city}, {record.address.voivodeship.toString()}</p>
-            <p>{record.description.substring(0, 100)}{record.description.length > 100 && <span>...</span>}</p>
             <Button href={`/caretakers/${record.accountData.email}`} type="primary">
               {t('viewDetails')}
             </Button>
