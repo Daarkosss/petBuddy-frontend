@@ -1,5 +1,6 @@
 import { toast } from 'react-toastify';
 import store from '../store/RootStore';
+import { CaretakerResponse, CaretakerSearchFilters, PagingParams } from '../types';
 
 const backendHost = import.meta.env.VITE_BACKEND_HOST || window.location.hostname;
 const backendPort = import.meta.env.VITE_BACKEND_PORT || '8081';
@@ -7,7 +8,7 @@ export const PATH_PREFIX = `http://${backendHost}:${backendPort}/`;
 
 type Method = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
-export interface User {
+export type User = {
   _id: string;
   name: string;
   email: string;
@@ -70,7 +71,7 @@ class API {
       )
       toast.success(JSON.stringify(response));
       return response
-    } catch(error: unknown) {
+    } catch (error: unknown) {
       return "brak"
     }
   }
@@ -82,9 +83,53 @@ class API {
         'api/csrf'
       )
       return response
-    } catch(error: unknown) {
+    } catch (error: unknown) {
       return;
     }
+  }
+
+  async getCaretakers(
+    pagingParams: PagingParams,
+    filters: CaretakerSearchFilters
+  ): Promise<CaretakerResponse> {
+    const queryParams = new URLSearchParams({
+      page: pagingParams.page.toString(),
+      size: pagingParams.size.toString()
+    });
+  
+    if (pagingParams.sortBy) {
+      queryParams.append('sortBy', pagingParams.sortBy);
+    }
+    if (pagingParams.sortDirection) {
+      queryParams.append('sortDirection', pagingParams.sortDirection);
+    }
+  
+    if (filters.personalDataLike) {
+      queryParams.append('personalDataLike', filters.personalDataLike);
+    }
+    if (filters.cityLike) {
+      queryParams.append('cityLike', filters.cityLike);
+    }
+    if (filters.voivodeship) {
+      queryParams.append('voivodeship', filters.voivodeship);
+    }
+  
+    const queryString = queryParams.toString();
+    
+    const requestBody = filters.animals?.map((animal) => ({
+      animalType: animal.animalType,
+      offerConfigurations: animal.offerConfigurations.map((offer) => ({
+        ...offer,
+        minPrice: offer.minPrice ? offer.minPrice : 0.01,
+        maxPrice: offer.maxPrice ? offer.maxPrice : 99999.99
+      }))
+    }));
+  
+    return this.authorizedFetch<CaretakerResponse>(
+      'POST',
+      `api/caretaker?${queryString}`,
+      requestBody
+    );
   }
 
   // async login(): Promise<User | null> {

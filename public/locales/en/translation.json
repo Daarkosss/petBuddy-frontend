@@ -1,6 +1,42 @@
 {
-  "logout": "Logout",
+  "from": "From",
+  "to": "To",
+
+  "dog": "Dog",
+  "cat": "Cat",
+  "bird": "Bird",
+  "reptile": "Reptile",
+  "horse": "Horse",
+
+  "sex": "Sex",
+  "male": "Male",
+  "she": "She",
+
+  "size": "Size",
+  "small": "Small",
+  "medium": "Medium",
+  "big": "Big",
+
+  "search": "Search",
+  "filters": "Filters",
+  "price": "Price",
+  "rating": "Rating",
+  "noRatings": "No ratings",
+  "viewDetails": "View Details",
   "loading": "Loading...",
+  "logout": "Logout",
+  "caretaker": "Caretaker",
+  "city": "City",
+  "voivodeship": "Voivodeship",
+
+  "amenities": "Amenities",
+  "amenityTypes": {
+    "toys": "Toys",
+    "scratchingPost": "Scratching Post",
+    "cage": "Cage"
+  },
+  
+  "perPage": "per page",
 
   "loginPage": {
     "proceedInfo": "To proceed you must be logged in",
@@ -11,7 +47,8 @@
     "title": "Welcome home, message from backend:",
     "requestMessage": "Request message",
     "fetchToken": "Fetch xsrf token",
-    "changeCaretakerForm": "Change caretaker form"
+    "changeCaretakerForm": "Change caretaker form",
+    "searchCaretakers": "Search caretakers"
   },
 
   "caretakerForm": {
@@ -20,7 +57,6 @@
     "animalTypes": "Types of animals you care for",
     "smallDog": "Small Dog",
     "mediumDog": "Medium Dog",
-    "cat": "Cat",
     "priceFor": "Price for {{type}}",
     "description": "Description",
     "enterDescription": "Enter a brief description about yourself",
@@ -30,7 +66,16 @@
     "uploadImages": "Upload Images",
     "submit": "Submit",
     "dragDrop": "Drag & drop some files here, or click to select files"
-  }
-
-}
+  },
   
+  "caretakerSearch": {
+    "personalData": "Personal data",
+    "animalTypes": "Animal types",
+    "minPrice": "Min price",
+    "maxPrice": "Max price",
+    "noCaretakers": "There are no caretakers for selected filters",
+    "triggerDesc": "Click to sort descending",
+    "triggerAsc": "Click to sort ascending",
+    "cancelSort": "Click to cancel sorting"
+  }
+}

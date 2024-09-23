@@ -1,6 +1,6 @@
 @use '../helpers/variables' as v;
 
-.form-container {
+.caretaker-form-container {
   max-width: 800px;
   margin: 5vh auto;
   padding: 20px;
@@ -70,6 +70,20 @@
   }
 
   .images-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
     margin-top: 10px;
+  
+    .image-item {
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+      img {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+        object-fit: cover;
+      }
+    }
   }
 }

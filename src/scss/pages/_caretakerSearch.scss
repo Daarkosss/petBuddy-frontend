@@ -1,0 +1,79 @@
+@use '../helpers/variables' as v;
+
+.caretaker-container {
+  margin: 3vh auto;
+  padding: 15px;
+  display: flex;
+  gap: 20px;
+
+  .caretaker-sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    width: 300px;
+    height: max-content;
+    padding: 20px;
+    border: 1px solid v.$grey-light;
+    background-color: v.$white;
+    border-radius: 10px;
+  }
+  
+  .filters {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+
+    .input-field, .ant-select, .ant-select-selector {
+      width: 100%;
+    }
+
+    .animal-filter {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      margin-top: 20px;
+
+      .prices {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+      }
+    }
+  }
+
+  .caretaker-content {
+    flex-grow: 1;
+  }
+
+  .caretaker-list-item {
+    display: flex;
+    align-items: center;
+  }
+
+  .caretaker-list-item img {
+    width: 150px;
+    height: 150px;
+    margin-right: 20px;
+  }
+
+  .caretaker-rating {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 5px;
+  }
+
+  .caretaker-rating-stars {
+    display: flex;
+    gap: 5px;
+  }
+
+  .caretaker-rating-value {
+    margin-left: 8px;
+  }
+}
