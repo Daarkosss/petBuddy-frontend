@@ -71,7 +71,6 @@
   "caretakerSearch": {
     "personalData": "Personal data",
     "animalTypes": "Animal types",
-    "amenities": "Amenities",
     "minPrice": "Min price",
     "maxPrice": "Max price",
     "noCaretakers": "There are no caretakers for selected filters",
