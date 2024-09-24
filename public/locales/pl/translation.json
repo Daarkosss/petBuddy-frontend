@@ -1,6 +1,42 @@
 {
-  "logout": "Wyloguj",
+  "from": "Od",
+  "to": "Do",
+
+  "dog": "Pies",
+  "cat": "Kot",
+  "bird": "Ptak",
+  "reptile": "Gad",
+  "horse": "Koń",
+
+  "sex": "Płeć",
+  "male": "Samiec",
+  "she": "Samiczka",
+
+  "size": "Wielkość",
+  "small": "Mały",
+  "medium": "Średni",
+  "big": "Duży",
+
+  "search": "Szukaj",
+  "filters": "Filtry",
+  "price": "Cena",
+  "rating": "Ocena",
+  "noRatings": "Brak ocen",
+  "viewDetails": "Zobacz Szczegóły",
   "loading": "Ładowanie...",
+  "logout": "Wyloguj",
+  "caretaker": "Opiekun",
+  "city": "Miasto",
+  "voivodeship": "Województwo",
+
+  "amenities": "Udogodnienia",
+  "amenityTypes": {
+    "toys": "Zabawki",
+    "scratchingPost": "Drapak",
+    "cage": "Klatka"
+  },
+
+  "perPage": "na stronę",
 
   "loginPage": {
     "proceedInfo": "Aby kontynuować musisz być zalogowany",
@@ -11,7 +47,8 @@
     "title": "Witamy, wiadomość z backendu:",
     "requestMessage": "Testowy request",
     "fetchToken": "Pobierz token xsrf",
-    "changeCaretakerForm": "Zmien dane opiekuna"
+    "changeCaretakerForm": "Zmień dane opiekuna",
+    "searchCaretakers": "Wyszukaj opiekunów"
   },
 
   "caretakerForm": {
@@ -20,7 +57,6 @@
     "animalTypes": "Rodzaje zwierząt, którymi się opiekujesz",
     "smallDog": "Mały pies",
     "mediumDog": "Średni pies",
-    "cat": "Kot",
     "priceFor": "Cena za {{type}}",
     "description": "Opis",
     "enterDescription": "Wprowadź krótki opis o sobie",
@@ -37,5 +73,16 @@
     "client": "Klient",
     "caretaker": "Opiekun",
     "createCaretaker": "Utwórz profil opiekuna"
+  },
+
+  "caretakerSearch": {
+    "personalData": "Dane personalne",
+    "animalTypes": "Rodzaje zwierząt",
+    "minPrice": "Minimalna cena",
+    "maxPrice": "Maksymalna cena",
+    "noCaretakers": "Brak opiekunów dla podanych parametrów",
+    "triggerDesc": "Kliknij aby sortowac malejąco",
+    "triggerAsc": "Kliknij aby sortowac rosnąco",
+    "cancelSort": "Kliknij aby anulowac sortowanie"
   }
 }

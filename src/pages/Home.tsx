@@ -29,25 +29,26 @@ const Home = () => {
   };
 
   return (
-    store.user.profile?.selected_profile && (
-      <div>
-        <Header />
-        <div className="home-container">
-          <h1>
-            {t("home.title")} {message}
-          </h1>
-          <Button variant="outline-dark" onClick={handleGetMessage}>
-            {t("home.requestMessage")}
-          </Button>
-          <Button variant="outline-dark" onClick={() => api.getXsrfToken()}>
-            {t("home.fetchToken")}
-          </Button>
-          <Button variant="dark" onClick={() => navigate("/caretaker/form")}>
-            {t("home.changeCaretakerForm")}
-          </Button>
-        </div>
+    <div>
+      <Header />
+      <div className="home-container">
+        <h1>
+          {t("home.title")} {message}
+        </h1>
+        <Button variant="outline-dark" onClick={handleGetMessage}>
+          {t("home.requestMessage")}
+        </Button>
+        <Button variant="outline-dark" onClick={() => api.getXsrfToken()}>
+          {t("home.fetchToken")}
+        </Button>
+        <Button variant="dark" onClick={() => navigate("/caretaker/form")}>
+          {t("home.changeCaretakerForm")}
+        </Button>
+        <Button variant="dark" onClick={() => navigate("/caretaker/search")}>
+          {t("home.searchCaretakers")}
+        </Button>
       </div>
-    )
+    </div>
   );
 };
 
