@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Input, Button, Upload, UploadProps, UploadFile, Select, GetProp } from 'antd';
+import { Form, Input, Button, GetProp, Upload, UploadProps, UploadFile, Select, Card, Space } from 'antd';
 import ImgCrop from 'antd-img-crop';
 import { useTranslation } from 'react-i18next';
 import { Header } from '../components/Header';
@@ -79,111 +79,121 @@ const CaretakerForm: React.FC<CaregiverFormProps> = ({ onSubmit }) => {
       <Header />
       <div className='caretaker-form-container'>
         <Form layout='vertical' onFinish={handleSubmit}>
-          <Form.Item label={t('personalData.phoneNumber')} name='phoneNumber'>
-            <Input
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-              placeholder={t('personalData.phoneNumber')}
-            />
-          </Form.Item>
+          <Space direction="vertical" size="large" style={{ width: '100%' }}>
+            <Card title={t('address')}>
+              <Form.Item label={t('addressDetails.city')} name='city'>
+                <Input
+                  value={address.city}
+                  onChange={(e) => handleAddressChange('city', e.target.value)}
+                  placeholder={t('addressDetails.city')}
+                />
+              </Form.Item>
 
-          <Form.Item label={t('addressDetails.city')} name='city'>
-            <Input
-              value={address.city}
-              onChange={(e) => handleAddressChange('city', e.target.value)}
-              placeholder={t('addressDetails.city')}
-            />
-          </Form.Item>
+              <Form.Item label={t('addressDetails.zipCode')} name='zipCode'>
+                <Input
+                  value={address.zipCode}
+                  onChange={(e) => handleAddressChange('zipCode', e.target.value)}
+                  placeholder={t('addressDetails.zipCode')}
+                />
+              </Form.Item>
 
-          <Form.Item label={t('addressDetails.zipCode')} name='zipCode'>
-            <Input
-              value={address.zipCode}
-              onChange={(e) => handleAddressChange('zipCode', e.target.value)}
-              placeholder={t('addressDetails.zipCode')}
-            />
-          </Form.Item>
+              <Form.Item label={t('addressDetails.voivodeship')} name='voivodeship'>
+                <Select
+                  value={address.voivodeship}
+                  onChange={(value) => handleAddressChange('voivodeship', value)}
+                  placeholder={t('addressDetails.voivodeship')}
+                >
+                  {renderSelectOptions({
+                    DOLNOSLASKIE: 'Dolnośląskie',
+                    KUJAWSKO_POMORSKIE: 'Kujawsko-Pomorskie',
+                    LUBELSKIE: 'Lubelskie',
+                    LUBUSKIE: 'Lubuskie',
+                    LODZKIE: 'Łódzkie',
+                    MALOPOLSKIE: 'Małopolskie',
+                    MAZOWIECKIE: 'Mazowieckie',
+                    OPOLSKIE: 'Opolskie',
+                    PODKARPACKIE: 'Podkarpackie',
+                    PODLASKIE: 'Podlaskie',
+                    POMORSKIE: 'Pomorskie',
+                    SLASKIE: 'Śląskie',
+                    SWIETOKRZYSKIE: 'Świętokrzyskie',
+                    WARMINSKO_MAZURSKIE: 'Warmińsko-Mazurskie',
+                    WIELKOPOLSKIE: 'Wielkopolskie',
+                    ZACHODNIOPOMORSKIE: 'Zachodniopomorskie',
+                  })}
+                </Select>
+              </Form.Item>
 
-          <Form.Item label={t('addressDetails.voivodeship')} name='voivodeship'>
-            <Select
-              value={address.voivodeship}
-              onChange={(value) => handleAddressChange('voivodeship', value)}
-              placeholder={t('addressDetails.voivodeship')}
-            >
-              {renderSelectOptions({
-                DOLNOSLASKIE: 'Dolnośląskie',
-                KUJAWSKO_POMORSKIE: 'Kujawsko-Pomorskie',
-                LUBELSKIE: 'Lubelskie',
-                LUBUSKIE: 'Lubuskie',
-                LODZKIE: 'Łódzkie',
-                MALOPOLSKIE: 'Małopolskie',
-                MAZOWIECKIE: 'Mazowieckie',
-                OPOLSKIE: 'Opolskie',
-                PODKARPACKIE: 'Podkarpackie',
-                PODLASKIE: 'Podlaskie',
-                POMORSKIE: 'Pomorskie',
-                SLASKIE: 'Śląskie',
-                SWIETOKRZYSKIE: 'Świętokrzyskie',
-                WARMINSKO_MAZURSKIE: 'Warmińsko-Mazurskie',
-                WIELKOPOLSKIE: 'Wielkopolskie',
-                ZACHODNIOPOMORSKIE: 'Zachodniopomorskie',
-              })}
-            </Select>
-          </Form.Item>
+              <Form.Item label={t('addressDetails.street')} name='street'>
+                <Input
+                  value={address.street}
+                  onChange={(e) => handleAddressChange('street', e.target.value)}
+                  placeholder={t('addressDetails.street')}
+                />
+              </Form.Item>
 
-          <Form.Item label={t('addressDetails.street')} name='street'>
-            <Input
-              value={address.street}
-              onChange={(e) => handleAddressChange('street', e.target.value)}
-              placeholder={t('addressDetails.street')}
-            />
-          </Form.Item>
+              <Form.Item label={t('addressDetails.buildingNumber')} name='buildingNumber'>
+                <Input
+                  value={address.buildingNumber}
+                  onChange={(e) => handleAddressChange('buildingNumber', e.target.value)}
+                  placeholder={t('addressDetails.buildingNumber')}
+                />
+              </Form.Item>
 
-          <Form.Item label={t('addressDetails.buildingNumber')} name='buildingNumber'>
-            <Input
-              value={address.buildingNumber}
-              onChange={(e) => handleAddressChange('buildingNumber', e.target.value)}
-              placeholder={t('addressDetails.buildingNumber')}
-            />
-          </Form.Item>
+              <Form.Item label={t('addressDetails.apartmentNumber')} name='apartmentNumber'>
+                <Input
+                  value={address.apartmentNumber}
+                  onChange={(e) => handleAddressChange('apartmentNumber', e.target.value)}
+                  placeholder={t('addressDetails.apartmentNumber')}
+                />
+              </Form.Item>
+            </Card>
 
-          <Form.Item label={t('addressDetails.apartmentNumber')} name='apartmentNumber'>
-            <Input
-              value={address.apartmentNumber}
-              onChange={(e) => handleAddressChange('apartmentNumber', e.target.value)}
-              placeholder={t('addressDetails.apartmentNumber')}
-            />
-          </Form.Item>
+            <Card title={t('personalData.contactDetails')}>
+              <Form.Item label={t('personalData.phoneNumber')} name='phoneNumber'>
+                <Input
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  placeholder={t('personalData.phoneNumber')}
+                />
+              </Form.Item>
+            </Card>
 
-          <Form.Item label={t('description')} name='description'>
-            <Input.TextArea
-              autoSize={{
-                minRows: 1,
-                maxRows: 4,
-              }}
-              maxLength={1000}
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder={t('caretakerForm.enterDescription')}
-            />
-          </Form.Item>
+            <Card title={t('description')}>
+              <Form.Item name='description'>
+                <Input.TextArea
+                  autoSize={{
+                    minRows: 1,
+                    maxRows: 4,
+                  }}
+                  maxLength={1000}
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder={t('description')}
+                />
+              </Form.Item>
+            </Card>
 
-          <Form.Item label={t('caretakerForm.uploadImages')} name='images'>
-            <ImgCrop rotationSlider>
-              <Upload
-                listType='picture-card'
-                fileList={fileList}
-                onChange={onChange}
-                onPreview={onPreview}
-                accept='image/*'
-              >
-                {fileList.length < 5 && '+ Upload'}
-              </Upload>
-            </ImgCrop>
-          </Form.Item>
+            <Card title={t('uploadImages')}>
+              <Form.Item name='images'>
+                <ImgCrop rotationSlider>
+                  <Upload
+                    listType='picture-card'
+                    fileList={fileList}
+                    onChange={onChange}
+                    onPreview={onPreview}
+                    accept='image/*'
+                  >
+                    {fileList.length < 5 && '+ Upload'}
+                  </Upload>
+                </ImgCrop>
+              </Form.Item>
+            </Card>
 
-          <Button type='primary' htmlType='submit'>
-            {t('caretakerForm.submit')}
-          </Button>
+            <Button type='primary' htmlType='submit'>
+              {t('save')}
+            </Button>
+          </Space>
         </Form>
       </div>
     </div>

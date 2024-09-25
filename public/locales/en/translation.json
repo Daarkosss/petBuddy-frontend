@@ -48,10 +48,9 @@
     "name": "Name",
     "surname": "Surname",
     "phoneNumber": "Phone number",
-    "email": "E-mail"
+    "email": "E-mail",
+    "contactDetails": "Contact details"
   },
-
-  "description": "Description",
   
   "perPage": "per page",
 
@@ -67,23 +66,6 @@
     "changeCaretakerForm": "Change caretaker form",
     "searchCaretakers": "Search caretakers"
   },
-
-  "caretakerForm": {
-    "location": "Location",
-    "enterCity": "Enter your city or district",
-    "animalTypes": "Types of animals you care for",
-    "smallDog": "Small Dog",
-    "mediumDog": "Medium Dog",
-    "priceFor": "Price for {{type}}",
-    "description": "Description",
-    "enterDescription": "Enter a brief description about yourself",
-    "availabilityCalendar": "Availability Calendar",
-    "startDate": "Start Date",
-    "endDate": "End Date",
-    "uploadImages": "Upload Images",
-    "submit": "Submit",
-    "dragDrop": "Drag & drop some files here, or click to select files"
-  },
   
   "caretakerSearch": {
     "personalData": "Personal data",
@@ -94,5 +76,9 @@
     "triggerDesc": "Click to sort descending",
     "triggerAsc": "Click to sort ascending",
     "cancelSort": "Click to cancel sorting"
-  }
+  },
+
+  "description": "Description",
+  "uploadImages": "Upload images",
+  "save": "Save"
 }
