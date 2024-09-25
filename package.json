@@ -11,10 +11,12 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.5.1",
     "@mdi/js": "^7.4.47",
     "@mdi/react": "^1.6.1",
     "@react-keycloak/web": "^3.4.0",
     "antd": "^5.20.1",
+    "antd-img-crop": "^4.23.0",
     "bootstrap": "^5.3.3",
     "i18next": "^23.12.2",
     "i18next-browser-languagedetector": "^8.0.0",

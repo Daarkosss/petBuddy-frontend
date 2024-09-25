@@ -1,11 +1,10 @@
-import { useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
-import { useDropzone } from 'react-dropzone';
+import React, { useState } from 'react';
+import { Form, Input, Button, Upload, UploadProps, UploadFile, Select, GetProp } from 'antd';
+import ImgCrop from 'antd-img-crop';
 import { useTranslation } from 'react-i18next';
 import { Header } from '../components/Header';
-import DatePicker, { Value } from 'react-multi-date-picker';
-import DatePanel from "react-multi-date-picker/plugins/date_panel";
-import weekends from "react-multi-date-picker/plugins/highlight_weekends";
+
+type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
 interface CaregiverFormProps {
   onSubmit: (formData: FormData) => void;
@@ -14,191 +13,175 @@ interface CaregiverFormProps {
 const CaretakerForm: React.FC<CaregiverFormProps> = ({ onSubmit }) => {
   const { t } = useTranslation();
 
-  const [location, setLocation] = useState('');
-  const [animalTypes, setAnimalTypes] = useState<string[]>([]);
-  const [prices, setPrices] = useState<{ [key: string]: string }>({});
   const [description, setDescription] = useState('');
-  const [availability, setAvailability] = useState<Value[][]>();
-  const [images, setImages] = useState<File[]>([]);
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [address, setAddress] = useState({
+    city: '',
+    zipCode: '',
+    voivodeship: '',
+    street: '',
+    buildingNumber: '',
+    apartmentNumber: '',
+  });
 
-  const onDrop = (acceptedFiles: File[]) => {
-    setImages([...images, ...acceptedFiles]);
+  const onChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
+    setFileList(newFileList);
   };
 
-  const { getRootProps, getInputProps } = useDropzone({ onDrop });
-
-  const handleAnimalTypeChange = (type: string) => {
-    if (animalTypes.includes(type)) {
-      setAnimalTypes(animalTypes.filter((t) => t !== type));
-    } else {
-      setAnimalTypes([...animalTypes, type]);
+  const onPreview = async (file: UploadFile) => {
+    let src = file.url as string;
+    if (!src) {
+      src = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file.originFileObj as FileType);
+        reader.onload = () => resolve(reader.result as string);
+      });
     }
+    const image = new Image();
+    image.src = src;
+    const imgWindow = window.open(src);
+    imgWindow?.document.write(image.outerHTML);
   };
 
-  const handlePriceChange = (type: string, price: string) => {
-    if (/^\d*\.?\d{0,2}$/.test(price) || price === '') {
-      setPrices({ ...prices, [type]: price });
-    }
+  const renderSelectOptions = (options: Record<string, string>) => {
+    return Object.entries(options).map(([value, label]) => (
+      <Select.Option key={value} value={value}>
+        {label}
+      </Select.Option>
+    ));
   };
 
-  const validatePrices = () => {
-    let isValid = true;
-    const newErrors: { [key: string]: string } = {};
+  const handleAddressChange = (field: string, value: string) => {
+    setAddress((prev) => ({ ...prev, [field]: value }));
+  };
 
-    animalTypes.forEach((type) => {
-      if (!prices[type] || !/^\d+(\.\d{1,2})?$/.test(prices[type])) {
-        isValid = false;
-        newErrors[type] = t('caretakerForm.invalidPrice');
+  const handleSubmit = () => {
+    const formData = new FormData();
+    formData.append('description', description);
+    formData.append('phoneNumber', phoneNumber);
+
+    Object.entries(address).forEach(([key, value]) => {
+      formData.append(`address[${key}]`, value);
+    });
+
+    fileList.forEach((file, index) => {
+      if (file.originFileObj) {
+        formData.append(`image_${index}`, file.originFileObj);
       }
     });
 
-    return isValid;
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (validatePrices()) {
-      const formData = new FormData();
-      formData.append('location', location);
-      formData.append('description', description);
-
-      animalTypes.forEach((type) => {
-        formData.append('animalTypes', type);
-        formData.append(`price_${type}`, prices[type]);
-      });
-
-      images.forEach((image, index) => {
-        formData.append(`image_${index}`, image);
-      });
-
-      onSubmit(formData);
-    }
+    onSubmit(formData);
   };
 
   return (
     <div>
       <Header />
       <div className='caretaker-form-container'>
-        <Form onSubmit={handleSubmit}>
-          <Form.Group controlId='location' className='form-group'>
-            <Form.Label className='form-label'>{t('caretakerForm.location')}</Form.Label>
-            <Form.Control
-              type='text'
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-              placeholder={t('caretakerForm.enterCity')}
-              className='form-control'
+        <Form layout='vertical' onFinish={handleSubmit}>
+          <Form.Item label={t('personalData.phoneNumber')} name='phoneNumber'>
+            <Input
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+              placeholder={t('personalData.phoneNumber')}
             />
-          </Form.Group>
+          </Form.Item>
 
-          <Form.Group className='form-group'>
-            <Form.Label className='form-label'>{t('caretakerForm.animalTypes')}</Form.Label>
-            <div className='animal-type'>
-              <Form.Check
-                type='checkbox'
-                label={t('caretakerForm.smallDog')}
-                onChange={() => handleAnimalTypeChange('smallDog')}
-                checked={animalTypes.includes('smallDog')}
-                className='form-check'
-              />
-              {animalTypes.includes('smallDog') && (
-                <div className='price-container'>
-                  <Form.Control
-                    type='text'
-                    value={prices['smallDog'] || ''}
-                    onChange={(e) => handlePriceChange('smallDog', e.target.value)}
-                    placeholder={t('caretakerForm.priceFor', { type: t('caretakerForm.smallDog') })}
-                    className='form-control price-input'
-                  />
-                </div>
-              )}
-            </div>
-            <div className='animal-type'>
-              <Form.Check
-                type='checkbox'
-                label={t('caretakerForm.mediumDog')}
-                onChange={() => handleAnimalTypeChange('mediumDog')}
-                checked={animalTypes.includes('mediumDog')}
-                className='form-check'
-              />
-              {animalTypes.includes('mediumDog') && (
-                <div className='price-container'>
-                  <Form.Control
-                    type='text'
-                    value={prices['mediumDog'] || ''}
-                    onChange={(e) => handlePriceChange('mediumDog', e.target.value)}
-                    placeholder={t('caretakerForm.priceFor', { type: t('caretakerForm.mediumDog') })}
-                    className='form-control price-input'
-                  />
-                </div>
-              )}
-            </div>
-            <div className='animal-type'>
-              <Form.Check
-                type='checkbox'
-                label={t('caretakerForm.cat')}
-                onChange={() => handleAnimalTypeChange('cat')}
-                checked={animalTypes.includes('cat')}
-                className='form-check'
-              />
-              {animalTypes.includes('cat') && (
-                <div className='price-container'>
-                  <Form.Control
-                    type='text'
-                    value={prices['cat'] || ''}
-                    onChange={(e) => handlePriceChange('cat', e.target.value)}
-                    placeholder={t('caretakerForm.priceFor', { type: t('caretakerForm.cat') })}
-                    className='form-control price-input'
-                  />
-                </div>
-              )}
-            </div>
-          </Form.Group>
+          <Form.Item label={t('addressDetails.city')} name='city'>
+            <Input
+              value={address.city}
+              onChange={(e) => handleAddressChange('city', e.target.value)}
+              placeholder={t('addressDetails.city')}
+            />
+          </Form.Item>
 
-          <Form.Group controlId='description' className='form-group'>
-            <Form.Label className='form-label'>{t('caretakerForm.description')}</Form.Label>
-            <Form.Control
-              as='textarea'
-              rows={3}
+          <Form.Item label={t('addressDetails.zipCode')} name='zipCode'>
+            <Input
+              value={address.zipCode}
+              onChange={(e) => handleAddressChange('zipCode', e.target.value)}
+              placeholder={t('addressDetails.zipCode')}
+            />
+          </Form.Item>
+
+          <Form.Item label={t('addressDetails.voivodeship')} name='voivodeship'>
+            <Select
+              value={address.voivodeship}
+              onChange={(value) => handleAddressChange('voivodeship', value)}
+              placeholder={t('addressDetails.voivodeship')}
+            >
+              {renderSelectOptions({
+                DOLNOSLASKIE: 'Dolnośląskie',
+                KUJAWSKO_POMORSKIE: 'Kujawsko-Pomorskie',
+                LUBELSKIE: 'Lubelskie',
+                LUBUSKIE: 'Lubuskie',
+                LODZKIE: 'Łódzkie',
+                MALOPOLSKIE: 'Małopolskie',
+                MAZOWIECKIE: 'Mazowieckie',
+                OPOLSKIE: 'Opolskie',
+                PODKARPACKIE: 'Podkarpackie',
+                PODLASKIE: 'Podlaskie',
+                POMORSKIE: 'Pomorskie',
+                SLASKIE: 'Śląskie',
+                SWIETOKRZYSKIE: 'Świętokrzyskie',
+                WARMINSKO_MAZURSKIE: 'Warmińsko-Mazurskie',
+                WIELKOPOLSKIE: 'Wielkopolskie',
+                ZACHODNIOPOMORSKIE: 'Zachodniopomorskie',
+              })}
+            </Select>
+          </Form.Item>
+
+          <Form.Item label={t('addressDetails.street')} name='street'>
+            <Input
+              value={address.street}
+              onChange={(e) => handleAddressChange('street', e.target.value)}
+              placeholder={t('addressDetails.street')}
+            />
+          </Form.Item>
+
+          <Form.Item label={t('addressDetails.buildingNumber')} name='buildingNumber'>
+            <Input
+              value={address.buildingNumber}
+              onChange={(e) => handleAddressChange('buildingNumber', e.target.value)}
+              placeholder={t('addressDetails.buildingNumber')}
+            />
+          </Form.Item>
+
+          <Form.Item label={t('addressDetails.apartmentNumber')} name='apartmentNumber'>
+            <Input
+              value={address.apartmentNumber}
+              onChange={(e) => handleAddressChange('apartmentNumber', e.target.value)}
+              placeholder={t('addressDetails.apartmentNumber')}
+            />
+          </Form.Item>
+
+          <Form.Item label={t('description')} name='description'>
+            <Input.TextArea
+              autoSize={{
+                minRows: 1,
+                maxRows: 4,
+              }}
+              maxLength={1000}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder={t('caretakerForm.enterDescription')}
-              className='form-label form-text-area'
             />
-          </Form.Group>
+          </Form.Item>
 
-          <Form.Group controlId='availability' className='form-group'>
-            <Form.Label className='form-label'>{t('caretakerForm.availabilityCalendar')}</Form.Label>
-            <DatePicker
-              value={availability}
-              onChange={setAvailability}
-              multiple
-              range
-              format='DD-MM-YYYY'
-              plugins={[
-                weekends(),
-                <DatePanel sort="date" style={{ width: 150 }} />
-              ]}
-            />
-          </Form.Group>
+          <Form.Item label={t('caretakerForm.uploadImages')} name='images'>
+            <ImgCrop rotationSlider>
+              <Upload
+                listType='picture-card'
+                fileList={fileList}
+                onChange={onChange}
+                onPreview={onPreview}
+                accept='image/*'
+              >
+                {fileList.length < 5 && '+ Upload'}
+              </Upload>
+            </ImgCrop>
+          </Form.Item>
 
-          <Form.Group controlId='images' className='form-group'>
-            <Form.Label className='form-label'>{t('caretakerForm.uploadImages')}</Form.Label>
-            <div {...getRootProps({ className: 'dropzone' })}>
-              <input {...getInputProps()} />
-              <p>{t('caretakerForm.dragDrop')}</p>
-            </div>
-            <div className='images-list'>
-              {images.map((file, index) => (
-                <div key={index} className="image-item">
-                  <img src={URL.createObjectURL(file)} alt={`preview-${index}`} />
-                </div>
-              ))}
-            </div>
-          </Form.Group>
-
-          <Button variant='primary' type='submit'>
+          <Button type='primary' htmlType='submit'>
             {t('caretakerForm.submit')}
           </Button>
         </Form>

@@ -36,6 +36,23 @@
     "cage": "Klatka"
   },
 
+  "address": "Adres",
+  "addressDetails": {
+    "city": "Miasto",
+    "voivodeship": "Województwo",
+    "zipCode": "Kod pocztowy",
+    "street": "Ulica",
+    "buildingNumber": "Numer domu",
+    "apartmentNumber": "Numer mieszkania"
+  },
+
+  "personalData": {
+    "name": "Imie",
+    "surname": "Nazwisko",
+    "phoneNumber": "Numer telefonu",
+    "email": "E-mail"
+  },
+
   "perPage": "na stronę",
 
   "loginPage": {

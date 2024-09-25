@@ -35,6 +35,25 @@
     "scratchingPost": "Scratching Post",
     "cage": "Cage"
   },
+
+  "address": "Address",
+  "addressDetails": {
+    "city": "City",
+    "voivodeship": "Voivodeship",
+    "zipCode": "Zip code",
+    "street": "Street",
+    "buildingNumber": "Building number",
+    "apartmentNumber": "Apartment number"
+  },
+
+  "personalData": {
+    "name": "Name",
+    "surname": "Surname",
+    "phoneNumber": "Phone number",
+    "email": "E-mail"
+  },
+
+  "description": "Description",
   
   "perPage": "per page",
 
