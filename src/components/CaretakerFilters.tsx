@@ -135,14 +135,14 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
           onKeyDown={handleKeyDown}
         />
         <Input
-          placeholder={t('city')}
+          placeholder={t('addressDetails.city')}
           value={filters.cityLike}
           onChange={(e) => onFiltersChange({ ...filters, cityLike: e.target.value })}
           className="input-field"
           onKeyDown={handleKeyDown}
         />
         <Select
-          placeholder={t('voivodeship')}
+          placeholder={t('addressDetails.voivodeship')}
           className="input-field"
           onChange={(value) => onFiltersChange({ ...filters, voivodeship: value })}
           allowClear
