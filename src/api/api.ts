@@ -5,6 +5,7 @@ import {
   CaretakerSearchFilters,
   PagingParams,
 } from "../types";
+import { UserProfiles } from "../types/user.types";
 
 const backendHost =
   import.meta.env.VITE_BACKEND_HOST || window.location.hostname;
@@ -124,6 +125,21 @@ class API {
       `api/caretaker?${queryString}`,
       requestBody
     );
+  }
+
+  async getUserProfiles(): Promise<UserProfiles> {
+    try {
+      const response = await this.authorizedFetch<UserProfiles>(
+        "GET",
+        "user/available-profiles"
+      );
+      return response;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new Error(`Failed to fetch user profiles: ${error.message}`);
+      }
+      throw new Error("An unknown error occurred while fetching user profiles");
+    }
   }
 
   // async login(): Promise<User | null> {
