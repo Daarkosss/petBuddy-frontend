@@ -9,7 +9,15 @@ import { Header } from "../components/Header";
 import RoundedLine from "../components/RoundedLine";
 import { api } from "../api/api";
 
-const ProfileSelection: React.FC = () => {
+interface ProfileSelectionProps {
+  // to be able to know when user data is fetched
+  //only then we can modify profile
+  isUserDataFetched: boolean;
+}
+
+const ProfileSelection: React.FC<ProfileSelectionProps> = ({
+  isUserDataFetched,
+}) => {
   const { t } = useTranslation();
 
   const [hasCaretakerProfile, setHasCaretakerProfile] = useState(false);
@@ -38,7 +46,7 @@ const ProfileSelection: React.FC = () => {
         <h1 className="selection-title">{t("profileSelection.title")}</h1>
         <RoundedLine width="40%" height="5px" backgroundColor="#007EA7" />
 
-        {!isRequesting && (
+        {!isRequesting && isUserDataFetched && (
           <div className="selection-nested-container">
             <ProfileSelectionBox
               icon={CgProfile}
