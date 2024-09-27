@@ -1,11 +1,11 @@
 import { useKeycloak } from "@react-keycloak/web";
-import { Route, Routes, Navigate } from 'react-router-dom';
+import { Route, Routes, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { api } from './api/api';
-import Home from './pages/Home';
-import CaretakerForm from './pages/CaretakerForm';
-import LoginPage from './pages/LoginPage';
-import store from './store/RootStore';
+import { api } from "./api/api";
+import Home from "./pages/Home";
+import CaretakerForm from "./pages/CaretakerForm";
+import LoginPage from "./pages/LoginPage";
+import store from "./store/RootStore";
 import CaretakerSearch from "./pages/CaretakerSearch";
 
 function App() {

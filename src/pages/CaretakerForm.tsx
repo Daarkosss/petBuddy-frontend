@@ -1,29 +1,29 @@
-import { useState } from 'react';
-import { Form, Input, Button, GetProp, Upload, UploadProps, UploadFile, Select, Card, Space } from 'antd';
-import ImgCrop from 'antd-img-crop';
-import { useTranslation } from 'react-i18next';
-import { Header } from '../components/Header';
-import { api } from '../api/api';
-import { AddressDTO } from '../types';
+import { useState } from "react";
+import { Form, Input, Button, GetProp, Upload, UploadProps, UploadFile, Select, Card, Space } from "antd";
+import ImgCrop from "antd-img-crop";
+import { useTranslation } from "react-i18next";
+import { Header } from "../components/Header";
+import { api } from "../api/api";
+import { AddressDTO } from "../types";
 
-type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
+type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
 const CaretakerForm = () => {
   const { t } = useTranslation();
 
-  const [description, setDescription] = useState('');
+  const [description, setDescription] = useState("");
   const [fileList, setFileList] = useState<UploadFile[]>([]);
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState<AddressDTO>({
-    city: '',
-    zipCode: '',
-    voivodeship: '',
-    street: '',
-    buildingNumber: '',
-    apartmentNumber: '',
+    city: "",
+    zipCode: "",
+    voivodeship: null,
+    street: "",
+    buildingNumber: "",
+    apartmentNumber: "",
   });
 
-  const onChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
+  const onChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
     setFileList(newFileList);
   };
 
@@ -71,90 +71,90 @@ const CaretakerForm = () => {
   return (
     <div>
       <Header />
-      <div className='caretaker-form-container'>
-        <Form layout='vertical' onFinish={handleSubmit}>
-          <Space direction="vertical" size="large" style={{ width: '100%' }}>
-            <Card title={t('address')}>
-              <div className='card-grid-row'>
-                <Form.Item label={t('addressDetails.street')} name='street'>
+      <div className="caretaker-form-container">
+        <Form layout="vertical" onFinish={handleSubmit}>
+          <Space direction="vertical" size="large" style={{ width: "100%" }}>
+            <Card title={t("address")}>
+              <div className="card-grid-row">
+                <Form.Item label={t("addressDetails.street")} name="street">
                   <Input
                     value={address.street}
-                    onChange={(e) => handleAddressChange('street', e.target.value)}
-                    placeholder={t('placeholder.street')}
+                    onChange={(e) => handleAddressChange("street", e.target.value)}
+                    placeholder={t("placeholder.street")}
                   />
                 </Form.Item>
-                <Form.Item label={t('addressDetails.buildingNumber')} name='buildingNumber'>
+                <Form.Item label={t("addressDetails.buildingNumber")} name="buildingNumber">
                   <Input
                     value={address.buildingNumber}
-                    onChange={(e) => handleAddressChange('buildingNumber', e.target.value)}
-                    placeholder={t('placeholder.buildingNumber')}
+                    onChange={(e) => handleAddressChange("buildingNumber", e.target.value)}
+                    placeholder={t("placeholder.buildingNumber")}
                   />
                 </Form.Item>
-                <Form.Item label={t('addressDetails.apartmentNumber')} name='apartmentNumber'>
+                <Form.Item label={t("addressDetails.apartmentNumber")} name="apartmentNumber">
                   <Input
                     value={address.apartmentNumber}
-                    onChange={(e) => handleAddressChange('apartmentNumber', e.target.value)}
-                    placeholder={t('placeholder.apartmentNumber')}
+                    onChange={(e) => handleAddressChange("apartmentNumber", e.target.value)}
+                    placeholder={t("placeholder.apartmentNumber")}
                   />
                 </Form.Item>
               </div>
 
-              <div className='card-grid-row'>
-                <Form.Item label={t('addressDetails.zipCode')} name='zipCode'>
+              <div className="card-grid-row">
+                <Form.Item label={t("addressDetails.zipCode")} name="zipCode">
                   <Input
                     value={address.zipCode}
-                    onChange={(e) => handleAddressChange('zipCode', e.target.value)}
-                    placeholder={t('placeholder.zipCode')}
+                    onChange={(e) => handleAddressChange("zipCode", e.target.value)}
+                    placeholder={t("placeholder.zipCode")}
                   />
                 </Form.Item>
-                <Form.Item label={t('addressDetails.city')} name='city'>
+                <Form.Item label={t("addressDetails.city")} name="city">
                   <Input
                     value={address.city}
-                    onChange={(e) => handleAddressChange('city', e.target.value)}
-                    placeholder={t('placeholder.city')}
+                    onChange={(e) => handleAddressChange("city", e.target.value)}
+                    placeholder={t("placeholder.city")}
                   />
                 </Form.Item>
-                <Form.Item label={t('addressDetails.voivodeship')} name='voivodeship'>
+                <Form.Item label={t("addressDetails.voivodeship")} name="voivodeship">
                   <Select
                     value={address.voivodeship}
-                    onChange={(value) => handleAddressChange('voivodeship', value)}
-                    placeholder={t('placeholder.voivodeship')}
+                    onChange={(value) => handleAddressChange("voivodeship", value)}
+                    placeholder={t("placeholder.voivodeship")}
                   >
                     {renderSelectOptions({
-                      DOLNOSLASKIE: 'Dolnośląskie',
-                      KUJAWSKO_POMORSKIE: 'Kujawsko-Pomorskie',
-                      LUBELSKIE: 'Lubelskie',
-                      LUBUSKIE: 'Lubuskie',
-                      LODZKIE: 'Łódzkie',
-                      MALOPOLSKIE: 'Małopolskie',
-                      MAZOWIECKIE: 'Mazowieckie',
-                      OPOLSKIE: 'Opolskie',
-                      PODKARPACKIE: 'Podkarpackie',
-                      PODLASKIE: 'Podlaskie',
-                      POMORSKIE: 'Pomorskie',
-                      SLASKIE: 'Śląskie',
-                      SWIETOKRZYSKIE: 'Świętokrzyskie',
-                      WARMINSKO_MAZURSKIE: 'Warmińsko-Mazurskie',
-                      WIELKOPOLSKIE: 'Wielkopolskie',
-                      ZACHODNIOPOMORSKIE: 'Zachodniopomorskie',
+                      DOLNOSLASKIE: "Dolnośląskie",
+                      KUJAWSKO_POMORSKIE: "Kujawsko-Pomorskie",
+                      LUBELSKIE: "Lubelskie",
+                      LUBUSKIE: "Lubuskie",
+                      LODZKIE: "Łódzkie",
+                      MALOPOLSKIE: "Małopolskie",
+                      MAZOWIECKIE: "Mazowieckie",
+                      OPOLSKIE: "Opolskie",
+                      PODKARPACKIE: "Podkarpackie",
+                      PODLASKIE: "Podlaskie",
+                      POMORSKIE: "Pomorskie",
+                      SLASKIE: "Śląskie",
+                      SWIETOKRZYSKIE: "Świętokrzyskie",
+                      WARMINSKO_MAZURSKIE: "Warmińsko-Mazurskie",
+                      WIELKOPOLSKIE: "Wielkopolskie",
+                      ZACHODNIOPOMORSKIE: "Zachodniopomorskie",
                     })}
                   </Select>
                 </Form.Item>
               </div>
             </Card>
 
-            <Card title={t('personalData.contactDetails')}>
-              <Form.Item label={t('personalData.phoneNumber')} name='phoneNumber' style={{ width: '200px' }}>
+            <Card title={t("personalData.contactDetails")}>
+              <Form.Item label={t("personalData.phoneNumber")} name="phoneNumber" style={{ width: "200px" }}>
                 <Input
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
-                  placeholder={t('placeholder.phoneNumber')}
+                  placeholder={t("placeholder.phoneNumber")}
                 />
               </Form.Item>
             </Card>
 
-            <Card title={t('description')}>
-              <Form.Item name='description'>
+            <Card title={t("description")}>
+              <Form.Item name="description">
                 <Input.TextArea
                   autoSize={{
                     minRows: 2,
@@ -163,29 +163,29 @@ const CaretakerForm = () => {
                   maxLength={1000}
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  placeholder={t('placeholder.description')}
+                  placeholder={t("placeholder.description")}
                 />
               </Form.Item>
             </Card>
 
-            <Card title={t('uploadImages')}>
-              <Form.Item name='images'>
+            <Card title={t("uploadImages")}>
+              <Form.Item name="images">
                 <ImgCrop rotationSlider>
                   <Upload
-                    listType='picture-card'
+                    listType="picture-card"
                     fileList={fileList}
                     onChange={onChange}
                     onPreview={onPreview}
-                    accept='image/*'
+                    accept="image/*"
                   >
-                    {fileList.length < 5 && `+ ${t('upload')}`}
+                    {fileList.length < 5 && `+ ${t("upload")}`}
                   </Upload>
                 </ImgCrop>
               </Form.Item>
             </Card>
 
-            <Button type='primary' htmlType='submit'>
-              {t('save')}
+            <Button type="primary" htmlType="submit">
+              {t("save")}
             </Button>
           </Space>
         </Form>
