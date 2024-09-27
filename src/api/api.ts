@@ -8,12 +8,6 @@ export const PATH_PREFIX = `http://${backendHost}:${backendPort}/`;
 
 type Method = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
-export type User = {
-  _id: string;
-  name: string;
-  email: string;
-}
-
 class API {
 
   async fetch<T>(
