@@ -38,7 +38,7 @@ function App() {
       {keycloak.authenticated ? (
         <>
           <Route path="/home" element={<Home />} />
-          <Route path="/caretaker/form" element={<CaretakerForm onSubmit={() => {}} />} />
+          <Route path="/caretaker/form" element={<CaretakerForm />} />
           <Route path="/caretaker/search" element={<CaretakerSearch />} />
           <Route path="*" element={<Navigate to="/home" />} />
         </>

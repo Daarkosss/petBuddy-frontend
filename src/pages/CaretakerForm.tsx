@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Form, Input, Button, GetProp, Upload, UploadProps, UploadFile, Select, Card, Space } from 'antd';
 import ImgCrop from 'antd-img-crop';
 import { useTranslation } from 'react-i18next';
@@ -6,11 +6,7 @@ import { Header } from '../components/Header';
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
-interface CaregiverFormProps {
-  onSubmit: (formData: FormData) => void;
-}
-
-const CaretakerForm: React.FC<CaregiverFormProps> = ({ onSubmit }) => {
+const CaretakerForm = () => {
   const { t } = useTranslation();
 
   const [description, setDescription] = useState('');
@@ -65,13 +61,13 @@ const CaretakerForm: React.FC<CaregiverFormProps> = ({ onSubmit }) => {
       formData.append(`address[${key}]`, value);
     });
 
-    fileList.forEach((file, index) => {
-      if (file.originFileObj) {
-        formData.append(`image_${index}`, file.originFileObj);
-      }
-    });
+    // fileList.forEach((file, index) => {
+    //   if (file.originFileObj) {
+    //     formData.append(`image_${index}`, file.originFileObj);
+    //   }
+    // });
 
-    onSubmit(formData);
+    // onSubmit(formData);
   };
 
   return (
