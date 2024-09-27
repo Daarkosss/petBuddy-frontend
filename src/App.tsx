@@ -11,40 +11,51 @@ import ProfileSelection from "./pages/ProfileSelection";
 
 function App() {
   const { keycloak, initialized } = useKeycloak();
+  const [isXsrfTokenFetched, setIsXsrfTokenFetched] = useState(false);
+  const [isUserDataFetched, setIsUserDataFetched] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  // const [xsrfToken, setXsrfToken] = useState();
 
   useEffect(() => {
     const fetchXsrfToken = async () => {
       if (keycloak.authenticated && !store.user.xsrfToken) {
         await api.getXsrfToken();
-        try {
-          const userData = await keycloak.loadUserProfile();
-          const userProfileData = {
-            username: userData.username,
-            email: userData.email,
-            firstName: userData.firstName,
-            lastName: userData.lastName,
-            token: store.user.xsrfToken,
-            selected_profile: null,
-          };
-          store.user.saveProfileToStorage(userProfileData);
-        } catch (error) {
-          console.error(`Failed to load user profile: ${error}`);
-        }
-        // setXsrfToken(fetchedXsrfToken)
+        setIsXsrfTokenFetched(true);
       }
-      setIsLoading(false);
+    };
+
+    const fetchUserData = async () => {
+      try {
+        const userData = await keycloak.loadUserProfile();
+        const userProfileData = {
+          username: userData.username,
+          email: userData.email,
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+          token: store.user.xsrfToken,
+          selected_profile: null,
+        };
+        store.user.saveProfileToStorage(userProfileData);
+        setIsUserDataFetched(true);
+      } catch (error) {
+        console.error(`Failed to load user profile: ${error}`);
+      }
     };
 
     if (initialized) {
       if (keycloak.authenticated) {
         fetchXsrfToken();
+        fetchUserData();
       } else {
         setIsLoading(false);
       }
     }
   }, [initialized, keycloak.authenticated]);
+
+  useEffect(() => {
+    if (isXsrfTokenFetched && isUserDataFetched) {
+      setIsLoading(false);
+    }
+  }, [isXsrfTokenFetched, isUserDataFetched]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -57,10 +68,13 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route
             path="/caretaker/form"
-            element={<CaretakerForm onSubmit={() => {}} />}
+            element={<CaretakerForm onSubmit={() => {}} />} //TODO: dodaj onSubmit
           />
           <Route path="/caretaker/search" element={<CaretakerSearch />} />
-          <Route path="/profile-selection" element={<ProfileSelection />} />
+          <Route
+            path="/profile-selection"
+            element={<ProfileSelection isUserDataFetched={isUserDataFetched} />}
+          />
           <Route path="*" element={<Navigate to="/home" />} />
         </>
       ) : (
