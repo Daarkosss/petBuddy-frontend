@@ -1,4 +1,4 @@
-import { PageableDTO, SortDTO } from './pagination.types';
+import { PageableDTO, SortDTO } from "./pagination.types";
 
 export type CaretakerDTO = {
   accountData: {
@@ -25,22 +25,22 @@ export type AddressDTO = {
 }
 
 export type VoivodeshipDTO =
-  | 'DOLNOSLASKIE'
-  | 'KUJAWSKO_POMORSKIE'
-  | 'LUBELSKIE'
-  | 'LUBUSKIE'
-  | 'LODZKIE'
-  | 'MALOPOLSKIE'
-  | 'MAZOWIECKIE'
-  | 'OPOLSKIE'
-  | 'PODKARPACKIE'
-  | 'PODLASKIE'
-  | 'POMORSKIE'
-  | 'SLASKIE'
-  | 'SWIETOKRZYSKIE'
-  | 'WARMINSKO_MAZURSKIE'
-  | 'WIELKOPOLSKIE'
-  | 'ZACHODNIOPOMORSKIE';
+  | "DOLNOSLASKIE"
+  | "KUJAWSKO_POMORSKIE"
+  | "LUBELSKIE"
+  | "LUBUSKIE"
+  | "LODZKIE"
+  | "MALOPOLSKIE"
+  | "MAZOWIECKIE"
+  | "OPOLSKIE"
+  | "PODKARPACKIE"
+  | "PODLASKIE"
+  | "POMORSKIE"
+  | "SLASKIE"
+  | "SWIETOKRZYSKIE"
+  | "WARMINSKO_MAZURSKIE"
+  | "WIELKOPOLSKIE"
+  | "ZACHODNIOPOMORSKIE";
 
 export type OfferDTO = {
   id: number;
@@ -80,8 +80,8 @@ export type CaretakerSearchFilters = {
   animals?: AnimalFilter[];
 }
 
-export type AnimalSex = 'MALE' | 'SHE';
-export type AnimalSize = 'SMALL' | 'MEDIUM' | 'BIG'; 
+export type AnimalSex = "MALE" | "SHE";
+export type AnimalSize = "SMALL" | "MEDIUM" | "BIG"; 
 
 export type OfferConfiguration = {
   attributes?: {

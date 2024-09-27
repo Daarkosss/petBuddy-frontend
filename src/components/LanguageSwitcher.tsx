@@ -1,7 +1,7 @@
-import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { Dropdown, DropdownButton } from 'react-bootstrap';
-import { FaGlobe } from 'react-icons/fa';
+import React from "react";
+import { useTranslation } from "react-i18next";
+import { Dropdown, DropdownButton } from "react-bootstrap";
+import { FaGlobe } from "react-icons/fa";
 
 const LanguageSwitcher: React.FC = () => {
   const { i18n } = useTranslation();
@@ -17,8 +17,8 @@ const LanguageSwitcher: React.FC = () => {
       variant="outline-light"
       className="language-switcher"
     >
-      <Dropdown.Item onClick={() => changeLanguage('en')}>English</Dropdown.Item>
-      <Dropdown.Item onClick={() => changeLanguage('pl')}>Polski</Dropdown.Item>
+      <Dropdown.Item onClick={() => changeLanguage("en")}>English</Dropdown.Item>
+      <Dropdown.Item onClick={() => changeLanguage("pl")}>Polski</Dropdown.Item>
     </DropdownButton>
   );
 };

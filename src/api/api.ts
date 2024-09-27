@@ -1,12 +1,12 @@
-import { toast } from 'react-toastify';
-import store from '../store/RootStore';
-import { CaretakerResponse, CaretakerSearchFilters, PagingParams } from '../types';
+import { toast } from "react-toastify";
+import store from "../store/RootStore";
+import { CaretakerResponse, CaretakerSearchFilters, PagingParams } from "../types";
 
 const backendHost = import.meta.env.VITE_BACKEND_HOST || window.location.hostname;
-const backendPort = import.meta.env.VITE_BACKEND_PORT || '8081';
+const backendPort = import.meta.env.VITE_BACKEND_PORT || "8081";
 export const PATH_PREFIX = `http://${backendHost}:${backendPort}/`;
 
-type Method = 'GET' | 'POST' | 'PUT' | 'DELETE';
+type Method = "GET" | "POST" | "PUT" | "DELETE";
 
 export type User = {
   _id: string;
@@ -26,20 +26,20 @@ class API {
     const options = {
       method,
       headers: {
-        'Content-Type': 'application/json',
-        'X-XSRF-TOKEN': store.user.xsrfToken,
+        "Content-Type": "application/json",
+        "X-XSRF-TOKEN": store.user.xsrfToken,
         ...headers
       },
       body: body ? JSON.stringify(body) : undefined,
-      credentials: 'include'
+      credentials: "include"
     } as RequestInit
 
     const response = await fetch(`${PATH_PREFIX}${path}`, options)
     const data = await response.json();
 
     if (!response.ok) {
-      toast.error(data.message || 'Wrong server response!');
-      throw new Error(data.message || 'Wrong server response!');
+      toast.error(data.message || "Wrong server response!");
+      throw new Error(data.message || "Wrong server response!");
     } else {
       return data;
     }
@@ -55,19 +55,19 @@ class API {
         method,
         path,
         body,
-        { 'Authorization': `Bearer ${store.user.jwtToken}` },
+        { "Authorization": `Bearer ${store.user.jwtToken}` },
       );
     } else {
-      return Promise.reject(new Error('No user token available'));
+      return Promise.reject(new Error("No user token available"));
     }
   }
 
   async getTestMessage(): Promise<string> {
     try {
-      console.log('getting test message')
+      console.log("getting test message")
       const response = await this.authorizedFetch<string>(
-        'GET',
-        'api/test'
+        "GET",
+        "api/test"
       )
       toast.success(JSON.stringify(response));
       return response
@@ -79,8 +79,8 @@ class API {
   async getXsrfToken(): Promise<void> {
     try {
       const response = await this.fetch<void>(
-        'GET',
-        'api/csrf'
+        "GET",
+        "api/csrf"
       )
       return response
     } catch (error: unknown) {
@@ -98,20 +98,20 @@ class API {
     });
   
     if (pagingParams.sortBy) {
-      queryParams.append('sortBy', pagingParams.sortBy);
+      queryParams.append("sortBy", pagingParams.sortBy);
     }
     if (pagingParams.sortDirection) {
-      queryParams.append('sortDirection', pagingParams.sortDirection);
+      queryParams.append("sortDirection", pagingParams.sortDirection);
     }
   
     if (filters.personalDataLike) {
-      queryParams.append('personalDataLike', filters.personalDataLike);
+      queryParams.append("personalDataLike", filters.personalDataLike);
     }
     if (filters.cityLike) {
-      queryParams.append('cityLike', filters.cityLike);
+      queryParams.append("cityLike", filters.cityLike);
     }
     if (filters.voivodeship) {
-      queryParams.append('voivodeship', filters.voivodeship);
+      queryParams.append("voivodeship", filters.voivodeship);
     }
   
     const queryString = queryParams.toString();
@@ -126,7 +126,7 @@ class API {
     }));
   
     return this.authorizedFetch<CaretakerResponse>(
-      'POST',
+      "POST",
       `api/caretaker?${queryString}`,
       requestBody
     );
@@ -134,10 +134,10 @@ class API {
 
   // async login(): Promise<User | null> {
   //   try {
-  //     console.log('login');
+  //     console.log("login");
   //     const response = await this.authorizedFetch<User>(
-  //       'POST',
-  //       'user/login',
+  //       "POST",
+  //       "user/login",
   //       // { email: store.auth.user?.email }
   //     );
   //     return response;

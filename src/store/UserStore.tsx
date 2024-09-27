@@ -29,7 +29,7 @@ class UserStore {
   saveProfileToStorage(profile?: UserProfile) {
     if (profile) {
       this.profile = profile;
-      localStorage.setItem('user', JSON.stringify(this.profile));
+      localStorage.setItem("user", JSON.stringify(this.profile));
     }
   }
 
@@ -38,7 +38,7 @@ class UserStore {
   }
 
   getProfileFromStorage() {
-    const profile = localStorage.getItem('profile');
+    const profile = localStorage.getItem("profile");
     if (profile) {
       return JSON.parse(profile);
     } else {
@@ -48,8 +48,8 @@ class UserStore {
 
   reset() {
     this.profile = null;
-    localStorage.removeItem('user');
-    removeCookie('XSRF-TOKEN');
+    localStorage.removeItem("user");
+    removeCookie("XSRF-TOKEN");
   }
 }
 
