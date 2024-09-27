@@ -40,7 +40,8 @@ export type VoivodeshipDTO =
   | 'SWIETOKRZYSKIE'
   | 'WARMINSKO_MAZURSKIE'
   | 'WIELKOPOLSKIE'
-  | 'ZACHODNIOPOMORSKIE';
+  | 'ZACHODNIOPOMORSKIE'
+  | '';
 
 export type OfferDTO = {
   id: number;
@@ -97,3 +98,9 @@ export type AnimalFilter = {
   animalType: string;
   offerConfigurations: OfferConfiguration[];
 };
+
+export type CaretakerAddOrEditForm = {
+  phoneNumber: string;
+  description: string;
+  address: AddressDTO;
+}

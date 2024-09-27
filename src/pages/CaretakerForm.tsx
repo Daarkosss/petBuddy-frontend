@@ -3,6 +3,8 @@ import { Form, Input, Button, GetProp, Upload, UploadProps, UploadFile, Select, 
 import ImgCrop from 'antd-img-crop';
 import { useTranslation } from 'react-i18next';
 import { Header } from '../components/Header';
+import { api } from '../api/api';
+import { AddressDTO } from '../types';
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
@@ -12,7 +14,7 @@ const CaretakerForm = () => {
   const [description, setDescription] = useState('');
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [address, setAddress] = useState({
+  const [address, setAddress] = useState<AddressDTO>({
     city: '',
     zipCode: '',
     voivodeship: '',
@@ -53,21 +55,17 @@ const CaretakerForm = () => {
   };
 
   const handleSubmit = () => {
-    const formData = new FormData();
-    formData.append('description', description);
-    formData.append('phoneNumber', phoneNumber);
-
-    Object.entries(address).forEach(([key, value]) => {
-      formData.append(`address[${key}]`, value);
-    });
-
     // fileList.forEach((file, index) => {
     //   if (file.originFileObj) {
     //     formData.append(`image_${index}`, file.originFileObj);
     //   }
     // });
 
-    // onSubmit(formData);
+    api.editCaretakerProfile({
+      phoneNumber,
+      description,
+      address
+    });
   };
 
   return (
