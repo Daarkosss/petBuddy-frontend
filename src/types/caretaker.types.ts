@@ -18,7 +18,7 @@ export type CaretakerDTO = {
 export type AddressDTO = {
   city: string;
   zipCode: string;
-  voivodeship: VoivodeshipDTO | null;
+  voivodeship: VoivodeshipDTO;
   street: string;
   buildingNumber: string;
   apartmentNumber: string;
@@ -101,5 +101,14 @@ export type AnimalFilter = {
 export type CaretakerAddOrEditForm = {
   phoneNumber: string;
   description: string;
-  address: AddressDTO;
+  address: FormAddress;
+}
+
+export type FormAddress = {
+  city: string;
+  zipCode: string;
+  voivodeship: VoivodeshipDTO | undefined;
+  street: string;
+  buildingNumber: string;
+  apartmentNumber: string;
 }

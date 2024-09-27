@@ -4,7 +4,7 @@ import ImgCrop from "antd-img-crop";
 import { useTranslation } from "react-i18next";
 import { Header } from "../components/Header";
 import { api } from "../api/api";
-import { AddressDTO } from "../types";
+import { FormAddress } from "../types";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
@@ -14,10 +14,10 @@ const CaretakerForm = () => {
   const [description, setDescription] = useState("");
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [address, setAddress] = useState<AddressDTO>({
+  const [address, setAddress] = useState<FormAddress>({
     city: "",
     zipCode: "",
-    voivodeship: null,
+    voivodeship: undefined,
     street: "",
     buildingNumber: "",
     apartmentNumber: "",
