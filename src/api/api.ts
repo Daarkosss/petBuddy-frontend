@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify';
 import store from '../store/RootStore';
-import { CaretakerResponse, CaretakerSearchFilters, PagingParams } from '../types';
+import { CaretakerAddOrEditForm, CaretakerResponse, CaretakerSearchFilters, PagingParams } from '../types';
 
 const backendHost = import.meta.env.VITE_BACKEND_HOST || window.location.hostname;
 const backendPort = import.meta.env.VITE_BACKEND_PORT || '8081';
@@ -132,18 +132,18 @@ class API {
     );
   }
 
-  async addCaretakerProfile(data: FormData): Promise<void> {
+  async addCaretakerProfile(data: CaretakerAddOrEditForm): Promise<void> {
     return this.authorizedFetch<void>(
       'POST',
-      'api/caretaker/profile',
+      'api/caretaker/add',
       data
     );
   }
 
-  async editCaretakerProfile(data: FormData): Promise<void> {
+  async editCaretakerProfile(data: CaretakerAddOrEditForm): Promise<void> {
     return this.authorizedFetch<void>(
       'PATCH',
-      'api/caretaker/profile',
+      'api/caretaker/edit',
       data
     );
   }
