@@ -36,12 +36,23 @@
 
   "address": "Adres",
   "addressDetails": {
-    "city": "Miasto",
+    "city": "Miejscowość",
     "voivodeship": "Województwo",
     "zipCode": "Kod pocztowy",
     "street": "Ulica",
-    "buildingNumber": "Numer domu",
+    "buildingNumber": "Numer budynku",
     "apartmentNumber": "Numer mieszkania"
+  },
+
+  "placeholder": {
+    "city": "np. Wrocław",
+    "voivodeship": "np. Dolnośląskie",
+    "zipCode": "np. 00-000",
+    "street": "np. Szkolna",
+    "buildingNumber": "np. 102A",
+    "apartmentNumber": "np. 7",
+    "phoneNumber": "np. 000000000",
+    "description": "np. Mam na imię Jan i zajmuje się opieką nad zwierzętami już od 2 lat. Moi klienci zawsze są zadowoleni..."
   },
 
   "personalData": {
@@ -79,6 +90,7 @@
   },
 
   "description": "Opis",
+  "upload": "Prześlij",
   "uploadImages": "Prześlij zdjęcia",
   "save": "Zapisz"
 }
