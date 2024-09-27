@@ -36,6 +36,7 @@
         justify-content: center;
         align-items: center;
         transition: 0.3s transform ease, 0.3s border ease, 0.3s color ease;
+        cursor: pointer;
       }
       .profile-title {
         color: v.$blue-medium;
