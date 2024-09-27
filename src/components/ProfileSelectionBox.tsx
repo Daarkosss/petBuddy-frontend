@@ -28,6 +28,8 @@ const ProfileSelectionBox: React.FC<Image> = ({
           store.user.setSelectedProfile(profile);
           store.user.saveProfileToStorage(store.user.profile);
           navigate("/home");
+        } else {
+          navigate("/caretaker/form");
         }
       }}
     >
