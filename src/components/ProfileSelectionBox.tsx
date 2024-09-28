@@ -9,6 +9,8 @@ interface Image {
   size: number;
   title: string;
   profile: Profile;
+  onHover: () => void;
+  onLeave: () => void;
 }
 
 const ProfileSelectionBox: React.FC<Image> = ({
@@ -16,6 +18,8 @@ const ProfileSelectionBox: React.FC<Image> = ({
   size,
   title,
   profile,
+  onHover,
+  onLeave,
 }) => {
   const navigate = useNavigate();
 
@@ -23,6 +27,8 @@ const ProfileSelectionBox: React.FC<Image> = ({
     //TODO: add create caretaker profile logic
     <div
       className="profile-container"
+      onMouseEnter={onHover}
+      onMouseLeave={onLeave}
       onClick={() => {
         if (profile) {
           store.user.setSelectedProfile(profile);
