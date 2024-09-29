@@ -55,6 +55,22 @@ const CaretakerForm = () => {
     setAddress((prev) => ({ ...prev, [field]: value }));
   };
 
+  const handleZipCodeKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const allowedKeys = ["Backspace", "Delete"];
+    const regex = /^[0-9-]*$/;
+    if (!regex.test(e.key) && !allowedKeys.includes(e.key)) {
+      e.preventDefault();
+    }
+  };
+
+  const handlePhoneNumberKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const allowedKeys = ["Backspace", "Delete"];
+    const regex = /^[0-9+]*$/;
+    if (!regex.test(e.key) && !allowedKeys.includes(e.key)) {
+      e.preventDefault();
+    }
+  }
+
   const handleSubmit = () => {
     // fileList.forEach((file, index) => {
     //   if (file.originFileObj) {
@@ -77,23 +93,38 @@ const CaretakerForm = () => {
           <Space direction="vertical" size="large" style={{ width: "100%" }}>
             <Card title={t("address")}>
               <div className="card-grid-row">
-                <Form.Item label={t("addressDetails.street")} name="street">
+                <Form.Item
+                  label={t("addressDetails.street")}
+                  name="street"
+                  rules={[{ required: true, message: t("validation.required") }]}
+                >
                   <Input
                     value={address.street}
+                    maxLength={150}
                     onChange={(e) => handleAddressChange("street", e.target.value)}
                     placeholder={t("placeholder.street")}
                   />
                 </Form.Item>
-                <Form.Item label={t("addressDetails.buildingNumber")} name="buildingNumber">
+                <Form.Item
+                  label={t("addressDetails.buildingNumber")}
+                  name="buildingNumber"
+                  rules={[{ required: true, message: t("validation.required") }]}
+                >
                   <Input
                     value={address.buildingNumber}
+                    maxLength={10}
                     onChange={(e) => handleAddressChange("buildingNumber", e.target.value)}
                     placeholder={t("placeholder.buildingNumber")}
                   />
                 </Form.Item>
-                <Form.Item label={t("addressDetails.apartmentNumber")} name="apartmentNumber">
+                <Form.Item
+                  label={t("addressDetails.apartmentNumber")}
+                  name="apartmentNumber"
+                  rules={[{ required: true, message: t("validation.required") }]}
+                >
                   <Input
                     value={address.apartmentNumber}
+                    maxLength={10}
                     onChange={(e) => handleAddressChange("apartmentNumber", e.target.value)}
                     placeholder={t("placeholder.apartmentNumber")}
                   />
@@ -101,21 +132,39 @@ const CaretakerForm = () => {
               </div>
 
               <div className="card-grid-row">
-                <Form.Item label={t("addressDetails.zipCode")} name="zipCode">
+                <Form.Item
+                  label={t("addressDetails.zipCode")}
+                  name="zipCode"
+                  rules={[
+                    { required: true, message: t("validation.required") },
+                    { pattern: /^[0-9]{2}-[0-9]{3}$/, message: t("validation.zipCodeFormat") }
+                  ]}
+                >
                   <Input
                     value={address.zipCode}
+                    maxLength={6}
                     onChange={(e) => handleAddressChange("zipCode", e.target.value)}
+                    onKeyDown={(e) => handleZipCodeKeyDown(e)}
                     placeholder={t("placeholder.zipCode")}
                   />
                 </Form.Item>
-                <Form.Item label={t("addressDetails.city")} name="city">
+                <Form.Item
+                  label={t("addressDetails.city")}
+                  name="city"
+                  rules={[{ required: true, message: t("validation.required") }]}
+                >
                   <Input
                     value={address.city}
+                    maxLength={50}
                     onChange={(e) => handleAddressChange("city", e.target.value)}
                     placeholder={t("placeholder.city")}
                   />
                 </Form.Item>
-                <Form.Item label={t("addressDetails.voivodeship")} name="voivodeship">
+                <Form.Item
+                  label={t("addressDetails.voivodeship")}
+                  name="voivodeship"
+                  rules={[{ required: true, message: t("validation.required") }]}
+                >
                   <Select
                     value={address.voivodeship}
                     onChange={(value) => handleAddressChange("voivodeship", value)}
@@ -128,10 +177,20 @@ const CaretakerForm = () => {
             </Card>
 
             <Card title={t("personalData.contactDetails")}>
-              <Form.Item label={t("personalData.phoneNumber")} name="phoneNumber" style={{ width: "200px" }}>
+              <Form.Item
+                label={t("personalData.phoneNumber")}
+                name="phoneNumber"
+                rules={[
+                  { required: true, message: t("validation.required") },
+                  { pattern: /^\+?([0-9]){7,}$/, message: t("validation.phoneNumberFormat") },
+                ]}
+                style={{ width: "200px" }}
+              >
                 <Input
                   value={phoneNumber}
+                  maxLength={14}
                   onChange={(e) => setPhoneNumber(e.target.value)}
+                  onKeyDown={handlePhoneNumberKeyDown}
                   placeholder={t("placeholder.phoneNumber")}
                 />
               </Form.Item>
@@ -140,11 +199,12 @@ const CaretakerForm = () => {
             <Card title={t("description")}>
               <Form.Item name="description">
                 <Input.TextArea
+                  showCount 
                   autoSize={{
                     minRows: 2,
                     maxRows: 4,
                   }}
-                  maxLength={1000}
+                  maxLength={1500}
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder={t("placeholder.description")}

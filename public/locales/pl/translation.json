@@ -92,5 +92,11 @@
   "description": "Opis",
   "upload": "Prześlij",
   "uploadImages": "Prześlij zdjęcia",
-  "save": "Zapisz"
+  "save": "Zapisz",
+
+  "validation": {
+    "required": "Wymagane",
+    "zipCodeFormat": "Nieprawidłowy format (00-000)",
+    "phoneNumberFormat": "Nieprawidłowy format (minimum 7 cyfr)"
+  }
 }
