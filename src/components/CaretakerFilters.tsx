@@ -23,12 +23,6 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
 }) => {
   const { t } = useTranslation();
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      handleSearch();
-    }
-  };
-
   const handlePriceKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     const value = e.key;
     const regex = /^\d/;
@@ -37,8 +31,6 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
     if (!regex.test(value) && !allowedKeys.includes(e.key)) {
       e.preventDefault();
     }
-
-    handleKeyDown(e);
   };
 
   const handlePriceChange = (animalType: string, priceType: "minPrice" | "maxPrice", value: string) => {
@@ -48,8 +40,6 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
     if (regex.test(value)) {
       const updatedConfig = { [priceType]: parsedValue || undefined };
       onAnimalFiltersChange(animalType, updatedConfig);    
-    } else {
-      value = value.slice(0, -1);
     }
   };
   const checkAndSwapPrices = () => {
@@ -88,6 +78,7 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
             value={animalFilters[animalType]?.minPrice}
             onChange={(e) => handlePriceChange(animalType, "minPrice", e.target.value)}
             onKeyDown={handlePriceKeyDown}
+            onPressEnter={handleSearch}
             className="input-field"
           />
           <Input
@@ -97,6 +88,7 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
             value={animalFilters[animalType]?.maxPrice}
             onChange={(e) => handlePriceChange(animalType, "maxPrice", e.target.value)}
             onKeyDown={handlePriceKeyDown}
+            onPressEnter={handleSearch}
             className="input-field"
           />
           <div>zł</div>
@@ -147,22 +139,21 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
           value={filters.personalDataLike}
           onChange={(e) => onFiltersChange({ ...filters, personalDataLike: e.target.value })}
           className="input-field"
-          onKeyDown={handleKeyDown}
-        />
+          onPressEnter={handleSearch}
+          />
         <Input
           placeholder={t("addressDetails.city")}
           value={filters.cityLike}
           onChange={(e) => onFiltersChange({ ...filters, cityLike: e.target.value })}
           className="input-field"
-          onKeyDown={handleKeyDown}
-        />
+          onPressEnter={handleSearch}
+          />
         <Select
           placeholder={t("addressDetails.voivodeship")}
           className="input-field"
           onChange={(value) => onFiltersChange({ ...filters, voivodeship: value })}
           allowClear
           value={filters.voivodeship}
-          onKeyDown={handleKeyDown}
         >
           {renderSelectOptions(Voivodeship.voivodeshipMap)}
         </Select>
