@@ -2,6 +2,7 @@ import { Input, Select, Button } from "antd";
 import { CaretakerSearchFilters, OfferConfiguration, AnimalSize, AnimalSex } from "../types";
 import { useTranslation } from "react-i18next";
 import Voivodeship from "../models/Voivodeship";
+import { KeyboardEvent } from "react";
 
 interface CaretakerFiltersProps {
   filters: CaretakerSearchFilters;
@@ -28,18 +29,29 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
     }
   };
 
-  const handlePriceInput = (animalType: string, priceType: "minPrice" | "maxPrice", value: string) => {
+  const handlePriceKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    const value = e.key;
+    const regex = /^\d/;
+
+    const allowedKeys = ["Backspace", "Delete", ","];
+    if (!regex.test(value) && !allowedKeys.includes(e.key)) {
+      e.preventDefault();
+    }
+
+    handleKeyDown(e);
+  };
+
+  const handlePriceChange = (animalType: string, priceType: "minPrice" | "maxPrice", value: string) => {
     const regex = /^\d{0,5}(\.\d{0,2})?$/;
-    const parsedValue = parseFloat(value) || undefined;
+    const parsedValue = parseFloat(value);
     
-    if (regex.test(value) && (parsedValue === undefined || parsedValue >= 0)) {
+    if (regex.test(value)) {
       const updatedConfig = { [priceType]: parsedValue || undefined };
       onAnimalFiltersChange(animalType, updatedConfig);    
     } else {
       value = value.slice(0, -1);
     }
   };
-
   const checkAndSwapPrices = () => {
     Object.keys(animalFilters).forEach((animalType) => {
       const { minPrice, maxPrice } = animalFilters[animalType] || {};
@@ -71,18 +83,20 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
           <div>{t("price")}</div>
           <Input
             type="number"
+            min={0}
             placeholder={t("from")}
             value={animalFilters[animalType]?.minPrice}
-            onKeyDown={handleKeyDown}
-            onChange={(e) => handlePriceInput(animalType, "minPrice", e.target.value)}
+            onChange={(e) => handlePriceChange(animalType, "minPrice", e.target.value)}
+            onKeyDown={handlePriceKeyDown}
             className="input-field"
           />
           <Input
             type="number"
+            min={0}
             placeholder={t("to")}
             value={animalFilters[animalType]?.maxPrice}
-            onKeyDown={handleKeyDown}
-            onChange={(e) => handlePriceInput(animalType, "maxPrice", e.target.value)}
+            onChange={(e) => handlePriceChange(animalType, "maxPrice", e.target.value)}
+            onKeyDown={handlePriceKeyDown}
             className="input-field"
           />
           <div>zł</div>
