@@ -132,6 +132,21 @@ class API {
     );
   }
 
+  async getUserProfiles(): Promise<UserProfiles> {
+    try {
+      const response = await this.authorizedFetch<UserProfiles>(
+        "GET",
+        "user/available-profiles"
+      );
+      return response;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new Error(`Failed to fetch user profiles: ${error.message}`);
+      }
+      throw new Error("An unknown error occurred while fetching user profiles");
+    }
+  }
+
   async addCaretakerProfile(data: CaretakerAddOrEditForm): Promise<void> {
     return this.authorizedFetch<void>(
       "POST",
