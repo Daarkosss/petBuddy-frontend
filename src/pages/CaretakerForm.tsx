@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Header } from "../components/Header";
 import { api } from "../api/api";
 import { FormAddress } from "../types";
+import Voivodeship from "../models/Voivodeship";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
@@ -120,24 +121,7 @@ const CaretakerForm = () => {
                     onChange={(value) => handleAddressChange("voivodeship", value)}
                     placeholder={t("placeholder.voivodeship")}
                   >
-                    {renderSelectOptions({
-                      DOLNOSLASKIE: "Dolnośląskie",
-                      KUJAWSKO_POMORSKIE: "Kujawsko-Pomorskie",
-                      LUBELSKIE: "Lubelskie",
-                      LUBUSKIE: "Lubuskie",
-                      LODZKIE: "Łódzkie",
-                      MALOPOLSKIE: "Małopolskie",
-                      MAZOWIECKIE: "Mazowieckie",
-                      OPOLSKIE: "Opolskie",
-                      PODKARPACKIE: "Podkarpackie",
-                      PODLASKIE: "Podlaskie",
-                      POMORSKIE: "Pomorskie",
-                      SLASKIE: "Śląskie",
-                      SWIETOKRZYSKIE: "Świętokrzyskie",
-                      WARMINSKO_MAZURSKIE: "Warmińsko-Mazurskie",
-                      WIELKOPOLSKIE: "Wielkopolskie",
-                      ZACHODNIOPOMORSKIE: "Zachodniopomorskie",
-                    })}
+                    {renderSelectOptions(Voivodeship.voivodeshipMap)}
                   </Select>
                 </Form.Item>
               </div>

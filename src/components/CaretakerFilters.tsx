@@ -1,6 +1,7 @@
 import { Input, Select, Button } from "antd";
 import { CaretakerSearchFilters, OfferConfiguration, AnimalSize, AnimalSex } from "../types";
 import { useTranslation } from "react-i18next";
+import Voivodeship from "../models/Voivodeship";
 
 interface CaretakerFiltersProps {
   filters: CaretakerSearchFilters;
@@ -149,24 +150,7 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
           value={filters.voivodeship}
           onKeyDown={handleKeyDown}
         >
-          {renderSelectOptions({
-            DOLNOSLASKIE: "Dolnośląskie",
-            KUJAWSKO_POMORSKIE: "Kujawsko-Pomorskie",
-            LUBELSKIE: "Lubelskie",
-            LUBUSKIE: "Lubuskie",
-            LODZKIE: "Łódzkie",
-            MALOPOLSKIE: "Małopolskie",
-            MAZOWIECKIE: "Mazowieckie",
-            OPOLSKIE: "Opolskie",
-            PODKARPACKIE: "Podkarpackie",
-            PODLASKIE: "Podlaskie",
-            POMORSKIE: "Pomorskie",
-            SLASKIE: "Śląskie",
-            SWIETOKRZYSKIE: "Świętokrzyskie",
-            WARMINSKO_MAZURSKIE: "Warmińsko-Mazurskie",
-            WIELKOPOLSKIE: "Wielkopolskie",
-            ZACHODNIOPOMORSKIE: "Zachodniopomorskie",
-          })}
+          {renderSelectOptions(Voivodeship.voivodeshipMap)}
         </Select>
         <Select
           mode="multiple"

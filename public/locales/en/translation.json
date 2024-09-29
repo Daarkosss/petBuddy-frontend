@@ -46,7 +46,7 @@
 
   "placeholder": {
     "city": "e.g. Wrocław",
-    "voivodeship": "e.g. Dolnośląskie",
+    "voivodeship": "e.g. dolnośląskie",
     "zipCode": "e.g. 00-000",
     "street": "e.g. Szkolna",
     "buildingNumber": "e.g. 102A",
