@@ -55,17 +55,8 @@ const CaretakerForm = () => {
     setAddress((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleZipCodeKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (regex: RegExp, e: React.KeyboardEvent<HTMLInputElement>) => {
     const allowedKeys = ["Backspace", "Delete"];
-    const regex = /^[0-9-]*$/;
-    if (!regex.test(e.key) && !allowedKeys.includes(e.key)) {
-      e.preventDefault();
-    }
-  };
-
-  const handlePhoneNumberKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    const allowedKeys = ["Backspace", "Delete"];
-    const regex = /^[0-9+]*$/;
     if (!regex.test(e.key) && !allowedKeys.includes(e.key)) {
       e.preventDefault();
     }
@@ -78,10 +69,20 @@ const CaretakerForm = () => {
     //   }
     // });
 
-    api.editCaretakerProfile({
-      phoneNumber,
-      description,
-      address
+    api.getUserProfiles().then((userProfiles) => {
+      if (userProfiles.hasCaretakerProfile) {
+        api.editCaretakerProfile({
+          phoneNumber,
+          description,
+          address
+        });
+      } else {
+        api.editCaretakerProfile({
+          phoneNumber,
+          description,
+          address
+        });
+      }
     });
   };
 
@@ -144,7 +145,7 @@ const CaretakerForm = () => {
                     value={address.zipCode}
                     maxLength={6}
                     onChange={(e) => handleAddressChange("zipCode", e.target.value)}
-                    onKeyDown={(e) => handleZipCodeKeyDown(e)}
+                    onKeyDown={(e) => handleKeyDown(/^[0-9-]*$/, e)}
                     placeholder={t("placeholder.zipCode")}
                   />
                 </Form.Item>
@@ -190,7 +191,7 @@ const CaretakerForm = () => {
                   value={phoneNumber}
                   maxLength={14}
                   onChange={(e) => setPhoneNumber(e.target.value)}
-                  onKeyDown={handlePhoneNumberKeyDown}
+                  onKeyDown={e => handleKeyDown(/^[0-9+]*$/, e)}
                   placeholder={t("placeholder.phoneNumber")}
                 />
               </Form.Item>
