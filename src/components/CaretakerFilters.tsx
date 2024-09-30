@@ -1,6 +1,6 @@
-import { Input, Select, Button } from 'antd';
-import { CaretakerSearchFilters, OfferConfiguration, AnimalSize, AnimalSex } from '../types';
-import { useTranslation } from 'react-i18next';
+import { Input, Select, Button } from "antd";
+import { CaretakerSearchFilters, OfferConfiguration, AnimalSize, AnimalSex } from "../types";
+import { useTranslation } from "react-i18next";
 
 interface CaretakerFiltersProps {
   filters: CaretakerSearchFilters;
@@ -22,12 +22,12 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
   const { t } = useTranslation();
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       handleSearch();
     }
   };
 
-  const handlePriceInput = (animalType: string, priceType: 'minPrice' | 'maxPrice', value: string) => {
+  const handlePriceInput = (animalType: string, priceType: "minPrice" | "maxPrice", value: string) => {
     const regex = /^\d{0,5}(\.\d{0,2})?$/;
     const parsedValue = parseFloat(value) || undefined;
     
@@ -67,57 +67,57 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
       <div key={animalType} className="animal-filter">
         <h3>{t(animalType.toLowerCase())}</h3>
         <div className="prices">
-          <div>{t('price')}</div>
+          <div>{t("price")}</div>
           <Input
             type="number"
-            placeholder={t('from')}
+            placeholder={t("from")}
             value={animalFilters[animalType]?.minPrice}
             onKeyDown={handleKeyDown}
-            onChange={(e) => handlePriceInput(animalType, 'minPrice', e.target.value)}
+            onChange={(e) => handlePriceInput(animalType, "minPrice", e.target.value)}
             className="input-field"
           />
           <Input
             type="number"
-            placeholder={t('to')}
+            placeholder={t("to")}
             value={animalFilters[animalType]?.maxPrice}
             onKeyDown={handleKeyDown}
-            onChange={(e) => handlePriceInput(animalType, 'maxPrice', e.target.value)}
+            onChange={(e) => handlePriceInput(animalType, "maxPrice", e.target.value)}
             className="input-field"
           />
           <div>zł</div>
         </div>
         <Select
           mode="multiple"
-          placeholder={t('size')}
+          placeholder={t("size")}
           onChange={(value) =>
             onAnimalFiltersChange(animalType, { attributes: { SIZE: value as AnimalSize[] } })
           }
           value={animalFilters[animalType]?.attributes?.SIZE || []}
         >
-          {renderSelectOptions({ SMALL: t('small'), MEDIUM: t('medium'), BIG: t('big') })}
+          {renderSelectOptions({ SMALL: t("small"), MEDIUM: t("medium"), BIG: t("big") })}
         </Select>
         <Select
           mode="multiple"
-          placeholder={t('sex')}
+          placeholder={t("sex")}
           onChange={(value) =>
             onAnimalFiltersChange(animalType, { attributes: { SEX: value as AnimalSex[] } })
           }
           value={animalFilters[animalType]?.attributes?.SEX || []}
         >
-          {renderSelectOptions({ MALE: t('male'), SHE: t('she') })}
+          {renderSelectOptions({ MALE: t("male"), SHE: t("she") })}
         </Select>
         <Select
           mode="multiple"
-          placeholder={t('amenities')}
+          placeholder={t("amenities")}
           onChange={(value) =>
             onAnimalFiltersChange(animalType, { amenities: value as string[] })
           }
           value={animalFilters[animalType]?.amenities || []}
         >
           {renderSelectOptions({
-            toys: t('amenityTypes.toys'),
-            'scratching post': t('amenityTypes.scratchingPost'),
-            cage: t('amenityTypes.cage'),
+            toys: t("amenityTypes.toys"),
+            "scratching post": t("amenityTypes.scratchingPost"),
+            cage: t("amenityTypes.cage"),
           })}
         </Select>
       </div>
@@ -125,24 +125,24 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
 
   return (
     <div className="caretaker-sidebar">
-      <h2>{t('filters')}</h2>
+      <h2>{t("filters")}</h2>
       <div className="filters">
         <Input
-          placeholder={t('caretakerSearch.personalData')}
+          placeholder={t("caretakerSearch.personalData")}
           value={filters.personalDataLike}
           onChange={(e) => onFiltersChange({ ...filters, personalDataLike: e.target.value })}
           className="input-field"
           onKeyDown={handleKeyDown}
         />
         <Input
-          placeholder={t('city')}
+          placeholder={t("city")}
           value={filters.cityLike}
           onChange={(e) => onFiltersChange({ ...filters, cityLike: e.target.value })}
           className="input-field"
           onKeyDown={handleKeyDown}
         />
         <Select
-          placeholder={t('voivodeship')}
+          placeholder={t("voivodeship")}
           className="input-field"
           onChange={(value) => onFiltersChange({ ...filters, voivodeship: value })}
           allowClear
@@ -150,41 +150,41 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
           onKeyDown={handleKeyDown}
         >
           {renderSelectOptions({
-            DOLNOSLASKIE: 'Dolnośląskie',
-            KUJAWSKO_POMORSKIE: 'Kujawsko-Pomorskie',
-            LUBELSKIE: 'Lubelskie',
-            LUBUSKIE: 'Lubuskie',
-            LODZKIE: 'Łódzkie',
-            MALOPOLSKIE: 'Małopolskie',
-            MAZOWIECKIE: 'Mazowieckie',
-            OPOLSKIE: 'Opolskie',
-            PODKARPACKIE: 'Podkarpackie',
-            PODLASKIE: 'Podlaskie',
-            POMORSKIE: 'Pomorskie',
-            SLASKIE: 'Śląskie',
-            SWIETOKRZYSKIE: 'Świętokrzyskie',
-            WARMINSKO_MAZURSKIE: 'Warmińsko-Mazurskie',
-            WIELKOPOLSKIE: 'Wielkopolskie',
-            ZACHODNIOPOMORSKIE: 'Zachodniopomorskie',
+            DOLNOSLASKIE: "Dolnośląskie",
+            KUJAWSKO_POMORSKIE: "Kujawsko-Pomorskie",
+            LUBELSKIE: "Lubelskie",
+            LUBUSKIE: "Lubuskie",
+            LODZKIE: "Łódzkie",
+            MALOPOLSKIE: "Małopolskie",
+            MAZOWIECKIE: "Mazowieckie",
+            OPOLSKIE: "Opolskie",
+            PODKARPACKIE: "Podkarpackie",
+            PODLASKIE: "Podlaskie",
+            POMORSKIE: "Pomorskie",
+            SLASKIE: "Śląskie",
+            SWIETOKRZYSKIE: "Świętokrzyskie",
+            WARMINSKO_MAZURSKIE: "Warmińsko-Mazurskie",
+            WIELKOPOLSKIE: "Wielkopolskie",
+            ZACHODNIOPOMORSKIE: "Zachodniopomorskie",
           })}
         </Select>
         <Select
           mode="multiple"
-          placeholder={t('caretakerSearch.animalTypes')}
+          placeholder={t("caretakerSearch.animalTypes")}
           onChange={onAnimalTypesChange}
           value={filters.animals?.map((animal) => animal.animalType)}
         >
           {renderSelectOptions({
-            DOG: t('dog'),
-            CAT: t('cat'),
-            BIRD: t('bird'),
-            REPTILE: t('reptile'),
-            HORSE: t('horse'),
+            DOG: t("dog"),
+            CAT: t("cat"),
+            BIRD: t("bird"),
+            REPTILE: t("reptile"),
+            HORSE: t("horse"),
           })}
         </Select>
         {renderAnimalFilters()}
         <Button type="primary" onClick={handleSearch} className="button-search">
-          {t('search')}
+          {t("search")}
         </Button>
       </div>
     </div>

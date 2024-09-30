@@ -144,10 +144,10 @@ class API {
 
   // async login(): Promise<User | null> {
   //   try {
-  //     console.log('login');
+  //     console.log("login");
   //     const response = await this.authorizedFetch<User>(
-  //       'POST',
-  //       'user/login',
+  //       "POST",
+  //       "user/login",
   //       // { email: store.auth.user?.email }
   //     );
   //     return response;

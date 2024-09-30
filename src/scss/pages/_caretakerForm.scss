@@ -1,4 +1,4 @@
-@use '../helpers/variables' as v;
+@use "../helpers/variables" as v;
 
 .caretaker-form-container {
   max-width: 800px;
@@ -39,7 +39,7 @@
       align-items: center;
       margin-bottom: 10px;
 
-      input[type='checkbox'] {
+      input[type="checkbox"] {
         margin-right: 10px;
       }
     }

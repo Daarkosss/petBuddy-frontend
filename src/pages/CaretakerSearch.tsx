@@ -1,12 +1,12 @@
-import { useState, useEffect } from 'react';
-import { Table, Button, Spin, Rate } from 'antd';
-import { SorterResult, TablePaginationConfig, FilterValue, ColumnsType } from 'antd/es/table/interface';
-import { api } from '../api/api';
-import { Header } from '../components/Header';
-import { useTranslation } from 'react-i18next';
-import Caretaker from '../models/Caretaker';
-import { CaretakerSearchFilters, OfferConfiguration } from '../types';
-import CaretakerFilters from '../components/CaretakerFilters';
+import { useState, useEffect } from "react";
+import { Table, Button, Spin, Rate } from "antd";
+import { SorterResult, TablePaginationConfig, FilterValue, ColumnsType } from "antd/es/table/interface";
+import { api } from "../api/api";
+import { Header } from "../components/Header";
+import { useTranslation } from "react-i18next";
+import Caretaker from "../models/Caretaker";
+import { CaretakerSearchFilters, OfferConfiguration } from "../types";
+import CaretakerFilters from "../components/CaretakerFilters";
 
 const CaretakerList = () => {
   const { t } = useTranslation();
@@ -29,8 +29,8 @@ const CaretakerList = () => {
   });
 
   const [filters, setFilters] = useState<CaretakerSearchFilters>({
-    personalDataLike: '',
-    cityLike: '',
+    personalDataLike: "",
+    cityLike: "",
     voivodeship: undefined,
     animals: [],
   });
@@ -49,7 +49,7 @@ const CaretakerList = () => {
         total: data.totalElements,
       });
     } catch (error) {
-      setError(error instanceof Error ? error.message : t('unknownError'));
+      setError(error instanceof Error ? error.message : t("unknownError"));
     } finally {
       setIsLoading(false);
     }
@@ -62,7 +62,7 @@ const CaretakerList = () => {
 
   const mapSortDirection = (sorter: SorterResult<Caretaker>) => {
     if (sorter.order) {
-      return sorter.order === 'ascend' ? 'ASC' : 'DESC';
+      return sorter.order === "ascend" ? "ASC" : "DESC";
     } else {
       return undefined;
     }
@@ -139,8 +139,8 @@ const CaretakerList = () => {
 
   const columns: ColumnsType<Caretaker> = [
     {
-      title: t('caretaker'),
-      key: 'caretaker',
+      title: t("caretaker"),
+      key: "caretaker",
       render: (_: unknown, record: Caretaker) => (
         <div className="caretaker-list-item">
           <img src="https://via.placeholder.com/150" alt="avatar" />
@@ -148,16 +148,16 @@ const CaretakerList = () => {
             <h4>{record.accountData.name} {record.accountData.surname}</h4>
             <p>{record.address.city}, {record.address.voivodeship.toString()}</p>
             <Button href={`/caretakers/${record.accountData.email}`} type="primary">
-              {t('viewDetails')}
+              {t("viewDetails")}
             </Button>
           </div>
         </div>
       ),
     },
     {
-      title: t('rating'),
-      dataIndex: 'avgRating',
-      key: 'avgRating',
+      title: t("rating"),
+      dataIndex: "avgRating",
+      key: "avgRating",
       sorter: true,
       render: (rating: number | null, record: Caretaker) => (
         <div className="caretaker-rating">
@@ -172,7 +172,7 @@ const CaretakerList = () => {
           ) : (
             <>
               <Rate disabled allowHalf value={0} />
-              <p>{t('noRatings')}</p>
+              <p>{t("noRatings")}</p>
             </>
           )}
         </div>
@@ -199,10 +199,10 @@ const CaretakerList = () => {
           <Table
             columns={columns}
             locale={{ 
-              emptyText: t('caretakerSearch.noCaretakers'),
-              triggerDesc: t('caretakerSearch.triggerDesc'),
-              triggerAsc: t('caretakerSearch.triggerAsc'),
-              cancelSort: t('caretakerSearch.cancelSort'),
+              emptyText: t("caretakerSearch.noCaretakers"),
+              triggerDesc: t("caretakerSearch.triggerDesc"),
+              triggerAsc: t("caretakerSearch.triggerAsc"),
+              cancelSort: t("caretakerSearch.cancelSort"),
             }}
             dataSource={caretakers}
             rowKey={(record) => record.accountData.email}
@@ -212,7 +212,7 @@ const CaretakerList = () => {
               total: pagination.total,
               showSizeChanger: true,
               locale: {
-                items_per_page: t('perPage'),
+                items_per_page: t("perPage"),
               }
             }}
             onChange={handleTableChange}

@@ -1,9 +1,9 @@
-import React from 'react';
-import { Button } from 'react-bootstrap';
+import React from "react";
+import { Button } from "react-bootstrap";
 import keycloak from "../Keycloack";
-import LanguageSwitcher from './LanguageSwitcher';
-import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import LanguageSwitcher from "./LanguageSwitcher";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 export const Header: React.FC = () => {
   const { t } = useTranslation();
@@ -11,12 +11,12 @@ export const Header: React.FC = () => {
   
   return (
     <div className="sticky-header">
-      <h1 className="title" onClick={() => navigate('/')}>Pet Buddy</h1>
+      <h1 className="title" onClick={() => navigate("/")}>Pet Buddy</h1>
       <div className="right-corner">
         <LanguageSwitcher />
         {keycloak.authenticated && 
           <Button className="logout-button" variant="outline-light" onClick={() => keycloak.logout()}>
-            {t('logout')}
+            {t("logout")}
           </Button>
         }
       </div>

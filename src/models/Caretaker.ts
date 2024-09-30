@@ -1,5 +1,5 @@
-import { CaretakerDTO, OfferDTO } from '../types';
-import Voivodeship from './Voivodeship';
+import { CaretakerDTO, OfferDTO } from "../types";
+import Voivodeship from "./Voivodeship";
 
 class Caretaker {
   accountData: {

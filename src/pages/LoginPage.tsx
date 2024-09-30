@@ -1,8 +1,8 @@
 // src/pages/LandingPage.tsx
-import React, { useEffect } from 'react';
-import LoginPanel from '../components/LoginPanel';
-import { Header } from '../components/Header';
-import store from '../store/RootStore';
+import React, { useEffect } from "react";
+import LoginPanel from "../components/LoginPanel";
+import { Header } from "../components/Header";
+import store from "../store/RootStore";
 
 const LoginPage: React.FC = () => {
 
