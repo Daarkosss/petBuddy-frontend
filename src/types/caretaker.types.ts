@@ -98,17 +98,8 @@ export type AnimalFilter = {
   offerConfigurations: OfferConfiguration[];
 };
 
-export type CaretakerAddOrEditForm = {
+export type CaretakerFormFields = {
   phoneNumber: string;
   description: string;
-  address: FormAddress;
-}
-
-export type FormAddress = {
-  city: string;
-  zipCode: string;
-  voivodeship: VoivodeshipDTO | undefined;
-  street: string;
-  buildingNumber: string;
-  apartmentNumber: string;
+  address: AddressDTO;
 }

@@ -4,7 +4,7 @@ import ImgCrop from "antd-img-crop";
 import { useTranslation } from "react-i18next";
 import { Header } from "../components/Header";
 import { api } from "../api/api";
-import { FormAddress } from "../types";
+import { CaretakerFormFields } from "../types";
 import Voivodeship from "../models/Voivodeship";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
@@ -12,17 +12,8 @@ type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 const CaretakerForm = () => {
   const { t } = useTranslation();
 
-  const [description, setDescription] = useState("");
   const [fileList, setFileList] = useState<UploadFile[]>([]);
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [address, setAddress] = useState<FormAddress>({
-    city: "",
-    zipCode: "",
-    voivodeship: undefined,
-    street: "",
-    buildingNumber: "",
-    apartmentNumber: "",
-  });
+  const [form] = Form.useForm<CaretakerFormFields>();
 
   const onChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
     setFileList(newFileList);
@@ -51,37 +42,30 @@ const CaretakerForm = () => {
     ));
   };
 
-  const handleAddressChange = (field: string, value: string) => {
-    setAddress((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const handleKeyDown = (regex: RegExp, e: React.KeyboardEvent<HTMLInputElement>) => {
-    const allowedKeys = ["Backspace", "Delete"];
-    if (!regex.test(e.key) && !allowedKeys.includes(e.key)) {
+  const handleZipCodeOnKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const char = e.key;
+    const isDigit = /[0-9]/.test(char);
+    if (!isDigit && char !== "Backspace") {
       e.preventDefault();
     }
-  }
+    const zipCode = form.getFieldValue(["address", "zipCode"]);
+  
+    if (zipCode && zipCode.length === 2 && char !== "Backspace") {
+      form.setFieldsValue({
+        address: {
+          ...form.getFieldValue("address"),
+          zipCode: `${zipCode}-`,
+        },
+      });
+    }
+  };
 
   const handleSubmit = () => {
-    // fileList.forEach((file, index) => {
-    //   if (file.originFileObj) {
-    //     formData.append(`image_${index}`, file.originFileObj);
-    //   }
-    // });
-
     api.getUserProfiles().then((userProfiles) => {
       if (userProfiles.hasCaretakerProfile) {
-        api.editCaretakerProfile({
-          phoneNumber,
-          description,
-          address
-        });
+        api.editCaretakerProfile(form.getFieldsValue());
       } else {
-        api.editCaretakerProfile({
-          phoneNumber,
-          description,
-          address
-        });
+        api.addCaretakerProfile(form.getFieldsValue());
       }
     });
   };
@@ -90,43 +74,37 @@ const CaretakerForm = () => {
     <div>
       <Header />
       <div className="caretaker-form-container">
-        <Form layout="vertical" onFinish={handleSubmit}>
+        <Form form={form} layout="vertical" onFinish={handleSubmit}>
           <Space direction="vertical" size="large" style={{ width: "100%" }}>
             <Card title={t("address")}>
               <div className="card-grid-row">
                 <Form.Item
                   label={t("addressDetails.street")}
-                  name="street"
+                  name={["address", "street"]}
                   rules={[{ required: true, message: t("validation.required") }]}
                 >
                   <Input
-                    value={address.street}
                     maxLength={150}
-                    onChange={(e) => handleAddressChange("street", e.target.value)}
                     placeholder={t("placeholder.street")}
                   />
                 </Form.Item>
                 <Form.Item
                   label={t("addressDetails.buildingNumber")}
-                  name="buildingNumber"
+                  name={["address", "buildingNumber"]}
                   rules={[{ required: true, message: t("validation.required") }]}
                 >
                   <Input
-                    value={address.buildingNumber}
                     maxLength={10}
-                    onChange={(e) => handleAddressChange("buildingNumber", e.target.value)}
                     placeholder={t("placeholder.buildingNumber")}
                   />
                 </Form.Item>
                 <Form.Item
                   label={t("addressDetails.apartmentNumber")}
-                  name="apartmentNumber"
+                  name={["address", "apartmentNumber"]}
                   rules={[{ required: true, message: t("validation.required") }]}
                 >
                   <Input
-                    value={address.apartmentNumber}
                     maxLength={10}
-                    onChange={(e) => handleAddressChange("apartmentNumber", e.target.value)}
                     placeholder={t("placeholder.apartmentNumber")}
                   />
                 </Form.Item>
@@ -135,40 +113,34 @@ const CaretakerForm = () => {
               <div className="card-grid-row">
                 <Form.Item
                   label={t("addressDetails.zipCode")}
-                  name="zipCode"
+                  name={["address", "zipCode"]}
                   rules={[
                     { required: true, message: t("validation.required") },
                     { pattern: /^[0-9]{2}-[0-9]{3}$/, message: t("validation.zipCodeFormat") }
                   ]}
                 >
                   <Input
-                    value={address.zipCode}
                     maxLength={6}
-                    onChange={(e) => handleAddressChange("zipCode", e.target.value)}
-                    onKeyDown={(e) => handleKeyDown(/^[0-9-]*$/, e)}
+                    onKeyDown={handleZipCodeOnKeyDown}
                     placeholder={t("placeholder.zipCode")}
                   />
                 </Form.Item>
                 <Form.Item
                   label={t("addressDetails.city")}
-                  name="city"
+                  name={["address", "city"]}
                   rules={[{ required: true, message: t("validation.required") }]}
                 >
                   <Input
-                    value={address.city}
                     maxLength={50}
-                    onChange={(e) => handleAddressChange("city", e.target.value)}
                     placeholder={t("placeholder.city")}
                   />
                 </Form.Item>
                 <Form.Item
                   label={t("addressDetails.voivodeship")}
-                  name="voivodeship"
+                  name={["address", "voivodeship"]}
                   rules={[{ required: true, message: t("validation.required") }]}
                 >
                   <Select
-                    value={address.voivodeship}
-                    onChange={(value) => handleAddressChange("voivodeship", value)}
                     placeholder={t("placeholder.voivodeship")}
                   >
                     {renderSelectOptions(Voivodeship.voivodeshipMap)}
@@ -188,10 +160,7 @@ const CaretakerForm = () => {
                 style={{ width: "200px" }}
               >
                 <Input
-                  value={phoneNumber}
                   maxLength={14}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                  onKeyDown={e => handleKeyDown(/^[0-9+]*$/, e)}
                   placeholder={t("placeholder.phoneNumber")}
                 />
               </Form.Item>
@@ -206,8 +175,6 @@ const CaretakerForm = () => {
                     maxRows: 4,
                   }}
                   maxLength={1500}
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
                   placeholder={t("placeholder.description")}
                 />
               </Form.Item>
