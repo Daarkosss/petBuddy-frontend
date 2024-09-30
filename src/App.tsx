@@ -70,7 +70,7 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route
             path="/caretaker/form"
-            element={<CaretakerForm onSubmit={() => {}} />} //TODO: dodaj onSubmit
+            element={<CaretakerForm />}
           />
           <Route path="/caretaker/search" element={<CaretakerSearch />} />
           <Route
