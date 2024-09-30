@@ -17,6 +17,7 @@ const Home = () => {
     } else {
       handleGetMessage();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleGetMessage = async () => {
