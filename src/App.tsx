@@ -27,7 +27,6 @@ function App() {
       try {
         const userData = await keycloak.loadUserProfile();
         const userProfileData = {
-          username: userData.username,
           email: userData.email,
           firstName: userData.firstName,
           lastName: userData.lastName,
@@ -49,14 +48,14 @@ function App() {
         setIsLoading(false);
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialized, keycloak.authenticated]);
 
   useEffect(() => {
     if (isXsrfTokenFetched && isUserDataFetched) {
       setIsLoading(false);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isXsrfTokenFetched, isUserDataFetched]);
 
   if (isLoading) {
@@ -68,10 +67,7 @@ function App() {
       {keycloak.authenticated ? (
         <>
           <Route path="/home" element={<Home />} />
-          <Route
-            path="/caretaker/form"
-            element={<CaretakerForm />}
-          />
+          <Route path="/caretaker/form" element={<CaretakerForm />} />
           <Route path="/caretaker/search" element={<CaretakerSearch />} />
           <Route
             path="/profile-selection"
