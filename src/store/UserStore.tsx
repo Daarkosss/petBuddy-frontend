@@ -32,7 +32,7 @@ class UserStore {
   saveProfileToStorage(profile?: UserProfile | null) {
     if (profile) {
       this.profile = profile;
-      localStorage.setItem("user", JSON.stringify(this.profile));
+      localStorage.setItem("profile", JSON.stringify(this.profile));
     }
   }
 
