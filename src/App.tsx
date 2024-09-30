@@ -19,8 +19,8 @@ function App() {
     const fetchXsrfToken = async () => {
       if (keycloak.authenticated && !store.user.xsrfToken) {
         await api.getXsrfToken();
-        setIsXsrfTokenFetched(true);
       }
+      setIsXsrfTokenFetched(true);
     };
 
     const fetchUserData = async () => {
