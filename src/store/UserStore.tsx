@@ -57,7 +57,7 @@ class UserStore {
 
   reset() {
     this.profile = null;
-    localStorage.removeItem("user");
+    localStorage.removeItem("profile");
     removeCookie("XSRF-TOKEN");
   }
 }
