@@ -106,7 +106,6 @@ const CaretakerForm = () => {
                 <Form.Item
                   label={t("addressDetails.apartmentNumber")}
                   name={["address", "apartmentNumber"]}
-                  rules={[{ required: true, message: t("validation.required") }]}
                 >
                   <Input
                     maxLength={10}
