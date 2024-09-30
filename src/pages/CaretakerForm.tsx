@@ -12,8 +12,9 @@ type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 const CaretakerForm = () => {
   const { t } = useTranslation();
 
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [fileList, setFileList] = useState<UploadFile[]>([]); // Not send to backend yet, will be done when backend is ready
   const [form] = Form.useForm<CaretakerFormFields>();
+  const allowedSpecialKeys = ["Backspace", "Delete", "ArrowLeft", "ArrowRight"];
 
   const handleFileChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
     setFileList(newFileList);
@@ -46,7 +47,7 @@ const CaretakerForm = () => {
     handleKeyDownForNumeric(e);
 
     const zipCode = form.getFieldValue(["address", "zipCode"]);
-    if (zipCode && zipCode.length === 2 && e.key !== "Backspace") {
+    if (zipCode && zipCode.length === 2 && !allowedSpecialKeys.includes(e.key)) {
       form.setFieldsValue({
         address: {
           ...form.getFieldValue("address"),
@@ -57,10 +58,9 @@ const CaretakerForm = () => {
   };
 
   const handleKeyDownForNumeric = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    const allowedKeys = ["Backspace", "Delete"];
     const char = e.key;
     const isDigit = /[0-9]/.test(char);
-    if (!isDigit && !allowedKeys.includes(char)) {
+    if (!isDigit && !allowedSpecialKeys.includes(char)) {
       e.preventDefault();
     }
   }
