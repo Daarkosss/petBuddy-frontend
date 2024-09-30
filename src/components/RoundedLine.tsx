@@ -15,7 +15,7 @@ const RoundedLine: React.FC<LineProperties> = ({
   return (
     <div
       className="container"
-      style={{ width: width, height: height, backgroundColor: backgroundColor }}
+      style={{ width: width, height: height, background: backgroundColor }}
     ></div>
   );
 };

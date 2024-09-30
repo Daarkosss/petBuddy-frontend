@@ -19,8 +19,8 @@ function App() {
     const fetchXsrfToken = async () => {
       if (keycloak.authenticated && !store.user.xsrfToken) {
         await api.getXsrfToken();
-        setIsXsrfTokenFetched(true);
       }
+      setIsXsrfTokenFetched(true);
     };
 
     const fetchUserData = async () => {
@@ -49,12 +49,14 @@ function App() {
         setIsLoading(false);
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialized, keycloak.authenticated]);
 
   useEffect(() => {
     if (isXsrfTokenFetched && isUserDataFetched) {
       setIsLoading(false);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isXsrfTokenFetched, isUserDataFetched]);
 
   if (isLoading) {

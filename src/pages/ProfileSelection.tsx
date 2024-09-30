@@ -22,6 +22,7 @@ const ProfileSelection: React.FC<ProfileSelectionProps> = ({
 
   const [hasCaretakerProfile, setHasCaretakerProfile] = useState(false);
   const [isRequesting, setIsRequesting] = useState(true);
+  const [lineColor, setLineColor] = useState("#007EA7");
 
   useEffect(() => {
     const getUserProfiles = async () => {
@@ -44,7 +45,7 @@ const ProfileSelection: React.FC<ProfileSelectionProps> = ({
       <Header />
       <div className="selection-main-container">
         <h1 className="selection-title">{t("profileSelection.title")}</h1>
-        <RoundedLine width="40%" height="5px" backgroundColor="#007EA7" />
+        <RoundedLine width="40%" height="5px" backgroundColor={lineColor} />
 
         {!isRequesting && isUserDataFetched && (
           <div className="selection-nested-container">
@@ -52,14 +53,18 @@ const ProfileSelection: React.FC<ProfileSelectionProps> = ({
               icon={CgProfile}
               size={100}
               title={t("profileSelection.client")}
-              profile={"Client"}
+              profile="Client"
+              onHover={() => setLineColor("linear-gradient(to left, #007EA7, #00b7ff")}
+              onLeave={() => setLineColor("#007EA7")}
             />
-            {hasCaretakerProfile === true ? (
+            {hasCaretakerProfile ? (
               <ProfileSelectionBox
                 icon={LuHelpingHand}
                 size={100}
                 title={t("caretaker")}
-                profile={"Caretaker"}
+                profile="Caretaker"
+                onHover={() => setLineColor("linear-gradient(to right, #007EA7, #00b7ff")}
+                onLeave={() => setLineColor("#007EA7")}
               />
             ) : (
               <ProfileSelectionBox
@@ -67,6 +72,8 @@ const ProfileSelection: React.FC<ProfileSelectionProps> = ({
                 size={100}
                 title={t("profileSelection.createCaretaker")}
                 profile={null}
+                onHover={() => setLineColor("linear-gradient(to right, #007EA7, #00b7ff")}
+                onLeave={() => setLineColor("#007EA7")}
               />
             )}
           </div>
