@@ -15,11 +15,11 @@ const CaretakerForm = () => {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [form] = Form.useForm<CaretakerFormFields>();
 
-  const onChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
+  const handleFileChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
     setFileList(newFileList);
   };
 
-  const onPreview = async (file: UploadFile) => {
+  const handleFilePreview = async (file: UploadFile) => {
     let src = file.url as string;
     if (!src) {
       src = await new Promise((resolve) => {
@@ -34,23 +34,19 @@ const CaretakerForm = () => {
     imgWindow?.document.write(image.outerHTML);
   };
 
-  const renderSelectOptions = (options: Record<string, string>) => {
-    return Object.entries(options).map(([value, label]) => (
+  const renderSelectOptions = (options: Record<string, string>) => (
+    Object.entries(options).map(([value, label]) => (
       <Select.Option key={value} value={value}>
         {label}
       </Select.Option>
-    ));
-  };
+    ))
+  );
 
-  const handleZipCodeOnKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    const char = e.key;
-    const isDigit = /[0-9]/.test(char);
-    if (!isDigit && char !== "Backspace") {
-      e.preventDefault();
-    }
+  const handleZipCodeKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    handleKeyDownForNumeric(e);
+
     const zipCode = form.getFieldValue(["address", "zipCode"]);
-  
-    if (zipCode && zipCode.length === 2 && char !== "Backspace") {
+    if (zipCode && zipCode.length === 2 && e.key !== "Backspace") {
       form.setFieldsValue({
         address: {
           ...form.getFieldValue("address"),
@@ -59,6 +55,15 @@ const CaretakerForm = () => {
       });
     }
   };
+
+  const handleKeyDownForNumeric = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const allowedKeys = ["Backspace", "Delete"];
+    const char = e.key;
+    const isDigit = /[0-9]/.test(char);
+    if (!isDigit && !allowedKeys.includes(char)) {
+      e.preventDefault();
+    }
+  }
 
   const handleSubmit = () => {
     api.getUserProfiles().then((userProfiles) => {
@@ -121,7 +126,7 @@ const CaretakerForm = () => {
                 >
                   <Input
                     maxLength={6}
-                    onKeyDown={handleZipCodeOnKeyDown}
+                    onKeyDown={handleZipCodeKeyDown}
                     placeholder={t("placeholder.zipCode")}
                   />
                 </Form.Item>
@@ -140,9 +145,7 @@ const CaretakerForm = () => {
                   name={["address", "voivodeship"]}
                   rules={[{ required: true, message: t("validation.required") }]}
                 >
-                  <Select
-                    placeholder={t("placeholder.voivodeship")}
-                  >
+                  <Select placeholder={t("placeholder.voivodeship")}>
                     {renderSelectOptions(Voivodeship.voivodeshipMap)}
                   </Select>
                 </Form.Item>
@@ -155,13 +158,15 @@ const CaretakerForm = () => {
                 name="phoneNumber"
                 rules={[
                   { required: true, message: t("validation.required") },
-                  { pattern: /^\+?([0-9]){7,}$/, message: t("validation.phoneNumberFormat") },
+                  { pattern: /^([0-9]){9,14}$/, message: t("validation.phoneNumberFormat") },
                 ]}
                 style={{ width: "200px" }}
               >
                 <Input
                   maxLength={14}
                   placeholder={t("placeholder.phoneNumber")}
+                  onKeyDown={handleKeyDownForNumeric}
+                  addonBefore="+48"
                 />
               </Form.Item>
             </Card>
@@ -169,11 +174,8 @@ const CaretakerForm = () => {
             <Card title={t("description")}>
               <Form.Item name="description">
                 <Input.TextArea
-                  showCount 
-                  autoSize={{
-                    minRows: 2,
-                    maxRows: 4,
-                  }}
+                  showCount
+                  autoSize={{ minRows: 2, maxRows: 4 }}
                   maxLength={1500}
                   placeholder={t("placeholder.description")}
                 />
@@ -186,8 +188,8 @@ const CaretakerForm = () => {
                   <Upload
                     listType="picture-card"
                     fileList={fileList}
-                    onChange={onChange}
-                    onPreview={onPreview}
+                    onChange={handleFileChange}
+                    onPreview={handleFilePreview}
                     accept="image/*"
                   >
                     {fileList.length < 5 && `+ ${t("upload")}`}

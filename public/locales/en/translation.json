@@ -97,6 +97,6 @@
   "validation": {
     "required": "Required",
     "zipCodeFormat": "Invalid format (00-000)",
-    "phoneNumberFormat": "Invalid format (at least 7 digits)"
+    "phoneNumberFormat": "Invalid format (at least 9 digits)"
   }
 }
