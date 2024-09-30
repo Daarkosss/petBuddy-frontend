@@ -43,7 +43,9 @@ function App() {
     if (initialized) {
       if (keycloak.authenticated) {
         fetchXsrfToken();
-        fetchUserData();
+        if (store.user.profile === null) {
+          fetchUserData();
+        }
       } else {
         setIsLoading(false);
       }
