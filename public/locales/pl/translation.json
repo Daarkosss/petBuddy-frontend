@@ -68,6 +68,13 @@
     "dragDrop": "Przeciągnij i upuść pliki tutaj lub kliknij, aby wybrać pliki"
   },
 
+  "profileSelection": {
+    "title": "Wybierz profil",
+    "client": "Klient",
+    "caretaker": "Opiekun",
+    "createCaretaker": "Utwórz profil opiekuna"
+  },
+
   "caretakerSearch": {
     "personalData": "Dane personalne",
     "animalTypes": "Rodzaje zwierząt",

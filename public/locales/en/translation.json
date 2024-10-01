@@ -35,7 +35,7 @@
     "scratchingPost": "Scratching Post",
     "cage": "Cage"
   },
-  
+
   "perPage": "per page",
 
   "loginPage": {
@@ -67,7 +67,14 @@
     "submit": "Submit",
     "dragDrop": "Drag & drop some files here, or click to select files"
   },
-  
+
+  "profileSelection": {
+    "title": "Choose your profile",
+    "client": "Client",
+    "caretaker": "Caretaker",
+    "createCaretaker": "Create caretaker profile"
+  },
+
   "caretakerSearch": {
     "personalData": "Personal data",
     "animalTypes": "Animal types",

@@ -7,11 +7,7 @@ import DatePicker, { Value } from "react-multi-date-picker";
 import DatePanel from "react-multi-date-picker/plugins/date_panel";
 import weekends from "react-multi-date-picker/plugins/highlight_weekends";
 
-interface CaregiverFormProps {
-  onSubmit: (formData: FormData) => void;
-}
-
-const CaretakerForm: React.FC<CaregiverFormProps> = ({ onSubmit }) => {
+const CaretakerForm: React.FC = () => {
   const { t } = useTranslation();
 
   const [location, setLocation] = useState("");
@@ -72,7 +68,7 @@ const CaretakerForm: React.FC<CaregiverFormProps> = ({ onSubmit }) => {
         formData.append(`image_${index}`, image);
       });
 
-      onSubmit(formData);
+      // onSubmit(formData);
     }
   };
 
@@ -82,7 +78,9 @@ const CaretakerForm: React.FC<CaregiverFormProps> = ({ onSubmit }) => {
       <div className="caretaker-form-container">
         <Form onSubmit={handleSubmit}>
           <Form.Group controlId="location" className="form-group">
-            <Form.Label className="form-label">{t("caretakerForm.location")}</Form.Label>
+            <Form.Label className="form-label">
+              {t("caretakerForm.location")}
+            </Form.Label>
             <Form.Control
               type="text"
               value={location}
@@ -93,7 +91,9 @@ const CaretakerForm: React.FC<CaregiverFormProps> = ({ onSubmit }) => {
           </Form.Group>
 
           <Form.Group className="form-group">
-            <Form.Label className="form-label">{t("caretakerForm.animalTypes")}</Form.Label>
+            <Form.Label className="form-label">
+              {t("caretakerForm.animalTypes")}
+            </Form.Label>
             <div className="animal-type">
               <Form.Check
                 type="checkbox"
@@ -107,8 +107,12 @@ const CaretakerForm: React.FC<CaregiverFormProps> = ({ onSubmit }) => {
                   <Form.Control
                     type="text"
                     value={prices["smallDog"] || ""}
-                    onChange={(e) => handlePriceChange("smallDog", e.target.value)}
-                    placeholder={t("caretakerForm.priceFor", { type: t("caretakerForm.smallDog") })}
+                    onChange={(e) =>
+                      handlePriceChange("smallDog", e.target.value)
+                    }
+                    placeholder={t("caretakerForm.priceFor", {
+                      type: t("caretakerForm.smallDog"),
+                    })}
                     className="form-control price-input"
                   />
                 </div>
@@ -127,8 +131,12 @@ const CaretakerForm: React.FC<CaregiverFormProps> = ({ onSubmit }) => {
                   <Form.Control
                     type="text"
                     value={prices["mediumDog"] || ""}
-                    onChange={(e) => handlePriceChange("mediumDog", e.target.value)}
-                    placeholder={t("caretakerForm.priceFor", { type: t("caretakerForm.mediumDog") })}
+                    onChange={(e) =>
+                      handlePriceChange("mediumDog", e.target.value)
+                    }
+                    placeholder={t("caretakerForm.priceFor", {
+                      type: t("caretakerForm.mediumDog"),
+                    })}
                     className="form-control price-input"
                   />
                 </div>
@@ -148,7 +156,9 @@ const CaretakerForm: React.FC<CaregiverFormProps> = ({ onSubmit }) => {
                     type="text"
                     value={prices["cat"] || ""}
                     onChange={(e) => handlePriceChange("cat", e.target.value)}
-                    placeholder={t("caretakerForm.priceFor", { type: t("caretakerForm.cat") })}
+                    placeholder={t("caretakerForm.priceFor", {
+                      type: t("caretakerForm.cat"),
+                    })}
                     className="form-control price-input"
                   />
                 </div>
@@ -157,7 +167,9 @@ const CaretakerForm: React.FC<CaregiverFormProps> = ({ onSubmit }) => {
           </Form.Group>
 
           <Form.Group controlId="description" className="form-group">
-            <Form.Label className="form-label">{t("caretakerForm.description")}</Form.Label>
+            <Form.Label className="form-label">
+              {t("caretakerForm.description")}
+            </Form.Label>
             <Form.Control
               as="textarea"
               rows={3}
@@ -169,7 +181,9 @@ const CaretakerForm: React.FC<CaregiverFormProps> = ({ onSubmit }) => {
           </Form.Group>
 
           <Form.Group controlId="availability" className="form-group">
-            <Form.Label className="form-label">{t("caretakerForm.availabilityCalendar")}</Form.Label>
+            <Form.Label className="form-label">
+              {t("caretakerForm.availabilityCalendar")}
+            </Form.Label>
             <DatePicker
               value={availability}
               onChange={setAvailability}
@@ -178,13 +192,15 @@ const CaretakerForm: React.FC<CaregiverFormProps> = ({ onSubmit }) => {
               format="DD-MM-YYYY"
               plugins={[
                 weekends(),
-                <DatePanel sort="date" style={{ width: 150 }} />
+                <DatePanel sort="date" style={{ width: 150 }} />,
               ]}
             />
           </Form.Group>
 
           <Form.Group controlId="images" className="form-group">
-            <Form.Label className="form-label">{t("caretakerForm.uploadImages")}</Form.Label>
+            <Form.Label className="form-label">
+              {t("caretakerForm.uploadImages")}
+            </Form.Label>
             <div {...getRootProps({ className: "dropzone" })}>
               <input {...getInputProps()} />
               <p>{t("caretakerForm.dragDrop")}</p>
@@ -192,7 +208,10 @@ const CaretakerForm: React.FC<CaregiverFormProps> = ({ onSubmit }) => {
             <div className="images-list">
               {images.map((file, index) => (
                 <div key={index} className="image-item">
-                  <img src={URL.createObjectURL(file)} alt={`preview-${index}`} />
+                  <img
+                    src={URL.createObjectURL(file)}
+                    alt={`preview-${index}`}
+                  />
                 </div>
               ))}
             </div>

@@ -1,0 +1,58 @@
+@use "../helpers/variables" as v;
+
+.selection-main-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 70vh;
+  width: 100%;
+  .selection-title {
+    color: v.$blue-medium;
+    font-weight: bold;
+    font-size: 40px;
+  }
+
+  .selection-nested-container {
+    display: flex;
+    justify-content: center;
+    gap: 10vw;
+    width: 100%;
+    .profile-container {
+      width: 10%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      //TODO: fix bad scaling when width is small (box is not square anymore)
+      .profile-box {
+        width: 100%;
+        color: v.$blue-medium;
+        aspect-ratio: 1 / 1;
+        border: 15px solid v.$blue-medium;
+        border-radius: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: 0.3s transform ease, 0.3s border ease, 0.3s color ease;
+        cursor: pointer;
+      }
+      .profile-title {
+        color: v.$blue-medium;
+        text-align: center;
+        transition: 0.3s color ease;
+      }
+
+      &:hover .profile-box {
+        transform: translateY(-10px);
+        border: 15px solid v.$blue-light;
+        color: v.$blue-light;
+      }
+
+      &:hover .profile-title {
+        color: v.$blue-light;
+      }
+    }
+  }
+}
