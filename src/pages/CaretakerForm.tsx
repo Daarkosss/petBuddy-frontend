@@ -197,7 +197,7 @@ const CaretakerForm = () => {
               </Form.Item>
             </Card>
 
-            <Button type="primary" htmlType="submit" style={{ float: "right" }}>
+            <Button type="primary" htmlType="submit" className="submit-button">
               {t("save")}
             </Button>
           </Space>
