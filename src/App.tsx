@@ -57,7 +57,6 @@ function App() {
     if (isXsrfTokenFetched && isUserDataFetched) {
       setIsLoading(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isXsrfTokenFetched, isUserDataFetched]);
 
   if (isLoading) {
