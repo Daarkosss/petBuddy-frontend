@@ -1,0 +1,9 @@
+@use "../helpers/variables" as v;
+
+.container {
+  min-height: 5px;
+  min-width: 100px;
+  border-radius: 4px;
+  margin-top: 3vh;
+  margin-bottom: 3vh;
+}

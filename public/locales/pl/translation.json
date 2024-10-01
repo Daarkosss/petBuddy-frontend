@@ -78,6 +78,13 @@
     "searchCaretakers": "Wyszukaj opiekunów"
   },
 
+  "profileSelection": {
+    "title": "Wybierz profil",
+    "client": "Klient",
+    "caretaker": "Opiekun",
+    "createCaretaker": "Utwórz profil opiekuna"
+  },
+
   "caretakerSearch": {
     "personalData": "Dane personalne",
     "animalTypes": "Rodzaje zwierząt",
