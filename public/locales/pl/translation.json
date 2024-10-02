@@ -26,14 +26,41 @@
   "loading": "Ładowanie...",
   "logout": "Wyloguj",
   "caretaker": "Opiekun",
-  "city": "Miasto",
-  "voivodeship": "Województwo",
 
   "amenities": "Udogodnienia",
   "amenityTypes": {
     "toys": "Zabawki",
     "scratchingPost": "Drapak",
     "cage": "Klatka"
+  },
+
+  "address": "Adres",
+  "addressDetails": {
+    "city": "Miejscowość",
+    "voivodeship": "Województwo",
+    "zipCode": "Kod pocztowy",
+    "street": "Ulica",
+    "streetNumber": "Numer budynku",
+    "apartmentNumber": "Numer mieszkania"
+  },
+
+  "placeholder": {
+    "city": "np. Wrocław",
+    "voivodeship": "np. dolnośląskie",
+    "zipCode": "np. 00-000",
+    "street": "np. Szkolna",
+    "streetNumber": "np. 102A",
+    "apartmentNumber": "np. 7",
+    "phoneNumber": "np. 000000000",
+    "description": "np. Zajmuje się opieką nad zwierzętami już od 2 lat. Moi klienci zawsze są zadowoleni..."
+  },
+
+  "personalData": {
+    "name": "Imie",
+    "surname": "Nazwisko",
+    "phoneNumber": "Numer telefonu",
+    "email": "E-mail",
+    "contactDetails": "Dane kontaktowe"
   },
 
   "perPage": "na stronę",
@@ -49,23 +76,6 @@
     "fetchToken": "Pobierz token xsrf",
     "changeCaretakerForm": "Zmień dane opiekuna",
     "searchCaretakers": "Wyszukaj opiekunów"
-  },
-
-  "caretakerForm": {
-    "location": "Lokalizacja",
-    "enterCity": "Wpisz swoje miasto lub dzielnicę",
-    "animalTypes": "Rodzaje zwierząt, którymi się opiekujesz",
-    "smallDog": "Mały pies",
-    "mediumDog": "Średni pies",
-    "priceFor": "Cena za {{type}}",
-    "description": "Opis",
-    "enterDescription": "Wprowadź krótki opis o sobie",
-    "availabilityCalendar": "Kalendarz dostępności",
-    "startDate": "Data rozpoczęcia",
-    "endDate": "Data zakończenia",
-    "uploadImages": "Prześlij zdjęcia",
-    "submit": "Zatwierdź",
-    "dragDrop": "Przeciągnij i upuść pliki tutaj lub kliknij, aby wybrać pliki"
   },
 
   "profileSelection": {
@@ -84,5 +94,16 @@
     "triggerDesc": "Kliknij aby sortowac malejąco",
     "triggerAsc": "Kliknij aby sortowac rosnąco",
     "cancelSort": "Kliknij aby anulowac sortowanie"
+  },
+
+  "description": "Opis",
+  "upload": "Prześlij",
+  "uploadImages": "Prześlij zdjęcia",
+  "save": "Zapisz",
+
+  "validation": {
+    "required": "Wymagane",
+    "zipCodeFormat": "Nieprawidłowy format (00-000)",
+    "phoneNumberFormat": "Nieprawidłowy format (minimum 9 cyfr)"
   }
 }

@@ -26,8 +26,6 @@
   "loading": "Loading...",
   "logout": "Logout",
   "caretaker": "Caretaker",
-  "city": "City",
-  "voivodeship": "Voivodeship",
 
   "amenities": "Amenities",
   "amenityTypes": {
@@ -36,6 +34,35 @@
     "cage": "Cage"
   },
 
+  "address": "Address",
+  "addressDetails": {
+    "city": "City",
+    "voivodeship": "Voivodeship",
+    "zipCode": "Zip code",
+    "street": "Street",
+    "streetNumber": "Building number",
+    "apartmentNumber": "Apartment number"
+  },
+
+  "placeholder": {
+    "city": "e.g. Wrocław",
+    "voivodeship": "e.g. dolnośląskie",
+    "zipCode": "e.g. 00-000",
+    "street": "e.g. Szkolna",
+    "streetNumber": "e.g. 102A",
+    "apartmentNumber": "e.g. 7",
+    "phoneNumber": "e.g. 000000000",
+    "description": "e.g. I have been taking care of animals for 2 years. My clients are always happy..."
+  },
+
+  "personalData": {
+    "name": "Name",
+    "surname": "Surname",
+    "phoneNumber": "Phone number",
+    "email": "E-mail",
+    "contactDetails": "Contact details"
+  },
+  
   "perPage": "per page",
 
   "loginPage": {
@@ -49,23 +76,6 @@
     "fetchToken": "Fetch xsrf token",
     "changeCaretakerForm": "Change caretaker form",
     "searchCaretakers": "Search caretakers"
-  },
-
-  "caretakerForm": {
-    "location": "Location",
-    "enterCity": "Enter your city or district",
-    "animalTypes": "Types of animals you care for",
-    "smallDog": "Small Dog",
-    "mediumDog": "Medium Dog",
-    "priceFor": "Price for {{type}}",
-    "description": "Description",
-    "enterDescription": "Enter a brief description about yourself",
-    "availabilityCalendar": "Availability Calendar",
-    "startDate": "Start Date",
-    "endDate": "End Date",
-    "uploadImages": "Upload Images",
-    "submit": "Submit",
-    "dragDrop": "Drag & drop some files here, or click to select files"
   },
 
   "profileSelection": {
@@ -84,5 +94,16 @@
     "triggerDesc": "Click to sort descending",
     "triggerAsc": "Click to sort ascending",
     "cancelSort": "Click to cancel sorting"
+  },
+
+  "description": "Description",
+  "upload": "Upload",
+  "uploadImages": "Upload images",
+  "save": "Save",
+
+  "validation": {
+    "required": "Required",
+    "zipCodeFormat": "Invalid format (00-000)",
+    "phoneNumberFormat": "Invalid format (at least 9 digits)"
   }
 }

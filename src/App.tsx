@@ -45,10 +45,11 @@ function App() {
         fetchXsrfToken();
         if (store.user.profile === null) {
           fetchUserData();
+        } else {
+          setIsUserDataFetched(true);
         }
-      } else {
-        setIsLoading(false);
       }
+      setIsLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialized, keycloak.authenticated]);

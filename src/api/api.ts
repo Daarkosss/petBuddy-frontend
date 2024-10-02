@@ -1,18 +1,13 @@
 import { toast } from "react-toastify";
 import store from "../store/RootStore";
-import {
-  CaretakerResponse,
-  CaretakerSearchFilters,
-  PagingParams,
-} from "../types";
-import { UserProfiles } from "../types/user.types";
+import { CaretakerResponse, CaretakerSearchFilters, PagingParams, CaretakerFormFields, UserProfiles } from "../types";
 
 const backendHost =
   import.meta.env.VITE_BACKEND_HOST || window.location.hostname;
 const backendPort = import.meta.env.VITE_BACKEND_PORT || "8081";
 export const PATH_PREFIX = `http://${backendHost}:${backendPort}/`;
 
-type Method = "GET" | "POST" | "PUT" | "DELETE";
+type Method = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
 export type User = {
   _id: string;
@@ -142,20 +137,21 @@ class API {
     }
   }
 
-  // async login(): Promise<User | null> {
-  //   try {
-  //     console.log("login");
-  //     const response = await this.authorizedFetch<User>(
-  //       "POST",
-  //       "user/login",
-  //       // { email: store.auth.user?.email }
-  //     );
-  //     return response;
-  //   } catch (error: unknown) {
-  //     console.log(error);
-  //     return null;
-  //   }
-  // }
+  async addCaretakerProfile(data: CaretakerFormFields): Promise<void> {
+    return this.authorizedFetch<void>(
+      "POST",
+      "api/caretaker/add",
+      data
+    );
+  }
+
+  async editCaretakerProfile(data: CaretakerFormFields): Promise<void> {
+    return this.authorizedFetch<void>(
+      "PATCH",
+      "api/caretaker/edit",
+      data
+    );
+  }
 }
 
 export const api = new API();

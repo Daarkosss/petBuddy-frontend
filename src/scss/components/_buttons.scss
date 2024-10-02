@@ -1,0 +1,12 @@
+@use "../helpers/variables" as v;
+
+.submit-button {
+  float: right;
+  background: v.$blue-medium;
+  width: 100px;
+
+  &:hover,
+  &:focus {
+    background: v.$blue-light !important;
+  }
+}

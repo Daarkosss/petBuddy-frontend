@@ -1,225 +1,206 @@
 import { useState } from "react";
-import { Form, Button } from "react-bootstrap";
-import { useDropzone } from "react-dropzone";
+import { Form, Input, Button, GetProp, Upload, UploadProps, UploadFile, Select, Card, Space } from "antd";
+import ImgCrop from "antd-img-crop";
 import { useTranslation } from "react-i18next";
 import { Header } from "../components/Header";
-import DatePicker, { Value } from "react-multi-date-picker";
-import DatePanel from "react-multi-date-picker/plugins/date_panel";
-import weekends from "react-multi-date-picker/plugins/highlight_weekends";
+import { api } from "../api/api";
+import { CaretakerFormFields } from "../types";
+import Voivodeship from "../models/Voivodeship";
 
-const CaretakerForm: React.FC = () => {
+type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
+
+const CaretakerForm = () => {
   const { t } = useTranslation();
 
-  const [location, setLocation] = useState("");
-  const [animalTypes, setAnimalTypes] = useState<string[]>([]);
-  const [prices, setPrices] = useState<{ [key: string]: string }>({});
-  const [description, setDescription] = useState("");
-  const [availability, setAvailability] = useState<Value[][]>();
-  const [images, setImages] = useState<File[]>([]);
+  const [fileList, setFileList] = useState<UploadFile[]>([]); // Not send to backend yet, will be done when backend is ready
+  const [form] = Form.useForm<CaretakerFormFields>();
+  const allowedSpecialKeys = ["Backspace", "Delete", "ArrowLeft", "ArrowRight"];
 
-  const onDrop = (acceptedFiles: File[]) => {
-    setImages([...images, ...acceptedFiles]);
+  const handleFileChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
+    setFileList(newFileList);
   };
 
-  const { getRootProps, getInputProps } = useDropzone({ onDrop });
+  const handleFilePreview = async (file: UploadFile) => {
+    let src = file.url as string;
+    if (!src) {
+      src = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file.originFileObj as FileType);
+        reader.onload = () => resolve(reader.result as string);
+      });
+    }
+    const image = new Image();
+    image.src = src;
+    const imgWindow = window.open(src);
+    imgWindow?.document.write(image.outerHTML);
+  };
 
-  const handleAnimalTypeChange = (type: string) => {
-    if (animalTypes.includes(type)) {
-      setAnimalTypes(animalTypes.filter((t) => t !== type));
-    } else {
-      setAnimalTypes([...animalTypes, type]);
+  const renderSelectOptions = (options: Record<string, string>) => (
+    Object.entries(options).map(([value, label]) => (
+      <Select.Option key={value} value={value}>
+        {label}
+      </Select.Option>
+    ))
+  );
+
+  const handleZipCodeKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    handleKeyDownForNumeric(e);
+
+    const zipCode = form.getFieldValue(["address", "zipCode"]);
+    if (zipCode && zipCode.length === 2 && !allowedSpecialKeys.includes(e.key)) {
+      form.setFieldsValue({
+        address: {
+          ...form.getFieldValue("address"),
+          zipCode: `${zipCode}-`,
+        },
+      });
     }
   };
 
-  const handlePriceChange = (type: string, price: string) => {
-    if (/^\d*\.?\d{0,2}$/.test(price) || price === "") {
-      setPrices({ ...prices, [type]: price });
+  const handleKeyDownForNumeric = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const char = e.key;
+    const isDigit = /[0-9]/.test(char);
+    if (!isDigit && !allowedSpecialKeys.includes(char)) {
+      e.preventDefault();
     }
-  };
+  }
 
-  const validatePrices = () => {
-    let isValid = true;
-    const newErrors: { [key: string]: string } = {};
-
-    animalTypes.forEach((type) => {
-      if (!prices[type] || !/^\d+(\.\d{1,2})?$/.test(prices[type])) {
-        isValid = false;
-        newErrors[type] = t("caretakerForm.invalidPrice");
+  const handleSubmit = () => {
+    api.getUserProfiles().then((userProfiles) => {
+      if (userProfiles.hasCaretakerProfile) {
+        api.editCaretakerProfile(form.getFieldsValue());
+      } else {
+        api.addCaretakerProfile(form.getFieldsValue());
       }
     });
-
-    return isValid;
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (validatePrices()) {
-      const formData = new FormData();
-      formData.append("location", location);
-      formData.append("description", description);
-
-      animalTypes.forEach((type) => {
-        formData.append("animalTypes", type);
-        formData.append(`price_${type}`, prices[type]);
-      });
-
-      images.forEach((image, index) => {
-        formData.append(`image_${index}`, image);
-      });
-
-      // onSubmit(formData);
-    }
   };
 
   return (
     <div>
       <Header />
       <div className="caretaker-form-container">
-        <Form onSubmit={handleSubmit}>
-          <Form.Group controlId="location" className="form-group">
-            <Form.Label className="form-label">
-              {t("caretakerForm.location")}
-            </Form.Label>
-            <Form.Control
-              type="text"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-              placeholder={t("caretakerForm.enterCity")}
-              className="form-control"
-            />
-          </Form.Group>
-
-          <Form.Group className="form-group">
-            <Form.Label className="form-label">
-              {t("caretakerForm.animalTypes")}
-            </Form.Label>
-            <div className="animal-type">
-              <Form.Check
-                type="checkbox"
-                label={t("caretakerForm.smallDog")}
-                onChange={() => handleAnimalTypeChange("smallDog")}
-                checked={animalTypes.includes("smallDog")}
-                className="form-check"
-              />
-              {animalTypes.includes("smallDog") && (
-                <div className="price-container">
-                  <Form.Control
-                    type="text"
-                    value={prices["smallDog"] || ""}
-                    onChange={(e) =>
-                      handlePriceChange("smallDog", e.target.value)
-                    }
-                    placeholder={t("caretakerForm.priceFor", {
-                      type: t("caretakerForm.smallDog"),
-                    })}
-                    className="form-control price-input"
+        <Form form={form} layout="vertical" onFinish={handleSubmit}>
+          <Space direction="vertical" size="large" style={{ width: "100%" }}>
+            <Card title={t("address")}>
+              <div className="card-grid-row">
+                <Form.Item
+                  label={t("addressDetails.street")}
+                  name={["address", "street"]}
+                  rules={[{ required: true, message: t("validation.required") }]}
+                >
+                  <Input
+                    maxLength={150}
+                    placeholder={t("placeholder.street")}
                   />
-                </div>
-              )}
-            </div>
-            <div className="animal-type">
-              <Form.Check
-                type="checkbox"
-                label={t("caretakerForm.mediumDog")}
-                onChange={() => handleAnimalTypeChange("mediumDog")}
-                checked={animalTypes.includes("mediumDog")}
-                className="form-check"
-              />
-              {animalTypes.includes("mediumDog") && (
-                <div className="price-container">
-                  <Form.Control
-                    type="text"
-                    value={prices["mediumDog"] || ""}
-                    onChange={(e) =>
-                      handlePriceChange("mediumDog", e.target.value)
-                    }
-                    placeholder={t("caretakerForm.priceFor", {
-                      type: t("caretakerForm.mediumDog"),
-                    })}
-                    className="form-control price-input"
+                </Form.Item>
+                <Form.Item
+                  label={t("addressDetails.streetNumber")}
+                  name={["address", "streetNumber"]}
+                  rules={[{ required: true, message: t("validation.required") }]}
+                >
+                  <Input
+                    maxLength={10}
+                    placeholder={t("placeholder.streetNumber")}
                   />
-                </div>
-              )}
-            </div>
-            <div className="animal-type">
-              <Form.Check
-                type="checkbox"
-                label={t("caretakerForm.cat")}
-                onChange={() => handleAnimalTypeChange("cat")}
-                checked={animalTypes.includes("cat")}
-                className="form-check"
-              />
-              {animalTypes.includes("cat") && (
-                <div className="price-container">
-                  <Form.Control
-                    type="text"
-                    value={prices["cat"] || ""}
-                    onChange={(e) => handlePriceChange("cat", e.target.value)}
-                    placeholder={t("caretakerForm.priceFor", {
-                      type: t("caretakerForm.cat"),
-                    })}
-                    className="form-control price-input"
+                </Form.Item>
+                <Form.Item
+                  label={t("addressDetails.apartmentNumber")}
+                  name={["address", "apartmentNumber"]}
+                >
+                  <Input
+                    maxLength={10}
+                    placeholder={t("placeholder.apartmentNumber")}
                   />
-                </div>
-              )}
-            </div>
-          </Form.Group>
+                </Form.Item>
+              </div>
 
-          <Form.Group controlId="description" className="form-group">
-            <Form.Label className="form-label">
-              {t("caretakerForm.description")}
-            </Form.Label>
-            <Form.Control
-              as="textarea"
-              rows={3}
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder={t("caretakerForm.enterDescription")}
-              className="form-label form-text-area"
-            />
-          </Form.Group>
-
-          <Form.Group controlId="availability" className="form-group">
-            <Form.Label className="form-label">
-              {t("caretakerForm.availabilityCalendar")}
-            </Form.Label>
-            <DatePicker
-              value={availability}
-              onChange={setAvailability}
-              multiple
-              range
-              format="DD-MM-YYYY"
-              plugins={[
-                weekends(),
-                <DatePanel sort="date" style={{ width: 150 }} />,
-              ]}
-            />
-          </Form.Group>
-
-          <Form.Group controlId="images" className="form-group">
-            <Form.Label className="form-label">
-              {t("caretakerForm.uploadImages")}
-            </Form.Label>
-            <div {...getRootProps({ className: "dropzone" })}>
-              <input {...getInputProps()} />
-              <p>{t("caretakerForm.dragDrop")}</p>
-            </div>
-            <div className="images-list">
-              {images.map((file, index) => (
-                <div key={index} className="image-item">
-                  <img
-                    src={URL.createObjectURL(file)}
-                    alt={`preview-${index}`}
+              <div className="card-grid-row">
+                <Form.Item
+                  label={t("addressDetails.zipCode")}
+                  name={["address", "zipCode"]}
+                  rules={[
+                    { required: true, message: t("validation.required") },
+                    { pattern: /^[0-9]{2}-[0-9]{3}$/, message: t("validation.zipCodeFormat") }
+                  ]}
+                >
+                  <Input
+                    maxLength={6}
+                    onKeyDown={handleZipCodeKeyDown}
+                    placeholder={t("placeholder.zipCode")}
                   />
-                </div>
-              ))}
-            </div>
-          </Form.Group>
+                </Form.Item>
+                <Form.Item
+                  label={t("addressDetails.city")}
+                  name={["address", "city"]}
+                  rules={[{ required: true, message: t("validation.required") }]}
+                >
+                  <Input
+                    maxLength={50}
+                    placeholder={t("placeholder.city")}
+                  />
+                </Form.Item>
+                <Form.Item
+                  label={t("addressDetails.voivodeship")}
+                  name={["address", "voivodeship"]}
+                  rules={[{ required: true, message: t("validation.required") }]}
+                >
+                  <Select placeholder={t("placeholder.voivodeship")}>
+                    {renderSelectOptions(Voivodeship.voivodeshipMap)}
+                  </Select>
+                </Form.Item>
+              </div>
+            </Card>
 
-          <Button variant="primary" type="submit">
-            {t("caretakerForm.submit")}
-          </Button>
+            <Card title={t("personalData.contactDetails")}>
+              <Form.Item
+                label={t("personalData.phoneNumber")}
+                name="phoneNumber"
+                rules={[
+                  { required: true, message: t("validation.required") },
+                  { pattern: /^([0-9]){9,14}$/, message: t("validation.phoneNumberFormat") },
+                ]}
+                style={{ width: "200px" }}
+              >
+                <Input
+                  maxLength={14}
+                  placeholder={t("placeholder.phoneNumber")}
+                  onKeyDown={handleKeyDownForNumeric}
+                  addonBefore="+48"
+                />
+              </Form.Item>
+            </Card>
+
+            <Card title={t("description")}>
+              <Form.Item name="description">
+                <Input.TextArea
+                  showCount
+                  autoSize={{ minRows: 2, maxRows: 4 }}
+                  maxLength={1500}
+                  placeholder={t("placeholder.description")}
+                />
+              </Form.Item>
+            </Card>
+
+            <Card title={t("uploadImages")}>
+              <Form.Item name="images">
+                <ImgCrop rotationSlider>
+                  <Upload
+                    listType="picture-card"
+                    fileList={fileList}
+                    onChange={handleFileChange}
+                    onPreview={handleFilePreview}
+                    accept="image/*"
+                  >
+                    {fileList.length < 5 && `+ ${t("upload")}`}
+                  </Upload>
+                </ImgCrop>
+              </Form.Item>
+            </Card>
+
+            <Button type="primary" htmlType="submit" className="submit-button">
+              {t("save")}
+            </Button>
+          </Space>
         </Form>
       </div>
     </div>

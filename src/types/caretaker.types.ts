@@ -20,7 +20,7 @@ export type AddressDTO = {
   zipCode: string;
   voivodeship: VoivodeshipDTO;
   street: string;
-  buildingNumber: string;
+  streetNumber: string;
   apartmentNumber: string;
 }
 
@@ -97,3 +97,9 @@ export type AnimalFilter = {
   animalType: string;
   offerConfigurations: OfferConfiguration[];
 };
+
+export type CaretakerFormFields = {
+  phoneNumber: string;
+  description: string;
+  address: AddressDTO;
+}

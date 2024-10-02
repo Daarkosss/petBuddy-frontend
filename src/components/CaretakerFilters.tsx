@@ -1,6 +1,8 @@
 import { Input, Select, Button } from "antd";
 import { CaretakerSearchFilters, OfferConfiguration, AnimalSize, AnimalSex } from "../types";
 import { useTranslation } from "react-i18next";
+import Voivodeship from "../models/Voivodeship";
+import { KeyboardEvent } from "react";
 
 interface CaretakerFiltersProps {
   filters: CaretakerSearchFilters;
@@ -21,24 +23,25 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
 }) => {
   const { t } = useTranslation();
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      handleSearch();
+  const handlePriceKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    const value = e.key;
+    const regex = /^\d/;
+
+    const allowedKeys = ["Backspace", "Delete", ","];
+    if (!regex.test(value) && !allowedKeys.includes(e.key)) {
+      e.preventDefault();
     }
   };
 
-  const handlePriceInput = (animalType: string, priceType: "minPrice" | "maxPrice", value: string) => {
+  const handlePriceChange = (animalType: string, priceType: "minPrice" | "maxPrice", value: string) => {
     const regex = /^\d{0,5}(\.\d{0,2})?$/;
-    const parsedValue = parseFloat(value) || undefined;
+    const parsedValue = parseFloat(value);
     
-    if (regex.test(value) && (parsedValue === undefined || parsedValue >= 0)) {
+    if (regex.test(value)) {
       const updatedConfig = { [priceType]: parsedValue || undefined };
       onAnimalFiltersChange(animalType, updatedConfig);    
-    } else {
-      value = value.slice(0, -1);
     }
   };
-
   const checkAndSwapPrices = () => {
     Object.keys(animalFilters).forEach((animalType) => {
       const { minPrice, maxPrice } = animalFilters[animalType] || {};
@@ -70,18 +73,22 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
           <div>{t("price")}</div>
           <Input
             type="number"
+            min={0}
             placeholder={t("from")}
             value={animalFilters[animalType]?.minPrice}
-            onKeyDown={handleKeyDown}
-            onChange={(e) => handlePriceInput(animalType, "minPrice", e.target.value)}
+            onChange={(e) => handlePriceChange(animalType, "minPrice", e.target.value)}
+            onKeyDown={handlePriceKeyDown}
+            onPressEnter={handleSearch}
             className="input-field"
           />
           <Input
             type="number"
+            min={0}
             placeholder={t("to")}
             value={animalFilters[animalType]?.maxPrice}
-            onKeyDown={handleKeyDown}
-            onChange={(e) => handlePriceInput(animalType, "maxPrice", e.target.value)}
+            onChange={(e) => handlePriceChange(animalType, "maxPrice", e.target.value)}
+            onKeyDown={handlePriceKeyDown}
+            onPressEnter={handleSearch}
             className="input-field"
           />
           <div>zł</div>
@@ -132,41 +139,23 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
           value={filters.personalDataLike}
           onChange={(e) => onFiltersChange({ ...filters, personalDataLike: e.target.value })}
           className="input-field"
-          onKeyDown={handleKeyDown}
-        />
+          onPressEnter={handleSearch}
+          />
         <Input
-          placeholder={t("city")}
+          placeholder={t("addressDetails.city")}
           value={filters.cityLike}
           onChange={(e) => onFiltersChange({ ...filters, cityLike: e.target.value })}
           className="input-field"
-          onKeyDown={handleKeyDown}
-        />
+          onPressEnter={handleSearch}
+          />
         <Select
-          placeholder={t("voivodeship")}
+          placeholder={t("addressDetails.voivodeship")}
           className="input-field"
           onChange={(value) => onFiltersChange({ ...filters, voivodeship: value })}
           allowClear
           value={filters.voivodeship}
-          onKeyDown={handleKeyDown}
         >
-          {renderSelectOptions({
-            DOLNOSLASKIE: "Dolnośląskie",
-            KUJAWSKO_POMORSKIE: "Kujawsko-Pomorskie",
-            LUBELSKIE: "Lubelskie",
-            LUBUSKIE: "Lubuskie",
-            LODZKIE: "Łódzkie",
-            MALOPOLSKIE: "Małopolskie",
-            MAZOWIECKIE: "Mazowieckie",
-            OPOLSKIE: "Opolskie",
-            PODKARPACKIE: "Podkarpackie",
-            PODLASKIE: "Podlaskie",
-            POMORSKIE: "Pomorskie",
-            SLASKIE: "Śląskie",
-            SWIETOKRZYSKIE: "Świętokrzyskie",
-            WARMINSKO_MAZURSKIE: "Warmińsko-Mazurskie",
-            WIELKOPOLSKIE: "Wielkopolskie",
-            ZACHODNIOPOMORSKIE: "Zachodniopomorskie",
-          })}
+          {renderSelectOptions(Voivodeship.voivodeshipMap)}
         </Select>
         <Select
           mode="multiple"
