@@ -40,7 +40,7 @@
     "voivodeship": "Voivodeship",
     "zipCode": "Zip code",
     "street": "Street",
-    "buildingNumber": "Building number",
+    "streetNumber": "Building number",
     "apartmentNumber": "Apartment number"
   },
 
@@ -49,7 +49,7 @@
     "voivodeship": "e.g. dolnośląskie",
     "zipCode": "e.g. 00-000",
     "street": "e.g. Szkolna",
-    "buildingNumber": "e.g. 102A",
+    "streetNumber": "e.g. 102A",
     "apartmentNumber": "e.g. 7",
     "phoneNumber": "e.g. 000000000",
     "description": "e.g. I have been taking care of animals for 2 years. My clients are always happy..."

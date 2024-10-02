@@ -14,7 +14,7 @@ class Caretaker {
     zipCode: string;
     voivodeship: Voivodeship;
     street: string;
-    buildingNumber: string;
+    streetNumber: string;
     apartmentNumber: string;
   };
   animals: string[];

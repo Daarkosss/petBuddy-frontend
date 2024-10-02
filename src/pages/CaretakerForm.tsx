@@ -94,13 +94,13 @@ const CaretakerForm = () => {
                   />
                 </Form.Item>
                 <Form.Item
-                  label={t("addressDetails.buildingNumber")}
-                  name={["address", "buildingNumber"]}
+                  label={t("addressDetails.streetNumber")}
+                  name={["address", "streetNumber"]}
                   rules={[{ required: true, message: t("validation.required") }]}
                 >
                   <Input
                     maxLength={10}
-                    placeholder={t("placeholder.buildingNumber")}
+                    placeholder={t("placeholder.streetNumber")}
                   />
                 </Form.Item>
                 <Form.Item

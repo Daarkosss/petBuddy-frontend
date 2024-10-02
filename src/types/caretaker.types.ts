@@ -20,7 +20,7 @@ export type AddressDTO = {
   zipCode: string;
   voivodeship: VoivodeshipDTO;
   street: string;
-  buildingNumber: string;
+  streetNumber: string;
   apartmentNumber: string;
 }
 

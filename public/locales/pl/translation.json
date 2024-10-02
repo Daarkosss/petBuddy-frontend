@@ -40,7 +40,7 @@
     "voivodeship": "Województwo",
     "zipCode": "Kod pocztowy",
     "street": "Ulica",
-    "buildingNumber": "Numer budynku",
+    "streetNumber": "Numer budynku",
     "apartmentNumber": "Numer mieszkania"
   },
 
@@ -49,7 +49,7 @@
     "voivodeship": "np. dolnośląskie",
     "zipCode": "np. 00-000",
     "street": "np. Szkolna",
-    "buildingNumber": "np. 102A",
+    "streetNumber": "np. 102A",
     "apartmentNumber": "np. 7",
     "phoneNumber": "np. 000000000",
     "description": "np. Zajmuje się opieką nad zwierzętami już od 2 lat. Moi klienci zawsze są zadowoleni..."
