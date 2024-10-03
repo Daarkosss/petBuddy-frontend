@@ -62,7 +62,7 @@
     "email": "E-mail",
     "contactDetails": "Contact details"
   },
-  
+
   "perPage": "per page",
 
   "loginPage": {
@@ -75,7 +75,8 @@
     "requestMessage": "Request message",
     "fetchToken": "Fetch xsrf token",
     "changeCaretakerForm": "Change caretaker form",
-    "searchCaretakers": "Search caretakers"
+    "searchCaretakers": "Search caretakers",
+    "showProfile": "See your profile"
   },
 
   "profileSelection": {

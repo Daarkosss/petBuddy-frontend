@@ -75,7 +75,8 @@
     "requestMessage": "Testowy request",
     "fetchToken": "Pobierz token xsrf",
     "changeCaretakerForm": "Zmień dane opiekuna",
-    "searchCaretakers": "Wyszukaj opiekunów"
+    "searchCaretakers": "Wyszukaj opiekunów",
+    "showProfile": "Odwiedź swój profil"
   },
 
   "profileSelection": {
