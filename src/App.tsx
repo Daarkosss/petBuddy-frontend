@@ -4,11 +4,14 @@ import { useEffect, useState } from "react";
 import { api } from "./api/api";
 import Home from "./pages/Home";
 import CaretakerForm from "./pages/CaretakerForm";
-import LoginPage from "./pages/LoginPage";
 import store from "./store/RootStore";
 import CaretakerSearch from "./pages/CaretakerSearch";
 import ProfileSelection from "./pages/ProfileSelection";
 import LandingPage from "./pages/LandingPage";
+import { Layout } from "antd";
+import Header from "./components/Header";
+
+const { Content } = Layout;
 
 function App() {
   const { keycloak, initialized } = useKeycloak();
@@ -66,26 +69,30 @@ function App() {
   }
 
   return (
-    <Routes>
-      {keycloak.authenticated ? (
-        <>
-          <Route path="/home" element={<Home />} />
-          <Route path="/caretaker/form" element={<CaretakerForm />} />
-          <Route path="/caretaker/search" element={<CaretakerSearch />} />
-          <Route
-            path="/profile-selection"
-            element={<ProfileSelection isUserDataFetched={isUserDataFetched} />}
-          />
-          <Route path="*" element={<LandingPage />} />
-          </>
-      ) : (
-        <>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/caretaker/search" element={<CaretakerSearch />} />
-          <Route path="*" element={<LandingPage />} />
-        </>
-      )}
-    </Routes>
+    <Layout>
+      <Header/>
+      <Content className="content">
+        <Routes>
+          {keycloak.authenticated ? (
+            <>
+              <Route path="/home" element={<Home />} />
+              <Route path="/caretaker/form" element={<CaretakerForm />} />
+              <Route path="/caretaker/search" element={<CaretakerSearch />} />
+              <Route
+                path="/profile-selection"
+                element={<ProfileSelection isUserDataFetched={isUserDataFetched} />}
+              />
+              <Route path="*" element={<LandingPage />} />
+              </>
+          ) : (
+            <>
+              <Route path="/caretaker/search" element={<CaretakerSearch />} />
+              <Route path="*" element={<LandingPage />} />
+            </>
+          )}
+        </Routes>
+      </Content>
+    </Layout>
   );
 }
 

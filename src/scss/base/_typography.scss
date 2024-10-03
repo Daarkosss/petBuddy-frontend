@@ -6,6 +6,10 @@ body {
     margin: 0;
     padding: 0;
     background: v.$home-background-gradient;
+
+    .content {
+        background: v.$home-background-gradient;
+    }
 }
 
 h1 {

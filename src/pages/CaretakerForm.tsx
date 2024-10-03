@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Form, Input, Button, GetProp, Upload, UploadProps, UploadFile, Select, Card, Space } from "antd";
 import ImgCrop from "antd-img-crop";
 import { useTranslation } from "react-i18next";
-import { Header } from "../components/Header";
 import { api } from "../api/api";
 import { CaretakerFormFields } from "../types";
 import Voivodeship from "../models/Voivodeship";
@@ -76,133 +75,130 @@ const CaretakerForm = () => {
   };
 
   return (
-    <div>
-      <Header />
-      <div className="caretaker-form-container">
-        <Form form={form} layout="vertical" onFinish={handleSubmit}>
-          <Space direction="vertical" size="large" style={{ width: "100%" }}>
-            <Card title={t("address")}>
-              <div className="card-grid-row">
-                <Form.Item
-                  label={t("addressDetails.street")}
-                  name={["address", "street"]}
-                  rules={[{ required: true, message: t("validation.required") }]}
-                >
-                  <Input
-                    maxLength={150}
-                    placeholder={t("placeholder.street")}
-                  />
-                </Form.Item>
-                <Form.Item
-                  label={t("addressDetails.streetNumber")}
-                  name={["address", "streetNumber"]}
-                  rules={[{ required: true, message: t("validation.required") }]}
-                >
-                  <Input
-                    maxLength={10}
-                    placeholder={t("placeholder.streetNumber")}
-                  />
-                </Form.Item>
-                <Form.Item
-                  label={t("addressDetails.apartmentNumber")}
-                  name={["address", "apartmentNumber"]}
-                >
-                  <Input
-                    maxLength={10}
-                    placeholder={t("placeholder.apartmentNumber")}
-                  />
-                </Form.Item>
-              </div>
-
-              <div className="card-grid-row">
-                <Form.Item
-                  label={t("addressDetails.zipCode")}
-                  name={["address", "zipCode"]}
-                  rules={[
-                    { required: true, message: t("validation.required") },
-                    { pattern: /^[0-9]{2}-[0-9]{3}$/, message: t("validation.zipCodeFormat") }
-                  ]}
-                >
-                  <Input
-                    maxLength={6}
-                    onKeyDown={handleZipCodeKeyDown}
-                    placeholder={t("placeholder.zipCode")}
-                  />
-                </Form.Item>
-                <Form.Item
-                  label={t("addressDetails.city")}
-                  name={["address", "city"]}
-                  rules={[{ required: true, message: t("validation.required") }]}
-                >
-                  <Input
-                    maxLength={50}
-                    placeholder={t("placeholder.city")}
-                  />
-                </Form.Item>
-                <Form.Item
-                  label={t("addressDetails.voivodeship")}
-                  name={["address", "voivodeship"]}
-                  rules={[{ required: true, message: t("validation.required") }]}
-                >
-                  <Select placeholder={t("placeholder.voivodeship")}>
-                    {renderSelectOptions(Voivodeship.voivodeshipMap)}
-                  </Select>
-                </Form.Item>
-              </div>
-            </Card>
-
-            <Card title={t("personalData.contactDetails")}>
+    <div className="caretaker-form-container">
+      <Form form={form} layout="vertical" onFinish={handleSubmit}>
+        <Space direction="vertical" size="large" style={{ width: "100%" }}>
+          <Card title={t("address")}>
+            <div className="card-grid-row">
               <Form.Item
-                label={t("personalData.phoneNumber")}
-                name="phoneNumber"
-                rules={[
-                  { required: true, message: t("validation.required") },
-                  { pattern: /^([0-9]){9,14}$/, message: t("validation.phoneNumberFormat") },
-                ]}
-                style={{ width: "200px" }}
+                label={t("addressDetails.street")}
+                name={["address", "street"]}
+                rules={[{ required: true, message: t("validation.required") }]}
               >
                 <Input
-                  maxLength={14}
-                  placeholder={t("placeholder.phoneNumber")}
-                  onKeyDown={handleKeyDownForNumeric}
-                  addonBefore="+48"
+                  maxLength={150}
+                  placeholder={t("placeholder.street")}
                 />
               </Form.Item>
-            </Card>
-
-            <Card title={t("description")}>
-              <Form.Item name="description">
-                <Input.TextArea
-                  showCount
-                  autoSize={{ minRows: 2, maxRows: 4 }}
-                  maxLength={1500}
-                  placeholder={t("placeholder.description")}
+              <Form.Item
+                label={t("addressDetails.streetNumber")}
+                name={["address", "streetNumber"]}
+                rules={[{ required: true, message: t("validation.required") }]}
+              >
+                <Input
+                  maxLength={10}
+                  placeholder={t("placeholder.streetNumber")}
                 />
               </Form.Item>
-            </Card>
-
-            <Card title={t("uploadImages")}>
-              <Form.Item name="images">
-                <ImgCrop rotationSlider>
-                  <Upload
-                    listType="picture-card"
-                    fileList={fileList}
-                    onChange={handleFileChange}
-                    onPreview={handleFilePreview}
-                    accept="image/*"
-                  >
-                    {fileList.length < 5 && `+ ${t("upload")}`}
-                  </Upload>
-                </ImgCrop>
+              <Form.Item
+                label={t("addressDetails.apartmentNumber")}
+                name={["address", "apartmentNumber"]}
+              >
+                <Input
+                  maxLength={10}
+                  placeholder={t("placeholder.apartmentNumber")}
+                />
               </Form.Item>
-            </Card>
+            </div>
 
-            <Button type="primary" htmlType="submit" className="submit-button">
-              {t("save")}
-            </Button>
-          </Space>
-        </Form>
-      </div>
+            <div className="card-grid-row">
+              <Form.Item
+                label={t("addressDetails.zipCode")}
+                name={["address", "zipCode"]}
+                rules={[
+                  { required: true, message: t("validation.required") },
+                  { pattern: /^[0-9]{2}-[0-9]{3}$/, message: t("validation.zipCodeFormat") }
+                ]}
+              >
+                <Input
+                  maxLength={6}
+                  onKeyDown={handleZipCodeKeyDown}
+                  placeholder={t("placeholder.zipCode")}
+                />
+              </Form.Item>
+              <Form.Item
+                label={t("addressDetails.city")}
+                name={["address", "city"]}
+                rules={[{ required: true, message: t("validation.required") }]}
+              >
+                <Input
+                  maxLength={50}
+                  placeholder={t("placeholder.city")}
+                />
+              </Form.Item>
+              <Form.Item
+                label={t("addressDetails.voivodeship")}
+                name={["address", "voivodeship"]}
+                rules={[{ required: true, message: t("validation.required") }]}
+              >
+                <Select placeholder={t("placeholder.voivodeship")}>
+                  {renderSelectOptions(Voivodeship.voivodeshipMap)}
+                </Select>
+              </Form.Item>
+            </div>
+          </Card>
+
+          <Card title={t("personalData.contactDetails")}>
+            <Form.Item
+              label={t("personalData.phoneNumber")}
+              name="phoneNumber"
+              rules={[
+                { required: true, message: t("validation.required") },
+                { pattern: /^([0-9]){9,14}$/, message: t("validation.phoneNumberFormat") },
+              ]}
+              style={{ width: "200px" }}
+            >
+              <Input
+                maxLength={14}
+                placeholder={t("placeholder.phoneNumber")}
+                onKeyDown={handleKeyDownForNumeric}
+                addonBefore="+48"
+              />
+            </Form.Item>
+          </Card>
+
+          <Card title={t("description")}>
+            <Form.Item name="description">
+              <Input.TextArea
+                showCount
+                autoSize={{ minRows: 2, maxRows: 4 }}
+                maxLength={1500}
+                placeholder={t("placeholder.description")}
+              />
+            </Form.Item>
+          </Card>
+
+          <Card title={t("uploadImages")}>
+            <Form.Item name="images">
+              <ImgCrop rotationSlider>
+                <Upload
+                  listType="picture-card"
+                  fileList={fileList}
+                  onChange={handleFileChange}
+                  onPreview={handleFilePreview}
+                  accept="image/*"
+                >
+                  {fileList.length < 5 && `+ ${t("upload")}`}
+                </Upload>
+              </ImgCrop>
+            </Form.Item>
+          </Card>
+
+          <Button type="primary" htmlType="submit" className="submit-button">
+            {t("save")}
+          </Button>
+        </Space>
+      </Form>
     </div>
   );
 };

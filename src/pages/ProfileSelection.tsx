@@ -5,7 +5,6 @@ import { IoAddCircleOutline } from "react-icons/io5";
 import { LuHelpingHand } from "react-icons/lu";
 import ProfileSelectionBox from "../components/ProfileSelectionBox";
 import { CgProfile } from "react-icons/cg";
-import { Header } from "../components/Header";
 import RoundedLine from "../components/RoundedLine";
 import { api } from "../api/api";
 
@@ -42,7 +41,6 @@ const ProfileSelection: React.FC<ProfileSelectionProps> = ({
 
   return (
     <>
-      <Header />
       <div className="selection-main-container">
         <h1 className="selection-title">{t("profileSelection.title")}</h1>
         <RoundedLine width="40%" height="5px" backgroundColor={lineColor} />

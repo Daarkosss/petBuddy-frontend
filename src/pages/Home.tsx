@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { api } from "../api/api";
 import { useNavigate } from "react-router-dom";
-import { Header } from "../components/Header";
 import { Button } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import store from "../store/RootStore";
@@ -30,25 +29,22 @@ const Home = () => {
   };
 
   return (
-    <div>
-      <Header />
-      <div className="home-container">
-        <h1>
-          {t("home.title")} {message}
-        </h1>
-        <Button variant="outline-dark" onClick={handleGetMessage}>
-          {t("home.requestMessage")}
-        </Button>
-        <Button variant="outline-dark" onClick={() => api.getXsrfToken()}>
-          {t("home.fetchToken")}
-        </Button>
-        <Button variant="dark" onClick={() => navigate("/caretaker/form")}>
-          {t("home.changeCaretakerForm")}
-        </Button>
-        <Button variant="dark" onClick={() => navigate("/caretaker/search")}>
-          {t("home.searchCaretakers")}
-        </Button>
-      </div>
+    <div className="home-container">
+      <h1>
+        {t("home.title")} {message}
+      </h1>
+      <Button variant="outline-dark" onClick={handleGetMessage}>
+        {t("home.requestMessage")}
+      </Button>
+      <Button variant="outline-dark" onClick={() => api.getXsrfToken()}>
+        {t("home.fetchToken")}
+      </Button>
+      <Button variant="dark" onClick={() => navigate("/caretaker/form")}>
+        {t("home.changeCaretakerForm")}
+      </Button>
+      <Button variant="dark" onClick={() => navigate("/caretaker/search")}>
+        {t("home.searchCaretakers")}
+      </Button>
     </div>
   );
 };

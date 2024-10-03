@@ -1,32 +1,10 @@
 @use "../helpers/variables" as v;
 
-.sticky-header {
-  position: sticky;
-  top: 0;
-  z-index: 1051; // 1 more than z-index of select
-  padding: 10px;
-  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
-  background-color: v.$blue-medium;
-  color: v.$white;
-
+.header {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-
-  .title {
-    font-size: 3rem;
-    color: white;
-    margin: auto;
-
-    &:hover {
-      cursor: pointer;
-    }
-  }
-
-  .right-corner {
-    position: absolute;
-    top: 25px;
-    right: 25px;
-    display: flex;
-    gap: 20px;
-  }
+  background-color: v.$white;
+  padding: 0 50px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }

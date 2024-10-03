@@ -2,11 +2,11 @@ import { useState, useEffect } from "react";
 import { Table, Button, Spin, Rate } from "antd";
 import { SorterResult, TablePaginationConfig, FilterValue, ColumnsType } from "antd/es/table/interface";
 import { api } from "../api/api";
-import { Header } from "../components/Header";
 import { useTranslation } from "react-i18next";
 import Caretaker from "../models/Caretaker";
 import { CaretakerSearchFilters, OfferConfiguration } from "../types";
 import CaretakerFilters from "../components/CaretakerFilters";
+import store from "../store/RootStore";
 
 const CaretakerList = () => {
   const { t } = useTranslation();
@@ -57,6 +57,7 @@ const CaretakerList = () => {
 
   useEffect(() => {
     fetchCaretakers();
+    store.selectedMenuKey = "caretakerSearch";
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagingParams]);
 
@@ -184,7 +185,6 @@ const CaretakerList = () => {
 
   return (
     <div>
-      <Header />
       <div className="caretaker-container">
         <Spin spinning={isLoading} fullscreen />
         <CaretakerFilters

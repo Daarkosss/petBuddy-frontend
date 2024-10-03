@@ -1,14 +1,5 @@
 @use "../helpers/variables" as v;
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: v.$white;
-  padding: 0 50px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-}
-
 .logo {
   &:hover {
     cursor: pointer;
@@ -25,7 +16,7 @@
   border: none;
 }
 
-.caretaker-section {
+.landing-page {
   display: grid;
   grid-template-columns: 1fr 1fr;
   background-color: #002A5B;
@@ -33,7 +24,7 @@
   position: relative;
 }
 
-.caretaker-content {
+.main-content {
   display: flex;
   flex-direction: column;
   align-items: center; /* Horizontal centering */
@@ -44,23 +35,22 @@
   margin: 0 auto;
 }
 
-.caretaker-content h1 {
+.main-content h1 {
   font-size: 2.5rem;
   margin-bottom: 20px;
 }
 
-.caretaker-content p {
+.main-content p {
   font-size: 1.2rem;
 }
 
-.caretaker-image img {
+.main-image img {
   max-width: 100%;
   height: auto;
 }
 
 .search-container {
   display: grid;
-  place-items: center;
   position: absolute;
   top: 70%;
   left: 50%;
@@ -90,16 +80,16 @@
 }
 
 @media (max-width: 768px) {
-  .caretaker-section {
+  .main-section {
     flex-direction: column;
   }
 
-  .caretaker-image {
+  .main-image {
     margin-top: 20px;
     text-align: center;
   }
 
-  .caretaker-image img {
+  .main-image img {
     width: 100%;
     max-width: 400px;
   }
