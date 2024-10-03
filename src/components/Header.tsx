@@ -20,7 +20,7 @@ const PageHeader = observer(() => {
     },
     {
       key: "caretakerSearch",
-      label: "Search caretakers",
+      label: "Search Caretakers",
       onClick: () => navigate("/caretaker/search")
     },
     {

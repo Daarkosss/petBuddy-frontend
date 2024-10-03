@@ -19,7 +19,7 @@
 .landing-page {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  background-color: #002A5B;
+  background-color: linear-gradient(to right, v.$blue-dark, v.$blue-very-dark);
   height: max-content;
   position: relative;
 }
