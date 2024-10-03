@@ -88,6 +88,7 @@
   "caretakerSearch": {
     "personalData": "Dane personalne",
     "animalTypes": "Rodzaje zwierząt",
+    "animalType": "Typ zwierzęcia",
     "minPrice": "Minimalna cena",
     "maxPrice": "Maksymalna cena",
     "noCaretakers": "Brak opiekunów dla podanych parametrów",

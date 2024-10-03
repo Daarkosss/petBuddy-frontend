@@ -1,5 +1,5 @@
 import { useKeycloak } from "@react-keycloak/web";
-import { Route, Routes, Navigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { api } from "./api/api";
 import Home from "./pages/Home";
@@ -8,6 +8,7 @@ import LoginPage from "./pages/LoginPage";
 import store from "./store/RootStore";
 import CaretakerSearch from "./pages/CaretakerSearch";
 import ProfileSelection from "./pages/ProfileSelection";
+import LandingPage from "./pages/LandingPage";
 
 function App() {
   const { keycloak, initialized } = useKeycloak();
@@ -75,12 +76,13 @@ function App() {
             path="/profile-selection"
             element={<ProfileSelection isUserDataFetched={isUserDataFetched} />}
           />
-          <Route path="*" element={<Navigate to="/home" />} />
-        </>
+          <Route path="*" element={<LandingPage />} />
+          </>
       ) : (
         <>
           <Route path="/login" element={<LoginPage />} />
-          <Route path="*" element={<Navigate to="/login" />} />
+          <Route path="/caretaker/search" element={<CaretakerSearch />} />
+          <Route path="*" element={<LandingPage />} />
         </>
       )}
     </Routes>

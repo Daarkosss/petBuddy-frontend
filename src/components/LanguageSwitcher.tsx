@@ -14,7 +14,7 @@ const LanguageSwitcher: React.FC = () => {
     <DropdownButton
       id="dropdown-basic-button"
       title={<FaGlobe />}
-      variant="outline-light"
+      variant="light"
       className="language-switcher"
     >
       <Dropdown.Item onClick={() => changeLanguage("en")}>English</Dropdown.Item>

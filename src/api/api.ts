@@ -54,6 +54,7 @@ class API {
         Authorization: `Bearer ${store.user.jwtToken}`,
       });
     } else {
+      toast.error("No user token available");
       return Promise.reject(new Error("No user token available"));
     }
   }
@@ -115,7 +116,7 @@ class API {
       })),
     }));
 
-    return this.authorizedFetch<CaretakerResponse>(
+    return this.fetch<CaretakerResponse>(
       "POST",
       `api/caretaker?${queryString}`,
       requestBody
