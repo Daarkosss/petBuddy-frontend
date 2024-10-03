@@ -17,7 +17,7 @@ const Home = () => {
     } else {
       handleGetMessage();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleGetMessage = async () => {
@@ -47,6 +47,9 @@ const Home = () => {
         </Button>
         <Button variant="dark" onClick={() => navigate("/caretaker/search")}>
           {t("home.searchCaretakers")}
+        </Button>
+        <Button variant="dark" onClick={() => navigate("/profile")}>
+          {t("home.showProfile")}
         </Button>
       </div>
     </div>
