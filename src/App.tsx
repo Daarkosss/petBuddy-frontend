@@ -71,7 +71,7 @@ function App() {
   return (
     <Layout>
       <Header/>
-      <Content className="content">
+      <Content className="page-content">
         <Routes>
           {keycloak.authenticated ? (
             <>

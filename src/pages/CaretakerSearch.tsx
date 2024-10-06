@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { Table, Button, Spin, Rate } from "antd";
 import { SorterResult, TablePaginationConfig, FilterValue, ColumnsType } from "antd/es/table/interface";
 import { api } from "../api/api";
@@ -10,6 +11,7 @@ import store from "../store/RootStore";
 
 const CaretakerList = () => {
   const { t } = useTranslation();
+  const location = useLocation();
 
   const [caretakers, setCaretakers] = useState<Caretaker[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -28,7 +30,7 @@ const CaretakerList = () => {
     total: 0,
   });
 
-  const [filters, setFilters] = useState<CaretakerSearchFilters>({
+  const [filters, setFilters] = useState<CaretakerSearchFilters>(location.state?.filters || {
     personalDataLike: "",
     cityLike: "",
     voivodeship: undefined,
@@ -56,8 +58,11 @@ const CaretakerList = () => {
   };
 
   useEffect(() => {
-    fetchCaretakers();
     store.selectedMenuKey = "caretakerSearch";
+  }, []);
+
+  useEffect(() => {
+    fetchCaretakers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagingParams]);
 
