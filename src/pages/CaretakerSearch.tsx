@@ -37,8 +37,17 @@ const CaretakerList = () => {
     animals: [],
   });
 
-  const [animalFilters, setAnimalFilters] = useState<Record<string, OfferConfiguration>>({});
-
+  const [animalFilters, setAnimalFilters] = useState<Record<string, OfferConfiguration>>(
+    () => {
+      const animal = location.state?.filters?.animals?.[0];
+      if (animal) {
+        return { [animal.animalType]: animal.offerConfigurations?.[0] || {} };
+      }
+      return {};
+    }
+  );
+  
+  
   const fetchCaretakers = async () => {
     setIsLoading(true);
     setError(null);
