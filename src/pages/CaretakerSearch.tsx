@@ -47,7 +47,6 @@ const CaretakerList = () => {
     }
   );
   
-  
   const fetchCaretakers = async () => {
     setIsLoading(true);
     setError(null);
@@ -67,7 +66,7 @@ const CaretakerList = () => {
   };
 
   useEffect(() => {
-    store.selectedMenuKey = "caretakerSearch";
+    store.selectedMenuOption = "caretakerSearch";
   }, []);
 
   useEffect(() => {

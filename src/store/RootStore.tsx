@@ -3,7 +3,7 @@ import UserStore from "./UserStore";
 
 class RootStore {
   user: UserStore;
-  selectedMenuKey = "";
+  private _selectedMenuOption = "";
 
   constructor() {
     makeAutoObservable(this);
@@ -12,6 +12,14 @@ class RootStore {
 
   reset() { 
     this.user.reset();
+  }
+
+  get selectedMenuOption() {
+    return this._selectedMenuOption;
+  }
+
+  set selectedMenuOption(option: string) {
+    this._selectedMenuOption = option;
   }
 }
 

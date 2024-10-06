@@ -34,7 +34,7 @@ const PageHeader = observer(() => {
       <div className="logo" onClick={() => navigate("/")}>
         <img src="/favicon.png" alt="Logo" />
       </div>
-      <Menu mode="horizontal" selectedKeys={[store.selectedMenuKey]} items={menuItems}>
+      <Menu mode="horizontal" selectedKeys={[store.selectedMenuOption]} items={menuItems}>
 
       </Menu>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "20px" }}>

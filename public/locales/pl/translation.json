@@ -108,5 +108,11 @@
     "required": "Wymagane",
     "zipCodeFormat": "Nieprawidłowy format (00-000)",
     "phoneNumberFormat": "Nieprawidłowy format (minimum 9 cyfr)"
+  },
+
+  "landingPage": {
+    "title": "Witamy w Pet Buddy, miejscu gdzie możesz znaleźć opiekuna dla swojego pupila lub samemu zacząć opiekować się zwierzętami innych osób",
+    "subtitle": "Użyj poniższego paska wyszukiwania, aby znaleźć opiekuna lub uwierzytelnij się, aby uzyskać więcej opcji.",
+    "searchTitle": "Znajdz najlepszego opiekun dla swojego pupila"
   }
 }

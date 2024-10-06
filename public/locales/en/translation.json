@@ -108,5 +108,11 @@
     "required": "Required",
     "zipCodeFormat": "Invalid format (00-000)",
     "phoneNumberFormat": "Invalid format (at least 9 digits)"
+  },
+
+  "landingPage": {
+    "title": "Welcome to Pet Buddy, a place where you can find a pet caretaker or start taking care of other people pets",
+    "subtitle": "Use search bar below to find caretaker or or authenticate for more options.",
+    "searchTitle": "Find the best caretaker for your pet"
   }
 }

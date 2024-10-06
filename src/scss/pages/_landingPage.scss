@@ -19,7 +19,7 @@
 
 .landing-page {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1.2fr;
   background-color: linear-gradient(to right, v.$blue-dark, v.$blue-very-dark);
   height: max-content;
   position: relative;
@@ -31,12 +31,12 @@
   align-items: center;
   justify-content: flex-start;
   padding-top: 10vh;
-  color: #fff;
+  color: v.$white;
   max-width: 600px;
   margin: 0 auto;
 }
 
-.main-content h1 {
+.main-content h2 {
   font-size: 2.5rem;
   margin-bottom: 20px;
 }
@@ -60,7 +60,7 @@
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  width: 850px;
+  width: 870px;
 
   .search-fields {
     display: grid;

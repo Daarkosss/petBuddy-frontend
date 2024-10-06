@@ -19,7 +19,7 @@ const LandingPage = () => {
   });
 
   useEffect(() => {
-    store.selectedMenuKey = "home";
+    store.selectedMenuOption = "home";
   }, []);
 
   const renderSelectOptions = (options: Record<string, string>) => {
@@ -47,12 +47,13 @@ const LandingPage = () => {
 
   const handleSexChange = (value: string) => {
     setFilters((prev) => {
-      const animals = prev.animals?.length ? prev.animals : [{ animalType: "", offerConfigurations: [] }];
+      if (!prev.animals) {
+        return prev;
+      }
       
       return {
-        ...prev,
         animals: [{ 
-          ...animals[0],
+          ...prev.animals[0],
           offerConfigurations: [{
             attributes: {
               SEX: [value as AnimalSex],
@@ -71,14 +72,12 @@ const LandingPage = () => {
   return (
     <div className="landing-page">
       <div className="main-content">
-        <h1>
-          Welcome to Pet Buddy, a place where you can find a pet caretaker or start taking care of lovely pets
-        </h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
+        <h2>{t("landingPage.title")}</h2>
+        <p>{t("landingPage.subtitle")}</p>
       </div>
 
       <div className="search-container">
-        <h3>Find the best caretaker for your pet</h3>
+        <h3>{t("landingPage.searchTitle")}</h3>
         <div className="search-fields">
           <Form layout="inline" className="search-form">
             <Form.Item
