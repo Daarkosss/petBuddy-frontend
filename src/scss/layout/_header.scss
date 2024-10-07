@@ -19,6 +19,10 @@
       width: 20px;
       height: 20px;
       color: v.$blue-dark;
+
+      &:hover {
+        color: v.$blue-light;
+      }
     }
   }
 }
