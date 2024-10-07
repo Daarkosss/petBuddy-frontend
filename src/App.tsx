@@ -2,7 +2,6 @@ import { useKeycloak } from "@react-keycloak/web";
 import { Route, Routes } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { api } from "./api/api";
-import Home from "./pages/Home";
 import CaretakerForm from "./pages/CaretakerForm";
 import store from "./store/RootStore";
 import CaretakerSearch from "./pages/CaretakerSearch";
@@ -75,7 +74,6 @@ function App() {
         <Routes>
           {keycloak.authenticated ? (
             <>
-              <Route path="/home" element={<Home />} />
               <Route path="/caretaker/form" element={<CaretakerForm />} />
               <Route path="/caretaker/search" element={<CaretakerSearch />} />
               <Route
