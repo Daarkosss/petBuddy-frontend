@@ -23,7 +23,7 @@ const CaretakerForm = () => {
         form.setFieldsValue(data);
       })
     }
-  })
+  }, [form])
 
   const handleFileChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
     setFileList(newFileList);
@@ -75,11 +75,12 @@ const CaretakerForm = () => {
   }
 
   const handleSubmit = () => {
+    const formFields = form.getFieldsValue();
     api.getUserProfiles().then((userProfiles) => {
       if (userProfiles.hasCaretakerProfile) {
-        api.editCaretakerProfile(form.getFieldsValue());
+        api.editCaretakerProfile(formFields);
       } else {
-        api.addCaretakerProfile(form.getFieldsValue());
+        api.addCaretakerProfile(formFields);
       }
     });
   };
