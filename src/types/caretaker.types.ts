@@ -1,18 +1,18 @@
 import { PageableDTO, SortDTO } from "./pagination.types";
+import { AccountDataDTO } from "./user.types";
 
-export type CaretakerDTO = {
-  accountData: {
-    email: string;
-    name: string;
-    surname: string;
-  };
-  phoneNumber: string;
-  description: string;
+export type CaretakerBasicsDTO = {
+  accountData: AccountDataDTO;
   address: AddressDTO;
   animals: string[];
-  offers: OfferDTO[];
   numberOfRatings: number;
   avgRating: number | null;
+}
+
+export type CaretakerDetailsDTO = CaretakerBasicsDTO & {
+  phoneNumber: string;
+  description: string;
+  offers: OfferDTO[];
 }
 
 export type AddressDTO = {
@@ -50,6 +50,12 @@ export type OfferDTO = {
   };
   offerConfigurations: OfferConfigurationDTO[];
   animalAmenities: string[];
+  availabilities: AvailabilityDTO[];
+}
+
+export type AvailabilityDTO = {
+  availableFrom: string;
+  availableTo: string;
 }
 
 export type OfferConfigurationDTO = {
@@ -59,8 +65,8 @@ export type OfferConfigurationDTO = {
   selectedOptions: Record<string, string[]>;
 }
 
-export type CaretakerResponse = {
-  content: CaretakerDTO[];
+export type CaretakerBasicsResponse = {
+  content: CaretakerBasicsDTO[];
   pageable: PageableDTO;
   totalElements: number;
   totalPages: number;

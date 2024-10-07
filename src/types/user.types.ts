@@ -1,13 +1,15 @@
 export type UserProfiles = {
-  accountData: {
-    email: string;
-    name: string;
-    surname: string,
-    profilePicture: {
-      blob: string;
-      url: string;
-    };
-  };
+  accountData: AccountDataDTO;
   hasClientProfile: boolean;
   hasCaretakerProfile: boolean;
+};
+
+export type AccountDataDTO = {
+  email: string;
+  name: string;
+  surname: string;
+  profilePicture: {
+    blob: string;
+    url: string;
+  };
 };
