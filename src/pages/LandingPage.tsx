@@ -4,8 +4,11 @@ import { useTranslation } from "react-i18next";
 import Voivodeship from "../models/Voivodeship";
 import { useEffect, useState } from "react";
 import store from "../store/RootStore";
-import { AnimalSex, CaretakerSearchFilters } from "../types";
+import { CaretakerSearchFilters } from "../types";
 import { useNavigate } from "react-router-dom";
+import DatePicker, { Value } from "react-multi-date-picker";
+import DatePanel from "react-multi-date-picker/plugins/date_panel";
+import weekends from "react-multi-date-picker/plugins/highlight_weekends"
 
 const LandingPage = () => {
   const { t } = useTranslation();
@@ -16,6 +19,7 @@ const LandingPage = () => {
     cityLike: "",
     voivodeship: undefined,
     animals: [],
+    availabilities: [], // To store selected availability date ranges
   });
 
   useEffect(() => {
@@ -45,25 +49,14 @@ const LandingPage = () => {
     }));
   };
 
-  const handleSexChange = (value: string) => {
-    setFilters((prev) => {
-      if (!prev.animals) {
-        return prev;
-      }
-      
-      return {
-        animals: [{ 
-          ...prev.animals[0],
-          offerConfigurations: [{
-            attributes: {
-              SEX: [value as AnimalSex],
-            },
-          }],
-        }],
-      };
-    });
+  const handleAvailabilitiesChange = (dates: Value[][]) => {
+    // const formattedDates = dates.map(date => date.format("YYYY-MM-DD"));
+    setFilters((prev) => ({
+      ...prev,
+      availability: dates, // Store the selected date ranges
+    }));
   };
-  
+
   const handleSearch = async () => {
     console.log("filters", filters);
     navigate("/caretaker/search", { state: { filters } });
@@ -122,14 +115,18 @@ const LandingPage = () => {
               </Select>
             </Form.Item>
 
-            <Form.Item layout="vertical" label={t("sex")}>
-              <Select disabled={!filters.animals?.[0]}
-                className="search-select"
-                placeholder={t("placeholder.sex")}
-                onChange={handleSexChange}
-              >
-                {renderSelectOptions({ MALE: t("male"), SHE: t("she") })}
-              </Select>
+            <Form.Item layout="vertical" label={t("availability")}>
+              <DatePicker
+                value={filters.availabilities}
+                onChange={handleAvailabilitiesChange}
+                multiple
+                range
+                format='DD-MM-YYYY'
+                plugins={[
+                  weekends(),
+                  <DatePanel sort="date" style={{ width: 150 }} />
+                ]}
+              />
             </Form.Item>
 
             <Button className="search-button" onClick={handleSearch} icon={<SearchOutlined />}>
