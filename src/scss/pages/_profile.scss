@@ -1,0 +1,56 @@
+@use "../helpers/variables" as v;
+
+.profile-container {
+  display: flex;
+  height: 100vh;
+  color: v.$tertiary-color;
+
+  .profile-left-data {
+    flex: 3;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    .profile-left-upper-container {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: start;
+      gap: 20px;
+
+      .profile-user {
+        .profile-user-nick {
+          text-align: start;
+        }
+
+        .profile-rating {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          align-items: start;
+          gap: 10px;
+          .profile-rating-stars {
+            color: v.$tertiary-color;
+          }
+        }
+      }
+    }
+  }
+
+  .profile-right-comments {
+    flex: 5;
+    padding: 20px;
+    overflow-y: auto;
+    max-height: 100vh;
+
+    /* hide scrollbar */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+  }
+
+  /* hide scrollbar */
+  .profile-right-comments::-webkit-scrollbar {
+    display: none; /* Chrome, Safari i Opera */
+  }
+}
