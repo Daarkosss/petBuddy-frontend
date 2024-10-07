@@ -72,14 +72,6 @@
     "loginOrRegister": "Login or register with Keycloak"
   },
 
-  "home": {
-    "title": "Welcome home, message from backend:",
-    "requestMessage": "Request message",
-    "fetchToken": "Fetch xsrf token",
-    "changeCaretakerForm": "Change caretaker form",
-    "searchCaretakers": "Search caretakers"
-  },
-
   "profileSelection": {
     "title": "Choose your profile",
     "client": "Client",
@@ -114,5 +106,9 @@
     "title": "Welcome to Pet Buddy, a place where you can find a pet caretaker or start taking care of other people pets",
     "subtitle": "Use search bar below to find caretaker or or authenticate for more options.",
     "searchTitle": "Find the best caretaker for your pet"
-  }
+  },
+
+  "home": "Home",
+  "searchCaretakers": "Search caretakers",
+  "aboutUs": "About Us"
 }

@@ -15,17 +15,17 @@ const PageHeader = observer(() => {
   const menuItems = [
     {
       key: "home",
-      label: "Home",
+      label: t("home"),
       onClick: () => navigate("/")
     },
     {
       key: "caretakerSearch",
-      label: "Search Caretakers",
+      label: t("searchCaretakers"),
       onClick: () => navigate("/caretaker/search")
     },
     {
       key: "aboutUs",
-      label: "About Us"
+      label: t("aboutUs"),
     }
   ]
 
@@ -34,16 +34,21 @@ const PageHeader = observer(() => {
       <div className="logo" onClick={() => navigate("/")}>
         <img src="/favicon.png" alt="Logo" />
       </div>
-      <Menu mode="horizontal" selectedKeys={[store.selectedMenuOption]} items={menuItems}>
+      <Menu
+        mode="horizontal"
+        disabledOverflow
+        selectedKeys={[store.selectedMenuOption]} 
+        items={menuItems}
+      >
 
       </Menu>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "20px" }}>
+      <div className="right-corner">
         <LanguageSwitcher/>
         {keycloak.authenticated 
-          ? <Button className="logout-button" onClick={() => keycloak.logout()}>
+          ? <Button type="primary" className="auth-button" onClick={() => keycloak.logout()}>
             {t("logout")}
           </Button>
-          : <Button type="primary" className="login-button" onClick={() => keycloak.login()}>
+          : <Button type="primary" className="auth-button" onClick={() => keycloak.login()}>
             Login or Register
           </Button>
         }

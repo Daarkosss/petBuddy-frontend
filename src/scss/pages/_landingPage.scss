@@ -11,10 +11,14 @@
   }
 }
 
-.login-button {
-  background-color: #003366;
-  color: #fff;
-  border: none;
+.auth-button {
+  background-color: v.$blue-dark;
+  height: 38px;
+
+  &:hover,
+  &:focus {
+    background: v.$blue-light !important;
+  }
 }
 
 .landing-page {

@@ -72,14 +72,6 @@
     "loginOrRegister": "Zaloguj się za pomocą Keycloaka"
   },
 
-  "home": {
-    "title": "Witamy, wiadomość z backendu:",
-    "requestMessage": "Testowy request",
-    "fetchToken": "Pobierz token xsrf",
-    "changeCaretakerForm": "Zmień dane opiekuna",
-    "searchCaretakers": "Wyszukaj opiekunów"
-  },
-
   "profileSelection": {
     "title": "Wybierz profil",
     "client": "Klient",
@@ -114,5 +106,9 @@
     "title": "Witamy w Pet Buddy, miejscu gdzie możesz znaleźć opiekuna dla swojego pupila lub samemu zacząć opiekować się zwierzętami innych osób",
     "subtitle": "Użyj poniższego paska wyszukiwania, aby znaleźć opiekuna lub uwierzytelnij się, aby uzyskać więcej opcji.",
     "searchTitle": "Znajdz najlepszego opiekun dla swojego pupila"
-  }
+  },
+  
+  "home": "Strona główna",
+  "searchCaretakers": "Wyszukaj opiekunów",
+  "aboutUs": "O nas"
 }
