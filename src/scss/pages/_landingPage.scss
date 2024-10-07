@@ -72,19 +72,10 @@
     gap: 15px;
 
     .search-button {
+      @extend .search-button;
       align-self: flex-end;
       width: 120px;
       height: 40px;
-      font-size: 16px;
-      color: v.$white;
-      background: v.$orange-medium;
-      
-      &:hover,
-      &:focus {
-        color: v.$white;
-        background: v.$orange-light !important;
-        border: v.$white;
-      }
     }
   }
 }

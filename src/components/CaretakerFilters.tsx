@@ -172,7 +172,7 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
           })}
         </Select>
         {renderAnimalFilters()}
-        <Button type="primary" onClick={handleSearch} className="button-search">
+        <Button type="primary" onClick={handleSearch} className="search-button">
           {t("search")}
         </Button>
       </div>
