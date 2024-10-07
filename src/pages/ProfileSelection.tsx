@@ -29,10 +29,11 @@ const ProfileSelection: React.FC<ProfileSelectionProps> = ({
         const userProfiles = await api.getUserProfiles();
         if ("hasCaretakerProfile" in userProfiles) {
           setHasCaretakerProfile(userProfiles.hasCaretakerProfile);
-          setIsRequesting(false);
         }
       } catch (error) {
         console.log("Failed to fetch user profiles data");
+      } finally {
+        setIsRequesting(false);
       }
     };
 

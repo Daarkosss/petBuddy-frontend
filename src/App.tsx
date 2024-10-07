@@ -73,15 +73,22 @@ function App() {
       <Content className="page-content">
         <Routes>
           {keycloak.authenticated ? (
-            <>
-              <Route path="/caretaker/form" element={<CaretakerForm />} />
-              <Route path="/caretaker/search" element={<CaretakerSearch />} />
+            store.user.profile?.selected_profile ? (
+              <>
+                <Route path="/caretaker/form" element={<CaretakerForm />} />
+                <Route path="/caretaker/search" element={<CaretakerSearch />} />
+                <Route
+                  path="/profile-selection"
+                  element={<ProfileSelection isUserDataFetched={isUserDataFetched} />}
+                />
+                <Route path="*" element={<LandingPage />} />
+              </>
+            ) : (
               <Route
-                path="/profile-selection"
+                path="/*"
                 element={<ProfileSelection isUserDataFetched={isUserDataFetched} />}
               />
-              <Route path="*" element={<LandingPage />} />
-              </>
+            )
           ) : (
             <>
               <Route path="/caretaker/search" element={<CaretakerSearch />} />
