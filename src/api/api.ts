@@ -126,7 +126,7 @@ class API {
     try {
       const response = await this.authorizedFetch<UserProfiles>(
         "GET",
-        "user/available-profiles"
+        "api/user/available-profiles"
       );
       return response;
     } catch (error: unknown) {
