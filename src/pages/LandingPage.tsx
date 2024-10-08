@@ -91,7 +91,7 @@ const LandingPage = () => {
                 placeholder={t("placeholder.voivodeship")}
                 className="input-field"
                 allowClear
-                style={{ width: "200px" }}
+                style={{ width: "180px" }}
                 value={filters.voivodeship}
                 onChange={handleVoivodeshipChange}
               >
@@ -115,12 +115,14 @@ const LandingPage = () => {
               </Select>
             </Form.Item>
 
-            <Form.Item layout="vertical" label={t("availability")}>
+            <Form.Item layout="vertical" label={t("date")}>
               <DatePicker
                 value={filters.availabilities}
                 onChange={handleAvailabilitiesChange}
+                placeholder={t("placeholder.date")}
                 multiple
                 range
+                style={{ height: 30, width: 190 }}
                 format='DD-MM-YYYY'
                 plugins={[
                   weekends(),

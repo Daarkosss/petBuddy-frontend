@@ -54,7 +54,8 @@
     "phoneNumber": "e.g. 000000000",
     "description": "e.g. I have been taking care of animals for 2 years. My clients are always happy...",
     "sex": "e.g. Male",
-    "animalType": "e.g. Dog"
+    "animalType": "e.g. Dog",
+    "date": "e.g. 01.10.2024 - 08.10.2024"
   },
 
   "personalData": {
@@ -110,5 +111,7 @@
 
   "home": "Home",
   "searchCaretakers": "Search caretakers",
-  "aboutUs": "About Us"
+  "aboutUs": "About Us",
+
+  "date": "Date"
 }

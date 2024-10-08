@@ -54,7 +54,8 @@
     "phoneNumber": "np. 000000000",
     "description": "np. Zajmuje się opieką nad zwierzętami już od 2 lat. Moi klienci zawsze są zadowoleni...",
     "sex": "np. Samiec",
-    "animalType": "np. Pies"
+    "animalType": "np. Pies",
+    "date": "np. 01.10.2024 - 08.10.2024"
   },
 
   "personalData": {
@@ -110,5 +111,7 @@
   
   "home": "Strona główna",
   "searchCaretakers": "Wyszukaj opiekunów",
-  "aboutUs": "O nas"
+  "aboutUs": "O nas",
+
+  "date": "Data"
 }
