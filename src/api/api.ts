@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
 import store from "../store/RootStore";
-import { CaretakerResponse, CaretakerSearchFilters, PagingParams, CaretakerFormFields, UserProfiles } from "../types";
+import { CaretakerBasicsResponse, CaretakerSearchFilters, PagingParams, CaretakerFormFields, UserProfiles, CaretakerDetailsDTO } from "../types";
 
 const backendHost =
   import.meta.env.VITE_BACKEND_HOST || window.location.hostname;
@@ -81,7 +81,7 @@ class API {
   async getCaretakers(
     pagingParams: PagingParams,
     filters: CaretakerSearchFilters
-  ): Promise<CaretakerResponse> {
+  ): Promise<CaretakerBasicsResponse> {
     const queryParams = new URLSearchParams({
       page: pagingParams.page.toString(),
       size: pagingParams.size.toString(),
@@ -115,7 +115,7 @@ class API {
       })),
     }));
 
-    return this.authorizedFetch<CaretakerResponse>(
+    return this.authorizedFetch<CaretakerBasicsResponse>(
       "POST",
       `api/caretaker?${queryString}`,
       requestBody
@@ -134,6 +134,23 @@ class API {
         throw new Error(`Failed to fetch user profiles: ${error.message}`);
       }
       throw new Error("An unknown error occurred while fetching user profiles");
+    }
+  }
+
+  async getCaretakerDetails(email: string): Promise<CaretakerDetailsDTO> {
+    try {
+      const response = await this.authorizedFetch<CaretakerDetailsDTO>(
+        "GET",
+        `api/caretaker/${email}`
+      );
+      return response;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new Error(`Failed to fetch caretaker profile: ${error.message}`);
+      }
+      throw new Error(
+        "An unknown error occurred while fetching caretaker profile"
+      );
     }
   }
 

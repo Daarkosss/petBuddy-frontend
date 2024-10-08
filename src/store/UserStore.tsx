@@ -5,7 +5,6 @@ import { getCookie, removeCookie } from "typescript-cookie";
 export type Profile = "Client" | "Caretaker" | null;
 
 export interface UserProfile {
-  username?: string;
   email?: string;
   firstName?: string;
   lastName?: string;
