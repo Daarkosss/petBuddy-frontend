@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Form, Input, Button, GetProp, Upload, UploadProps, UploadFile, Select, Card, Space } from "antd";
 import ImgCrop from "antd-img-crop";
 import { useTranslation } from "react-i18next";
@@ -6,6 +6,7 @@ import { Header } from "../components/Header";
 import { api } from "../api/api";
 import { CaretakerFormFields } from "../types";
 import Voivodeship from "../models/Voivodeship";
+import store from "../store/RootStore";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
@@ -15,6 +16,14 @@ const CaretakerForm = () => {
   const [fileList, setFileList] = useState<UploadFile[]>([]); // Not send to backend yet, will be done when backend is ready
   const [form] = Form.useForm<CaretakerFormFields>();
   const allowedSpecialKeys = ["Backspace", "Delete", "ArrowLeft", "ArrowRight"];
+  
+  useEffect(() => {
+    if (store.user.profile?.email) {
+      api.getCaretakerDetails(store.user.profile?.email).then((data) => {
+        form.setFieldsValue(data);
+      })
+    }
+  }, [form])
 
   const handleFileChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
     setFileList(newFileList);
@@ -66,11 +75,12 @@ const CaretakerForm = () => {
   }
 
   const handleSubmit = () => {
+    const formFields = form.getFieldsValue();
     api.getUserProfiles().then((userProfiles) => {
       if (userProfiles.hasCaretakerProfile) {
-        api.editCaretakerProfile(form.getFieldsValue());
+        api.editCaretakerProfile(formFields);
       } else {
-        api.addCaretakerProfile(form.getFieldsValue());
+        api.addCaretakerProfile(formFields);
       }
     });
   };

@@ -1,14 +1,8 @@
-import { CaretakerDTO, OfferDTO } from "../types";
+import { AccountDataDTO, CaretakerBasicsDTO, CaretakerDetailsDTO, OfferDTO } from "../types";
 import Voivodeship from "./Voivodeship";
 
-class Caretaker {
-  accountData: {
-    email: string;
-    name: string;
-    surname: string;
-  };
-  phoneNumber: string;
-  description: string;
+export class CaretakerBasics {
+  accountData: AccountDataDTO;
   address: {
     city: string;
     zipCode: string;
@@ -18,24 +12,30 @@ class Caretaker {
     apartmentNumber: string;
   };
   animals: string[];
-  offers: OfferDTO[];
   numberOfRatings: number;
   avgRating: number | null;
 
-  constructor(data: CaretakerDTO) {
+  constructor(data: CaretakerBasicsDTO) {
     this.accountData = data.accountData;
-    this.phoneNumber = data.phoneNumber;
-    this.description = data.description;
     this.address = {
       ...data.address,
       voivodeship: new Voivodeship(data.address.voivodeship),
     };
     this.animals = data.animals;
-    this.offers = data.offers;
     this.numberOfRatings = data.numberOfRatings;
     this.avgRating = data.avgRating;
   }
 }
-  
-export default Caretaker;
-  
+
+export class CaretakerDetails extends CaretakerBasics {
+  phoneNumber: string;
+  description: string;
+  offers: OfferDTO[];
+
+  constructor(data: CaretakerDetailsDTO) {
+    super(data);
+    this.phoneNumber = data.phoneNumber;
+    this.description = data.description;
+    this.offers = data.offers;
+  }
+}  
