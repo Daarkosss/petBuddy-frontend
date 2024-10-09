@@ -33,13 +33,13 @@ const LandingPage = () => {
         <p>{t("landingPage.subtitle")}</p>
       </div>
 
+      <div className="main-image">
+        <img src="/caretakerImage.png" alt="Dog and Woman" />
+      </div>
+
       <div className="search-container">
         <h3>{t("landingPage.searchTitle")}</h3>
         <SearchBar filters={filters} setFilters={setFilters} handleSearch={handleSearch} />
-      </div>
-
-      <div className="main-image">
-        <img src="/caretakerImage.png" alt="Dog and Woman" />
       </div>
     </div>
   );

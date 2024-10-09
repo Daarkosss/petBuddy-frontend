@@ -7,11 +7,15 @@
   background-color: v.$white;
   padding: 0 50px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  position: relative;
+
+  .logo {
+    cursor: pointer;
+  }
 
   .right-corner {
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 20px;
 
     .language-switcher {
@@ -23,6 +27,48 @@
       &:hover {
         color: v.$blue-light;
       }
+    }
+  }
+
+  .menu-desktop {
+    display: block;
+  }
+
+  .menu-mobile {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0 20px;
+
+    .menu-desktop {
+      display: none;
+    }
+
+    .menu-mobile {
+      display: block;
+      position: absolute;
+      left: 20px; /* Align hamburger menu to the left */
+      top: 4px; /* Center it vertically within the header */
+    }
+
+    .logo {
+      margin-left: 40px;
+    }
+
+    .right-corner {
+      gap: 10px;
+    }
+
+    .auth-button {
+      font-size: 14px;
+    }
+  }
+
+  @media (max-width: 480px) {
+
+    .auth-button {
+      font-size: 11px;
     }
   }
 }
