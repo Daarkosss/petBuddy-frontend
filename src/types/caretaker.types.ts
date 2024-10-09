@@ -1,4 +1,3 @@
-import { Value } from "react-multi-date-picker";
 import { PageableDTO, SortDTO } from "./pagination.types";
 
 export type CaretakerDTO = {
@@ -79,11 +78,15 @@ export type CaretakerSearchFilters = {
   cityLike?: string;
   voivodeship?: string;
   animals?: AnimalFilter[];
-  availabilities?: Value[][];
 }
 
 export type AnimalSex = "MALE" | "SHE";
 export type AnimalSize = "SMALL" | "MEDIUM" | "BIG"; 
+
+export type Availability = {
+  availableFrom: string;
+  availableTo: string;
+}
 
 export type OfferConfiguration = {
   attributes?: {
@@ -93,6 +96,7 @@ export type OfferConfiguration = {
   minPrice?: number;
   maxPrice?: number;
   amenities?: string[];
+  availabilities: Availability[];
 };
 
 export type AnimalFilter = {

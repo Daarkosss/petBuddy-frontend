@@ -8,7 +8,7 @@ import { CaretakerSearchFilters } from "../types";
 import { useNavigate } from "react-router-dom";
 import DatePicker, { Value } from "react-multi-date-picker";
 import DatePanel from "react-multi-date-picker/plugins/date_panel";
-import weekends from "react-multi-date-picker/plugins/highlight_weekends"
+import weekends from "react-multi-date-picker/plugins/highlight_weekends";
 
 const LandingPage = () => {
   const { t } = useTranslation();
@@ -18,8 +18,7 @@ const LandingPage = () => {
     personalDataLike: "",
     cityLike: "",
     voivodeship: undefined,
-    animals: [],
-    availabilities: [], // To store selected availability date ranges
+    animals: []
   });
 
   useEffect(() => {
@@ -49,12 +48,29 @@ const LandingPage = () => {
     }));
   };
 
-  const handleAvailabilitiesChange = (dates: Value[][]) => {
-    // const formattedDates = dates.map(date => date.format("YYYY-MM-DD"));
-    setFilters((prev) => ({
-      ...prev,
-      availability: dates, // Store the selected date ranges
-    }));
+  const formatDateTime = (date: string): string => {
+    return `${date} 00:00:00.000 +0100`;
+  };
+
+  const handleAvailabilitiesChange = (availabilities: Value[][]) => {
+    setFilters((prev) => {
+      if (!prev.animals || prev.animals.length === 0) {
+        return prev;
+      }
+  
+      return {
+        ...prev,
+        animals: [{ 
+          ...prev.animals[0],
+          offerConfigurations: [{
+            availabilities: availabilities.map((dateRange) => ({
+              availableFrom: formatDateTime(dateRange[0] as string) || "",
+              availableTo: formatDateTime(dateRange[1] as string) || "",
+            })),
+          }],
+        }],
+      };
+    });
   };
 
   const handleSearch = async () => {
@@ -117,13 +133,14 @@ const LandingPage = () => {
 
             <Form.Item layout="vertical" label={t("date")}>
               <DatePicker
-                value={filters.availabilities}
+                value={filters.animals?.[0]?.offerConfigurations?.[0]?.availabilities.map((date) => [date.availableFrom, date.availableTo])}
+                disabled={filters.animals?.length === 0}
                 onChange={handleAvailabilitiesChange}
                 placeholder={t("placeholder.date")}
                 multiple
                 range
-                style={{ height: 30, width: 190 }}
-                format='DD-MM-YYYY'
+                format="YYYY-MM-DD"
+                style={{ width: 185 }}
                 plugins={[
                   weekends(),
                   <DatePanel sort="date" style={{ width: 150 }} />

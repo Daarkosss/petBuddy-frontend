@@ -68,11 +68,6 @@
 
   "perPage": "na stronę",
 
-  "loginPage": {
-    "proceedInfo": "Aby kontynuować musisz być zalogowany",
-    "loginOrRegister": "Zaloguj się za pomocą Keycloaka"
-  },
-
   "profileSelection": {
     "title": "Wybierz profil",
     "client": "Klient",
@@ -113,5 +108,6 @@
   "searchCaretakers": "Wyszukaj opiekunów",
   "aboutUs": "O nas",
 
-  "date": "Data"
+  "date": "Data",
+  "loginOrRegister": "Zaloguj się lub zarejestruj"
 }

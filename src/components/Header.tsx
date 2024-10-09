@@ -49,7 +49,7 @@ const PageHeader = observer(() => {
             {t("logout")}
           </Button>
           : <Button type="primary" className="auth-button" onClick={() => keycloak.login()}>
-            Login or Register
+            {t("loginOrRegister")}
           </Button>
         }
       </div>
