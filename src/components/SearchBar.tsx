@@ -3,11 +3,10 @@ import { Button, Form, Select, Input } from "antd";
 import { SearchOutlined, EnvironmentOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 import Voivodeship from "../models/Voivodeship";
-import DatePicker, { Value } from "react-multi-date-picker";
-import DatePanel from "react-multi-date-picker/plugins/date_panel";
-import weekends from "react-multi-date-picker/plugins/highlight_weekends";
 import { CaretakerSearchFilters } from "../types";
 import { Dispatch, SetStateAction } from "react";
+import MultiDatePicker from "./MultiDatePicker";
+import { Value } from "react-multi-date-picker";
 
 interface SearchBarProps {
   filters: CaretakerSearchFilters;
@@ -111,19 +110,10 @@ const SearchBar: React.FC<SearchBarProps> = ({ filters, setFilters, handleSearch
       </Form.Item>
 
       <Form.Item layout="vertical" label={t("date")}>
-        <DatePicker
-          value={filters.animals?.[0]?.offerConfigurations?.[0]?.availabilities.map((date) => [date.availableFrom, date.availableTo])}
-          disabled={filters.animals?.length === 0}
-          onChange={handleAvailabilitiesChange}
-          placeholder={t("placeholder.date")}
-          multiple
-          range
-          format="YYYY-MM-DD"
-          style={{ width: 185 }}
-          plugins={[
-            weekends(),
-            <DatePanel sort="date" style={{ width: 150 }} />
-          ]}
+        <MultiDatePicker
+          handleChange={handleAvailabilitiesChange}
+          dateValue={filters.animals?.[0]?.offerConfigurations?.[0]?.availabilities.map((date) => [date.availableFrom, date.availableTo])}
+          isDisabled={filters.animals?.length === 0}
         />
       </Form.Item>
 
