@@ -11,7 +11,7 @@ type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 const CaretakerForm = () => {
   const { t } = useTranslation();
 
-  const [fileList, setFileList] = useState<UploadFile[]>([]); // Not send to backend yet, will be done when backend is ready
+  const [fileList, setFileList] = useState<UploadFile[]>([]); // Not send to server yet, will be done when backend ready
   const [form] = Form.useForm<CaretakerFormFields>();
   const allowedSpecialKeys = ["Backspace", "Delete", "ArrowLeft", "ArrowRight"];
 

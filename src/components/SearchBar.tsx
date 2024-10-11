@@ -112,7 +112,9 @@ const SearchBar: React.FC<SearchBarProps> = ({ filters, setFilters, handleSearch
       <Form.Item layout="vertical" label={t("date")}>
         <MultiDatePicker
           handleChange={handleAvailabilitiesChange}
-          dateValue={filters.animals?.[0]?.offerConfigurations?.[0]?.availabilities.map((date) => [date.availableFrom, date.availableTo])}
+          dateValue={filters.animals?.[0]?.offerConfigurations?.[0]?.availabilities.map(
+            (date) => [date.availableFrom, date.availableTo]
+          )}
           isDisabled={filters.animals?.length === 0}
         />
       </Form.Item>
