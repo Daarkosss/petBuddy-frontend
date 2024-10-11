@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
 import store from "../store/RootStore";
-import { CaretakerBasicsResponse, CaretakerSearchFilters, PagingParams, CaretakerFormFields, UserProfiles, CaretakerDetailsDTO } from "../types";
+import { CaretakerBasicsResponse, CaretakerSearchFilters, PagingParams, CaretakerFormFields, UserProfiles, CaretakerDetailsDTO, OfferDTO, OfferConfigurationDTO, OfferConfigurationWithId } from "../types";
 
 const backendHost =
   import.meta.env.VITE_BACKEND_HOST || window.location.hostname;
@@ -167,6 +167,29 @@ class API {
       "PUT",
       "api/caretaker/edit",
       data
+    );
+  }
+
+  async addOrEditOffer(offer: OfferDTO): Promise<void> {
+    return this.authorizedFetch<void>(
+      "POST",
+      "api/caretaker/offer/add-or-edit",
+      offer
+    );
+  }
+
+  async editOfferConfiguration(configurationId: number, offerConfiguration: OfferConfigurationDTO): Promise<void> {
+    return this.authorizedFetch<void>(
+      "PUT",
+      `api/caretaker/offer/configuration/${configurationId}/edit`,
+      offerConfiguration
+    );
+  }
+
+  async deleteOfferConfiguration(configurationId: number): Promise<void> {
+    return this.authorizedFetch<void>(
+      "DELETE",
+      `api/caretaker/offer/configuration/${configurationId}/delete`
     );
   }
 }

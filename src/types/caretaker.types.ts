@@ -1,5 +1,6 @@
 import { PageableDTO, SortDTO } from "./pagination.types";
 import { AccountDataDTO } from "./user.types";
+import { OfferConfiguration, OfferDTOWithId } from "./offer.types";
 
 export type CaretakerBasicsDTO = {
   accountData: AccountDataDTO;
@@ -12,7 +13,7 @@ export type CaretakerBasicsDTO = {
 export type CaretakerDetailsDTO = CaretakerBasicsDTO & {
   phoneNumber: string;
   description: string;
-  offers: OfferDTO[];
+  offers: OfferDTOWithId[];
 }
 
 export type AddressDTO = {
@@ -42,29 +43,6 @@ export type VoivodeshipDTO =
   | "WIELKOPOLSKIE"
   | "ZACHODNIOPOMORSKIE";
 
-export type OfferDTO = {
-  id: number;
-  description: string;
-  animal: {
-    animalType: string;
-  };
-  offerConfigurations: OfferConfigurationDTO[];
-  animalAmenities: string[];
-  availabilities: AvailabilityDTO[];
-}
-
-export type AvailabilityDTO = {
-  availableFrom: string;
-  availableTo: string;
-}
-
-export type OfferConfigurationDTO = {
-  id: number;
-  description: string;
-  dailyPrice: number;
-  selectedOptions: Record<string, string[]>;
-}
-
 export type CaretakerBasicsResponse = {
   content: CaretakerBasicsDTO[];
   pageable: PageableDTO;
@@ -85,19 +63,6 @@ export type CaretakerSearchFilters = {
   voivodeship?: string;
   animals?: AnimalFilter[];
 }
-
-export type AnimalSex = "MALE" | "SHE";
-export type AnimalSize = "SMALL" | "MEDIUM" | "BIG"; 
-
-export type OfferConfiguration = {
-  attributes?: {
-    SIZE?: AnimalSize[];
-    SEX?: AnimalSex[];
-  };
-  minPrice?: number;
-  maxPrice?: number;
-  amenities?: string[];
-};
 
 export type AnimalFilter = {
   animalType: string;
