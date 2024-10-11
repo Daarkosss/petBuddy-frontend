@@ -164,7 +164,7 @@ class API {
 
   async editCaretakerProfile(data: CaretakerFormFields): Promise<void> {
     return this.authorizedFetch<void>(
-      "PATCH",
+      "PUT",
       "api/caretaker/edit",
       data
     );

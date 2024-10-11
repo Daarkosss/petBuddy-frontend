@@ -7,6 +7,7 @@ import { api } from "../api/api";
 import { CaretakerFormFields } from "../types";
 import Voivodeship from "../models/Voivodeship";
 import store from "../store/RootStore";
+import { toast } from "react-toastify";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
@@ -18,7 +19,7 @@ const CaretakerForm = () => {
   const allowedSpecialKeys = ["Backspace", "Delete", "ArrowLeft", "ArrowRight"];
   
   useEffect(() => {
-    if (store.user.profile?.email) {
+    if (store.user.profile?.email && store.user.profile?.hasCaretakerProfile) {
       api.getCaretakerDetails(store.user.profile?.email).then((data) => {
         form.setFieldsValue(data);
       })
@@ -74,15 +75,32 @@ const CaretakerForm = () => {
     }
   }
 
-  const handleSubmit = () => {
+  const handleAddCaretaker = async (data: CaretakerFormFields) => {
+    try {
+      await api.addCaretakerProfile(data);
+      toast.success(t("success.createCaretakerProfile"));
+      store.user.hasCaretakerProfile = true;
+    } catch (error) {
+      toast.error(t("error.createCaretakerProfile"));
+    }
+  };
+  
+  const handleEditCaretaker = async (data: CaretakerFormFields) => {
+    try {
+      await api.editCaretakerProfile(data);
+      toast.success(t("success.editCaretakerForm"));
+    } catch (error) {
+      toast.error(t("error.editCaretakerForm"));
+    }
+  };
+
+  const handleSubmit = async () => {
     const formFields = form.getFieldsValue();
-    api.getUserProfiles().then((userProfiles) => {
-      if (userProfiles.hasCaretakerProfile) {
-        api.editCaretakerProfile(formFields);
-      } else {
-        api.addCaretakerProfile(formFields);
-      }
-    });
+    if (store.user.profile?.hasCaretakerProfile) {
+      handleEditCaretaker(formFields);
+    } else {
+      handleAddCaretaker(formFields);
+    }
   };
 
   return (
