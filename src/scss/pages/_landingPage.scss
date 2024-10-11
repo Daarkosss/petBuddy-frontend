@@ -24,7 +24,6 @@
 .landing-page {
   display: grid;
   grid-template-columns: 1fr 1.2fr;
-  background-color: linear-gradient(to right, v.$blue-dark, v.$blue-very-dark);
   height: max-content;
   position: relative;
 
@@ -39,23 +38,22 @@
   }
 }
 
-.main-content {
+.main-text {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding-top: 10vh;
   color: v.$white;
+  padding-top: 10vh;
   max-width: 600px;
   margin: 0 auto;
 
-  @media (max-width: 768px) {
-    padding-top: 5vh;
-    text-align: center;
+  @media (max-width: 1024px) {
+    padding-top: 3vh;
   }
 
-  @media (min-height: 800px) {
-    padding-top: 15vh; /* Większy padding dla urządzeń o dużej wysokości */
+  @media (max-width: 768px) {
+    text-align: center;
   }
 
   h2 {
@@ -79,7 +77,7 @@
     }
 
     @media (max-width: 480px) {
-      font-size: 1.2rem; /* Zwiększ rozmiar tekstu na mniejszych ekranach */
+      font-size: 1.2rem;
     }
   }
 }

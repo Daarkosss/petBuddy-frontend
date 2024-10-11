@@ -28,7 +28,7 @@ const LandingPage = () => {
 
   return (
     <div className="landing-page">
-      <div className="main-content">
+      <div className="main-text">
         <h2>{t("landingPage.title")}</h2>
         <p>{t("landingPage.subtitle")}</p>
       </div>

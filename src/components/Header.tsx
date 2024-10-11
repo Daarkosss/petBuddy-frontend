@@ -13,7 +13,7 @@ const PageHeader = observer(() => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { keycloak } = useKeycloak();
-  const [drawerVisible, setDrawerVisible] = useState(false); // For Drawer on smaller screens
+  const [drawerVisible, setDrawerVisible] = useState(false);
 
   const menuItems = [
     {
@@ -38,7 +38,7 @@ const PageHeader = observer(() => {
         ...item,
         onClick: () => {
           item.onClick && item.onClick();
-          setDrawerVisible(false); // Close drawer after selection
+          setDrawerVisible(false);
         },
       }))}
     />
@@ -69,6 +69,7 @@ const PageHeader = observer(() => {
       <div className="menu-desktop">
         <Menu
           mode="horizontal"
+          disabledOverflow
           selectedKeys={[store.selectedMenuOption]}
           items={menuItems}
         />
