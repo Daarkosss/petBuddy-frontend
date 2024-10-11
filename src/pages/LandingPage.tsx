@@ -22,7 +22,6 @@ const LandingPage = () => {
   }, []);
 
   const handleSearch = async () => {
-    console.log("filters", filters);
     navigate("/caretaker/search", { state: { filters } });
   };
 

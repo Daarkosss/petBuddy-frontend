@@ -176,16 +176,6 @@
       grid-template-columns: 1fr;
     }
 
-    .rmdp-container input {
-      height: 31px;
-      border-color: v.$grey-very-light;
-
-      ::placeholder {
-        color: v.$grey-light;
-        opacity: 1;
-      }
-    }
-
     .search-button {
       @extend .search-button;
       align-self: flex-end;

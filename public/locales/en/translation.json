@@ -55,7 +55,7 @@
     "description": "e.g. I have been taking care of animals for 2 years. My clients are always happy...",
     "sex": "e.g. Male",
     "animalType": "e.g. Dog",
-    "date": "e.g. 01.10.2024 - 08.10.2024"
+    "date": "Press to select date"
   },
 
   "personalData": {

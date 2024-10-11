@@ -1,3 +1,4 @@
+import { Input } from "antd";
 import { useTranslation } from "react-i18next";
 import DatePicker, { Value } from "react-multi-date-picker";
 import DatePanel from "react-multi-date-picker/plugins/date_panel";
@@ -84,6 +85,7 @@ const MultiDatePicker: React.FC<DatePickerProps> = ({ handleChange, isDisabled, 
       placeholder={t("placeholder.date")}
       multiple
       range
+      inputMode="none"
       format="YYYY-MM-DD"
       locale={i18n.language === "pl" ? calendar_pl : calendar_en}
       style={{ width: 185 }}
@@ -91,6 +93,15 @@ const MultiDatePicker: React.FC<DatePickerProps> = ({ handleChange, isDisabled, 
         weekends(),
         <DatePanel sort="date" style={{ width: 150 }} />
       ]}
+      render={(value, openCalendar) => (
+        <Input
+          value={value}
+          className="ant-input"
+          onFocus={openCalendar}
+          placeholder={t("placeholder.date")}
+          style={{ width: 185 }}
+        />
+      )}
     />
   );
 }
