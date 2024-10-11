@@ -80,7 +80,6 @@ const MultiDatePicker: React.FC<DatePickerProps> = ({ handleChange, isDisabled, 
   return (
     <DatePicker
       value={dateValue}
-      disabled={isDisabled}
       onChange={handleChange}
       placeholder={t("placeholder.date")}
       multiple
@@ -95,8 +94,8 @@ const MultiDatePicker: React.FC<DatePickerProps> = ({ handleChange, isDisabled, 
       ]}
       render={(value, openCalendar) => (
         <Input
+          disabled={isDisabled}
           value={value}
-          className="ant-input"
           onFocus={openCalendar}
           placeholder={t("placeholder.date")}
           style={{ width: 185 }}
