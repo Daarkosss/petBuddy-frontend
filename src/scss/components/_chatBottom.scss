@@ -1,0 +1,9 @@
+@use "../helpers/variables" as v;
+
+.chat-bottom-container {
+  background-color: v.$blue-dark;
+  color: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
