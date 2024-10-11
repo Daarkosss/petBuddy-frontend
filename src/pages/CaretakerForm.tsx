@@ -204,7 +204,6 @@ const CaretakerForm = () => {
                   showCount
                   autoSize={{ minRows: 2, maxRows: 4 }}
                   maxLength={1500}
-                  
                   placeholder={t("placeholder.description")}
                 />
               </Form.Item>
