@@ -9,10 +9,11 @@ import ProfileSelection from "./pages/ProfileSelection";
 import LandingPage from "./pages/LandingPage";
 import { Layout } from "antd";
 import Header from "./components/Header";
+import { observer } from "mobx-react-lite";
 
 const { Content } = Layout;
 
-function App() {
+const App = observer(() => {
   const { keycloak, initialized } = useKeycloak();
   const [isXsrfTokenFetched, setIsXsrfTokenFetched] = useState(false);
   const [isUserDataFetched, setIsUserDataFetched] = useState(false);
@@ -101,6 +102,6 @@ function App() {
       </Content>
     </Layout>
   );
-}
+});
 
 export default App;
