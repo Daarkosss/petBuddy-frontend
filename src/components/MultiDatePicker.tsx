@@ -84,13 +84,17 @@ const MultiDatePicker: React.FC<DatePickerProps> = ({ handleChange, isDisabled, 
       placeholder={t("placeholder.date")}
       multiple
       range
+      highlightToday
       inputMode="none"
       format="YYYY-MM-DD"
       locale={i18n.language === "pl" ? calendar_pl : calendar_en}
       style={{ width: 185 }}
       plugins={[
         weekends(),
-        <DatePanel sort="date" style={{ width: 150 }} />
+        <DatePanel
+          header={t("selectedDates")}
+          style={{ width: 150 }}
+        />
       ]}
       render={(value, openCalendar) => (
         <Input
