@@ -78,33 +78,19 @@ const CaretakerForm = () => {
   const handleAddCaretaker = async (data: CaretakerFormFields) => {
     try {
       await api.addCaretakerProfile(data);
-      toast.success("Opiekun został dodany pomyślnie!");
+      toast.success(t("success.createCaretakerProfile"));
       store.user.hasCaretakerProfile = true;
     } catch (error) {
-      if (error instanceof Response) {
-        if (!error.ok) {
-          toast.error("Błąd podczas dodawania opiekuna. Status: " + error.status);
-        }
-      } else {
-        console.error("Error adding caretaker:", error);
-        toast.error("Wystąpił błąd przy dodawaniu opiekuna.");
-      }
+      toast.error(t("error.createCaretakerProfile"));
     }
   };
   
   const handleEditCaretaker = async (data: CaretakerFormFields) => {
     try {
       await api.editCaretakerProfile(data);
-      toast.success("Profil opiekuna został zaktualizowany!");
+      toast.success(t("success.editCaretakerForm"));
     } catch (error) {
-      if (error instanceof Response) {
-        if (!error.ok) {
-          toast.error("Błąd podczas aktualizacji profilu opiekuna. Status: " + error.status);
-        }
-      } else {
-        console.error("Error editing caretaker:", error);
-        toast.error("Wystąpił błąd przy aktualizacji profilu opiekuna.");
-      }
+      toast.error(t("error.editCaretakerForm"));
     }
   };
 
