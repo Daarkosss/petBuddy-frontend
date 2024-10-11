@@ -7,6 +7,7 @@ import { api } from "../api/api";
 import { CaretakerFormFields } from "../types";
 import Voivodeship from "../models/Voivodeship";
 import store from "../store/RootStore";
+import { toast } from "react-toastify";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
@@ -18,7 +19,7 @@ const CaretakerForm = () => {
   const allowedSpecialKeys = ["Backspace", "Delete", "ArrowLeft", "ArrowRight"];
   
   useEffect(() => {
-    if (store.user.profile?.email) {
+    if (store.user.profile?.email && store.user.profile?.hasCaretakerProfile) {
       api.getCaretakerDetails(store.user.profile?.email).then((data) => {
         form.setFieldsValue(data);
       })
@@ -74,15 +75,46 @@ const CaretakerForm = () => {
     }
   }
 
-  const handleSubmit = () => {
-    const formFields = form.getFieldsValue();
-    api.getUserProfiles().then((userProfiles) => {
-      if (userProfiles.hasCaretakerProfile) {
-        api.editCaretakerProfile(formFields);
+  const handleAddCaretaker = async (data: CaretakerFormFields) => {
+    try {
+      await api.addCaretakerProfile(data);
+      toast.success("Opiekun został dodany pomyślnie!");
+      store.user.hasCaretakerProfile = true;
+    } catch (error) {
+      if (error instanceof Response) {
+        if (!error.ok) {
+          toast.error("Błąd podczas dodawania opiekuna. Status: " + error.status);
+        }
       } else {
-        api.addCaretakerProfile(formFields);
+        console.error("Error adding caretaker:", error);
+        toast.error("Wystąpił błąd przy dodawaniu opiekuna.");
       }
-    });
+    }
+  };
+  
+  const handleEditCaretaker = async (data: CaretakerFormFields) => {
+    try {
+      await api.editCaretakerProfile(data);
+      toast.success("Profil opiekuna został zaktualizowany!");
+    } catch (error) {
+      if (error instanceof Response) {
+        if (!error.ok) {
+          toast.error("Błąd podczas aktualizacji profilu opiekuna. Status: " + error.status);
+        }
+      } else {
+        console.error("Error editing caretaker:", error);
+        toast.error("Wystąpił błąd przy aktualizacji profilu opiekuna.");
+      }
+    }
+  };
+
+  const handleSubmit = async () => {
+    const formFields = form.getFieldsValue();
+    if (store.user.profile?.hasCaretakerProfile) {
+      handleEditCaretaker(formFields);
+    } else {
+      handleAddCaretaker(formFields);
+    }
   };
 
   return (
@@ -186,6 +218,7 @@ const CaretakerForm = () => {
                   showCount
                   autoSize={{ minRows: 2, maxRows: 4 }}
                   maxLength={1500}
+                  
                   placeholder={t("placeholder.description")}
                 />
               </Form.Item>
