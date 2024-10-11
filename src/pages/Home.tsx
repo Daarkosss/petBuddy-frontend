@@ -5,11 +5,14 @@ import { Header } from "../components/Header";
 import { Button } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import store from "../store/RootStore";
+import ChatBox from "../components/ChatBox";
 
 const Home = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [message, setMessage] = useState<string>(t("loading"));
+
+  const [recipientEmail, setRecipientEmail] = useState<string>("");
 
   useEffect(() => {
     if (!store.user.profile?.selected_profile) {
@@ -17,7 +20,7 @@ const Home = () => {
     } else {
       handleGetMessage();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleGetMessage = async () => {
@@ -48,6 +51,16 @@ const Home = () => {
         <Button variant="dark" onClick={() => navigate("/caretaker/search")}>
           {t("home.searchCaretakers")}
         </Button>
+        <form id="myForm">
+          <h3>Testowy chat. Wpisz adres email adresata:</h3>
+          <input
+            type="text"
+            value={recipientEmail}
+            onChange={(event) => setRecipientEmail(event.target.value)}
+          />
+          <button type="submit">Rozpocznij chat</button>
+          <ChatBox />
+        </form>
       </div>
     </div>
   );
