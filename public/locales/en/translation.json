@@ -116,5 +116,15 @@
 
   "date": "Date",
   "selectedDates": "Selected dates",
-  "loginOrRegister": "Login or register"
+  "loginOrRegister": "Login or register",
+
+  "error": {
+    "createCaretakerProfile": "An error occurred while creating caretaker profile",
+    "editCaretakerForm": "An error occurred while editing caretaker data"
+  },
+
+  "success": {
+    "createCaretakerProfile": "Caretaker profile has been successfully created",
+    "editCaretakerForm": "Caretaker data has been successfully updated"
+  }
 }

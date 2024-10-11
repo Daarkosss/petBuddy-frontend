@@ -5,12 +5,12 @@ import { getCookie, removeCookie } from "typescript-cookie";
 export type Profile = "Client" | "Caretaker" | null;
 
 export interface UserProfile {
-  username?: string;
   email?: string;
   firstName?: string;
   lastName?: string;
   token?: string;
   selected_profile: Profile;
+  hasCaretakerProfile?: boolean;
 }
 
 class UserStore {
@@ -40,7 +40,7 @@ class UserStore {
     this.profile = this.getProfileFromStorage();
   }
 
-  getProfileFromStorage() {
+  getProfileFromStorage(): UserProfile | null {
     const profile = localStorage.getItem("profile");
     if (profile) {
       return JSON.parse(profile);
@@ -52,6 +52,12 @@ class UserStore {
   setSelectedProfile(selected_profile?: Profile) {
     if (this.profile && selected_profile) {
       this.profile.selected_profile = selected_profile;
+    }
+  }
+
+  set hasCaretakerProfile(value: boolean) {
+    if (this.profile) {
+      this.profile.hasCaretakerProfile = value;
     }
   }
 

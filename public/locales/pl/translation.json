@@ -111,5 +111,15 @@
 
   "date": "Data",
   "selectedDates": "Wybrane daty",
-  "loginOrRegister": "Zaloguj się lub zarejestruj"
+  "loginOrRegister": "Zaloguj się lub zarejestruj",
+
+  "error": {
+    "createCaretakerProfile": "Wystąpił błąd podczas tworzenia profilu opiekuna",
+    "editCaretakerForm": "Wystąpił błąd podczas edycji danych opiekuna"
+  },
+
+  "success": {
+    "createCaretakerProfile": "Profil opiekuna został pomyślnie utworzony",
+    "editCaretakerForm": "Dane opiekuna zostały pomyślnie zaktualizowane"
+  }
 }

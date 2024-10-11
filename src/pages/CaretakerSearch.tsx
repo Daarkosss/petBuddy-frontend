@@ -4,7 +4,7 @@ import { Table, Button, Spin, Rate } from "antd";
 import { SorterResult, TablePaginationConfig, FilterValue, ColumnsType } from "antd/es/table/interface";
 import { api } from "../api/api";
 import { useTranslation } from "react-i18next";
-import Caretaker from "../models/Caretaker";
+import { CaretakerBasics } from "../models/Caretaker";
 import { CaretakerSearchFilters, OfferConfiguration } from "../types";
 import CaretakerFilters from "../components/CaretakerFilters";
 import store from "../store/RootStore";
@@ -13,7 +13,7 @@ const CaretakerList = () => {
   const { t } = useTranslation();
   const location = useLocation();
 
-  const [caretakers, setCaretakers] = useState<Caretaker[]>([]);
+  const [caretakers, setCaretakers] = useState<CaretakerBasics[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -52,7 +52,7 @@ const CaretakerList = () => {
     setError(null);
     try {
       const data = await api.getCaretakers(pagingParams, filters);
-      setCaretakers(data.content.map((caretaker) => new Caretaker(caretaker)));
+      setCaretakers(data.content.map((caretaker) => new CaretakerBasics(caretaker)));
       setPagination({
         current: data.pageable.pageNumber + 1,
         pageSize: data.pageable.pageSize,
@@ -74,7 +74,7 @@ const CaretakerList = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagingParams]);
 
-  const mapSortDirection = (sorter: SorterResult<Caretaker>) => {
+  const mapSortDirection = (sorter: SorterResult<CaretakerBasics>) => {
     if (sorter.order) {
       return sorter.order === "ascend" ? "ASC" : "DESC";
     } else {
@@ -85,7 +85,7 @@ const CaretakerList = () => {
   const handleTableChange = (
     pagination: TablePaginationConfig,
     _filters: Record<string, FilterValue | null>,
-    sorter: SorterResult<Caretaker> | SorterResult<Caretaker>[]
+    sorter: SorterResult<CaretakerBasics> | SorterResult<CaretakerBasics>[]
   ) => {
     const singleSorter = Array.isArray(sorter) ? sorter[0] : sorter;
     const isSorted = !!singleSorter.order;
@@ -151,11 +151,11 @@ const CaretakerList = () => {
     }));
   };
 
-  const columns: ColumnsType<Caretaker> = [
+  const columns: ColumnsType<CaretakerBasics> = [
     {
       title: t("caretaker"),
       key: "caretaker",
-      render: (_: unknown, record: Caretaker) => (
+      render: (_: unknown, record: CaretakerBasics) => (
         <div className="caretaker-list-item">
           <img src="https://via.placeholder.com/150" alt="avatar" />
           <div>
@@ -173,7 +173,7 @@ const CaretakerList = () => {
       dataIndex: "avgRating",
       key: "avgRating",
       sorter: true,
-      render: (rating: number | null, record: Caretaker) => (
+      render: (rating: number | null, record: CaretakerBasics) => (
         <div className="caretaker-rating">
           {rating ? (
             <>

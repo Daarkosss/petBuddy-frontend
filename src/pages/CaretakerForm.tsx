@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Form, Input, Button, GetProp, Upload, UploadProps, UploadFile, Select, Card, Space } from "antd";
 import ImgCrop from "antd-img-crop";
 import { useTranslation } from "react-i18next";
 import { api } from "../api/api";
 import { CaretakerFormFields } from "../types";
 import Voivodeship from "../models/Voivodeship";
+import store from "../store/RootStore";
+import { toast } from "react-toastify";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
@@ -14,6 +16,14 @@ const CaretakerForm = () => {
   const [fileList, setFileList] = useState<UploadFile[]>([]); // Not send to server yet, will be done when backend ready
   const [form] = Form.useForm<CaretakerFormFields>();
   const allowedSpecialKeys = ["Backspace", "Delete", "ArrowLeft", "ArrowRight"];
+  
+  useEffect(() => {
+    if (store.user.profile?.email && store.user.profile?.hasCaretakerProfile) {
+      api.getCaretakerDetails(store.user.profile?.email).then((data) => {
+        form.setFieldsValue(data);
+      })
+    }
+  }, [form])
 
   const handleFileChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
     setFileList(newFileList);
@@ -64,14 +74,32 @@ const CaretakerForm = () => {
     }
   }
 
-  const handleSubmit = () => {
-    api.getUserProfiles().then((userProfiles) => {
-      if (userProfiles.hasCaretakerProfile) {
-        api.editCaretakerProfile(form.getFieldsValue());
-      } else {
-        api.addCaretakerProfile(form.getFieldsValue());
-      }
-    });
+  const handleAddCaretaker = async (data: CaretakerFormFields) => {
+    try {
+      await api.addCaretakerProfile(data);
+      toast.success(t("success.createCaretakerProfile"));
+      store.user.hasCaretakerProfile = true;
+    } catch (error) {
+      toast.error(t("error.createCaretakerProfile"));
+    }
+  };
+  
+  const handleEditCaretaker = async (data: CaretakerFormFields) => {
+    try {
+      await api.editCaretakerProfile(data);
+      toast.success(t("success.editCaretakerForm"));
+    } catch (error) {
+      toast.error(t("error.editCaretakerForm"));
+    }
+  };
+
+  const handleSubmit = async () => {
+    const formFields = form.getFieldsValue();
+    if (store.user.profile?.hasCaretakerProfile) {
+      handleEditCaretaker(formFields);
+    } else {
+      handleAddCaretaker(formFields);
+    }
   };
 
   return (
