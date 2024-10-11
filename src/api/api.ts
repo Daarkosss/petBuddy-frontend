@@ -1,6 +1,9 @@
 import { toast } from "react-toastify";
 import store from "../store/RootStore";
-import { CaretakerBasicsResponse, CaretakerSearchFilters, PagingParams, CaretakerFormFields, UserProfiles, CaretakerDetailsDTO } from "../types";
+import { 
+  CaretakerBasicsResponse, CaretakerSearchFilters, PagingParams, CaretakerFormFields, UserProfiles,
+  CaretakerDetailsDTO
+} from "../types";
 
 const backendHost =
   import.meta.env.VITE_BACKEND_HOST || window.location.hostname;
