@@ -1,43 +1,65 @@
 import React, { useState } from "react";
-import { Form, Input, Button, InputNumber } from "antd";
-import { OfferConfigurationDTO } from "../types";
-import { api } from "../api/api";
-import { toast } from "react-toastify";
+import { Form, Input, Button, InputNumber, Select } from "antd";
+import { OfferConfigurationDTO, OfferConfigurationWithId } from "../types";
+import { useTranslation } from "react-i18next";
+import { renderSelectOptions } from "../utils/utils";
 
 interface OfferConfigurationFormProps {
-  configurationId?: number;
-  initialValues?: OfferConfigurationDTO;
-  onSuccess: () => void;
+  initialValues: OfferConfigurationDTO;
+  onSuccess: (values: OfferConfigurationWithId) => void;
 }
 
-const OfferConfigurationForm: React.FC<OfferConfigurationFormProps> = ({ configurationId, initialValues, onSuccess }) => {
+const OfferConfigurationForm: React.FC<OfferConfigurationFormProps> = ({ initialValues, onSuccess }) => {
+  const { t } = useTranslation();
   const [form] = Form.useForm();
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleFinish = async (values: OfferConfigurationDTO) => {
+  const handleFinish = (values: OfferConfigurationWithId) => {
     setIsLoading(true);
-    try {
-      if (configurationId) {
-        await api.editOfferConfiguration(configurationId, values);
-      } else {
-        // await api.addOrEditOfferConfiguration(values);
-      }
-      toast.success("Configuration saved successfully");
-      onSuccess();
-    } catch (error) {
-      toast.error("Failed to save configuration");
-    } finally {
-      setIsLoading(false);
-    }
+    onSuccess(values);
+    setIsLoading(false);
   };
 
   return (
-    <Form form={form} onFinish={handleFinish} initialValues={initialValues}>
-      <Form.Item name="description" label="Description">
+    <Form
+      form={form}
+      onFinish={handleFinish}
+      initialValues={initialValues}
+    >
+      <Form.Item name="id" label="Id">
+        <Input disabled/>
+      </Form.Item>
+      <Form.Item 
+        name="description"
+        label="Description"
+        rules={[{ required: true, message: t("validation.required") }]}
+      >
         <Input />
       </Form.Item>
-      <Form.Item name="dailyPrice" label="Daily Price">
+      <Form.Item
+        name="dailyPrice"
+        label="Daily Price"
+        rules={[{ required: true, message: t("validation.required") }]}
+      >
         <InputNumber min={1} max={9999} />
+      </Form.Item>
+      <Form.Item 
+        name={["selectedOptions", "SEX"]} 
+        label="Sex"
+        rules={[{ required: true, message: t("validation.required") }]}
+      >
+        <Select mode="multiple" placeholder={t("sex")}>
+          {renderSelectOptions({ MALE: t("male"), SHE: t("she") })}
+        </Select>
+      </Form.Item>
+      <Form.Item
+        name={["selectedOptions", "SIZE"]}
+        label="Size"
+        rules={[{ required: true, message: t("validation.required") }]}
+      >
+        <Select mode="multiple" placeholder={t("size")}>
+          {renderSelectOptions({ SMALL: t("small"), BIG: t("big") })}
+        </Select>
       </Form.Item>
       <Button type="primary" htmlType="submit" loading={isLoading}>
         Save Configuration

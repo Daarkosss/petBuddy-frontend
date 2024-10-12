@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { Form, Input, Button } from "antd";
+import { Form, Input, Button, Select } from "antd";
 import { OfferDTO, OfferDTOWithId } from "../types";
 import { api } from "../api/api";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
+import { renderSelectOptions } from "../utils/utils";
 
 interface OfferFormProps {
   offer?: OfferDTOWithId;
@@ -10,6 +12,8 @@ interface OfferFormProps {
 }
 
 const OfferForm: React.FC<OfferFormProps> = ({ offer, onSuccess }) => {
+  const { t } = useTranslation();
+
   const [form] = Form.useForm();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -40,7 +44,15 @@ const OfferForm: React.FC<OfferFormProps> = ({ offer, onSuccess }) => {
         label="Animal Type"
         rules={[{ required: true, message: "Please select an animal type" }]}
       >
-        <Input />
+        <Select placeholder={t("caretakerSearch.animalTypes")}>
+          {renderSelectOptions({
+            DOG: t("dog"),
+            CAT: t("cat"),
+            BIRD: t("bird"),
+            REPTILE: t("reptile"),
+            HORSE: t("horse"),
+          })}
+        </Select>
       </Form.Item>
       <Button type="primary" htmlType="submit" loading={isLoading}>
         {offer ? "Save Changes" : "Add Offer"}

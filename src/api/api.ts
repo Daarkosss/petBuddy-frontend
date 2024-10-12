@@ -183,6 +183,17 @@ class API {
     }
   }
 
+  async deleteOffer(offerId: number): Promise<void> {
+    if (store.user.profile?.selected_profile) {
+      return this.authorizedFetch<void>(
+        "DELETE",
+        `api/caretaker/offer/${offerId}/delete`,
+        undefined,
+        { "Accept-Role": store.user.profile?.selected_profile }
+      );
+    }
+  }
+
   async setAvailabilityForOffers(offersWithAvailability: SetAvailabilityDTO): Promise<void> {
     if (store.user.profile?.selected_profile) {
       return this.authorizedFetch<void>(
@@ -191,6 +202,17 @@ class API {
         offersWithAvailability,
         { "Accept-Role": store.user.profile?.selected_profile }
       )
+    }
+  }
+
+  async addOfferConfiguration(offerId: number, offerConfiguration: OfferConfigurationDTO): Promise<void> {
+    if (store.user.profile?.selected_profile) {
+      return this.authorizedFetch<void>(
+        "POST",
+        `api/caretaker/offer/${offerId}/add-configurations`,
+        [offerConfiguration],
+        { "Accept-Role": store.user.profile?.selected_profile }
+      );
     }
   }
 

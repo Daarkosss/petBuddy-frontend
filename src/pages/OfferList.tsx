@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Button, Table, Modal, Space } from "antd";
-import { OfferDTOWithId, OfferConfigurationDTO } from "../types";
+import { OfferDTOWithId, OfferConfigurationWithId } from "../types";
 import OfferForm from "../components/OfferForm";
 import { api } from "../api/api";
 import { toast } from "react-toastify";
 import store from "../store/RootStore";
-import ConfigurationForm from "../components/OfferConfigurationForm"; // Form for adding/editing configurations
+import ConfigurationForm from "../components/OfferConfigurationForm";
 
 const OfferList: React.FC = () => {
   const [offers, setOffers] = useState<OfferDTOWithId[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingOffer, setEditingOffer] = useState<OfferDTOWithId | null>(null);
-  const [editingConfigOfferId, setEditingConfigOfferId] = useState<number | null>(null);
+  const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
+  const [editingConfig, setEditingConfig] = useState<OfferConfigurationWithId | null>(null);
   const [isConfigModalOpen, setIsConfigModalOpen] = useState(false);
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const OfferList: React.FC = () => {
 
   const handleDeleteOffer = async (offerId: number) => {
     try {
-      // await api.deleteOffer(offerId);
+      await api.deleteOffer(offerId);
       toast.success("Offer deleted successfully");
       loadOffers();
     } catch (error) {
@@ -41,17 +41,45 @@ const OfferList: React.FC = () => {
 
   const handleEditOffer = (offer: OfferDTOWithId) => {
     setEditingOffer(offer);
-    setIsModalOpen(true);
+    setIsOfferModalOpen(true);
   };
 
   const handleAddOffer = () => {
     setEditingOffer(null);
-    setIsModalOpen(true);
+    setIsOfferModalOpen(true);
   };
 
-  const handleAddConfiguration = (offerId: number) => {
-    setEditingConfigOfferId(offerId);
+  const handleAddConfiguration = (offer: OfferDTOWithId) => {
+    setEditingOffer(offer);
+    setEditingConfig(null);
     setIsConfigModalOpen(true);
+  };
+
+  const handleEditConfiguration = (config: OfferConfigurationWithId) => {
+    setEditingConfig(config);
+    setIsConfigModalOpen(true);
+  };
+
+  const handleSaveConfiguration = async (newConfig: OfferConfigurationWithId) => {
+    if (newConfig.id) {
+      try {
+        await api.editOfferConfiguration(newConfig.id, newConfig);
+        toast.success("Configuration saved successfully");
+        setIsConfigModalOpen(false);
+        loadOffers();
+      } catch (error) {
+        toast.error("Failed to save configuration");
+      }
+    } else {
+      try {
+        await api.addOfferConfiguration(editingOffer!.id, newConfig);
+        toast.success("Configuration added successfully");
+        setIsConfigModalOpen(false);
+        loadOffers();
+      } catch (error) {
+        toast.error("Failed to add configuration");
+      }
+    }
   };
 
   const handleDeleteConfiguration = async (configurationId: number) => {
@@ -68,14 +96,23 @@ const OfferList: React.FC = () => {
     const columns = [
       { title: "Description", dataIndex: "description" },
       { title: "Daily Price", dataIndex: "dailyPrice" },
+      { 
+        title: "Sex", dataIndex: ["selectedOptions", "SEX"],
+        render: (values: string[]) => values.join(", ")
+      },
+      { 
+        title: "Size", dataIndex: ["selectedOptions", "SIZE"],
+        render: (values: string[]) => values.join(", ")
+      },
       {
         title: "Action",
-        render: (text, record: OfferConfigurationDTO & { id: number }) => (
+        render: (record: OfferConfigurationWithId & { id: number }) => (
           <Space size="middle">
+            <Button onClick={() => handleEditConfiguration(record)}>Edit</Button>
             <Button
-              type="link"
-              onClick={() => handleDeleteConfiguration(record.id)}
+              type="primary"
               danger
+              onClick={() => handleDeleteConfiguration(record.id)}
             >
               Delete
             </Button>
@@ -88,7 +125,7 @@ const OfferList: React.FC = () => {
       <div>
         <Button
           type="primary"
-          onClick={() => handleAddConfiguration(offer.id)}
+          onClick={() => handleAddConfiguration(offer)}
           style={{ marginBottom: 10 }}
         >
           Add Configuration
@@ -113,17 +150,18 @@ const OfferList: React.FC = () => {
           { title: "Animal Type", dataIndex: ["animal", "animalType"] },
           {
             title: "Action",
-            render: (text, offer) => (
-              <>
+            render: (offer) => (
+              <Space size="middle">
                 <Button onClick={() => handleEditOffer(offer)}>Edit</Button>
                 <Button
-                  disabled
-                  onClick={() => handleDeleteOffer(offer.id)}
+                  type="primary"
                   danger
+                  onClick={() => handleDeleteOffer(offer.id)}
+                  disabled
                 >
                   Delete
                 </Button>
-              </>
+              </Space>
             ),
           },
         ]}
@@ -134,25 +172,24 @@ const OfferList: React.FC = () => {
       />
       <Modal
         title={editingOffer ? "Edit Offer" : "Add Offer"}
-        open={isModalOpen}
-        onCancel={() => setIsModalOpen(false)}
+        open={isOfferModalOpen}
+        onCancel={() => setIsOfferModalOpen(false)}
         footer={null}
+        maskClosable={false}
       >
         <OfferForm offer={editingOffer!} onSuccess={loadOffers} />
       </Modal>
 
       <Modal
-        title="Add/Edit Configuration"
+        title={editingConfig ? "Edit Configuration" : "Add Configuration"}
         open={isConfigModalOpen}
         onCancel={() => setIsConfigModalOpen(false)}
         footer={null}
+        maskClosable={false}
       >
         <ConfigurationForm
-          configurationId={editingConfigOfferId}
-          onSuccess={() => {
-            setIsConfigModalOpen(false);
-            loadOffers();
-          }}
+          initialValues={editingConfig!}
+          onSuccess={handleSaveConfiguration}
         />
       </Modal>
     </div>
