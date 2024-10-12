@@ -13,6 +13,7 @@ const Home = () => {
   const [message, setMessage] = useState<string>(t("loading"));
 
   const [recipientEmail, setRecipientEmail] = useState<string>("");
+  const [shouldStartChat, setShouldStartChat] = useState<boolean>(false);
 
   useEffect(() => {
     if (!store.user.profile?.selected_profile) {
@@ -51,16 +52,16 @@ const Home = () => {
         <Button variant="dark" onClick={() => navigate("/caretaker/search")}>
           {t("home.searchCaretakers")}
         </Button>
-        <form id="myForm">
-          <h3>Testowy chat. Wpisz adres email adresata:</h3>
-          <input
-            type="text"
-            value={recipientEmail}
-            onChange={(event) => setRecipientEmail(event.target.value)}
-          />
-          <button type="submit">Rozpocznij chat</button>
-          <ChatBox />
-        </form>
+        <h3>Testowy chat. Wpisz adres email adresata:</h3>
+        <input
+          type="text"
+          value={recipientEmail}
+          onChange={(event) => setRecipientEmail(event.target.value)}
+        />
+        <button onClick={() => setShouldStartChat(true)}>
+          Rozpocznij chat
+        </button>
+        {shouldStartChat && <ChatBox recipientEmail={recipientEmail} />}
       </div>
     </div>
   );
