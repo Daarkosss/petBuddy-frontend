@@ -1,0 +1,34 @@
+$scrollbar_width: 3px;
+
+.chat-messages-container {
+  overflow-y: hidden;
+  height: 300px;
+
+  /* hide scrollbar */
+  //   scrollbar-width: none; /* Firefox */
+  //   -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.chat-messages-container:hover {
+  overflow-y: scroll; /* Pokaż scrollbar po najechaniu */
+}
+
+/* hide scrollbar */
+.chat-messages-container::-webkit-scrollbar {
+  //   display: none; /* Chrome, Safari i Opera */
+  width: $scrollbar_width;
+  height: 5px;
+}
+
+/* Stylowanie toru (track) paska przewijania */
+.chat-messages-container::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+  border-radius: 10px;
+}
+
+/* Stylowanie suwaka (thumb) paska przewijania */
+.chat-messages-container::-webkit-scrollbar-thumb {
+  background-color: #96969686; /* Kolor suwaka */
+  border-radius: 10px;
+  /* Przestrzeń wokół suwaka */
+}
