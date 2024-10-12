@@ -8,6 +8,7 @@ import {
   UserProfiles,
   CaretakerDetailsDTO,
 } from "../types";
+import { ChatRoom } from "../types/chat.types";
 
 const backendHost =
   import.meta.env.VITE_BACKEND_HOST || window.location.hostname;
@@ -45,7 +46,10 @@ class API {
 
     if (!response.ok) {
       toast.error(data.message || "Wrong server response!");
-      throw new Error(data.message || "Wrong server response!");
+      throw new Error(
+        data.message + `. Status code: ${response.status}` ||
+          "Wrong server response!"
+      );
     } else {
       return data;
     }
@@ -190,6 +194,35 @@ class API {
       },
       headers
     );
+  }
+
+  async getChatRoomWithGivenUser(
+    participantEmail: string,
+    acceptTimezone: string | null
+  ): Promise<ChatRoom> {
+    try {
+      const headers: HeadersInit = {
+        "Accept-Role": store.user.profile!.selected_profile!.toUpperCase(),
+      };
+      if (acceptTimezone !== null) {
+        headers["Accept-Timezone"] = acceptTimezone;
+      }
+      console.log();
+      const response = await this.authorizedFetch<ChatRoom>(
+        "GET",
+        `api/chat/${participantEmail}`,
+        null,
+        headers
+      );
+      return response;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new Error(`Failed to find chat: ${error.message}`);
+      }
+      throw new Error(
+        "An unknown error occurred while fetching caretaker profile"
+      );
+    }
   }
 }
 
