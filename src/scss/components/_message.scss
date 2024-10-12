@@ -1,0 +1,11 @@
+.message-author {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+}
+
+.message-recipient {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+}
