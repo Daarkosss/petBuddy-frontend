@@ -14,9 +14,6 @@ interface ChatBoxProperties {
 }
 
 const ChatBox: React.FC<ChatBoxProperties> = ({ recipientEmail }) => {
-  // const principalUsername = "user@backend.com";
-  const chatId = 1; // chatId == 1 already exists on backend and user@backend.com is a member of this chat
-
   const [wsClient, setWsClient] = useState<Client | null>(null);
   const [message, setMessage] = useState<string>("");
   const [sessionId, setSessionId] = useState<string | undefined>();
@@ -25,6 +22,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({ recipientEmail }) => {
     null
   );
   const [chatRoomData, setChatRoomData] = useState<ChatRoom | null>(null);
+  const [chatId, setChatId] = useState<number | null>(null);
 
   //TODO: is it ok to create it in ChatBox?
   useEffect(() => {
@@ -43,8 +41,9 @@ const ChatBox: React.FC<ChatBoxProperties> = ({ recipientEmail }) => {
   }, [wsClient, store.user.profile]);
 
   useEffect(() => {
+    console.log(`chatId: ${chatId}`);
     subscribeToChatRoom();
-  }, [sessionId]);
+  }, [sessionId, chatId]);
 
   //TODO: implement this
   const checkIfChatRoomExists = async () => {
@@ -53,8 +52,8 @@ const ChatBox: React.FC<ChatBoxProperties> = ({ recipientEmail }) => {
         recipientEmail,
         "Europe/Warsaw"
       );
-      console.log(`dane: ${data}`);
       setChatRoomData(data);
+      setChatId(data.id);
       setDoesChatRoomExist(true);
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -66,6 +65,10 @@ const ChatBox: React.FC<ChatBoxProperties> = ({ recipientEmail }) => {
         console.log(`error message: ${error.message}, match: ${match![1]}`);
       }
     }
+  };
+
+  const getMessages = () => {
+    return;
   };
 
   //TODO: timezone
@@ -106,7 +109,8 @@ const ChatBox: React.FC<ChatBoxProperties> = ({ recipientEmail }) => {
     // Accept-Role - required header
     // Accept-Timezone - optional header (caches initial timezone in the backend)
     const headers = {
-      "Accept-Role": "CLIENT",
+      "Accept-Role":
+        store.user.profile!.selected_profile?.toUpperCase() as string,
       "Accept-Timezone": "Europe/Warsaw",
     };
     wsClient.subscribe(
@@ -119,15 +123,16 @@ const ChatBox: React.FC<ChatBoxProperties> = ({ recipientEmail }) => {
     );
   };
 
-  const sendMessageToChatRoom = () => {
+  const sendMessageToChatRoom = (message: string) => {
     // Accept-Role - required header
     // Accept-Timezone - optional header (overrides cached timezone in the backend)
     const headers = {
-      "Accept-Role": "CLIENT",
+      "Accept-Role":
+        store.user.profile!.selected_profile?.toUpperCase() as string,
       "Accept-Timezone": "Asia/Tokyo",
     };
-    if (wsClient && inputMessage && sessionId) {
-      const chatMessage = { content: inputMessage };
+    if (wsClient && message && sessionId) {
+      const chatMessage = { content: message };
       wsClient.publish({
         destination: `/app/chat/${chatId}`,
         body: JSON.stringify(chatMessage),
@@ -176,8 +181,11 @@ const ChatBox: React.FC<ChatBoxProperties> = ({ recipientEmail }) => {
   ];
 
   const onSend = (input: string) => {
-    console.log(input);
-    initializeChatRoom(input);
+    if (doesChatRoomExist == false) {
+      initializeChatRoom(input);
+    } else if (doesChatRoomExist == true) {
+      sendMessageToChatRoom(input);
+    }
   };
 
   return (
