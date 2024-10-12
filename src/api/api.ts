@@ -1,6 +1,13 @@
 import { toast } from "react-toastify";
 import store from "../store/RootStore";
-import { CaretakerBasicsResponse, CaretakerSearchFilters, PagingParams, CaretakerFormFields, UserProfiles, CaretakerDetailsDTO } from "../types";
+import {
+  CaretakerBasicsResponse,
+  CaretakerSearchFilters,
+  PagingParams,
+  CaretakerFormFields,
+  UserProfiles,
+  CaretakerDetailsDTO,
+} from "../types";
 
 const backendHost =
   import.meta.env.VITE_BACKEND_HOST || window.location.hostname;
@@ -47,11 +54,13 @@ class API {
   async authorizedFetch<T>(
     method: Method,
     path: string,
-    body?: unknown
+    body?: unknown,
+    headers: HeadersInit = {}
   ): Promise<T> {
     if (store.user.jwtToken) {
       return this.fetch<T>(method, path, body, {
         Authorization: `Bearer ${store.user.jwtToken}`,
+        ...headers,
       });
     } else {
       return Promise.reject(new Error("No user token available"));
@@ -155,18 +164,31 @@ class API {
   }
 
   async addCaretakerProfile(data: CaretakerFormFields): Promise<void> {
-    return this.authorizedFetch<void>(
-      "POST",
-      "api/caretaker/add",
-      data
-    );
+    return this.authorizedFetch<void>("POST", "api/caretaker/add", data);
   }
 
   async editCaretakerProfile(data: CaretakerFormFields): Promise<void> {
+    return this.authorizedFetch<void>("PUT", "api/caretaker/edit", data);
+  }
+
+  async initializeChatRoom(
+    messageReceiverEmail: string,
+    content: string,
+    acceptTimezone: string | null
+  ): Promise<void> {
+    const headers: HeadersInit = {
+      "Accept-Role": store.user.profile!.selected_profile!.toUpperCase(),
+    };
+    if (acceptTimezone !== null) {
+      headers["Accept-Timezone"] = acceptTimezone;
+    }
     return this.authorizedFetch<void>(
-      "PUT",
-      "api/caretaker/edit",
-      data
+      "POST",
+      `api/chat/${messageReceiverEmail}`,
+      {
+        content: content,
+      },
+      headers
     );
   }
 }
