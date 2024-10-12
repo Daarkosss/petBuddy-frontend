@@ -161,24 +161,24 @@ const ChatBox: React.FC<ChatBoxProperties> = ({ recipientEmail }) => {
     return null;
   };
 
-  const mockupMessages = [
-    {
-      id: 1,
-      chatId: 1,
-      senderEmail: "kuba.staniszewski.ks@gmail.com",
-      content: "Hello",
-      createdAt: "2024-10-12T11:44:26.078Z",
-      seenByRecipient: true,
-    },
-    {
-      id: 2,
-      chatId: 1,
-      senderEmail: "test@gmail.com",
-      content: "Hello there!",
-      createdAt: "2024-10-12T11:45:26.078Z",
-      seenByRecipient: true,
-    },
-  ];
+  // const mockupMessages = [
+  //   {
+  //     id: 1,
+  //     chatId: 1,
+  //     senderEmail: "kuba.staniszewski.ks@gmail.com",
+  //     content: "Hello",
+  //     createdAt: "2024-10-12T11:44:26.078Z",
+  //     seenByRecipient: true,
+  //   },
+  //   {
+  //     id: 2,
+  //     chatId: 1,
+  //     senderEmail: "test@gmail.com",
+  //     content: "Hello there!",
+  //     createdAt: "2024-10-12T11:45:26.078Z",
+  //     seenByRecipient: true,
+  //   },
+  // ];
 
   const onSend = (input: string) => {
     if (doesChatRoomExist == false) {
