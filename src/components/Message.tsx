@@ -11,7 +11,7 @@ const Message: React.FC<MessageContent> = ({ message, name }) => {
   return (
     <div
       className={
-        store.user.profile!.email === name
+        store.user.profile?.email === name
           ? "message-author"
           : "message-recipient"
       }
