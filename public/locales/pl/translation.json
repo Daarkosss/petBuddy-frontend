@@ -105,5 +105,15 @@
     "required": "Wymagane",
     "zipCodeFormat": "Nieprawidłowy format (00-000)",
     "phoneNumberFormat": "Nieprawidłowy format (minimum 9 cyfr)"
+  },
+
+  "error": {
+    "createCaretakerProfile": "Wystąpił błąd podczas tworzenia profilu opiekuna",
+    "editCaretakerForm": "Wystąpił błąd podczas edycji danych opiekuna"
+  },
+
+  "success": {
+    "createCaretakerProfile": "Profil opiekuna został pomyślnie utworzony",
+    "editCaretakerForm": "Dane opiekuna zostały pomyślnie zaktualizowane"
   }
 }

@@ -26,12 +26,14 @@ function App() {
     const fetchUserData = async () => {
       try {
         const userData = await keycloak.loadUserProfile();
+        const userProfiles = await api.getUserProfiles();
         const userProfileData = {
           email: userData.email,
           firstName: userData.firstName,
           lastName: userData.lastName,
           token: store.user.xsrfToken,
           selected_profile: null,
+          hasCaretakerProfile: userProfiles.hasCaretakerProfile,
         };
         store.user.saveProfileToStorage(userProfileData);
         setIsUserDataFetched(true);

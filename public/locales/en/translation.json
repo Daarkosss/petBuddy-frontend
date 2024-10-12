@@ -105,5 +105,15 @@
     "required": "Required",
     "zipCodeFormat": "Invalid format (00-000)",
     "phoneNumberFormat": "Invalid format (at least 9 digits)"
+  },
+
+  "error": {
+    "createCaretakerProfile": "An error occurred while creating caretaker profile",
+    "editCaretakerForm": "An error occurred while editing caretaker data"
+  },
+
+  "success": {
+    "createCaretakerProfile": "Caretaker profile has been successfully created",
+    "editCaretakerForm": "Caretaker data has been successfully updated"
   }
 }
