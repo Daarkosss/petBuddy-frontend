@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Form, Input, Button, InputNumber, Select } from "antd";
 import { OfferConfigurationDTO, OfferConfigurationWithId } from "../types";
 import { useTranslation } from "react-i18next";
-import { renderSelectOptions } from "../utils/utils";
 
 interface OfferConfigurationFormProps {
   initialValues: OfferConfigurationDTO;
@@ -48,18 +47,28 @@ const OfferConfigurationForm: React.FC<OfferConfigurationFormProps> = ({ initial
         label="Sex"
         rules={[{ required: true, message: t("validation.required") }]}
       >
-        <Select mode="multiple" placeholder={t("sex")}>
-          {renderSelectOptions({ MALE: t("male"), SHE: t("she") })}
-        </Select>
+        <Select 
+          mode="multiple"
+          placeholder={t("sex")} 
+          options={[
+            { value: "MALE", label: t("male") },
+            { value: "SHE", label: t("she") }
+          ]}
+        />
       </Form.Item>
       <Form.Item
         name={["selectedOptions", "SIZE"]}
         label="Size"
         rules={[{ required: true, message: t("validation.required") }]}
       >
-        <Select mode="multiple" placeholder={t("size")}>
-          {renderSelectOptions({ SMALL: t("small"), BIG: t("big") })}
-        </Select>
+        <Select
+          mode="multiple"
+          placeholder={t("size")}
+          options={[
+            { value: "SMALL", label: t("small") },
+            { value: "BIG", label: t("big") }
+          ]}
+        />
       </Form.Item>
       <Button type="primary" htmlType="submit" loading={isLoading}>
         Save Configuration

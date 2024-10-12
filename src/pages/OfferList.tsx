@@ -49,6 +49,11 @@ const OfferList: React.FC = () => {
     setIsOfferModalOpen(true);
   };
 
+  const handleSuccessfulOfferSave = () => {
+    setIsOfferModalOpen(false);
+    loadOffers();
+  };
+
   const handleAddConfiguration = (offer: OfferDTOWithId) => {
     setEditingOffer(offer);
     setEditingConfig(null);
@@ -177,7 +182,7 @@ const OfferList: React.FC = () => {
         footer={null}
         maskClosable={false}
       >
-        <OfferForm offer={editingOffer!} onSuccess={loadOffers} />
+        <OfferForm offer={editingOffer!} onSuccess={handleSuccessfulOfferSave} />
       </Modal>
 
       <Modal

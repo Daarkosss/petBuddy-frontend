@@ -4,7 +4,6 @@ import { OfferDTO, OfferDTOWithId } from "../types";
 import { api } from "../api/api";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
-import { renderSelectOptions } from "../utils/utils";
 
 interface OfferFormProps {
   offer?: OfferDTOWithId;
@@ -44,15 +43,16 @@ const OfferForm: React.FC<OfferFormProps> = ({ offer, onSuccess }) => {
         label="Animal Type"
         rules={[{ required: true, message: "Please select an animal type" }]}
       >
-        <Select placeholder={t("caretakerSearch.animalTypes")}>
-          {renderSelectOptions({
-            DOG: t("dog"),
-            CAT: t("cat"),
-            BIRD: t("bird"),
-            REPTILE: t("reptile"),
-            HORSE: t("horse"),
-          })}
-        </Select>
+        <Select
+          placeholder={t("caretakerSearch.animalTypes")}
+          options={[
+            { value: "DOG", label: t("dog") },
+            { value: "CAT", label: t("cat") },
+            { value: "BIRD", label: t("bird") },
+            { value: "REPTILE", label: t("reptile") },
+            { value: "HORSE", label: t("horse") }
+          ]}
+        />
       </Form.Item>
       <Button type="primary" htmlType="submit" loading={isLoading}>
         {offer ? "Save Changes" : "Add Offer"}
