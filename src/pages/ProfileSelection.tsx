@@ -53,7 +53,7 @@ const ProfileSelection: React.FC<ProfileSelectionProps> = ({
               icon={CgProfile}
               size={100}
               title={t("profileSelection.client")}
-              profile="Client"
+              profile="CLIENT"
               onHover={() => setLineColor("linear-gradient(to left, #007EA7, #00b7ff")}
               onLeave={() => setLineColor("#007EA7")}
             />
@@ -62,7 +62,7 @@ const ProfileSelection: React.FC<ProfileSelectionProps> = ({
                 icon={LuHelpingHand}
                 size={100}
                 title={t("caretaker")}
-                profile="Caretaker"
+                profile="CARETAKER"
                 onHover={() => setLineColor("linear-gradient(to right, #007EA7, #00b7ff")}
                 onLeave={() => setLineColor("#007EA7")}
               />

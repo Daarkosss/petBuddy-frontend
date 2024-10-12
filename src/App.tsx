@@ -8,6 +8,7 @@ import LoginPage from "./pages/LoginPage";
 import store from "./store/RootStore";
 import CaretakerSearch from "./pages/CaretakerSearch";
 import ProfileSelection from "./pages/ProfileSelection";
+import OfferList from "./pages/OfferList";
 
 function App() {
   const { keycloak, initialized } = useKeycloak();
@@ -73,6 +74,7 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/caretaker/form" element={<CaretakerForm />} />
           <Route path="/caretaker/search" element={<CaretakerSearch />} />
+          <Route path="/caretaker/offers" element={<OfferList />} />
           <Route
             path="/profile-selection"
             element={<ProfileSelection isUserDataFetched={isUserDataFetched} />}
