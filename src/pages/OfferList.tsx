@@ -153,6 +153,7 @@ const OfferList: React.FC = () => {
         columns={[
           { title: "Description", dataIndex: "description" },
           { title: "Animal Type", dataIndex: ["animal", "animalType"] },
+          { title: "Availabilty", dataIndex: "availabilities" },
           {
             title: "Action",
             render: (offer) => (
@@ -170,6 +171,7 @@ const OfferList: React.FC = () => {
             ),
           },
         ]}
+        pagination={false}
         rowKey="id"
         expandable={{
           expandedRowRender: expandedRowRender,
