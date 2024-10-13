@@ -6,10 +6,12 @@ import { ToastContainer } from "react-toastify";
 import "./i18n";
 import App from "./App.tsx"
 import "./scss/main.scss";
+import SplashScreen from "./pages/SplashScreen.tsx";
 
 const keycloakInitOptions = {
   onLoad: "check-sso",
-  pkceMethod: "S256",
+  silentCheckSsoRedirectUri: `${window.location.origin}/silent-check-sso.html`,
+  pkceMethod: "S256"
 };
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
@@ -20,6 +22,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         position="bottom-right"
         theme="colored"
       />
+      <SplashScreen />
     </BrowserRouter>
   </ReactKeycloakProvider>
 )
