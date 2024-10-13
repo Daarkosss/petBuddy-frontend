@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Input, Button, InputNumber, Select } from "antd";
-import { OfferConfigurationDTO, OfferConfigurationWithId } from "../types";
+import { OfferConfigurationWithId } from "../types";
 import { useTranslation } from "react-i18next";
 
 interface OfferConfigurationFormProps {
-  initialValues: OfferConfigurationDTO;
+  initialValues: OfferConfigurationWithId | null;
   onSuccess: (values: OfferConfigurationWithId) => void;
 }
 
@@ -16,18 +16,24 @@ const OfferConfigurationForm: React.FC<OfferConfigurationFormProps> = ({ initial
   const handleFinish = (values: OfferConfigurationWithId) => {
     setIsLoading(true);
     onSuccess(values);
+    form.resetFields();
     setIsLoading(false);
   };
+
+  useEffect(() => {
+    if (initialValues) {
+      form.setFieldsValue(initialValues);
+    } else {
+      form.resetFields();
+    }
+  }, [initialValues, form]);
 
   return (
     <Form
       form={form}
       onFinish={handleFinish}
-      initialValues={initialValues}
     >
-      <Form.Item name="id" label="Id">
-        <Input disabled/>
-      </Form.Item>
+      <Form.Item name="id" hidden/>
       <Form.Item 
         name="description"
         label="Description"

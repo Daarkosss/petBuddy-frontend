@@ -209,7 +209,7 @@ class API {
     if (store.user.profile?.selected_profile) {
       return this.authorizedFetch<void>(
         "POST",
-        `api/caretaker/offer/${offerId}/add-configurations`,
+        `api/caretaker/offer/${offerId}/configurations`,
         [offerConfiguration],
         { "Accept-Role": store.user.profile?.selected_profile }
       );

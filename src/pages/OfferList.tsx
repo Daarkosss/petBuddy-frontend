@@ -85,6 +85,7 @@ const OfferList: React.FC = () => {
         toast.error("Failed to add configuration");
       }
     }
+    setEditingConfig(null);
   };
 
   const handleDeleteConfiguration = async (configurationId: number) => {
@@ -195,7 +196,7 @@ const OfferList: React.FC = () => {
         maskClosable={false}
       >
         <ConfigurationForm
-          initialValues={editingConfig!}
+          initialValues={editingConfig}
           onSuccess={handleSaveConfiguration}
         />
       </Modal>
