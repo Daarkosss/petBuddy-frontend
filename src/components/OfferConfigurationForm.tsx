@@ -77,7 +77,7 @@ const OfferConfigurationForm: React.FC<OfferConfigurationFormProps> = ({ initial
         />
       </Form.Item>
       <Button type="primary" htmlType="submit" loading={isLoading}>
-        Save Configuration
+        {t("save")}
       </Button>
     </Form>
   );

@@ -6,6 +6,7 @@ import { api } from "../api/api";
 import { toast } from "react-toastify";
 import store from "../store/RootStore";
 import ConfigurationForm from "../components/OfferConfigurationForm";
+import { t } from "i18next";
 
 const OfferList: React.FC = () => {
   const [offers, setOffers] = useState<OfferDTOWithId[]>([]);
@@ -100,27 +101,27 @@ const OfferList: React.FC = () => {
 
   const expandedRowRender = (offer: OfferDTOWithId) => {
     const columns = [
-      { title: "Description", dataIndex: "description" },
-      { title: "Daily Price", dataIndex: "dailyPrice" },
+      { title: t("description"), dataIndex: "description" },
+      { title: t("dailyPrice"), dataIndex: "dailyPrice" },
       { 
-        title: "Sex", dataIndex: ["selectedOptions", "SEX"],
-        render: (values: string[]) => values.join(", ")
+        title: t("sex"), dataIndex: ["selectedOptions", "SEX"],
+        render: (values: string[]) => values.map(value => t(value.toLowerCase())).join(", ")
       },
       { 
-        title: "Size", dataIndex: ["selectedOptions", "SIZE"],
-        render: (values: string[]) => values.join(", ")
+        title: t("size"), dataIndex: ["selectedOptions", "SIZE"],
+        render: (values: string[]) => values.map(value => t(value.toLowerCase())).join(", ")
       },
       {
-        title: "Action",
+        title: t("manage"),
         render: (record: OfferConfigurationWithId & { id: number }) => (
           <Space size="middle">
-            <Button onClick={() => handleEditConfiguration(record)}>Edit</Button>
+            <Button onClick={() => handleEditConfiguration(record)}>{t("edit")}</Button>
             <Button
               type="primary"
               danger
               onClick={() => handleDeleteConfiguration(record.id)}
             >
-              Delete
+              {t("delete")}
             </Button>
           </Space>
         ),
@@ -134,7 +135,7 @@ const OfferList: React.FC = () => {
           onClick={() => handleAddConfiguration(offer)}
           style={{ marginBottom: 10 }}
         >
-          Add Configuration
+          {t("addConfiguration")}
         </Button>
         <Table
           columns={columns}
@@ -148,25 +149,27 @@ const OfferList: React.FC = () => {
 
   return (
     <div>
-      <Button type="primary" onClick={handleAddOffer}>Add New Offer</Button>
+      <Button type="primary" onClick={handleAddOffer}>{t("addOffer")}</Button>
       <Table
         dataSource={offers}
         columns={[
-          { title: "Description", dataIndex: "description" },
-          { title: "Animal Type", dataIndex: ["animal", "animalType"] },
+          { title: t("description"), dataIndex: "description" },
+          { title: t("animalType"), dataIndex: ["animal", "animalType"],
+            render: (value) => t(value.toLowerCase())
+          },
           { title: "Availabilty", dataIndex: "availabilities" },
           {
-            title: "Action",
+            title: t("manage"),
             render: (offer) => (
               <Space size="middle">
-                <Button onClick={() => handleEditOffer(offer)}>Edit</Button>
+                <Button onClick={() => handleEditOffer(offer)}>{t("edit")}</Button>
                 <Button
                   type="primary"
                   danger
                   onClick={() => handleDeleteOffer(offer.id)}
                   disabled
                 >
-                  Delete
+                  {t("delete")}
                 </Button>
               </Space>
             ),
@@ -179,7 +182,7 @@ const OfferList: React.FC = () => {
         }}
       />
       <Modal
-        title={editingOffer ? "Edit Offer" : "Add Offer"}
+        title={editingOffer ? t("editOffer") : t("addOffer")}
         open={isOfferModalOpen}
         onCancel={() => setIsOfferModalOpen(false)}
         footer={null}
@@ -189,7 +192,7 @@ const OfferList: React.FC = () => {
       </Modal>
 
       <Modal
-        title={editingConfig ? "Edit Configuration" : "Add Configuration"}
+        title={editingConfig ? t("editOfferConfiguration") : t("addOfferConfiguration")}
         open={isConfigModalOpen}
         onCancel={() => setIsConfigModalOpen(false)}
         footer={null}
