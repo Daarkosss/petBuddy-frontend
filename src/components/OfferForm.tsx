@@ -20,10 +20,10 @@ const OfferForm: React.FC<OfferFormProps> = ({ offer, onSuccess }) => {
     setIsLoading(true);
     try {
       await api.addOrEditOffer(values);
-      toast.success(offer ? "Offer updated" : "Offer added");
+      toast.success(offer ? t("success.editOffer") : t("success.createOffer"));
       onSuccess();
     } catch (error) {
-      toast.error("Failed to save offer");
+      toast.error(offer ? t("error.editOffer") : t("error.addOffer"));
     } finally {
       setIsLoading(false);
     }
@@ -33,15 +33,15 @@ const OfferForm: React.FC<OfferFormProps> = ({ offer, onSuccess }) => {
     <Form form={form} onFinish={handleFinish} initialValues={offer}>
       <Form.Item
         name="description"
-        label="Description"
-        rules={[{ required: true, message: "Please enter description" }]}
+        label={t("description")}
+        rules={[{ required: true, message: t("validation.required") }]}
       >
         <Input />
       </Form.Item>
       <Form.Item
         name={["animal", "animalType"]}
-        label="Animal Type"
-        rules={[{ required: true, message: "Please select an animal type" }]}
+        label={t("animalType")}
+        rules={[{ required: true, message: t("validation.required") }]}
       >
         <Select
           placeholder={t("caretakerSearch.animalTypes")}
@@ -55,7 +55,7 @@ const OfferForm: React.FC<OfferFormProps> = ({ offer, onSuccess }) => {
         />
       </Form.Item>
       <Button type="primary" htmlType="submit" loading={isLoading}>
-        {offer ? "Save Changes" : "Add Offer"}
+        {offer ? t("editOffer") : t("addOffer")}
       </Button>
     </Form>
   );

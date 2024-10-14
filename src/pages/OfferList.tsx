@@ -26,17 +26,17 @@ const OfferList: React.FC = () => {
         setOffers(data.offers);
       }
     } catch (error) {
-      toast.error("Failed to load offers");
+      toast.error(t("error.loadOffers"));
     }
   };
 
   const handleDeleteOffer = async (offerId: number) => {
     try {
       await api.deleteOffer(offerId);
-      toast.success("Offer deleted successfully");
+      toast.success(t("success.deleteOffer"));
       loadOffers();
     } catch (error) {
-      toast.error("Failed to delete offer");
+      toast.error(t("error.deleteOffer"));
     }
   };
 
@@ -70,20 +70,20 @@ const OfferList: React.FC = () => {
     if (newConfig.id) {
       try {
         await api.editOfferConfiguration(newConfig.id, newConfig);
-        toast.success("Configuration saved successfully");
+        toast.success(t("success.editConfiguration"));
         setIsConfigModalOpen(false);
         loadOffers();
       } catch (error) {
-        toast.error("Failed to save configuration");
+        toast.error(t("error.editConfiguration"));
       }
     } else {
       try {
         await api.addOfferConfiguration(editingOffer!.id, newConfig);
-        toast.success("Configuration added successfully");
+        toast.success(t("success.addConfiguration"));
         setIsConfigModalOpen(false);
         loadOffers();
       } catch (error) {
-        toast.error("Failed to add configuration");
+        toast.error(t("error.addConfiguration"));
       }
     }
     setEditingConfig(null);
@@ -92,10 +92,10 @@ const OfferList: React.FC = () => {
   const handleDeleteConfiguration = async (configurationId: number) => {
     try {
       await api.deleteOfferConfiguration(configurationId);
-      toast.success("Configuration deleted successfully");
+      toast.success(t("success.deleteConfiguration"));
       loadOffers();
     } catch (error) {
-      toast.error("Failed to delete configuration");
+      toast.error(t("error.deleteConfiguration"));
     }
   };
 
@@ -192,7 +192,7 @@ const OfferList: React.FC = () => {
       </Modal>
 
       <Modal
-        title={editingConfig ? t("editOfferConfiguration") : t("addOfferConfiguration")}
+        title={editingConfig ? t("editConfiguration") : t("addConfiguration")}
         open={isConfigModalOpen}
         onCancel={() => setIsConfigModalOpen(false)}
         footer={null}

@@ -36,21 +36,21 @@ const OfferConfigurationForm: React.FC<OfferConfigurationFormProps> = ({ initial
       <Form.Item name="id" hidden/>
       <Form.Item 
         name="description"
-        label="Description"
+        label={t("description")}
         rules={[{ required: true, message: t("validation.required") }]}
       >
         <Input />
       </Form.Item>
       <Form.Item
         name="dailyPrice"
-        label="Daily Price"
+        label={t("dailyPrice")} 
         rules={[{ required: true, message: t("validation.required") }]}
       >
         <InputNumber min={1} max={9999} />
       </Form.Item>
       <Form.Item 
         name={["selectedOptions", "SEX"]} 
-        label="Sex"
+        label={t("sex")} 
         rules={[{ required: true, message: t("validation.required") }]}
       >
         <Select 
@@ -64,7 +64,7 @@ const OfferConfigurationForm: React.FC<OfferConfigurationFormProps> = ({ initial
       </Form.Item>
       <Form.Item
         name={["selectedOptions", "SIZE"]}
-        label="Size"
+        label={t("size")}
         rules={[{ required: true, message: t("validation.required") }]}
       >
         <Select

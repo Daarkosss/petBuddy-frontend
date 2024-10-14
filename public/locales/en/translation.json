@@ -109,11 +109,35 @@
 
   "error": {
     "createCaretakerProfile": "An error occurred while creating caretaker profile",
-    "editCaretakerForm": "An error occurred while editing caretaker data"
+    "editCaretakerForm": "An error occurred while editing caretaker data",
+    "createOffer": "An error occurred while creating offer",
+    "editOffer": "An error occurred while updating offer",
+    "loadOffers": "An error occurred while loading offers",
+    "deleteOffer": "An error occurred while deleting offer",
+    "deleteConfiguration": "An error occurred while deleting configuration",
+    "editConfiguration": "An error occurred while updating configuration",
+    "createConfiguration": "An error occurred while creating configuration"
   },
 
   "success": {
     "createCaretakerProfile": "Caretaker profile has been successfully created",
-    "editCaretakerForm": "Caretaker data has been successfully updated"
-  }
+    "editCaretakerForm": "Caretaker data has been successfully updated",
+    "createOffer": "Offer has been successfully created",
+    "editOffer": "Offer has been successfully updated",
+    "deleteOffer": "Offer has been successfully deleted",
+    "deleteConfiguration": "Configuration has been successfully deleted",
+    "editConfiguration": "Configuration has been successfully updated",
+    "createConfiguration": "Configuration has been successfully created"
+  },
+
+  "dailyPrice": "Daily price",
+
+  "addOffer": "Add offer",
+  "editOffer": "Edit offer",
+  "addConfiguration": "Add configuration",
+  "editConfiguration": "Edit configuration",
+  "animalType": "Animal type",
+  "manage": "Manage",
+  "edit": "Edit",
+  "delete": "Delete"
 }
