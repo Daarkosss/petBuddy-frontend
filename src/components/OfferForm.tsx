@@ -20,7 +20,7 @@ const OfferForm: React.FC<OfferFormProps> = ({ offer, onSuccess }) => {
     setIsLoading(true);
     try {
       await api.addOrEditOffer(values);
-      toast.success(offer ? t("success.editOffer") : t("success.createOffer"));
+      toast.success(offer ? t("success.editOffer") : t("success.addOffer"));
       onSuccess();
     } catch (error) {
       toast.error(offer ? t("error.editOffer") : t("error.addOffer"));

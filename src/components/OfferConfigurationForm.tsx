@@ -33,7 +33,9 @@ const OfferConfigurationForm: React.FC<OfferConfigurationFormProps> = ({ initial
       form={form}
       onFinish={handleFinish}
     >
-      <Form.Item name="id" hidden/>
+      <Form.Item name="id" hidden>
+        <Input />
+      </Form.Item>
       <Form.Item 
         name="description"
         label={t("description")}
