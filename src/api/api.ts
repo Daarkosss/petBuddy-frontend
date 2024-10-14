@@ -119,7 +119,7 @@ class API {
       })),
     }));
 
-    return this.authorizedFetch<CaretakerBasicsResponse>(
+    return this.fetch<CaretakerBasicsResponse>(
       "POST",
       `api/caretaker?${queryString}`,
       requestBody
@@ -143,7 +143,7 @@ class API {
 
   async getCaretakerDetails(email: string): Promise<CaretakerDetailsDTO> {
     try {
-      const response = await this.authorizedFetch<CaretakerDetailsDTO>(
+      const response = await this.fetch<CaretakerDetailsDTO>(
         "GET",
         `api/caretaker/${email}`
       );
