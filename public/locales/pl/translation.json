@@ -111,23 +111,23 @@
     "createCaretakerProfile": "Wystąpił błąd podczas tworzenia profilu opiekuna",
     "editCaretakerForm": "Wystąpił błąd podczas edycji danych opiekuna",
     "editOffer": "Wystąpił błąd podczas edycji oferty",
-    "createOffer": "Wystąpił błąd podczas tworzenia oferty",
+    "addOffer": "Wystąpił błąd podczas tworzenia oferty",
     "loadOffers": "Wystąpił błąd podczas ładowania ofert",
     "deleteOffer": "Wystąpił błąd podczas usuwania oferty",
     "deleteConfiguration": "Wystąpił błąd podczas usuwania konfiguracji",
     "editConfiguration": "Wystąpił błąd podczas edycji konfiguracji",
-    "createConfiguration": "Wystąpił błąd podczas tworzenia konfiguracji"
+    "addConfiguration": "Wystąpił błąd podczas tworzenia konfiguracji"
   },
 
   "success": {
     "createCaretakerProfile": "Profil opiekuna został pomyślnie utworzony",
     "editCaretakerForm": "Dane opiekuna zostały pomyślnie zaktualizowane",
-    "createOffer": "Oferta została pomyślnie utworzona",
+    "addOffer": "Oferta została pomyślnie utworzona",
     "editOffer": "Oferta została pomyślnie zaktualizowana",
     "deleteOffer": "Oferta została pomyślnie usunięta",
     "deleteConfiguration": "Konfiguracja została pomyślnie usunięta",
     "editConfiguration": "Konfiguracja została pomyślnie zaktualizowana",
-    "createConfiguration": "Konfiguracja została pomyślnie utworzona"
+    "addConfiguration": "Konfiguracja została pomyślnie utworzona"
   },
 
   "dailyPrice": "Cena za dzień",
@@ -139,5 +139,12 @@
   "animalType": "Rodzaj zwierzęcia",
   "manage": "Zarządzaj",
   "edit": "Edytuj",
-  "delete": "Usuń"
+  "delete": "Usuń",
+  "yes": "Tak",
+  "no": "Nie",
+
+  "deleteConfiguration": "Usuń konfigurację",
+  "confirmConfigurationDelete": "Czy na pewno chcesz usunąć tę konfigurację?",
+  "deleteOffer": "Usuń ofertę",
+  "confirmOfferDelete": "Czy na pewno chcesz usunąć tę ofertę wraz z wszystkimi przypisanymi konfiguracjami?"
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Table, Modal, Space } from "antd";
+import { Button, Table, Modal, Space, Popconfirm } from "antd";
 import { OfferDTOWithId, OfferConfigurationWithId } from "../types";
 import OfferForm from "../components/OfferForm";
 import { api } from "../api/api";
@@ -116,13 +116,17 @@ const OfferList: React.FC = () => {
         render: (record: OfferConfigurationWithId & { id: number }) => (
           <Space size="middle">
             <Button onClick={() => handleEditConfiguration(record)}>{t("edit")}</Button>
-            <Button
-              type="primary"
-              danger
-              onClick={() => handleDeleteConfiguration(record.id)}
+            <Popconfirm
+              title={t("deleteConfiguration")}
+              description={t("confirmConfigurationDelete")}
+              okText={t("yes")}
+              cancelText={t("no")}
+              onConfirm={() => handleDeleteConfiguration(record.id)}
             >
-              {t("delete")}
-            </Button>
+              <Button type="primary" danger>
+                {t("delete")}
+              </Button>
+            </Popconfirm>
           </Space>
         ),
       },
@@ -163,14 +167,17 @@ const OfferList: React.FC = () => {
             render: (offer) => (
               <Space size="middle">
                 <Button onClick={() => handleEditOffer(offer)}>{t("edit")}</Button>
-                <Button
-                  type="primary"
-                  danger
-                  onClick={() => handleDeleteOffer(offer.id)}
-                  disabled
+                <Popconfirm
+                  title={t("deleteOffer")}
+                  description={t("confirmOfferDelete")}
+                  okText={t("yes")}
+                  cancelText={t("no")}
+                  onConfirm={() => handleDeleteOffer(offer.id)}
                 >
+                <Button type="primary" danger disabled>
                   {t("delete")}
                 </Button>
+                </Popconfirm>
               </Space>
             ),
           },
