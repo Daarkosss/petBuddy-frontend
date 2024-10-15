@@ -58,10 +58,10 @@ const ChatBox: React.FC<ChatBoxProperties> = ({ recipientEmail }) => {
   }, [sessionId, chatId]);
 
   useEffect(() => {
-    if (doesChatRoomExist == true) {
+    if (doesChatRoomExist == true && chatId != null) {
       getMessages();
     }
-  }, [doesChatRoomExist]);
+  }, [doesChatRoomExist, chatId]);
 
   //TODO: implement this
   const checkIfChatRoomExists = async () => {
@@ -97,13 +97,25 @@ const ChatBox: React.FC<ChatBoxProperties> = ({ recipientEmail }) => {
       "Europe/Warsaw"
     );
     console.log(`Messages: ${messagesResponse.content}`);
-    setMessages([...messagesResponse.content]);
+    setMessages([...messagesResponse.content].reverse());
   };
 
   //TODO: timezone
-  const initializeChatRoom = (message: string) => {
+  const initializeChatRoom = async (message: string) => {
     console.log("initializing chat room");
-    api.initializeChatRoom(recipientEmail, message, "Europe/Warsaw");
+    await api.initializeChatRoom(recipientEmail, message, "Europe/Warsaw");
+    setDoesChatRoomExist(true);
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      {
+        id: 1,
+        chatId: chatId!,
+        senderEmail: store.user.profile!.email!,
+        content: message,
+        createdAt: new Date().toISOString(),
+        seenByRecipient: false,
+      },
+    ]);
   };
 
   const initWebsocketConnection = () => {
@@ -181,7 +193,6 @@ const ChatBox: React.FC<ChatBoxProperties> = ({ recipientEmail }) => {
         body: JSON.stringify(chatMessage),
         headers: headers,
       });
-      setInputMessage("");
     } else console.log("sending message ended without sending message");
   };
 
@@ -226,7 +237,16 @@ const ChatBox: React.FC<ChatBoxProperties> = ({ recipientEmail }) => {
   const onSend = (input: string) => {
     console.log(`sending while does chat room exist: ${doesChatRoomExist}`);
     if (doesChatRoomExist == false) {
-      initializeChatRoom(input);
+      try {
+        initializeChatRoom(input);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          throw new Error(`Failed to initialize chat room: ${error.message}`);
+        }
+        throw new Error(
+          "An unknown error occurred while initializing chat room"
+        );
+      }
     } else if (doesChatRoomExist == true) {
       sendMessageToChatRoom(input);
     }
