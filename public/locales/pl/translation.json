@@ -30,7 +30,7 @@
   "amenities": "Udogodnienia",
   "amenityTypes": {
     "toys": "Zabawki",
-    "scratchingPost": "Drapak",
+    "scratching post": "Drapak",
     "cage": "Klatka"
   },
 
@@ -138,6 +138,7 @@
   "editConfiguration": "Edytuj konfigurację",
   "animalType": "Rodzaj zwierzęcia",
   "manage": "Zarządzaj",
+  "availability": "Dostępność",
   "edit": "Edytuj",
   "delete": "Usuń",
   "yes": "Tak",

@@ -30,6 +30,7 @@ export type OfferDTO = {
 export type OfferDTOWithId = Omit<OfferDTO, "offerConfigurations"> & {
   id: number;
   offerConfigurations: OfferConfigurationWithId[];
+  animalAmenities: string[];
   availabilities: AvailabilityDTO[];
 }
 

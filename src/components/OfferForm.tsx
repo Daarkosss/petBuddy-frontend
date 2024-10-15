@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Input, Button, Select } from "antd";
 import { OfferDTO, OfferDTOWithId } from "../types";
 import { api } from "../api/api";
@@ -15,6 +15,15 @@ const OfferForm: React.FC<OfferFormProps> = ({ offer, onSuccess }) => {
 
   const [form] = Form.useForm();
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (offer) {
+      form.setFieldsValue(offer);
+    } else {
+      form.resetFields();
+    }
+  }, [offer, form]);
+  
 
   const handleFinish = async (values: OfferDTO) => {
     setIsLoading(true);
@@ -51,6 +60,19 @@ const OfferForm: React.FC<OfferFormProps> = ({ offer, onSuccess }) => {
             { value: "BIRD", label: t("bird") },
             { value: "REPTILE", label: t("reptile") },
             { value: "HORSE", label: t("horse") }
+          ]}
+        />
+      </Form.Item>
+      <Form.Item
+        name="animalAmenities"
+        label={t("amenities")}
+      >
+        <Select 
+          mode="multiple"
+          options={[
+            { value: "toys", label: t("amenityTypes.toys") },
+            { value: "scratching post", label: t("amenityTypes.scratchingPost") },
+            { value: "cage", label: t("amenityTypes.cage") },
           ]}
         />
       </Form.Item>

@@ -1,0 +1,16 @@
+@use "../helpers/variables" as v;
+@use "../components/buttons" as b;
+
+.offer-management-page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  .add-offer-button {
+    @extend .submit-button;
+
+    margin: 20px 20px 0px 0px;
+    float: right;
+    align-self: flex-end;
+  }
+}

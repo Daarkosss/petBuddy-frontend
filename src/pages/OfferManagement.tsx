@@ -8,7 +8,7 @@ import store from "../store/RootStore";
 import ConfigurationForm from "../components/OfferConfigurationForm";
 import { t } from "i18next";
 
-const OfferList: React.FC = () => {
+const OfferManagement: React.FC = () => {
   const [offers, setOffers] = useState<OfferDTOWithId[]>([]);
   const [editingOffer, setEditingOffer] = useState<OfferDTOWithId | null>(null);
   const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
@@ -152,8 +152,10 @@ const OfferList: React.FC = () => {
   };
 
   return (
-    <div>
-      <Button type="primary" onClick={handleAddOffer}>{t("addOffer")}</Button>
+    <div className="offer-management-page">
+      <Button type="primary" onClick={handleAddOffer} className="add-offer-button">
+        {t("addOffer")}
+      </Button>
       <Table
         dataSource={offers}
         columns={[
@@ -161,7 +163,10 @@ const OfferList: React.FC = () => {
           { title: t("animalType"), dataIndex: ["animal", "animalType"],
             render: (value) => t(value.toLowerCase())
           },
-          { title: "Availabilty", dataIndex: "availabilities" },
+          { title: t("amenities"), dataIndex: "animalAmenities",
+            render: (values: string[]) => values.map(value => t(`amenityTypes.${value.toLowerCase()}`)).join(", ")
+          },
+          { title: t("availability"), dataIndex: "availabilities" },
           {
             title: t("manage"),
             render: (offer) => (
@@ -214,4 +219,4 @@ const OfferList: React.FC = () => {
   );
 };
 
-export default OfferList;
+export default OfferManagement;
