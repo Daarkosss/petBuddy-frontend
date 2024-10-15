@@ -3,16 +3,10 @@ import { useEffect } from "react";
 import { useRef } from "react";
 import Message from "./Message";
 import "../scss/components/_chatMessages.scss";
+import { ChatMessage } from "../types/chat.types";
 
 interface ChatBoxContent {
-  messages: {
-    id: number;
-    chatId: number;
-    senderEmail: string;
-    content: string;
-    createdAt: string;
-    seenByRecipient: boolean;
-  }[];
+  messages: ChatMessage[];
 }
 
 const ChatMessages: React.FC<ChatBoxContent> = ({ messages }) => {
