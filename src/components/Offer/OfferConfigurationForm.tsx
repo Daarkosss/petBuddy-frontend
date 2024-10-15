@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Form, Input, Button, InputNumber, Select } from "antd";
-import { OfferConfigurationWithId } from "../types";
+import { OfferConfigurationWithId } from "../../types";
 import { useTranslation } from "react-i18next";
 
 interface OfferConfigurationFormProps {

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Form, Input, Button, Select } from "antd";
-import { OfferDTO, OfferDTOWithId } from "../types";
-import { api } from "../api/api";
+import { OfferDTO, OfferDTOWithId } from "../../types";
+import { api } from "../../api/api";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 
@@ -10,36 +10,27 @@ interface OfferFormProps {
   onSuccess: () => void;
 }
 
-const OfferForm: React.FC<OfferFormProps> = ({ offer, onSuccess }) => {
+const OfferForm: React.FC<OfferFormProps> = ({ onSuccess }) => {
   const { t } = useTranslation();
 
   const [form] = Form.useForm();
   const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    if (offer) {
-      form.setFieldsValue(offer);
-    } else {
-      form.resetFields();
-    }
-  }, [offer, form]);
   
-
   const handleFinish = async (values: OfferDTO) => {
     setIsLoading(true);
     try {
       await api.addOrEditOffer(values);
-      toast.success(offer ? t("success.editOffer") : t("success.addOffer"));
+      toast.success(t("success.addOffer"));
       onSuccess();
     } catch (error) {
-      toast.error(offer ? t("error.editOffer") : t("error.addOffer"));
+      toast.error(t("error.addOffer"));
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <Form form={form} onFinish={handleFinish} initialValues={offer}>
+    <Form form={form} onFinish={handleFinish}>
       <Form.Item
         name="description"
         label={t("description")}
@@ -77,7 +68,7 @@ const OfferForm: React.FC<OfferFormProps> = ({ offer, onSuccess }) => {
         />
       </Form.Item>
       <Button type="primary" htmlType="submit" loading={isLoading}>
-        {offer ? t("editOffer") : t("addOffer")}
+        {t("addOffer")}
       </Button>
     </Form>
   );
