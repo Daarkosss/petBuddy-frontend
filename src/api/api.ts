@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
 import store from "../store/RootStore";
-import { CaretakerBasicsResponse, CaretakerSearchFilters, PagingParams, CaretakerFormFields, UserProfiles, CaretakerDetailsDTO, OfferDTO, OfferConfigurationDTO, SetAvailabilityDTO } from "../types";
+import { CaretakerBasicsResponse, CaretakerSearchFilters, PagingParams, CaretakerFormFields, UserProfiles, CaretakerDetailsDTO, OfferDTO, OfferConfigurationDTO, SetAvailabilityDTO, EditOfferDescription } from "../types";
 
 const backendHost =
   import.meta.env.VITE_BACKEND_HOST || window.location.hostname;
@@ -172,7 +172,7 @@ class API {
     );
   }
 
-  async addOrEditOffer(offer: OfferDTO): Promise<void> {
+  async addOrEditOffer(offer: OfferDTO | EditOfferDescription): Promise<void> {
     if (store.user.profile?.selected_profile) {
       return this.authorizedFetch<void>(
         "POST",

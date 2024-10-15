@@ -1,6 +1,6 @@
-import React from "react";
-import { Button, Table, Space, Popconfirm } from "antd";
-import { OfferDTOWithId, OfferConfigurationWithId } from "../../types";
+import React, { ChangeEvent, useState } from "react";
+import { Button, Table, Space, Popconfirm, Input } from "antd";
+import { OfferDTOWithId, OfferConfigurationWithId, EditOfferDescription } from "../../types";
 import { api } from "../../api/api";
 import { toast } from "react-toastify";
 import store from "../../store/RootStore";
@@ -23,6 +23,8 @@ const OfferManagementTable: React.FC<OfferManagementTableProps> = ({
   setEditingOffer,
   setEditingConfig,
 }) => {
+  const [editingKey, setEditingKey] = useState<string | null>(null);
+  const [editedDescription, setEditedDescription] = useState<string>("");
 
   const loadOffers = async () => {
     try {
@@ -69,6 +71,31 @@ const OfferManagementTable: React.FC<OfferManagementTableProps> = ({
     } catch (error) {
       toast.error(t("error.deleteConfiguration"));
     }
+  };
+
+  const handleEditDescription = (offer: OfferDTOWithId) => {
+    setEditingKey(offer.id.toString());
+    setEditedDescription(offer.description);
+  };
+
+  const handleSaveDescription = async (offer: OfferDTOWithId) => {
+    try {
+      const updatedOffer: EditOfferDescription = { 
+        animal: offer.animal,
+        description: editedDescription,
+      };
+      await api.addOrEditOffer(updatedOffer);
+      setEditingKey(null);
+      loadOffers();
+      toast.success(t("success.editDescription"));
+    } catch (error) {
+      toast.error(t("error.editDescription"));
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditingKey(null);
+    setEditedDescription("");
   };
 
   const expandedRowRender = (offer: OfferDTOWithId) => {
@@ -123,40 +150,62 @@ const OfferManagementTable: React.FC<OfferManagementTableProps> = ({
     );
   };
 
-  return (
-    <Table
-      dataSource={offers}
-      columns={[
-        { title: t("description"), dataIndex: "description" },
-        { title: t("animalType"), dataIndex: ["animal", "animalType"],
-          render: (value) => t(value.toLowerCase())
-        },
-        { title: t("amenities"), dataIndex: "animalAmenities",
-          render: (values: string[]) => values.map(value => t(`amenityTypes.${value.toLowerCase()}`)).join(", ")
-        },
-        { title: t("availability"), dataIndex: "availabilities" },
-        {
-          title: t("manage"),
-          render: (offer) => (
-            <Space size="middle">
-              <Button onClick={() => handleEditOffer(offer)}>{t("editDescription")}</Button>
-              <Button onClick={() => handleEditOffer(offer)}>{t("editAvailability")}</Button>
-              <Button onClick={() => handleEditOffer(offer)}>{t("editAmenities")}</Button>
-              <Popconfirm
-                title={t("deleteOffer")}
-                description={t("confirmOfferDelete")}
-                okText={t("yes")}
-                cancelText={t("no")}
-                onConfirm={() => handleDeleteOffer(offer.id)}
-              >
+  const columns = [
+    {
+      title: t("description"),
+      dataIndex: "description",
+      render: (text: string, record: OfferDTOWithId) => {
+        return editingKey === record.id.toString() ? (
+          <Input
+            value={editedDescription}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setEditedDescription(e.target.value)}
+          />
+        ) : (
+          text
+        );
+      },
+    },
+    { title: t("animalType"), dataIndex: ["animal", "animalType"],
+      render: (value: string) => t(value.toLowerCase())
+    },
+    { title: t("amenities"), dataIndex: "animalAmenities",
+      render: (values: string[]) => values.map(value => t(`amenityTypes.${value.toLowerCase()}`)).join(", ")
+    },
+    { title: t("availability"), dataIndex: "availabilities" },
+    {
+      title: t("manage"),
+      render: (offer: OfferDTOWithId) => {
+        return editingKey === offer.id.toString() ? (
+          <Space size="middle">
+            <Button onClick={() => handleSaveDescription(offer)}>{t("save")}</Button>
+            <Button onClick={handleCancelEdit}>{t("cancel")}</Button>
+          </Space>
+        ) : (        
+          <Space size="middle">
+            <Button onClick={() => handleEditOffer(offer)}>{t("edit")}</Button>
+            <Button onClick={() => handleEditDescription(offer)}>{t("editDescription")}</Button>
+            {/* <Button onClick={() => handleEditAvailability(offer.id)}>{t("delete")}</Button> */}
+            <Popconfirm
+              title={t("deleteOffer")}
+              description={t("confirmOfferDelete")}
+              okText={t("yes")}
+              cancelText={t("no")}
+              onConfirm={() => handleDeleteOffer(offer.id)}
+            >
               <Button type="primary" danger disabled>
                 {t("delete")}
               </Button>
-              </Popconfirm>
-            </Space>
-          ),
-        },
-      ]}
+            </Popconfirm>
+          </Space>
+        )
+      },
+    },
+  ];
+
+  return (
+    <Table
+      dataSource={offers}
+      columns={columns}
       pagination={false}
       rowKey="id"
       expandable={{

@@ -27,6 +27,8 @@ export type OfferDTO = {
   animalAmenities: string[];
 }
 
+export type EditOfferDescription = Pick<OfferDTO, "animal" | "description">;
+
 export type OfferDTOWithId = Omit<OfferDTO, "offerConfigurations"> & {
   id: number;
   offerConfigurations: OfferConfigurationWithId[];

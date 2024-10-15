@@ -86,7 +86,6 @@ const OfferManagement: React.FC = () => {
       >
         <OfferForm offer={editingOffer!} onSuccess={handleSuccessfulOfferSave} />
       </Modal>
-
       <Modal
         title={editingConfig ? t("editConfiguration") : t("addConfiguration")}
         open={isConfigModalOpen}
