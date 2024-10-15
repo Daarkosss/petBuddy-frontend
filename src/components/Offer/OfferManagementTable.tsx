@@ -5,6 +5,7 @@ import { api } from "../../api/api";
 import { toast } from "react-toastify";
 import store from "../../store/RootStore";
 import { t } from "i18next";
+import { EditOutlined } from "@ant-design/icons"; // Import the edit icon
 
 type OfferManagementTableProps = {
   offers: OfferDTOWithId[];
@@ -13,7 +14,7 @@ type OfferManagementTableProps = {
   setIsConfigModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setEditingOffer: React.Dispatch<React.SetStateAction<OfferDTOWithId | null>>;
   setEditingConfig: React.Dispatch<React.SetStateAction<OfferConfigurationWithId | null>>;
-}
+};
 
 const OfferManagementTable: React.FC<OfferManagementTableProps> = ({
   offers,
@@ -159,17 +160,24 @@ const OfferManagementTable: React.FC<OfferManagementTableProps> = ({
           <Input
             value={editedDescription}
             onChange={(e: ChangeEvent<HTMLInputElement>) => setEditedDescription(e.target.value)}
+            style={{ width: "max-content" }}
           />
         ) : (
-          text
+          <>
+            {text} 
+            <EditOutlined
+              style={{ marginLeft: 10 }}
+              onClick={() => handleEditDescription(record)}
+            />
+          </>
         );
       },
     },
     { title: t("animalType"), dataIndex: ["animal", "animalType"],
-      render: (value: string) => t(value.toLowerCase())
+      render: (value: string) => t(value.toLowerCase()),
     },
     { title: t("amenities"), dataIndex: "animalAmenities",
-      render: (values: string[]) => values.map(value => t(`amenityTypes.${value.toLowerCase()}`)).join(", ")
+      render: (values: string[]) => values.map(value => t(`amenityTypes.${value.toLowerCase()}`)).join(", "),
     },
     { title: t("availability"), dataIndex: "availabilities" },
     {
@@ -182,9 +190,7 @@ const OfferManagementTable: React.FC<OfferManagementTableProps> = ({
           </Space>
         ) : (        
           <Space size="middle">
-            <Button onClick={() => handleEditOffer(offer)}>{t("edit")}</Button>
-            <Button onClick={() => handleEditDescription(offer)}>{t("editDescription")}</Button>
-            {/* <Button onClick={() => handleEditAvailability(offer.id)}>{t("delete")}</Button> */}
+            <Button onClick={() => handleEditOffer(offer)}>{t("editOffer")}</Button>
             <Popconfirm
               title={t("deleteOffer")}
               description={t("confirmOfferDelete")}
@@ -192,12 +198,12 @@ const OfferManagementTable: React.FC<OfferManagementTableProps> = ({
               cancelText={t("no")}
               onConfirm={() => handleDeleteOffer(offer.id)}
             >
-              <Button type="primary" danger disabled>
+              <Button type="primary" danger>
                 {t("delete")}
               </Button>
             </Popconfirm>
           </Space>
-        )
+        );
       },
     },
   ];

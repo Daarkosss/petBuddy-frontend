@@ -146,6 +146,7 @@
   "delete": "Usuń",
   "yes": "Tak",
   "no": "Nie",
+  "manageOffer": "Zarządzaj ofertą",
 
   "deleteConfiguration": "Usuń konfigurację",
   "confirmConfigurationDelete": "Czy na pewno chcesz usunąć tę konfigurację?",

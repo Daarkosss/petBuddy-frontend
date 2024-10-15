@@ -10,7 +10,7 @@ interface OfferFormProps {
   onSuccess: () => void;
 }
 
-const OfferForm: React.FC<OfferFormProps> = ({ onSuccess }) => {
+const AddOfferForm: React.FC<OfferFormProps> = ({ onSuccess }) => {
   const { t } = useTranslation();
 
   const [form] = Form.useForm();
@@ -32,13 +32,6 @@ const OfferForm: React.FC<OfferFormProps> = ({ onSuccess }) => {
   return (
     <Form form={form} onFinish={handleFinish}>
       <Form.Item
-        name="description"
-        label={t("description")}
-        rules={[{ required: true, message: t("validation.required") }]}
-      >
-        <Input />
-      </Form.Item>
-      <Form.Item
         name={["animal", "animalType"]}
         label={t("animalType")}
         rules={[{ required: true, message: t("validation.required") }]}
@@ -53,6 +46,13 @@ const OfferForm: React.FC<OfferFormProps> = ({ onSuccess }) => {
             { value: "HORSE", label: t("horse") }
           ]}
         />
+      </Form.Item>
+      <Form.Item
+        name="description"
+        label={t("description")}
+        rules={[{ required: true, message: t("validation.required") }]}
+      >
+        <Input />
       </Form.Item>
       <Form.Item
         name="animalAmenities"
@@ -74,4 +74,4 @@ const OfferForm: React.FC<OfferFormProps> = ({ onSuccess }) => {
   );
 };
 
-export default OfferForm;
+export default AddOfferForm;

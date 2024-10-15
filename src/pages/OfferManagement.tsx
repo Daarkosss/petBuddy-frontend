@@ -1,20 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Button, Modal } from "antd";
-import { OfferDTOWithId, OfferConfigurationWithId } from "../types";
-import OfferForm from "../components/Offer/CreateOfferForm";
+import { Row, Col, Button, Modal } from "antd";
+import { OfferDTOWithId } from "../types";
+import OfferCard from "../components/Offer/OfferCard";
 import { api } from "../api/api";
 import { toast } from "react-toastify";
 import store from "../store/RootStore";
-import ConfigurationForm from "../components/Offer/OfferConfigurationForm";
 import { t } from "i18next";
-import OfferManagementTable from "../components/Offer/OfferManagementTable";
+import AddOfferForm from "../components/Offer/AddOfferForm";
 
 const OfferManagement: React.FC = () => {
   const [offers, setOffers] = useState<OfferDTOWithId[]>([]);
-  const [editingOffer, setEditingOffer] = useState<OfferDTOWithId | null>(null);
   const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
-  const [editingConfig, setEditingConfig] = useState<OfferConfigurationWithId | null>(null);
-  const [isConfigModalOpen, setIsConfigModalOpen] = useState(false);
+
 
   useEffect(() => {
     loadOffers();
@@ -31,9 +28,14 @@ const OfferManagement: React.FC = () => {
     }
   };
 
-  const handleAddOffer = () => {
-    setEditingOffer(null);
-    setIsOfferModalOpen(true);
+  const handleSaveDetails = async (updatedOffer: OfferDTOWithId) => {
+    try {
+      await api.addOrEditOffer(updatedOffer);
+      toast.success(t("success.editOffer"));
+      loadOffers();
+    } catch (error) {
+      toast.error(t("error.editOffer"));
+    }
   };
 
   const handleSuccessfulOfferSave = () => {
@@ -41,62 +43,29 @@ const OfferManagement: React.FC = () => {
     loadOffers();
   };
 
-  const handleSaveConfiguration = async (newConfig: OfferConfigurationWithId) => {
-    if (newConfig.id) {
-      try {
-        await api.editOfferConfiguration(newConfig.id, newConfig);
-        toast.success(t("success.editConfiguration"));
-        setIsConfigModalOpen(false);
-        loadOffers();
-      } catch (error) {
-        toast.error(t("error.editConfiguration"));
-      }
-    } else {
-      try {
-        await api.addOfferConfiguration(editingOffer!.id, newConfig);
-        toast.success(t("success.addConfiguration"));
-        setIsConfigModalOpen(false);
-        loadOffers();
-      } catch (error) {
-        toast.error(t("error.addConfiguration"));
-      }
-    }
-    setEditingConfig(null);
+  const handleAddOffer = () => {
+    setIsOfferModalOpen(true);
   };
 
   return (
     <div className="offer-management-page">
-      <Button type="primary" onClick={handleAddOffer} className="add-offer-button">
-        {t("addOffer")}
-      </Button>
-      <OfferManagementTable
-        offers={offers}
-        setOffers={setOffers}
-        setIsOfferModalOpen={setIsOfferModalOpen}
-        setIsConfigModalOpen={setIsConfigModalOpen}
-        setEditingOffer={setEditingOffer}
-        setEditingConfig={setEditingConfig}
-      />
+      <h1>{t("manageOffer")}</h1>
+      <Button type="primary" onClick={handleAddOffer}>{t("addOffer")}</Button>
+      <Row gutter={[50, 50]}>
+        {offers.map((offer) => (
+          <Col key={offer.id}>
+            <OfferCard offer={offer} onSave={handleSaveDetails} />
+          </Col>
+        ))}
+      </Row>
       <Modal
-        title={editingOffer ? t("editOffer") : t("addOffer")}
+        title={t("addOffer")}
         open={isOfferModalOpen}
         onCancel={() => setIsOfferModalOpen(false)}
         footer={null}
         maskClosable={false}
       >
-        <OfferForm offer={editingOffer!} onSuccess={handleSuccessfulOfferSave} />
-      </Modal>
-      <Modal
-        title={editingConfig ? t("editConfiguration") : t("addConfiguration")}
-        open={isConfigModalOpen}
-        onCancel={() => setIsConfigModalOpen(false)}
-        footer={null}
-        maskClosable={false}
-      >
-        <ConfigurationForm
-          initialValues={editingConfig}
-          onSuccess={handleSaveConfiguration}
-        />
+        <AddOfferForm onSuccess={handleSuccessfulOfferSave} />
       </Modal>
     </div>
   );

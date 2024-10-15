@@ -5,6 +5,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  padding: 20px;
 
   .add-offer-button {
     @extend .submit-button;
@@ -12,5 +13,29 @@
     margin: 20px 20px 0px 0px;
     float: right;
     align-self: flex-end;
+  }
+}
+
+.offer-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.offer-field {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  
+  .label {
+    font-weight: bold;
+    display: flex;
+    justify-content: left;
+    gap: 10px;
+  }
+
+  .value {
+    font-weight: normal;
   }
 }
