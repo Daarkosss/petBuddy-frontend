@@ -14,6 +14,8 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
-    "quotes": ["error", "double"],
+    "quotes": ["error", "double"], // Enforce the use of double quotes
+    "max-len": ["warn", { "code": 120 }], // Enforce maximum line length
+    "eqeqeq": ["error", "always"], // Enforce use of === and !==
   },
 }

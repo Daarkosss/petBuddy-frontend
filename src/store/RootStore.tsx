@@ -3,7 +3,8 @@ import UserStore from "./UserStore";
 
 class RootStore {
   user: UserStore;
-  _isStarting: boolean = true;
+  private _isStarting = true;
+  private _selectedMenuOption = "";
 
   constructor() {
     makeAutoObservable(this);
@@ -20,6 +21,14 @@ class RootStore {
 
   set isStarting(value: boolean) {
     this._isStarting = value;
+  }
+
+  get selectedMenuOption() {
+    return this._selectedMenuOption;
+  }
+
+  set selectedMenuOption(option: string) {
+    this._selectedMenuOption = option;
   }
 }
 
