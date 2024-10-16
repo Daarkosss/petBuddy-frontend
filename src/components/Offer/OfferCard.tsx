@@ -146,7 +146,7 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, onSave }) => {
             )}
           </div>
         </div>
-        </Modal>
+      </Modal>
     </div>
   );
 };

@@ -4,19 +4,15 @@
 .offer-management-page {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  padding: 20px;
+  gap: 40px;
 
   .offer-management-header {
+    margin-top: 20px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 15px;
     align-items: center;
-  }
-
-  .add-offer-button {
-    @extend .submit-button;
-
+    color: v.$white
   }
 }
 
@@ -42,21 +38,4 @@
   .value {
     font-weight: normal;
   }
-}
-
-.ant-card-actions {
-  display: flex;
-}
-
-.ant-card-actions > li {
-  flex: 1;
-}
-.action-larger {
-  flex-grow: 3; /* Ta akcja zajmuje więcej miejsca */
-  text-align: center; /* Centruj tekst */
-}
-
-.action-smaller {
-  flex-grow: 1; /* Ta akcja zajmuje mniej miejsca */
-  text-align: center; /* Centruj tekst */
 }
