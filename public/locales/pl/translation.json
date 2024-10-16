@@ -52,7 +52,7 @@
     "streetNumber": "np. 102A",
     "apartmentNumber": "np. 7",
     "phoneNumber": "np. 000000000",
-    "description": "np. Zajmuje się opieką nad zwierzętami już od 2 lat. Moi klienci zawsze są zadowoleni...",
+    "description": "np. Zajmuję się opieką nad zwierzętami już od 2 lat. Moi klienci zawsze są zadowoleni...",
     "sex": "np. Samiec",
     "animalType": "np. Pies",
     "date": "Naciśnij, aby wybrać datę"
@@ -100,7 +100,7 @@
 
   "landingPage": {
     "title": "Witamy w Pet Buddy, miejscu gdzie możesz znaleźć opiekuna dla swojego pupila lub samemu zacząć opiekować się zwierzętami innych osób",
-    "subtitle": "Użyj poniższego paska wyszukiwania, aby znaleźć opiekuna lub uwierzytelnij się, aby uzyskać więcej opcji.",
+    "subtitle": "Użyj poniższego paska wyszukiwania, aby znaleźć opiekuna lub zaloguj się, aby uzyskać więcej opcji.",
     "searchTitle": "Znajdz najlepszego opiekuna dla swojego pupila"
   },
   
