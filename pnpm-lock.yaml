@@ -26,6 +26,9 @@ dependencies:
   bootstrap:
     specifier: ^5.3.3
     version: 5.3.3(@popperjs/core@2.11.8)
+  classnames:
+    specifier: ^2.5.1
+    version: 2.5.1
   i18next:
     specifier: ^23.12.2
     version: 23.12.2

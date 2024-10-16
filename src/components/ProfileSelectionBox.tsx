@@ -33,7 +33,7 @@ const ProfileSelectionBox: React.FC<Image> = ({
         if (profile) {
           store.user.setSelectedProfile(profile);
           store.user.saveProfileToStorage(store.user.profile);
-          navigate("/home");
+          navigate("/");
         } else {
           navigate("/caretaker/form");
         }

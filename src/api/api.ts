@@ -1,6 +1,9 @@
 import { toast } from "react-toastify";
 import store from "../store/RootStore";
-import { CaretakerBasicsResponse, CaretakerSearchFilters, PagingParams, CaretakerFormFields, UserProfiles, CaretakerDetailsDTO, OfferDTO, OfferConfigurationDTO, SetAvailabilityDTO, EditOfferDescription } from "../types";
+import { 
+  CaretakerBasicsResponse, CaretakerSearchFilters, PagingParams, CaretakerFormFields, UserProfiles,
+  CaretakerDetailsDTO, OfferDTO, OfferConfigurationDTO, SetAvailabilityDTO, EditOfferDescription
+} from "../types";
 
 const backendHost =
   import.meta.env.VITE_BACKEND_HOST || window.location.hostname;
@@ -56,6 +59,7 @@ class API {
         Authorization: `Bearer ${store.user.jwtToken}`,
       });
     } else {
+      toast.error("No user token available");
       return Promise.reject(new Error("No user token available"));
     }
   }
@@ -117,7 +121,7 @@ class API {
       })),
     }));
 
-    return this.authorizedFetch<CaretakerBasicsResponse>(
+    return this.fetch<CaretakerBasicsResponse>(
       "POST",
       `api/caretaker?${queryString}`,
       requestBody
@@ -141,7 +145,7 @@ class API {
 
   async getCaretakerDetails(email: string): Promise<CaretakerDetailsDTO> {
     try {
-      const response = await this.authorizedFetch<CaretakerDetailsDTO>(
+      const response = await this.fetch<CaretakerDetailsDTO>(
         "GET",
         `api/caretaker/${email}`
       );
