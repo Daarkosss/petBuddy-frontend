@@ -49,9 +49,11 @@ const OfferManagement: React.FC = () => {
 
   return (
     <div className="offer-management-page">
-      <h1>{t("manageOffer")}</h1>
-      <Button type="primary" onClick={handleAddOffer}>{t("addOffer")}</Button>
-      <Row gutter={[50, 50]}>
+      <div className="offer-management-header">
+        <h1>{t("manageOffer")}</h1>
+        <Button type="primary" className="add-offer-button" onClick={handleAddOffer}>{t("addOffer")}</Button>
+      </div>
+      <Row gutter={[50, 50]} justify="center">
         {offers.map((offer) => (
           <Col key={offer.id}>
             <OfferCard offer={offer} onSave={handleSaveDetails} />

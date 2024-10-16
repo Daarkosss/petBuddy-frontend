@@ -151,5 +151,13 @@
   "deleteConfiguration": "Delete configuration",
   "confirmConfigurationDelete": "Are you sure you want to delete this configuration?",
   "deleteOffer": "Delete offer",
-  "confirmOfferDelete": "Are you sure you want to delete this offer with all configurations assigned?"
+  "confirmOfferDelete": "Are you sure you want to delete this offer with all configurations assigned?",
+
+  "yourOffers": {
+    "cat": "Your offer for cats",
+    "dog": "Your offer for dogs",
+    "bird": "Your offer for birds",
+    "rabbit": "Your offer for rabbits",
+    "reptile": "Your offer for reptiles"
+  }
 }

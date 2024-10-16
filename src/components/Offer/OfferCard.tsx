@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Button, Card, Modal, Input, Select } from "antd";
-import { EditOutlined } from "@ant-design/icons";
+import { Button, Card, Modal, Input, Select, Popconfirm } from "antd";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { OfferDTOWithId } from "../../types";
 import { t } from "i18next";
 import Meta from "antd/es/card/Meta";
@@ -46,13 +46,22 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, onSave }) => {
           />
         }
         actions={[
-          <Button type="primary" onClick={() => setIsModalOpen(true)}>
+          <Button type="primary" onClick={() => setIsModalOpen(true)} className="action-larger">
             {t("viewDetails")}
           </Button>,
+          <Popconfirm
+            title={t("deleteOffer")}
+            description={t("confirmOfferDelete")}
+            okText={t("yes")}
+            cancelText={t("no")}
+            style={{ flexGrow: 1 }}
+          >
+            <Button type="primary" danger className="action-smaller"><DeleteOutlined/></Button>
+          </Popconfirm>
         ]}
       >
         <Meta
-          title={`Your offer for ${t(offer.animal.animalType.toLowerCase())}`}
+          title={t(`yourOffers.${offer.animal.animalType.toLowerCase()}`)}
           description={offer.description.substring(0, 50)}
         />
       </Card>

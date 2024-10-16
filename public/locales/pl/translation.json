@@ -151,5 +151,13 @@
   "deleteConfiguration": "Usuń konfigurację",
   "confirmConfigurationDelete": "Czy na pewno chcesz usunąć tę konfigurację?",
   "deleteOffer": "Usuń ofertę",
-  "confirmOfferDelete": "Czy na pewno chcesz usunąć tę ofertę wraz z wszystkimi przypisanymi konfiguracjami?"
+  "confirmOfferDelete": "Czy na pewno chcesz usunąć tę ofertę wraz z wszystkimi przypisanymi konfiguracjami?",
+
+  "yourOffers": {
+    "cat": "Twoja oferta dla kotów",
+    "dog": "Twoja oferta dla psów",
+    "bird": "Twoja oferta dla ptaków",
+    "rabbit": "Twoja oferta dla królików",
+    "reptile": "Twoja oferta dla gadów"
+  }
 }
