@@ -17,7 +17,6 @@ const App = observer(() => {
   const { keycloak, initialized } = useKeycloak();
   const [isXsrfTokenFetched, setIsXsrfTokenFetched] = useState(false);
   const [isUserDataFetched, setIsUserDataFetched] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchXsrfToken = async () => {
@@ -55,20 +54,16 @@ const App = observer(() => {
           setIsUserDataFetched(true);
         }
       }
-      setIsLoading(false);
+      store.isStarting = false;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialized, keycloak.authenticated]);
 
   useEffect(() => {
     if (isXsrfTokenFetched && isUserDataFetched) {
-      setIsLoading(false);
+      store.isStarting = false;
     }
   }, [isXsrfTokenFetched, isUserDataFetched]);
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <Layout>

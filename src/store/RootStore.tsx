@@ -3,6 +3,7 @@ import UserStore from "./UserStore";
 
 class RootStore {
   user: UserStore;
+  private _isStarting = true;
   private _selectedMenuOption = "";
 
   constructor() {
@@ -12,6 +13,14 @@ class RootStore {
 
   reset() { 
     this.user.reset();
+  }
+
+  get isStarting() {
+    return this._isStarting;
+  }
+
+  set isStarting(value: boolean) {
+    this._isStarting = value;
   }
 
   get selectedMenuOption() {
