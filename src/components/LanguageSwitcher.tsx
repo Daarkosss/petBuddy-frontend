@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Dropdown, DropdownButton } from "react-bootstrap";
+import { Dropdown } from "antd";
 import { FaGlobe } from "react-icons/fa";
 
 const LanguageSwitcher: React.FC = () => {
@@ -10,16 +10,27 @@ const LanguageSwitcher: React.FC = () => {
     i18n.changeLanguage(lng);
   };
 
+  const items = [
+    {
+      key: "en",
+      label: "English",
+      onClick: () => changeLanguage("en"),
+    },
+    {
+      key: "pl",
+      label: "Polski",
+      onClick: () => changeLanguage("pl"),
+    },
+  ];
+
   return (
-    <DropdownButton
-      id="dropdown-basic-button"
-      title={<FaGlobe />}
-      variant="outline-light"
+    <Dropdown
+      menu={{items}}
       className="language-switcher"
+      trigger={["click"]}
     >
-      <Dropdown.Item onClick={() => changeLanguage("en")}>English</Dropdown.Item>
-      <Dropdown.Item onClick={() => changeLanguage("pl")}>Polski</Dropdown.Item>
-    </DropdownButton>
+      <FaGlobe />
+    </Dropdown>
   );
 };
 

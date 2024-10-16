@@ -4,8 +4,8 @@ $primary-font: "Roboto", sans-serif;
 
 // Shades of grey
 $white: #ffffff;
-$grey-very-light: #e4e4e4;
-$grey-light: #cacaca;
+$grey-very-light: #d9d9d9;
+$grey-light: #bfbfbf;
 $grey-medium: #9e9e9e;
 $grey-dark: #474747;
 $black: #000000;
@@ -15,6 +15,10 @@ $blue-very-light: #E1F7FF;
 $blue-light: #00A8E8;
 $blue-medium: #007EA7;
 $blue-dark: #003459;
-$blue-very-dark: #00171F;
+$blue-very-dark: #00253f;
 
-$home-background-gradient: linear-gradient(to right, $blue-very-light, darken($blue-very-light, 3%));
+// Shades of orange
+$orange-light: #FFB800;
+$orange-medium: #D78400;
+
+$home-background-gradient: linear-gradient(to right, $blue-dark, $blue-very-dark);
