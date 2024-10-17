@@ -123,7 +123,7 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
         >
           {renderSelectOptions({
             toys: t("amenityTypes.toys"),
-            "scratching post": t("amenityTypes.scratchingPost"),
+            "scratching post": t("amenityTypes.scratching post"),
             cage: t("amenityTypes.cage"),
           })}
         </Select>

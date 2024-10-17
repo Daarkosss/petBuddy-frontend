@@ -30,7 +30,7 @@
   "amenities": "Amenities",
   "amenityTypes": {
     "toys": "Toys",
-    "scratchingPost": "Scratching Post",
+    "scratching post": "Scratching Post",
     "cage": "Cage"
   },
 
@@ -157,7 +157,6 @@
   "delete": "Delete",
   "yes": "Yes",
   "no": "No",
-  "manageOffer": "Manage offer",
 
   "deleteConfiguration": "Delete configuration",
   "confirmConfigurationDelete": "Are you sure you want to delete this configuration?",
@@ -165,6 +164,7 @@
   "confirmOfferDelete": "Are you sure you want to delete this offer with all configurations assigned?",
 
   "yourOffers": {
+    "manageOffer": "Manage your offer",
     "cat": "Your offer for cats",
     "dog": "Your offer for dogs",
     "bird": "Your offer for birds",

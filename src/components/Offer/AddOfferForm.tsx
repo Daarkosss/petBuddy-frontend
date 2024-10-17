@@ -62,7 +62,7 @@ const AddOfferForm: React.FC<OfferFormProps> = ({ onSuccess }) => {
           mode="multiple"
           options={[
             { value: "toys", label: t("amenityTypes.toys") },
-            { value: "scratching post", label: t("amenityTypes.scratchingPost") },
+            { value: "scratching post", label: t("amenityTypes.scratching post") },
             { value: "cage", label: t("amenityTypes.cage") },
           ]}
         />

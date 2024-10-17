@@ -50,7 +50,7 @@ const OfferManagement: React.FC = () => {
   return (
     <div className="offer-management-page">
       <div className="offer-management-header">
-        <h1>{t("manageOffer")}</h1>
+        <h1>{t("yourOffers.manageOffer")}</h1>
         <Button type="primary" className="add-offer-button" onClick={handleAddOffer}>{t("addOffer")}</Button>
       </div>
       <Row gutter={[50, 50]} justify="center">

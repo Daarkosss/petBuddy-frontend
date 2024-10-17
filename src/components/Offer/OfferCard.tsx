@@ -112,7 +112,7 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, onSave }) => {
                   onChange={setEditedAmenities}
                   options={[
                     { value: "toys", label: t("amenityTypes.toys") },
-                    { value: "scratching post", label: t("amenityTypes.scratchingPost") },
+                    { value: "scratching post", label: t("amenityTypes.scratching post") },
                     { value: "cage", label: t("amenityTypes.cage") },
                   ]}        
                 />
@@ -121,7 +121,9 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, onSave }) => {
               </>
             ) : (
               <>
-                {editedAmenities.join(", ")}
+                {editedAmenities.map((amenity) => (
+                  t(`amenityTypes.${amenity}`)
+                ))}
               </>
             )}
           </div>

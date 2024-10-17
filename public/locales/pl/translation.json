@@ -152,7 +152,6 @@
   "delete": "Usuń",
   "yes": "Tak",
   "no": "Nie",
-  "manageOffer": "Zarządzaj ofertą",
 
   "deleteConfiguration": "Usuń konfigurację",
   "confirmConfigurationDelete": "Czy na pewno chcesz usunąć tę konfigurację?",
@@ -160,6 +159,7 @@
   "confirmOfferDelete": "Czy na pewno chcesz usunąć tę ofertę wraz z wszystkimi przypisanymi konfiguracjami?",
 
   "yourOffers": {
+    "manageOffer": "Zarządzaj swoją ofertą",
     "cat": "Twoja oferta dla kotów",
     "dog": "Twoja oferta dla psów",
     "bird": "Twoja oferta dla ptaków",

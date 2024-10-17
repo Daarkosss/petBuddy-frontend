@@ -4,13 +4,13 @@
 .offer-management-page {
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 30px;
 
   .offer-management-header {
     margin-top: 20px;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 10px;
     align-items: center;
     color: v.$white
   }
