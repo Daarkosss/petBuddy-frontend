@@ -4,8 +4,7 @@ import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { OfferDTOWithId } from "../../types";
 import { t } from "i18next";
 import Meta from "antd/es/card/Meta";
-import MultiDatePicker from "../MultiDatePicker";
-import { Value } from "react-multi-date-picker";
+import { Calendar, Value } from "react-multi-date-picker";
 import { api } from "../../api/api";
 import { toast } from "react-toastify";
 
@@ -22,11 +21,16 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, updateOffers }) => {
 
   const [editedDescription, setEditedDescription] = useState(offer.description);
   const [editedAmenities, setEditedAmenities] = useState(offer.animalAmenities);
-  const [editedAvailability, setEditedAvailability] = useState(offer.availabilities);
+  const [editedAvailability, setEditedAvailability] = useState<Value[][]>(
+    offer.availabilities.map((availability) => [
+      availability.availableFrom,
+      availability.availableTo || availability.availableFrom,
+    ])
+  );
 
   const handleSaveDescription = async () => {
     try {
-      await api.addOrEditOffer({ ...offer, description: editedDescription, offerConfigurations: [] });
+      await api.addOrEditOffer({ ...offer, description: editedDescription });
       toast.success(t("success.editOffer"));
       updateOffers();
     } catch (error) {
@@ -48,9 +52,24 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, updateOffers }) => {
     }
   };
 
+  // Temporary format until backend is not corrected
+  const formatDateTime = (date: string, addHour=false): string => { 
+    if (addHour) {
+      return `${date} 01:00:00.000 +0100`;
+    } else {
+      return `${date} 00:00:00.000 +0100`;
+    }
+  };
+
   const handleSaveAvailability = async () => {
     try {
-      await api.setAvailabilityForOffers([offer.id], editedAvailability);
+      const availabilities = editedAvailability.map((dateRange) => ({
+        availableFrom: formatDateTime(dateRange[0] as string),
+        availableTo: dateRange[1] 
+        ? formatDateTime(dateRange[1] as string) 
+        : formatDateTime(dateRange[0] as string, true),
+      }));
+      await api.setAvailabilityForOffers([offer.id], availabilities);
       toast.success(t("success.editOffer"));
       updateOffers();
     } catch (error) {
@@ -60,6 +79,7 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, updateOffers }) => {
     }
   };
 
+  
   const handleDeleteOffer = async () => {
     try {
       await api.deleteOffer(offer.id);
@@ -70,31 +90,18 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, updateOffers }) => {
     }
   };
 
-  const formatDateTime = (date: string): string => { // Temporary format until backend is not corrected
-    return `${date} 00:00:00.000 +0100`;
-  };
-
-  const handleAvailabilitiesChange = (availabilities: Value[][]) => {
-    setEditedAvailability(  
-      availabilities.map((dateRange) => ({
-        availableFrom: formatDateTime(dateRange[0] as string) || "",
-        availableTo: formatDateTime(dateRange[1] as string) || "",
-      })), 
-    );
-  };
-
   return (
     <div>
       <Card
         style={{ width: 400 }}
         cover={
-          <img 
+          <img
             src={`/images/${offer.animal.animalType.toLowerCase()}-card.jpg`}
-            alt={offer.animal.animalType} 
+            alt={offer.animal.animalType}
           />
         }
         actions={[
-          <Button type="primary" onClick={() => setIsModalOpen(true)} className="action-larger">
+          <Button type="primary" onClick={() => setIsModalOpen(true)}>
             {t("viewDetails")}
           </Button>,
           <Popconfirm
@@ -102,9 +109,10 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, updateOffers }) => {
             description={t("confirmOfferDelete")}
             okText={t("yes")}
             cancelText={t("no")}
-            style={{ flexGrow: 1 }}
           >
-            <Button type="primary" danger onClick={handleDeleteOffer}><DeleteOutlined/></Button>
+            <Button type="primary" danger onClick={handleDeleteOffer}>
+              <DeleteOutlined />
+            </Button>
           </Popconfirm>
         ]}
       >
@@ -126,7 +134,9 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, updateOffers }) => {
           <div className="offer-field">
             <div className="label">
               {t("description")}
-              {!isEditingDescription && <EditOutlined onClick={() => setIsEditingDescription(true)} />}
+              {!isEditingDescription && (
+                <EditOutlined onClick={() => setIsEditingDescription(true)} />
+              )}
             </div>
             {isEditingDescription ? (
               <div>
@@ -135,25 +145,23 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, updateOffers }) => {
                   onChange={(e) => setEditedDescription(e.target.value)}
                 />
                 <Button onClick={handleSaveDescription}>{t("save")}</Button>
-                <Button onClick={() => setIsEditingDescription(false)}>{t("cancel")}</Button>
+                <Button onClick={() => setIsEditingDescription(false)}>
+                  {t("cancel")}
+                </Button>
               </div>
             ) : (
-              <>
-                <Input.TextArea
-                  value={editedDescription}
-                  onChange={(e) => setEditedDescription(e.target.value)}
-                  disabled
-                />
-              </>
+              <Input.TextArea value={offer.description} disabled />
             )}
           </div>
           <div className="offer-field">
             <div className="label">
               {t("amenities")}
-              {!isEditingAmenities && <EditOutlined onClick={() => setIsEditingAmenities(true)} />}
+              {!isEditingAmenities && (
+                <EditOutlined onClick={() => setIsEditingAmenities(true)} />
+              )}
             </div>
             {isEditingAmenities ? (
-              <>
+              <div>
                 <Select
                   mode="multiple"
                   value={editedAmenities}
@@ -162,37 +170,50 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, updateOffers }) => {
                     { value: "toys", label: t("amenityTypes.toys") },
                     { value: "scratching post", label: t("amenityTypes.scratching post") },
                     { value: "cage", label: t("amenityTypes.cage") },
-                  ]}        
+                  ]}
                 />
                 <Button onClick={handleSaveAmenities}>{t("save")}</Button>
-                <Button onClick={() => setIsEditingAmenities(false)}>{t("cancel")}</Button>
-              </>
+                <Button onClick={() => setIsEditingAmenities(false)}>
+                  {t("cancel")}
+                </Button>
+              </div>
             ) : (
-              <>
-                {editedAmenities.map((amenity) => (t(`amenityTypes.${amenity}`))).join(", ")}
-              </>
+              <div>{offer.animalAmenities.join(", ")}</div>
             )}
           </div>
+
           <div className="offer-field">
             <div className="label">
               {t("availability")}
-              {!isEditingAvailability && <EditOutlined onClick={() => setIsEditingAvailability(true)} />}
+              {!isEditingAvailability && (
+                <EditOutlined onClick={() => setIsEditingAvailability(true)} />
+              )}
             </div>
             {isEditingAvailability ? (
               <div>
-                <MultiDatePicker
-                  handleChange={handleAvailabilitiesChange}
-                  dateValue={editedAvailability.map((date) => [date.availableFrom, date.availableTo])}
+                <Calendar
+                  value={editedAvailability}
+                  multiple
+                  range
+                  format="YYYY-MM-DD"
+                  onChange={setEditedAvailability}
+                  minDate={new Date()}
                 />
                 <Button onClick={handleSaveAvailability}>{t("save")}</Button>
-                <Button onClick={() => setIsEditingAvailability(false)}>{t("cancel")}</Button>
+                <Button onClick={() => setIsEditingAvailability(false)}>
+                  {t("cancel")}
+                </Button>
               </div>
             ) : (
               <div>
-                <MultiDatePicker
-                  handleChange={handleAvailabilitiesChange}
-                  dateValue={editedAvailability.map((date) => [date.availableFrom, date.availableTo])}
-                  isDisabled
+                <Calendar
+                  value={offer.availabilities.map((date) => [
+                    date.availableFrom,
+                    date.availableTo,
+                  ])}
+                  multiple
+                  range
+                  readOnly
                 />
               </div>
             )}
