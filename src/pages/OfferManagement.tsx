@@ -12,7 +12,6 @@ const OfferManagement: React.FC = () => {
   const [offers, setOffers] = useState<OfferDTOWithId[]>([]);
   const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
 
-
   useEffect(() => {
     loadOffers();
   }, []);
@@ -25,16 +24,6 @@ const OfferManagement: React.FC = () => {
       }
     } catch (error) {
       toast.error(t("error.loadOffers"));
-    }
-  };
-
-  const handleSaveDetails = async (updatedOffer: OfferDTOWithId) => {
-    try {
-      await api.addOrEditOffer(updatedOffer);
-      toast.success(t("success.editOffer"));
-      loadOffers();
-    } catch (error) {
-      toast.error(t("error.editOffer"));
     }
   };
 
@@ -56,7 +45,7 @@ const OfferManagement: React.FC = () => {
       <Row gutter={[50, 50]} justify="center">
         {offers.map((offer) => (
           <Col key={offer.id}>
-            <OfferCard offer={offer} onSave={handleSaveDetails} />
+            <OfferCard offer={offer} updateOffers={loadOffers} />
           </Col>
         ))}
       </Row>

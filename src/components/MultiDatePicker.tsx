@@ -70,11 +70,11 @@ const calendar_en = {
 
 interface DatePickerProps {
   handleChange: (availabilities: Value[][]) => void;
-  isDisabled: boolean;
+  isDisabled?: boolean;
   dateValue: string[][] | undefined;
 }
 
-const MultiDatePicker: React.FC<DatePickerProps> = ({ handleChange, isDisabled, dateValue }) => {
+const MultiDatePicker: React.FC<DatePickerProps> = ({ handleChange, isDisabled=false, dateValue }) => {
   const { i18n, t } = useTranslation();
 
   return (

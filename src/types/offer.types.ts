@@ -8,14 +8,16 @@ export type OfferConfigurationWithId = OfferConfigurationDTO & {
   id: number;
 }
 
-export type AvailabilityDTO = {
+export type Availability = {
   availableFrom: string;
   availableTo: string;
 }
 
+export type Availabilities = Availability[];
+
 export type SetAvailabilityDTO = {
   offerIds: number[];
-  availabilityRanges: AvailabilityDTO[];
+  availabilityRanges: Availabilities;
 }
 
 export type OfferDTO = {
@@ -33,7 +35,7 @@ export type OfferDTOWithId = Omit<OfferDTO, "offerConfigurations"> & {
   id: number;
   offerConfigurations: OfferConfigurationWithId[];
   animalAmenities: string[];
-  availabilities: AvailabilityDTO[];
+  availabilities: Availabilities;
 }
 
 export type AnimalSex = "MALE" | "SHE";
@@ -47,5 +49,5 @@ export type OfferConfiguration = {
   minPrice?: number;
   maxPrice?: number;
   amenities?: string[];
-  availabilities?: AvailabilityDTO[];
+  availabilities?: Availabilities;
 };

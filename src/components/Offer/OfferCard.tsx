@@ -4,13 +4,17 @@ import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { OfferDTOWithId } from "../../types";
 import { t } from "i18next";
 import Meta from "antd/es/card/Meta";
+import MultiDatePicker from "../MultiDatePicker";
+import { Value } from "react-multi-date-picker";
+import { api } from "../../api/api";
+import { toast } from "react-toastify";
 
 type OfferCardProps = {
   offer: OfferDTOWithId;
-  onSave: (updatedOffer: OfferDTOWithId) => void;
+  updateOffers: () => void;
 };
 
-const OfferCard: React.FC<OfferCardProps> = ({ offer, onSave }) => {
+const OfferCard: React.FC<OfferCardProps> = ({ offer, updateOffers }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditingDescription, setIsEditingDescription] = useState(false);
   const [isEditingAmenities, setIsEditingAmenities] = useState(false);
@@ -20,19 +24,63 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, onSave }) => {
   const [editedAmenities, setEditedAmenities] = useState(offer.animalAmenities);
   const [editedAvailability, setEditedAvailability] = useState(offer.availabilities);
 
-  const handleSaveDescription = () => {
-    onSave({ ...offer, description: editedDescription });
-    setIsEditingDescription(false);
+  const handleSaveDescription = async () => {
+    try {
+      await api.addOrEditOffer({ ...offer, description: editedDescription, offerConfigurations: [] });
+      toast.success(t("success.editOffer"));
+      updateOffers();
+    } catch (error) {
+      toast.error(t("error.editOffer"));
+    } finally {
+      setIsEditingDescription(false);
+    }
   };
 
-  const handleSaveAmenities = () => {
-    onSave({ ...offer, animalAmenities: editedAmenities });
-    setIsEditingAmenities(false);
+  const handleSaveAmenities = async () => {
+    try {
+      await api.setAmenitiesForOffer(offer.id, editedAmenities);
+      toast.success(t("success.editOffer"));
+      updateOffers();
+    } catch (error) {
+      toast.error(t("error.editOffer"));
+    } finally {
+      setIsEditingAmenities(false);
+    }
   };
 
-  const handleSaveAvailability = () => {
-    onSave({ ...offer, availabilities: editedAvailability });
-    setIsEditingAvailability(false);
+  const handleSaveAvailability = async () => {
+    try {
+      await api.setAvailabilityForOffers([offer.id], editedAvailability);
+      toast.success(t("success.editOffer"));
+      updateOffers();
+    } catch (error) {
+      toast.error(t("error.editOffer"));
+    } finally {
+      setIsEditingAvailability(false);
+    }
+  };
+
+  const handleDeleteOffer = async () => {
+    try {
+      await api.deleteOffer(offer.id);
+      toast.success(t("success.deleteOffer"));
+      updateOffers();
+    } catch (error) {
+      toast.error(t("error.deleteOffer"));
+    }
+  };
+
+  const formatDateTime = (date: string): string => { // Temporary format until backend is not corrected
+    return `${date} 00:00:00.000 +0100`;
+  };
+
+  const handleAvailabilitiesChange = (availabilities: Value[][]) => {
+    setEditedAvailability(  
+      availabilities.map((dateRange) => ({
+        availableFrom: formatDateTime(dateRange[0] as string) || "",
+        availableTo: formatDateTime(dateRange[1] as string) || "",
+      })), 
+    );
   };
 
   return (
@@ -56,7 +104,7 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, onSave }) => {
             cancelText={t("no")}
             style={{ flexGrow: 1 }}
           >
-            <Button type="primary" danger className="action-smaller"><DeleteOutlined/></Button>
+            <Button type="primary" danger onClick={handleDeleteOffer}><DeleteOutlined/></Button>
           </Popconfirm>
         ]}
       >
@@ -121,9 +169,7 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, onSave }) => {
               </>
             ) : (
               <>
-                {editedAmenities.map((amenity) => (
-                  t(`amenityTypes.${amenity}`)
-                ))}
+                {editedAmenities.map((amenity) => (t(`amenityTypes.${amenity}`))).join(", ")}
               </>
             )}
           </div>
@@ -134,16 +180,20 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, onSave }) => {
             </div>
             {isEditingAvailability ? (
               <div>
-                <Input.TextArea
-                  value={editedAvailability.join(", ")}
-                  onChange={(e) => setEditedAvailability(e.target.value.split(", "))}
+                <MultiDatePicker
+                  handleChange={handleAvailabilitiesChange}
+                  dateValue={editedAvailability.map((date) => [date.availableFrom, date.availableTo])}
                 />
                 <Button onClick={handleSaveAvailability}>{t("save")}</Button>
                 <Button onClick={() => setIsEditingAvailability(false)}>{t("cancel")}</Button>
               </div>
             ) : (
               <div>
-                {offer.availabilities.join(", ")}
+                <MultiDatePicker
+                  handleChange={handleAvailabilitiesChange}
+                  dateValue={editedAvailability.map((date) => [date.availableFrom, date.availableTo])}
+                  isDisabled
+                />
               </div>
             )}
           </div>
