@@ -23,3 +23,16 @@
     border: v.$white;
   }
 }
+
+.add-offer-button {
+  font-size: 16px;
+  color: v.$white;
+  background: v.$orange-medium;
+  
+  &:hover,
+  &:focus {
+    color: v.$white;
+    background: v.$orange-light !important;
+    border: v.$white;
+  }
+}
