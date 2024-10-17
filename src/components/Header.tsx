@@ -63,7 +63,7 @@ const PageHeader = observer(() => {
       </div>
 
       <div className="logo" onClick={() => navigate("/")}>
-        <img src="/favicon.png" alt="Logo" />
+        <img src="/pet_buddy_logo.svg" alt="Logo" />
       </div>
 
       <div className="menu-desktop">

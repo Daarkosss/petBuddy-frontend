@@ -6,7 +6,7 @@ const SplashScreen = observer(() => {
   return (
     <div className={cx("splash-screen", { done: !store.isStarting })}>
       <div className="spinner">
-        <img src="/logo-1000x1000.png"/>
+        <img src="/pet_buddy_logo.svg"/>
       </div>
     </div>
   )
