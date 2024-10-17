@@ -47,4 +47,5 @@ export type OfferConfiguration = {
   minPrice?: number;
   maxPrice?: number;
   amenities?: string[];
+  availabilities?: AvailabilityDTO[];
 };

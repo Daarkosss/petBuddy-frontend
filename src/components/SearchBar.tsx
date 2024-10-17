@@ -17,14 +17,6 @@ interface SearchBarProps {
 const SearchBar: React.FC<SearchBarProps> = ({ filters, setFilters, handleSearch }) => {
   const { t } = useTranslation();
 
-  const renderSelectOptions = (options: Record<string, string>) => {
-    return Object.entries(options).map(([value, label]) => (
-      <Select.Option key={value} value={value}>
-        {label}
-      </Select.Option>
-    ));
-  };
-
   const handleCityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilters({ ...filters, cityLike: e.target.value });
   };
@@ -88,9 +80,8 @@ const SearchBar: React.FC<SearchBarProps> = ({ filters, setFilters, handleSearch
           style={{ width: "180px" }}
           value={filters.voivodeship}
           onChange={handleVoivodeshipChange}
-        >
-          {renderSelectOptions(Voivodeship.voivodeshipMap)}
-        </Select>
+          options={Voivodeship.voivodeshipOptions}
+        />
       </Form.Item>
 
       <Form.Item layout="vertical" label={t("caretakerSearch.animalType")}>
@@ -98,23 +89,24 @@ const SearchBar: React.FC<SearchBarProps> = ({ filters, setFilters, handleSearch
           className="search-select"
           placeholder={t("placeholder.animalType")}
           onChange={handleAnimalTypeChange}
-        >
-          {renderSelectOptions({
-            DOG: t("dog"),
-            CAT: t("cat"),
-            BIRD: t("bird"),
-            REPTILE: t("reptile"),
-            HORSE: t("horse"),
-          })}
-        </Select>
+          options={[
+            { value: "DOG", label: t("dog") },
+            { value: "CAT", label: t("cat") },
+            { value: "BIRD", label: t("bird") },
+            { value: "REPTILE", label: t("reptile") },
+            { value: "HORSE", label: t("horse") }
+          ]}
+        />
       </Form.Item>
 
       <Form.Item layout="vertical" label={t("date")}>
         <MultiDatePicker
           handleChange={handleAvailabilitiesChange}
-          dateValue={filters.animals?.[0]?.offerConfigurations?.[0]?.availabilities.map(
-            (date) => [date.availableFrom, date.availableTo]
-          )}
+          dateValue={filters.animals?.[0]?.offerConfigurations?.[0]?.availabilities
+            ? filters.animals[0].offerConfigurations[0].availabilities.map(
+              (date) => [date.availableFrom, date.availableTo])
+            : []
+          }
           isDisabled={filters.animals?.length === 0}
         />
       </Form.Item>
