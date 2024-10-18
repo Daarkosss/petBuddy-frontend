@@ -84,10 +84,13 @@ const App = observer(() => {
                 <Route path="*" element={<LandingPage />} />
               </>
             ) : (
-              <Route
-                path="/*"
-                element={<ProfileSelection isUserDataFetched={isUserDataFetched} />}
-              />
+              <>
+                <Route
+                  path="/*"
+                  element={<ProfileSelection isUserDataFetched={isUserDataFetched} />}
+                />
+                <Route path="/caretaker/form" element={<CaretakerForm />} />
+              </>
             )
           ) : (
             <>
