@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { Button, Card, Modal, Input, Select, Popconfirm } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { OfferDTOWithId } from "../../types";
+import { EditOfferDescription, OfferDTOWithId } from "../../types";
 import { t } from "i18next";
 import Meta from "antd/es/card/Meta";
 import { Calendar, Value } from "react-multi-date-picker";
 import { api } from "../../api/api";
 import { toast } from "react-toastify";
+import DatePanel from "react-multi-date-picker/plugins/date_panel";
 
 type OfferCardProps = {
   offer: OfferDTOWithId;
@@ -30,7 +31,11 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, updateOffers }) => {
 
   const handleSaveDescription = async () => {
     try {
-      await api.addOrEditOffer({ ...offer, description: editedDescription });
+      const offerWithDescription: EditOfferDescription = { 
+        animal: offer.animal,
+        description: editedDescription
+      };
+      await api.addOrEditOffer(offerWithDescription);
       toast.success(t("success.editOffer"));
       updateOffers();
     } catch (error) {
@@ -52,12 +57,20 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, updateOffers }) => {
     }
   };
 
+  const handleStartEditingAvailability = () => {
+    setIsEditingAvailability(true);
+    setEditedAvailability(offer.availabilities.map((availability) => [
+      availability.availableFrom,
+      availability.availableTo || availability.availableFrom,
+    ]))
+  };
+
   // Temporary format until backend is not corrected
   const formatDateTime = (date: string, addHour=false): string => { 
     if (addHour) {
-      return `${date} 01:00:00.000 +0100`;
+      return `${date} 12:00:00.000 +0100`;
     } else {
-      return `${date} 00:00:00.000 +0100`;
+      return `${date} 11:00:00.000 +0100`;
     }
   };
 
@@ -198,9 +211,10 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, updateOffers }) => {
                   format="YYYY-MM-DD"
                   onChange={setEditedAvailability}
                   minDate={new Date()}
+                  plugins={[<DatePanel header={t("selectedDates")} />]}
                 />
                 <Button onClick={handleSaveAvailability}>{t("save")}</Button>
-                <Button onClick={() => setIsEditingAvailability(false)}>
+                <Button onClick={handleStartEditingAvailability}>
                   {t("cancel")}
                 </Button>
               </div>
@@ -214,6 +228,7 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, updateOffers }) => {
                   multiple
                   range
                   readOnly
+                  plugins={[<DatePanel header={t("selectedDates")} />]}
                 />
               </div>
             )}
