@@ -48,7 +48,14 @@ const Home = () => {
         <Button variant="dark" onClick={() => navigate("/caretaker/search")}>
           {t("home.searchCaretakers")}
         </Button>
-        <Button variant="dark" onClick={() => navigate("/profile")}>
+        <Button
+          variant="dark"
+          onClick={() =>
+            store.user.profile?.selected_profile === "Caretaker"
+              ? navigate("/profile-caretaker")
+              : navigate("/profile-client")
+          }
+        >
           {t("home.showProfile")}
         </Button>
       </div>
