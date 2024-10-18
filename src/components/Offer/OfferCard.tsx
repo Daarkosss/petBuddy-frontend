@@ -29,6 +29,11 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, updateOffers }) => {
     ])
   );
 
+  const handleStartEditingDescription = () => {
+    setIsEditingDescription(true);
+    setEditedDescription(offer.description);
+  }
+
   const handleSaveDescription = async () => {
     try {
       const offerWithDescription: EditOfferDescription = { 
@@ -44,6 +49,11 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, updateOffers }) => {
       setIsEditingDescription(false);
     }
   };
+
+  const handleStartEditingAmenities = () => {
+    setIsEditingAmenities(true);
+    setEditedAmenities(offer.animalAmenities);
+  }
 
   const handleSaveAmenities = async () => {
     try {
@@ -92,7 +102,6 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, updateOffers }) => {
     }
   };
 
-  
   const handleDeleteOffer = async () => {
     try {
       await api.deleteOffer(offer.id);
@@ -148,7 +157,7 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, updateOffers }) => {
             <div className="label">
               {t("description")}
               {!isEditingDescription && (
-                <EditOutlined onClick={() => setIsEditingDescription(true)} />
+                <EditOutlined onClick={handleStartEditingDescription} />
               )}
             </div>
             {isEditingDescription ? (
@@ -170,7 +179,7 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, updateOffers }) => {
             <div className="label">
               {t("amenities")}
               {!isEditingAmenities && (
-                <EditOutlined onClick={() => setIsEditingAmenities(true)} />
+                <EditOutlined onClick={handleStartEditingAmenities} />
               )}
             </div>
             {isEditingAmenities ? (
@@ -191,7 +200,7 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, updateOffers }) => {
                 </Button>
               </div>
             ) : (
-              <div>{offer.animalAmenities.join(", ")}</div>
+              <div>{offer.animalAmenities.map((value) => t(`amenityTypes.${value}`)).join(", ")}</div>
             )}
           </div>
 
@@ -199,7 +208,7 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, updateOffers }) => {
             <div className="label">
               {t("availability")}
               {!isEditingAvailability && (
-                <EditOutlined onClick={() => setIsEditingAvailability(true)} />
+                <EditOutlined onClick={handleStartEditingAvailability} />
               )}
             </div>
             {isEditingAvailability ? (
@@ -211,10 +220,12 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, updateOffers }) => {
                   format="YYYY-MM-DD"
                   onChange={setEditedAvailability}
                   minDate={new Date()}
-                  plugins={[<DatePanel header={t("selectedDates")} />]}
+                  plugins={[<DatePanel        
+                    style={{ width: 300 }}
+                    header={t("selectedDates")} />]}
                 />
                 <Button onClick={handleSaveAvailability}>{t("save")}</Button>
-                <Button onClick={handleStartEditingAvailability}>
+                <Button onClick={() => setIsEditingAvailability(false)}>
                   {t("cancel")}
                 </Button>
               </div>
@@ -228,7 +239,7 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, updateOffers }) => {
                   multiple
                   range
                   readOnly
-                  plugins={[<DatePanel header={t("selectedDates")} />]}
+                  plugins={[<DatePanel header={t("selectedDates")} style={{ width: 300 }}/>]}
                 />
               </div>
             )}
