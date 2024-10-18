@@ -6,31 +6,43 @@ import testImg from "../../public/favicon.png";
 import { Rate } from "antd";
 import CommentContainer from "../components/CommentContainer";
 import RoundedLine from "../components/RoundedLine";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { api } from "../api/api";
+import { CaretakerDetailsDTO } from "../types";
 
-const Profile: React.FC = () => {
+const CaretakerProfile: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
+  // const { isUserProfile, profileEmail } = location.state || {};
   const [isProfileDataFetched, setIsProfileDataFetched] = useState(false);
+  const [profileData, setProfileData] = useState<CaretakerDetailsDTO>();
 
   const testList = [1, 2, 3, 4, 5, 6, 7];
 
   useEffect(() => {
-    if (false) {
-      //TODO: temporary. Put !store.user.profile?.selected_profile later
+    if (
+      !store.user.profile == null ||
+      !store.user.profile?.selected_profile == null
+    ) {
       navigate("/profile-selection");
     } else {
-      try {
-        // api.getCaretakerProfile("");
-      } catch (error: unknown) {}
+      if (store.user.profile!.selected_profile === "Caretaker") {
+        api.getCaretakerDetails(store.user.profile!.email!).then((data) => {
+          setProfileData(data);
+          setIsProfileDataFetched(true);
+        });
+      } else {
+        navigate("/profile-client");
+      }
     }
   }, []);
   return (
     <div>
       <Header />
-      {store.user.profile != null && true ? ( //TODO: temporary. Put store.user.profile?.selected_profile === "Caretaker" later
+      {store.user.profile != null &&
+      store.user.profile?.selected_profile === "Caretaker" ? (
         <div className="profile-container">
           <div className="profile-left-data">
             <div className="profile-left-upper-container">
@@ -70,10 +82,10 @@ const Profile: React.FC = () => {
           </div>
         </div>
       ) : (
-        <div>Not implemented yet</div>
+        <div>Loading ...</div>
       )}
     </div>
   );
 };
 
-export default Profile;
+export default CaretakerProfile;
