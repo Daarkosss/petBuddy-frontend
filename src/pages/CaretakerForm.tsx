@@ -1,5 +1,16 @@
 import { useEffect, useState } from "react";
-import { Form, Input, Button, GetProp, Upload, UploadProps, UploadFile, Select, Card, Space } from "antd";
+import {
+  Form,
+  Input,
+  Button,
+  GetProp,
+  Upload,
+  UploadProps,
+  UploadFile,
+  Select,
+  Card,
+  Space,
+} from "antd";
 import ImgCrop from "antd-img-crop";
 import { useTranslation } from "react-i18next";
 import { Header } from "../components/Header";
@@ -16,16 +27,18 @@ const CaretakerForm = () => {
   const [fileList, setFileList] = useState<UploadFile[]>([]); // Not send to backend yet, will be done when backend is ready
   const [form] = Form.useForm<CaretakerFormFields>();
   const allowedSpecialKeys = ["Backspace", "Delete", "ArrowLeft", "ArrowRight"];
-  
+
   useEffect(() => {
     if (store.user.profile?.email) {
       api.getCaretakerDetails(store.user.profile?.email).then((data) => {
         form.setFieldsValue(data);
-      })
+      });
     }
-  }, [form])
+  }, [form]);
 
-  const handleFileChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
+  const handleFileChange: UploadProps["onChange"] = ({
+    fileList: newFileList,
+  }) => {
     setFileList(newFileList);
   };
 
@@ -44,19 +57,22 @@ const CaretakerForm = () => {
     imgWindow?.document.write(image.outerHTML);
   };
 
-  const renderSelectOptions = (options: Record<string, string>) => (
+  const renderSelectOptions = (options: Record<string, string>) =>
     Object.entries(options).map(([value, label]) => (
       <Select.Option key={value} value={value}>
         {label}
       </Select.Option>
-    ))
-  );
+    ));
 
   const handleZipCodeKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     handleKeyDownForNumeric(e);
 
     const zipCode = form.getFieldValue(["address", "zipCode"]);
-    if (zipCode && zipCode.length === 2 && !allowedSpecialKeys.includes(e.key)) {
+    if (
+      zipCode &&
+      zipCode.length === 2 &&
+      !allowedSpecialKeys.includes(e.key)
+    ) {
       form.setFieldsValue({
         address: {
           ...form.getFieldValue("address"),
@@ -66,13 +82,15 @@ const CaretakerForm = () => {
     }
   };
 
-  const handleKeyDownForNumeric = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDownForNumeric = (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
     const char = e.key;
     const isDigit = /[0-9]/.test(char);
     if (!isDigit && !allowedSpecialKeys.includes(char)) {
       e.preventDefault();
     }
-  }
+  };
 
   const handleSubmit = () => {
     const formFields = form.getFieldsValue();
@@ -96,7 +114,9 @@ const CaretakerForm = () => {
                 <Form.Item
                   label={t("addressDetails.street")}
                   name={["address", "street"]}
-                  rules={[{ required: true, message: t("validation.required") }]}
+                  rules={[
+                    { required: true, message: t("validation.required") },
+                  ]}
                 >
                   <Input
                     maxLength={150}
@@ -106,7 +126,9 @@ const CaretakerForm = () => {
                 <Form.Item
                   label={t("addressDetails.streetNumber")}
                   name={["address", "streetNumber"]}
-                  rules={[{ required: true, message: t("validation.required") }]}
+                  rules={[
+                    { required: true, message: t("validation.required") },
+                  ]}
                 >
                   <Input
                     maxLength={10}
@@ -130,7 +152,10 @@ const CaretakerForm = () => {
                   name={["address", "zipCode"]}
                   rules={[
                     { required: true, message: t("validation.required") },
-                    { pattern: /^[0-9]{2}-[0-9]{3}$/, message: t("validation.zipCodeFormat") }
+                    {
+                      pattern: /^[0-9]{2}-[0-9]{3}$/,
+                      message: t("validation.zipCodeFormat"),
+                    },
                   ]}
                 >
                   <Input
@@ -142,17 +167,18 @@ const CaretakerForm = () => {
                 <Form.Item
                   label={t("addressDetails.city")}
                   name={["address", "city"]}
-                  rules={[{ required: true, message: t("validation.required") }]}
+                  rules={[
+                    { required: true, message: t("validation.required") },
+                  ]}
                 >
-                  <Input
-                    maxLength={50}
-                    placeholder={t("placeholder.city")}
-                  />
+                  <Input maxLength={50} placeholder={t("placeholder.city")} />
                 </Form.Item>
                 <Form.Item
                   label={t("addressDetails.voivodeship")}
                   name={["address", "voivodeship"]}
-                  rules={[{ required: true, message: t("validation.required") }]}
+                  rules={[
+                    { required: true, message: t("validation.required") },
+                  ]}
                 >
                   <Select placeholder={t("placeholder.voivodeship")}>
                     {renderSelectOptions(Voivodeship.voivodeshipMap)}
@@ -167,7 +193,10 @@ const CaretakerForm = () => {
                 name="phoneNumber"
                 rules={[
                   { required: true, message: t("validation.required") },
-                  { pattern: /^([0-9]){9,14}$/, message: t("validation.phoneNumberFormat") },
+                  {
+                    pattern: /^([0-9]){9,14}$/,
+                    message: t("validation.phoneNumberFormat"),
+                  },
                 ]}
                 style={{ width: "200px" }}
               >
