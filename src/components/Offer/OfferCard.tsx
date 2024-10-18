@@ -4,7 +4,7 @@ import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { EditOfferDescription, OfferDTOWithId } from "../../types";
 import { t } from "i18next";
 import Meta from "antd/es/card/Meta";
-import { Calendar, Value } from "react-multi-date-picker";
+import { Calendar, DateObject, Value } from "react-multi-date-picker";
 import { api } from "../../api/api";
 import { toast } from "react-toastify";
 import DatePanel from "react-multi-date-picker/plugins/date_panel";
@@ -75,22 +75,13 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, updateOffers }) => {
     ]))
   };
 
-  // Temporary format until backend is not corrected
-  const formatDateTime = (date: string, addHour=false): string => { 
-    if (addHour) {
-      return `${date} 12:00:00.000 +0100`;
-    } else {
-      return `${date} 11:00:00.000 +0100`;
-    }
-  };
-
   const handleSaveAvailability = async () => {
     try {
       const availabilities = editedAvailability.map((dateRange) => ({
-        availableFrom: formatDateTime(dateRange[0] as string),
+        availableFrom: dateRange[0]?.toString() || "",
         availableTo: dateRange[1] 
-        ? formatDateTime(dateRange[1] as string) 
-        : formatDateTime(dateRange[0] as string, true),
+        ? dateRange[1]?.toString()
+        : dateRange[0]?.toString() || "",
       }));
       await api.setAvailabilityForOffers([offer.id], availabilities);
       toast.success(t("success.editOffer"));
@@ -219,11 +210,10 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, updateOffers }) => {
                   range
                   format="YYYY-MM-DD"
                   onChange={setEditedAvailability}
-                  minDate={new Date()}
-                  plugins={[<DatePanel        
-                    style={{ width: 300 }}
-                    header={t("selectedDates")} />]}
-                />
+                  minDate={new DateObject().add(1, "days")} // Tomorrow
+                  plugins={[
+                    <DatePanel style={{ width: 200 }} header={t("selectedDates")} />]}
+                  />
                 <Button onClick={handleSaveAvailability}>{t("save")}</Button>
                 <Button onClick={() => setIsEditingAvailability(false)}>
                   {t("cancel")}
@@ -239,7 +229,10 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, updateOffers }) => {
                   multiple
                   range
                   readOnly
-                  plugins={[<DatePanel header={t("selectedDates")} style={{ width: 300 }}/>]}
+                  format="YYYY-MM-DD"
+                  minDate={new DateObject().add(1, "days")} // Tomorrow
+                  plugins={[
+                    <DatePanel style={{ width: 200 }} header={t("selectedDates")} />]}         
                 />
               </div>
             )}

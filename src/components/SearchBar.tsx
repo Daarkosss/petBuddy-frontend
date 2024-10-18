@@ -32,10 +32,6 @@ const SearchBar: React.FC<SearchBarProps> = ({ filters, setFilters, handleSearch
     });
   };
 
-  const formatDateTime = (date: string): string => { // Temporary format until backend is not corrected
-    return `${date} 00:00:00.000 +0100`;
-  };
-
   const handleAvailabilitiesChange = (availabilities: Value[][]) => {
     setFilters((prev) => {
       if (!prev.animals || prev.animals.length === 0) {
@@ -48,8 +44,8 @@ const SearchBar: React.FC<SearchBarProps> = ({ filters, setFilters, handleSearch
           ...prev.animals[0],
           offerConfigurations: [{
             availabilities: availabilities.map((dateRange) => ({
-              availableFrom: formatDateTime(dateRange[0] as string) || "",
-              availableTo: formatDateTime(dateRange[1] as string) || "",
+              availableFrom: dateRange[0] as string || "",
+              availableTo: dateRange[1] as string || "",
             })),
           }],
         }],
