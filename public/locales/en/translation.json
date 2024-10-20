@@ -162,6 +162,7 @@
   "confirmConfigurationDelete": "Are you sure you want to delete this configuration?",
   "deleteOffer": "Delete offer",
   "confirmOfferDelete": "Are you sure you want to delete this offer with all configurations assigned?",
+  "offerConfigurations": "Offer configurations",
 
   "yourOffers": {
     "manageOffer": "Manage your offer",

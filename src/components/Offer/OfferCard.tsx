@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Card, Modal, Input, Select, Popconfirm, Collapse } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { EditOfferDescription, OfferDTOWithId } from "../../types";
+import { EditOfferDescription, OfferConfigurationWithId, OfferDTOWithId } from "../../types";
 import { t } from "i18next";
 import Meta from "antd/es/card/Meta";
 import { Calendar, DateObject, Value } from "react-multi-date-picker";
@@ -103,6 +103,15 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, handleUpdateOffer, updateO
     } catch (error) {
       toast.error(t("error.deleteOffer"));
     }
+  };
+
+  const handleUpdateConfiguration = (updatedConfiguration: OfferConfigurationWithId) => {
+    const updatedConfigurations = offer.offerConfigurations.map((config) =>
+      config.id === updatedConfiguration.id ? updatedConfiguration : config
+    );
+    
+    const updatedOffer = { ...offer, offerConfigurations: updatedConfigurations };
+    handleUpdateOffer(updatedOffer);
   };
 
   return (
@@ -240,11 +249,12 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, handleUpdateOffer, updateO
             )}
           </div>
           <Collapse>
-            <Collapse.Panel header={t("offerConfigurations")} key="1">
+            <Collapse.Panel header={t("offerConfigurations")} key="panel">
               <OfferConfigurations
                 offerId={offer.id}
                 configurations={offer.offerConfigurations}
                 handleUpdateOffer={handleUpdateOffer}
+                handleUpdateConfiguration={handleUpdateConfiguration}
               />
             </Collapse.Panel>
           </Collapse>

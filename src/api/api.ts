@@ -4,7 +4,8 @@ import {
   CaretakerBasicsResponse, CaretakerSearchFilters, PagingParams, CaretakerFormFields, UserProfiles,
   CaretakerDetailsDTO, OfferDTO, OfferConfigurationDTO, EditOfferDescription, Availabilities,
   SetAvailabilityDTO,
-  OfferDTOWithId
+  OfferDTOWithId,
+  OfferConfigurationWithId
 } from "../types";
 
 const backendHost =
@@ -254,9 +255,9 @@ class API {
   async editOfferConfiguration(
     configurationId: number, 
     offerConfiguration: OfferConfigurationDTO
-  ): Promise<OfferDTOWithId | undefined> {
+  ): Promise<OfferConfigurationWithId | undefined> {
     if (store.user.profile?.selected_profile) {
-      return this.authorizedFetch<OfferDTOWithId>(
+      return this.authorizedFetch<OfferConfigurationWithId>(
         "PUT",
         `api/caretaker/offer/configuration/${configurationId}`,
         offerConfiguration,

@@ -157,6 +157,7 @@
   "confirmConfigurationDelete": "Czy na pewno chcesz usunąć tę konfigurację?",
   "deleteOffer": "Usuń ofertę",
   "confirmOfferDelete": "Czy na pewno chcesz usunąć tę ofertę wraz z wszystkimi przypisanymi konfiguracjami?",
+  "offerConfigurations": "Konfiguracje oferty",
 
   "yourOffers": {
     "manageOffer": "Zarządzaj swoją ofertą",

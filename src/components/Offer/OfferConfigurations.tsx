@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Button, Table, Input, InputNumber, Select, Space, Popconfirm } from "antd";
-import { OfferConfigurationWithOptionalId, OfferDTOWithId } from "../../types";
+import { Button, Table, Input, InputNumber, Select, Space, Popconfirm, Form } from "antd";
+import { OfferConfigurationWithId, OfferConfigurationWithOptionalId, OfferDTOWithId } from "../../types";
 import { useTranslation } from "react-i18next";
 import { api } from "../../api/api";
 
@@ -8,16 +8,19 @@ type ConfigurationsProps = {
   offerId: number;
   configurations: OfferConfigurationWithOptionalId[];
   handleUpdateOffer: (newOffer: OfferDTOWithId) => void;
+  handleUpdateConfiguration: (newOffer: OfferConfigurationWithId) => void;
 };
 
 const OfferConfigurations: React.FC<ConfigurationsProps> = ({
   offerId,
   configurations,
   handleUpdateOffer,
+  handleUpdateConfiguration
 }) => {
   const { t } = useTranslation();
   const [editingKey, setEditingKey] = useState<number | null | undefined>(undefined);
-  const [isAddingNew, setIsAddingNew] = useState(false);
+  const [form] = Form.useForm();
+
   const [newConfiguration, setNewConfiguration] = useState<OfferConfigurationWithOptionalId>({
     id: null,
     description: "",
@@ -29,13 +32,16 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
 
   const handleEdit = (record: OfferConfigurationWithOptionalId) => {
     setEditingKey(record.id);
-    setNewConfiguration(record);
+    form.setFieldsValue({ ...record });
   };
 
   const handleSaveEdit = async (configurationId: number) => {
     try {
-      const updatedOfferResponse = await api.editOfferConfiguration(configurationId, newConfiguration);
-      if (updatedOfferResponse) handleUpdateOffer(updatedOfferResponse);
+      const values = await form.validateFields();
+      const updatedConfiguration = await api.editOfferConfiguration(configurationId, values);
+      if (updatedConfiguration) {
+        handleUpdateConfiguration(updatedConfiguration);
+      }
       setEditingKey(undefined);
     } catch (error) {
       console.error("Failed to save the configuration:", error);
@@ -44,42 +50,40 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
 
   const handleDelete = async (configId: number) => {
     try {
-      const updatedOfferResponse = await api.deleteOfferConfiguration(configId);
-      if (updatedOfferResponse) handleUpdateOffer(updatedOfferResponse);
+      const updatedOffer = await api.deleteOfferConfiguration(configId);
+      if (updatedOffer) { 
+        handleUpdateOffer(updatedOffer);
+      }
     } catch (error) {
       console.error("Failed to delete the configuration:", error);
     }
   };
 
   const handleAddNewRow = () => {
-    setIsAddingNew(true);
+    form.resetFields();
     setNewConfiguration({
       id: null,
       description: "",
       dailyPrice: 0,
       selectedOptions: { SEX: [], SIZE: [] },
-    })
+    });
     setEditingKey(null);
   };
 
   const handleSaveNewRow = async () => {
     try {
-      const updatedOfferResponse = await api.addOfferConfiguration(offerId, newConfiguration);
-      if (updatedOfferResponse) handleUpdateOffer(updatedOfferResponse);
-      setIsAddingNew(false);
-      setNewConfiguration({
-        id: null,
-        description: "",
-        dailyPrice: 0,
-        selectedOptions: { SEX: [], SIZE: [] },
-      });
+      const values = await form.validateFields();
+      const updatedOffer = await api.addOfferConfiguration(offerId, values);
+      if (updatedOffer) {
+        handleUpdateOffer(updatedOffer);
+      }
+      setEditingKey(undefined);
     } catch (error) {
       console.error("Error saving new configuration:", error);
     }
   };
 
   const handleCancelNewRow = () => {
-    setIsAddingNew(false);
     setEditingKey(undefined);
   };
 
@@ -87,31 +91,34 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
     {
       title: t("description"),
       dataIndex: "description",
-      render: (desctiption: string, record: OfferConfigurationWithOptionalId) => {
-        const editable = isEditing(record)
-        console.log("editable", editable)
+      render: (_: string, record: OfferConfigurationWithOptionalId) => {
+        const editable = isEditing(record);
         return editable ? (
-          <Input
-            value={newConfiguration.description}
-            onChange={(e) => setNewConfiguration({ ...newConfiguration, description: e.target.value })}
-          />
+          <Form.Item
+            name="description"
+            rules={[{ required: true, message: t("validation.required") }]}
+          >
+            <Input />
+          </Form.Item>
         ) : (
-          desctiption
+          record.description
         );
       },
     },
     {
       title: t("dailyPrice"),
       dataIndex: "dailyPrice",
-      render: (dailyPrice: number, record: OfferConfigurationWithOptionalId) => {
+      render: (_: number, record: OfferConfigurationWithOptionalId) => {
         const editable = isEditing(record);
         return editable ? (
-          <InputNumber
-            value={newConfiguration.dailyPrice}
-            onChange={(value) => setNewConfiguration({ ...newConfiguration, dailyPrice: value || 0 })}
-          />
+          <Form.Item
+            name="dailyPrice"
+            rules={[{ required: true, message: t("validation.required") }]}
+          >
+            <InputNumber min={1} max={9999} />
+          </Form.Item>
         ) : (
-          dailyPrice
+          record.dailyPrice
         );
       },
     },
@@ -121,20 +128,18 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
       render: (values: string[], record: OfferConfigurationWithOptionalId) => {
         const editable = isEditing(record);
         return editable ? (
-          <Select
-            mode="multiple"
-            value={newConfiguration.selectedOptions.SEX}
-            onChange={(value) =>
-              setNewConfiguration({ 
-                ...newConfiguration,
-                selectedOptions: { ...newConfiguration.selectedOptions, SEX: value } 
-              })
-            }
-            options={[
-              { value: "MALE", label: t("male") },
-              { value: "SHE", label: t("she") },
-            ]}
-          />
+          <Form.Item
+            name={["selectedOptions", "SEX"]}
+            rules={[{ required: true, message: t("validation.required") }]}
+          >
+            <Select
+              mode="multiple"
+              options={[
+                { value: "MALE", label: t("male") },
+                { value: "SHE", label: t("she") },
+              ]}
+            />
+          </Form.Item>
         ) : (
           values.map((value) => t(value.toLowerCase())).join(", ")
         );
@@ -146,20 +151,18 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
       render: (values: string[], record: OfferConfigurationWithOptionalId) => {
         const editable = isEditing(record);
         return editable ? (
-          <Select
-            mode="multiple"
-            value={newConfiguration.selectedOptions.SIZE}
-            onChange={(value) =>
-              setNewConfiguration({ 
-                ...newConfiguration, 
-                selectedOptions: { ...newConfiguration.selectedOptions, SIZE: value } 
-              })
-            }
-            options={[
-              { value: "SMALL", label: t("small") },
-              { value: "BIG", label: t("big") },
-            ]}
-          />
+          <Form.Item
+            name={["selectedOptions", "SIZE"]}
+            rules={[{ required: true, message: t("validation.required") }]}
+          >
+            <Select
+              mode="multiple"
+              options={[
+                { value: "SMALL", label: t("small") },
+                { value: "BIG", label: t("big") },
+              ]}
+            />
+          </Form.Item>
         ) : (
           values.map((value) => t(value.toLowerCase())).join(", ")
         );
@@ -171,12 +174,10 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
         const editable = isEditing(record);
         return editable ? (
           <Space size="middle">
-            <Button onClick={isAddingNew ? handleSaveNewRow : () => handleSaveEdit(record.id!)}>
+            <Button onClick={record.id ? () => handleSaveEdit(record.id!) : handleSaveNewRow}>
               {t("save")}
             </Button>
-            <Button onClick={isAddingNew ? handleCancelNewRow : () => setEditingKey(undefined)}>
-              {t("cancel")}
-            </Button>
+            <Button onClick={handleCancelNewRow}>{t("cancel")}</Button>
           </Space>
         ) : (
           <Space size="middle">
@@ -203,23 +204,22 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
 
   return (
     <div>
-      <Table
-        dataSource={isAddingNew ? [...configurations, newConfiguration] : configurations}
-        columns={columns}
-        rowKey={(record: OfferConfigurationWithOptionalId) => record.id || "new"}
-        pagination={false}
-        rowClassName={() => (editingKey !== null ? "editable-row" : "")}
-      />
-      {!isAddingNew && (
-        <Button
-          type="primary"
-          onClick={handleAddNewRow}
-          style={{ marginTop: "10px" }}
-          disabled={!!editingKey}
-        >
-          {t("addNewConfiguration")}
-        </Button>
-      )}
+      <Form form={form} component={false}>
+        <Table
+          dataSource={editingKey === null ? [...configurations, newConfiguration] : configurations}
+          columns={columns}
+          rowKey={(record: OfferConfigurationWithOptionalId) => record.id || "new"}
+          pagination={false}
+        />
+      </Form>
+      <Button
+        type="primary"
+        onClick={handleAddNewRow}
+        style={{ marginTop: "10px" }}
+        disabled={editingKey !== undefined}
+      >
+        {t("addConfiguration")}
+      </Button>
     </div>
   );
 };
