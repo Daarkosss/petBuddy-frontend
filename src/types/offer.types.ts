@@ -8,6 +8,10 @@ export type OfferConfigurationWithId = OfferConfigurationDTO & {
   id: number;
 }
 
+export type OfferConfigurationWithOptionalId = OfferConfigurationDTO & {
+  id: number | null;
+}
+
 export type Availability = {
   availableFrom: string;
   availableTo: string;

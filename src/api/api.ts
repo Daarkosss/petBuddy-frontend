@@ -3,7 +3,8 @@ import store from "../store/RootStore";
 import { 
   CaretakerBasicsResponse, CaretakerSearchFilters, PagingParams, CaretakerFormFields, UserProfiles,
   CaretakerDetailsDTO, OfferDTO, OfferConfigurationDTO, EditOfferDescription, Availabilities,
-  SetAvailabilityDTO
+  SetAvailabilityDTO,
+  OfferDTOWithId
 } from "../types";
 
 const backendHost =
@@ -236,9 +237,12 @@ class API {
     }
   }
 
-  async addOfferConfiguration(offerId: number, offerConfiguration: OfferConfigurationDTO): Promise<void> {
+  async addOfferConfiguration(
+    offerId: number, 
+    offerConfiguration: OfferConfigurationDTO
+  ): Promise<OfferDTOWithId | undefined> {
     if (store.user.profile?.selected_profile) {
-      return this.authorizedFetch<void>(
+      return this.authorizedFetch<OfferDTOWithId>(
         "POST",
         `api/caretaker/offer/${offerId}/configurations`,
         [offerConfiguration],
@@ -247,9 +251,12 @@ class API {
     }
   }
 
-  async editOfferConfiguration(configurationId: number, offerConfiguration: OfferConfigurationDTO): Promise<void> {
+  async editOfferConfiguration(
+    configurationId: number, 
+    offerConfiguration: OfferConfigurationDTO
+  ): Promise<OfferDTOWithId | undefined> {
     if (store.user.profile?.selected_profile) {
-      return this.authorizedFetch<void>(
+      return this.authorizedFetch<OfferDTOWithId>(
         "PUT",
         `api/caretaker/offer/configuration/${configurationId}`,
         offerConfiguration,
@@ -258,9 +265,9 @@ class API {
     }
   }
 
-  async deleteOfferConfiguration(configurationId: number): Promise<void> {
+  async deleteOfferConfiguration(configurationId: number): Promise<OfferDTOWithId | undefined> {
     if (store.user.profile?.selected_profile) {
-      return this.authorizedFetch<void>(
+      return this.authorizedFetch<OfferDTOWithId>(
         "DELETE",
         `api/caretaker/offer/configuration/${configurationId}`,
         undefined,

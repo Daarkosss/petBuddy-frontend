@@ -5,15 +5,17 @@ import OfferCard from "../components/Offer/OfferCard";
 import { api } from "../api/api";
 import { toast } from "react-toastify";
 import store from "../store/RootStore";
-import { t } from "i18next";
 import AddOfferForm from "../components/Offer/AddOfferForm";
+import { useTranslation } from "react-i18next";
 
 const OfferManagement: React.FC = () => {
+  const { t } = useTranslation();
   const [offers, setOffers] = useState<OfferDTOWithId[]>([]);
   const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
 
   useEffect(() => {
     loadOffers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadOffers = async () => {
@@ -36,6 +38,14 @@ const OfferManagement: React.FC = () => {
     setIsOfferModalOpen(true);
   };
 
+  const handleUpdateOffer = (newOffer: OfferDTOWithId) => {
+    setOffers(
+      (prevOffers) => prevOffers.map(
+        (offer) => (offer.id === newOffer.id ? newOffer : offer)
+      )
+    );
+  };
+
   return (
     <div className="offer-management-page">
       <div className="offer-management-header">
@@ -45,7 +55,7 @@ const OfferManagement: React.FC = () => {
       <Row gutter={[50, 50]} justify="center">
         {offers.map((offer) => (
           <Col key={offer.id}>
-            <OfferCard offer={offer} updateOffers={loadOffers} />
+            <OfferCard offer={offer} updateOffers={loadOffers} handleUpdateOffer={handleUpdateOffer} />
           </Col>
         ))}
       </Row>

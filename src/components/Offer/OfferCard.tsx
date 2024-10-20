@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Card, Modal, Input, Select, Popconfirm } from "antd";
+import { Button, Card, Modal, Input, Select, Popconfirm, Collapse } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { EditOfferDescription, OfferDTOWithId } from "../../types";
 import { t } from "i18next";
@@ -8,13 +8,15 @@ import { Calendar, DateObject, Value } from "react-multi-date-picker";
 import { api } from "../../api/api";
 import { toast } from "react-toastify";
 import DatePanel from "react-multi-date-picker/plugins/date_panel";
+import OfferConfigurations from "./OfferConfigurations";
 
 type OfferCardProps = {
   offer: OfferDTOWithId;
+  handleUpdateOffer: (newOffer: OfferDTOWithId) => void;
   updateOffers: () => void;
 };
 
-const OfferCard: React.FC<OfferCardProps> = ({ offer, updateOffers }) => {
+const OfferCard: React.FC<OfferCardProps> = ({ offer, handleUpdateOffer, updateOffers }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditingDescription, setIsEditingDescription] = useState(false);
   const [isEditingAmenities, setIsEditingAmenities] = useState(false);
@@ -136,7 +138,7 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, updateOffers }) => {
       </Card>
 
       <Modal
-        title={`Your offer for ${t(offer.animal.animalType.toLowerCase())}`}
+        title={t(`yourOffers.${offer.animal.animalType.toLowerCase()}`)}
         open={isModalOpen}
         onCancel={() => setIsModalOpen(false)}
         footer={null}
@@ -237,6 +239,15 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, updateOffers }) => {
               </div>
             )}
           </div>
+          <Collapse>
+            <Collapse.Panel header={t("offerConfigurations")} key="1">
+              <OfferConfigurations
+                offerId={offer.id}
+                configurations={offer.offerConfigurations}
+                handleUpdateOffer={handleUpdateOffer}
+              />
+            </Collapse.Panel>
+          </Collapse>
         </div>
       </Modal>
     </div>
