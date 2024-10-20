@@ -44,8 +44,8 @@ const SearchBar: React.FC<SearchBarProps> = ({ filters, setFilters, handleSearch
           ...prev.animals[0],
           offerConfigurations: [{
             availabilities: availabilities.map((dateRange) => ({
-              availableFrom: dateRange[0] as string || "",
-              availableTo: dateRange[1] as string || "",
+              availableFrom: dateRange[0]?.toString() || "",
+              availableTo: dateRange[1]?.toString() || "",
             })),
           }],
         }],
