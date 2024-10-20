@@ -23,6 +23,15 @@
   }
 }
 
+.view-details-button {
+  background: v.$blue-medium;
+  
+  &:hover,
+  &:focus {
+    background: v.$blue-light !important;
+  }
+}
+
 .add-button {
   color: v.$white;
   background: v.$orange-medium;

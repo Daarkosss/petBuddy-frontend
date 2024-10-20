@@ -126,7 +126,7 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, handleUpdateOffer, updateO
           />
         }
         actions={[
-          <Button type="primary" className="submit-button" onClick={() => setIsModalOpen(true)}>
+          <Button type="primary" className="view-details-button" onClick={() => setIsModalOpen(true)}>
             {t("viewDetails")}
           </Button>,
           <Popconfirm
