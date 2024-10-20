@@ -38,12 +38,16 @@ const OfferManagement: React.FC = () => {
     setIsOfferModalOpen(true);
   };
 
-  const handleUpdateOffer = (newOffer: OfferDTOWithId) => {
-    setOffers(
-      (prevOffers) => prevOffers.map(
-        (offer) => (offer.id === newOffer.id ? newOffer : offer)
-      )
-    );
+  const handleUpdateOffer = (updatedOffer: OfferDTOWithId, isDeleted = false) => {
+    if (isDeleted) {
+      setOffers((prevOffers) => prevOffers.filter(
+        (offer) => offer.id !== updatedOffer.id
+      ));
+    } else {
+      setOffers((prevOffers) => prevOffers.map(
+        (offer) => (offer.id === updatedOffer.id ? updatedOffer : offer)
+      ));
+    }
   };
 
   return (

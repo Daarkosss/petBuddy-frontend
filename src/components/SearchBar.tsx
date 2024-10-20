@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import Voivodeship from "../models/Voivodeship";
 import { CaretakerSearchFilters } from "../types";
 import { Dispatch, SetStateAction } from "react";
-import MultiDatePicker from "./MultiDatePicker";
+import MultiDatePicker from "./Calendar/MultiDatePicker";
 import { Value } from "react-multi-date-picker";
 
 interface SearchBarProps {

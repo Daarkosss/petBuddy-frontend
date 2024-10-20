@@ -179,9 +179,9 @@ class API {
     );
   }
 
-  async addOrEditOffer(offer: OfferDTO | EditOfferDescription): Promise<void> {
+  async addOrEditOffer(offer: OfferDTO | EditOfferDescription): Promise<OfferDTOWithId | undefined> {
     if (store.user.profile?.selected_profile) {
-      return this.authorizedFetch<void>(
+      return this.authorizedFetch<OfferDTOWithId>(
         "POST",
         "api/caretaker/offer/add-or-edit",
         offer,
@@ -190,9 +190,9 @@ class API {
     }
   }
 
-  async deleteOffer(offerId: number): Promise<void> {
+  async deleteOffer(offerId: number): Promise<OfferDTOWithId | undefined> {
     if (store.user.profile?.selected_profile) {
-      return this.authorizedFetch<void>(
+      return this.authorizedFetch<OfferDTOWithId>(
         "DELETE",
         `api/caretaker/offer/${offerId}`,
         undefined,
@@ -201,9 +201,9 @@ class API {
     }
   }
 
-  async setAmenitiesForOffer(offerId: number, offerAmenities: string[]): Promise<void> {
+  async setAmenitiesForOffer(offerId: number, offerAmenities: string[]): Promise<OfferDTOWithId | undefined> {
     if (store.user.profile?.selected_profile) {
-      return this.authorizedFetch<void>(
+      return this.authorizedFetch<OfferDTOWithId>(
         "PUT",
         `api/caretaker/offer/${offerId}/amenities`,
         offerAmenities,
@@ -223,18 +223,31 @@ class API {
     }
   }
 
-  async setAvailabilityForOffers(offerIds: number[], availabilityRanges: Availabilities): Promise<void> {
+  async setAvailabilityForOffers(
+    offerIds: number[], 
+    availabilityRanges: Availabilities
+  ): Promise<OfferDTOWithId[] | undefined> {
     const offersWithAvailabilities: SetAvailabilityDTO = {
       offerIds,
       availabilityRanges
     }
     if (store.user.profile?.selected_profile) {
-      return this.authorizedFetch<void>(
+      return this.authorizedFetch<OfferDTOWithId[]>(
         "PUT",
         "api/caretaker/offer/availability",
         offersWithAvailabilities,
         { "Accept-Role": store.user.profile?.selected_profile }
       )
+    }
+  }
+
+  async setAvailabilityForOffer(
+    offerId: number, 
+    availabilityRanges: Availabilities
+  ): Promise<OfferDTOWithId | undefined> {
+    const response = await this.setAvailabilityForOffers([offerId], availabilityRanges);
+    if (response) {
+      return response[0];
     }
   }
 

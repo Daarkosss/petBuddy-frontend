@@ -4,19 +4,19 @@ import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { EditOfferDescription, OfferConfigurationWithId, OfferDTOWithId } from "../../types";
 import { t } from "i18next";
 import Meta from "antd/es/card/Meta";
-import { Calendar, DateObject, Value } from "react-multi-date-picker";
+import { Value } from "react-multi-date-picker";
 import { api } from "../../api/api";
 import { toast } from "react-toastify";
-import DatePanel from "react-multi-date-picker/plugins/date_panel";
 import OfferConfigurations from "./OfferConfigurations";
+import MultiCalendar from "../Calendar/MultiCalendar";
 
 type OfferCardProps = {
   offer: OfferDTOWithId;
-  handleUpdateOffer: (newOffer: OfferDTOWithId) => void;
+  handleUpdateOffer: (updatedOffer: OfferDTOWithId, isDeleted?: boolean) => void;
   updateOffers: () => void;
 };
 
-const OfferCard: React.FC<OfferCardProps> = ({ offer, handleUpdateOffer, updateOffers }) => {
+const OfferCard: React.FC<OfferCardProps> = ({ offer, handleUpdateOffer }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditingDescription, setIsEditingDescription] = useState(false);
   const [isEditingAmenities, setIsEditingAmenities] = useState(false);
@@ -42,9 +42,11 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, handleUpdateOffer, updateO
         animal: offer.animal,
         description: editedDescription
       };
-      await api.addOrEditOffer(offerWithDescription);
+      const updatedOffer = await api.addOrEditOffer(offerWithDescription);
+      if (updatedOffer) {
+        handleUpdateOffer(updatedOffer);
+      }
       toast.success(t("success.editOffer"));
-      updateOffers();
     } catch (error) {
       toast.error(t("error.editOffer"));
     } finally {
@@ -59,9 +61,11 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, handleUpdateOffer, updateO
 
   const handleSaveAmenities = async () => {
     try {
-      await api.setAmenitiesForOffer(offer.id, editedAmenities);
+      const updatedOffer = await api.setAmenitiesForOffer(offer.id, editedAmenities);
+      if (updatedOffer) {
+        handleUpdateOffer(updatedOffer);
+      }
       toast.success(t("success.editOffer"));
-      updateOffers();
     } catch (error) {
       toast.error(t("error.editOffer"));
     } finally {
@@ -85,9 +89,11 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, handleUpdateOffer, updateO
         ? dateRange[1]?.toString()
         : dateRange[0]?.toString() || "",
       }));
-      await api.setAvailabilityForOffers([offer.id], availabilities);
+      const updatedOffer = await api.setAvailabilityForOffer(offer.id, availabilities);
+      if (updatedOffer) {
+        handleUpdateOffer(updatedOffer);
+      }
       toast.success(t("success.editOffer"));
-      updateOffers();
     } catch (error) {
       toast.error(t("error.editOffer"));
     } finally {
@@ -97,9 +103,11 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, handleUpdateOffer, updateO
 
   const handleDeleteOffer = async () => {
     try {
-      await api.deleteOffer(offer.id);
+      const deletedOffer = await api.deleteOffer(offer.id);
+      if (deletedOffer) {
+        handleUpdateOffer(deletedOffer, true);
+      }
       toast.success(t("success.deleteOffer"));
-      updateOffers();
     } catch (error) {
       toast.error(t("error.deleteOffer"));
     }
@@ -236,15 +244,9 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, handleUpdateOffer, updateO
             </div>
             {isEditingAvailability ? (
               <div className="value">
-                <Calendar
-                  value={editedAvailability}
-                  multiple
-                  range
-                  format="YYYY-MM-DD"
-                  onChange={setEditedAvailability}
-                  minDate={new DateObject().add(1, "days")} // Tomorrow
-                  plugins={[
-                    <DatePanel style={{ width: 200 }} header={t("selectedDates")} />]}
+                <MultiCalendar
+                  dateValue={editedAvailability}
+                  handleChange={setEditedAvailability}
                 />
                 <Space>
                   <Button type="primary" className="submit-button" onClick={handleSaveAvailability}>
@@ -257,32 +259,30 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, handleUpdateOffer, updateO
               </div>
             ) : (
               <div>
-                <Calendar
-                  value={offer.availabilities.map((date) => [
+                <MultiCalendar
+                  dateValue={offer.availabilities.map((date) => [
                     date.availableFrom,
                     date.availableTo,
                   ])}
-                  multiple
-                  range
                   readOnly
-                  format="YYYY-MM-DD"
-                  minDate={new DateObject().add(1, "days")} // Tomorrow
-                  plugins={[
-                    <DatePanel style={{ width: 200 }} header={t("selectedDates")} />]}         
                 />
               </div>
             )}
           </div>
-          <Collapse>
-            <Collapse.Panel header={t("offerConfigurations")} key="panel">
-              <OfferConfigurations
-                offerId={offer.id}
-                configurations={offer.offerConfigurations}
-                handleUpdateOffer={handleUpdateOffer}
-                handleUpdateConfiguration={handleUpdateConfiguration}
-              />
-            </Collapse.Panel>
-          </Collapse>
+          <Collapse 
+            items={[
+              {
+                key: "panel",
+                label: t("offerConfigurations"),
+                children: <OfferConfigurations
+                  offerId={offer.id}
+                  configurations={offer.offerConfigurations}
+                  handleUpdateOffer={handleUpdateOffer}
+                  handleUpdateConfiguration={handleUpdateConfiguration}
+                />
+              }
+            ]}
+          />
         </div>
       </Modal>
     </div>
