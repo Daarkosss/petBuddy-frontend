@@ -3,7 +3,6 @@
 .submit-button {
   float: right;
   background: v.$blue-dark;
-  width: 100px;
 
   &:hover,
   &:focus {
@@ -24,8 +23,7 @@
   }
 }
 
-.add-offer-button {
-  font-size: 16px;
+.add-button {
   color: v.$white;
   background: v.$orange-medium;
   
@@ -35,4 +33,15 @@
     background: v.$orange-light !important;
     border: v.$white;
   }
+}
+
+.add-offer-button {
+  @extend .add-button;
+  font-size: 16px;
+}
+
+.add-configuration-button {
+  @extend .add-button;
+  align-self: center;
+  margin: 0 auto;
 }

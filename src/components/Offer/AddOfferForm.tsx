@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { Form, Input, Button, Select } from "antd";
-import { OfferDTO, OfferDTOWithId } from "../../types";
+import { OfferDTO } from "../../types";
 import { api } from "../../api/api";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 
 interface OfferFormProps {
-  offer?: OfferDTOWithId;
   onSuccess: () => void;
 }
 

@@ -96,6 +96,7 @@
   "upload": "Upload",
   "uploadImages": "Upload images",
   "save": "Save",
+  "cancel": "Cancel",
 
   "validation": {
     "required": "Required",
@@ -143,7 +144,7 @@
 
   "dailyPrice": "Daily price",
 
-  "addOffer": "Add offer",
+  "addOffer": "Add new offer",
   "editOffer": "Edit offer",
   "addConfiguration": "Add configuration",
   "editConfiguration": "Edit configuration",

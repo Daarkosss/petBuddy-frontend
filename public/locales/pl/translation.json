@@ -91,6 +91,7 @@
   "upload": "Prześlij",
   "uploadImages": "Prześlij zdjęcia",
   "save": "Zapisz",
+  "cancel": "Anuluj",
 
   "validation": {
     "required": "Wymagane",
@@ -138,7 +139,7 @@
 
   "dailyPrice": "Cena za dzień",
 
-  "addOffer": "Dodaj ofertę",
+  "addOffer": "Dodaj nową ofertę",
   "editOffer": "Edytuj ofertę",
   "addConfiguration": "Dodaj konfigurację",
   "editConfiguration": "Edytuj konfigurację",

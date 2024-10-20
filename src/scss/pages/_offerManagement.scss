@@ -20,6 +20,8 @@
   display: flex;
   flex-direction: column;
   gap: 25px;
+  overflow-x: auto;
+  padding: 10px;
 }
 
 .offer-field {
@@ -36,6 +38,19 @@
   }
 
   .value {
-    font-weight: normal;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
+}
+
+.offer-configurations {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.offer-modal-title {
+  text-align: center;
+  font-size: 1.5rem;
 }

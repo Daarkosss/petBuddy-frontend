@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Card, Modal, Input, Select, Popconfirm, Collapse } from "antd";
+import { Button, Card, Modal, Input, Select, Popconfirm, Collapse, Space } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { EditOfferDescription, OfferConfigurationWithId, OfferDTOWithId } from "../../types";
 import { t } from "i18next";
@@ -118,6 +118,7 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, handleUpdateOffer, updateO
     <div>
       <Card
         style={{ width: 400 }}
+        className="offer-card"
         cover={
           <img
             src={`/images/${offer.animal.animalType.toLowerCase()}-card.jpg`}
@@ -125,16 +126,17 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, handleUpdateOffer, updateO
           />
         }
         actions={[
-          <Button type="primary" onClick={() => setIsModalOpen(true)}>
+          <Button type="primary" className="submit-button" onClick={() => setIsModalOpen(true)}>
             {t("viewDetails")}
           </Button>,
           <Popconfirm
             title={t("deleteOffer")}
             description={t("confirmOfferDelete")}
+            onConfirm={handleDeleteOffer}
             okText={t("yes")}
             cancelText={t("no")}
           >
-            <Button type="primary" danger onClick={handleDeleteOffer}>
+            <Button type="primary" danger>
               <DeleteOutlined />
             </Button>
           </Popconfirm>
@@ -147,11 +149,15 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, handleUpdateOffer, updateO
       </Card>
 
       <Modal
-        title={t(`yourOffers.${offer.animal.animalType.toLowerCase()}`)}
+        title={
+          <div className="offer-modal-title">
+            {t(`yourOffers.${offer.animal.animalType.toLowerCase()}`)}
+          </div>
+        }
         open={isModalOpen}
         onCancel={() => setIsModalOpen(false)}
         footer={null}
-        width={800}
+        width={900}
         className="offer-modal"
       >
         <div className="offer-modal">
@@ -163,18 +169,29 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, handleUpdateOffer, updateO
               )}
             </div>
             {isEditingDescription ? (
-              <div>
+              <div className="value">
                 <Input.TextArea
                   value={editedDescription}
+                  autoSize={{ minRows: 2, maxRows: 4 }}
                   onChange={(e) => setEditedDescription(e.target.value)}
+                  style={{ maxWidth: 700 }}
                 />
-                <Button onClick={handleSaveDescription}>{t("save")}</Button>
-                <Button onClick={() => setIsEditingDescription(false)}>
-                  {t("cancel")}
-                </Button>
+                <Space>
+                  <Button type="primary" className="submit-button" onClick={handleSaveDescription}>
+                    {t("save")}
+                  </Button>
+                  <Button onClick={() => setIsEditingDescription(false)}>
+                    {t("cancel")}
+                  </Button>
+                </Space>
               </div>
             ) : (
-              <Input.TextArea value={offer.description} disabled />
+              <Input.TextArea 
+                value={offer.description} 
+                autoSize={{ minRows: 2, maxRows: 4 }} 
+                disabled
+                style={{ maxWidth: 700 }}
+              />
             )}
           </div>
           <div className="offer-field">
@@ -185,7 +202,7 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, handleUpdateOffer, updateO
               )}
             </div>
             {isEditingAmenities ? (
-              <div>
+              <div className="value">
                 <Select
                   mode="multiple"
                   value={editedAmenities}
@@ -196,10 +213,14 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, handleUpdateOffer, updateO
                     { value: "cage", label: t("amenityTypes.cage") },
                   ]}
                 />
-                <Button onClick={handleSaveAmenities}>{t("save")}</Button>
-                <Button onClick={() => setIsEditingAmenities(false)}>
-                  {t("cancel")}
-                </Button>
+                <Space>
+                  <Button type="primary" className="submit-button" onClick={handleSaveAmenities}>
+                    {t("save")}
+                  </Button>
+                  <Button onClick={() => setIsEditingAmenities(false)}>
+                    {t("cancel")}
+                  </Button>
+                </Space>
               </div>
             ) : (
               <div>{offer.animalAmenities.map((value) => t(`amenityTypes.${value}`)).join(", ")}</div>
@@ -214,7 +235,7 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, handleUpdateOffer, updateO
               )}
             </div>
             {isEditingAvailability ? (
-              <div>
+              <div className="value">
                 <Calendar
                   value={editedAvailability}
                   multiple
@@ -224,11 +245,15 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, handleUpdateOffer, updateO
                   minDate={new DateObject().add(1, "days")} // Tomorrow
                   plugins={[
                     <DatePanel style={{ width: 200 }} header={t("selectedDates")} />]}
-                  />
-                <Button onClick={handleSaveAvailability}>{t("save")}</Button>
-                <Button onClick={() => setIsEditingAvailability(false)}>
-                  {t("cancel")}
-                </Button>
+                />
+                <Space>
+                  <Button type="primary" className="submit-button" onClick={handleSaveAvailability}>
+                    {t("save")}
+                  </Button>
+                  <Button onClick={() => setIsEditingAvailability(false)}>
+                    {t("cancel")}
+                  </Button>
+                </Space>
               </div>
             ) : (
               <div>
