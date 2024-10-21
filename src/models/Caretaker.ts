@@ -1,4 +1,4 @@
-import { AccountDataDTO, CaretakerBasicsDTO, CaretakerDetailsDTO, OfferDTO } from "../types";
+import { AccountDataDTO, CaretakerBasicsDTO, CaretakerDetailsDTO, OfferDTOWithId } from "../types";
 import Voivodeship from "./Voivodeship";
 
 export class CaretakerBasics {
@@ -30,7 +30,7 @@ export class CaretakerBasics {
 export class CaretakerDetails extends CaretakerBasics {
   phoneNumber: string;
   description: string;
-  offers: OfferDTO[];
+  offers: OfferDTOWithId[];
 
   constructor(data: CaretakerDetailsDTO) {
     super(data);

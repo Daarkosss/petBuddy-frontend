@@ -1,13 +1,14 @@
 import { useKeycloak } from "@react-keycloak/web";
 import { Route, Routes } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { Layout } from "antd";
 import { api } from "./api/api";
 import CaretakerForm from "./pages/CaretakerForm";
 import store from "./store/RootStore";
 import CaretakerSearch from "./pages/CaretakerSearch";
 import ProfileSelection from "./pages/ProfileSelection";
+import OfferManagement from "./pages/OfferManagement";
 import LandingPage from "./pages/LandingPage";
-import { Layout } from "antd";
 import Header from "./components/Header";
 import { observer } from "mobx-react-lite";
 
@@ -75,6 +76,7 @@ const App = observer(() => {
               <>
                 <Route path="/caretaker/form" element={<CaretakerForm />} />
                 <Route path="/caretaker/search" element={<CaretakerSearch />} />
+                <Route path="/caretaker/offers" element={<OfferManagement />} />
                 <Route
                   path="/profile-selection"
                   element={<ProfileSelection isUserDataFetched={isUserDataFetched} />}
@@ -82,10 +84,13 @@ const App = observer(() => {
                 <Route path="*" element={<LandingPage />} />
               </>
             ) : (
-              <Route
-                path="/*"
-                element={<ProfileSelection isUserDataFetched={isUserDataFetched} />}
-              />
+              <>
+                <Route
+                  path="/*"
+                  element={<ProfileSelection isUserDataFetched={isUserDataFetched} />}
+                />
+                <Route path="/caretaker/form" element={<CaretakerForm />} />
+              </>
             )
           ) : (
             <>
