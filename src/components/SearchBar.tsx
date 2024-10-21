@@ -42,12 +42,10 @@ const SearchBar: React.FC<SearchBarProps> = ({ filters, setFilters, handleSearch
         ...prev,
         animals: [{ 
           ...prev.animals[0],
-          offerConfigurations: [{
-            availabilities: availabilities.map((dateRange) => ({
-              availableFrom: dateRange[0]?.toString() || "",
-              availableTo: dateRange[1]?.toString() || "",
-            })),
-          }],
+          availabilities: availabilities.map((dateRange) => ({
+            availableFrom: dateRange[0]?.toString() || "",
+            availableTo: dateRange[1]?.toString() || "",
+          })),
         }],
       };
     });
@@ -98,8 +96,8 @@ const SearchBar: React.FC<SearchBarProps> = ({ filters, setFilters, handleSearch
       <Form.Item layout="vertical" label={t("date")}>
         <MultiDatePicker
           handleChange={handleAvailabilitiesChange}
-          dateValue={filters.animals?.[0]?.offerConfigurations?.[0]?.availabilities
-            ? filters.animals[0].offerConfigurations[0].availabilities.map(
+          dateValue={filters.animals?.[0]?.availabilities
+            ? filters.animals[0].availabilities.map(
               (date) => [date.availableFrom, date.availableTo])
             : []
           }

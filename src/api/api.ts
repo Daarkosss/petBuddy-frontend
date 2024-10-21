@@ -122,6 +122,7 @@ class API {
         minPrice: offer.minPrice ? offer.minPrice : 0.01,
         maxPrice: offer.maxPrice ? offer.maxPrice : 99999.99,
       })),
+      availabilities: animal.availabilities,
     }));
 
     return this.fetch<CaretakerBasicsResponse>(
