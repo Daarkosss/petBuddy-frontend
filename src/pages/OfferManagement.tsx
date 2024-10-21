@@ -59,7 +59,7 @@ const OfferManagement: React.FC = () => {
       <Row gutter={[50, 50]} justify="center">
         {offers.map((offer) => (
           <Col key={offer.id}>
-            <OfferCard offer={offer} updateOffers={loadOffers} handleUpdateOffer={handleUpdateOffer} />
+            <OfferCard offer={offer} handleUpdateOffer={handleUpdateOffer} />
           </Col>
         ))}
       </Row>

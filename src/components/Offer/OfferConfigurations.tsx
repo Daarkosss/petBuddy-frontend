@@ -153,7 +153,7 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
       title: t("description"),
       dataIndex: "description",
       onCell: () => ({
-        style: { minWidth: 150, maxWidth: 170 },
+        style: { minWidth: 150, maxWidth: 160 },
       }),
       render: (_: string, record: OfferConfigurationWithOptionalId) => {
         const editable = isEditing(record);
