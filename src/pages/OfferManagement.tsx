@@ -70,7 +70,9 @@ const OfferManagement: React.FC = () => {
         footer={null}
         maskClosable={false}
       >
-        <AddOfferForm onSuccess={handleSuccessfulOfferSave} />
+        <AddOfferForm 
+          currentAnimalTypes={offers.map((offer) => offer.animal.animalType)} 
+          onSuccess={handleSuccessfulOfferSave} />
       </Modal>
     </div>
   );

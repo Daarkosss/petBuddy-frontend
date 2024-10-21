@@ -128,7 +128,8 @@
     "deleteOffer": "An error occurred while deleting offer",
     "deleteConfiguration": "An error occurred while deleting configuration",
     "editConfiguration": "An error occurred while updating configuration",
-    "addConfiguration": "An error occurred while creating configuration"
+    "addConfiguration": "An error occurred while creating configuration",
+    "duplicateConfiguration": "Configuration with these selected options already exists"
   },
 
   "success": {

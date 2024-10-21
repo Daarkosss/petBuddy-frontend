@@ -123,7 +123,8 @@
     "deleteOffer": "Wystąpił błąd podczas usuwania oferty",
     "deleteConfiguration": "Wystąpił błąd podczas usuwania konfiguracji",
     "editConfiguration": "Wystąpił błąd podczas edycji konfiguracji",
-    "addConfiguration": "Wystąpił błąd podczas tworzenia konfiguracji"
+    "addConfiguration": "Wystąpił błąd podczas tworzenia konfiguracji",
+    "duplicateConfiguration": "Konfiguracja z wybranymi parametrami juz istnieje"
   },
 
   "success": {

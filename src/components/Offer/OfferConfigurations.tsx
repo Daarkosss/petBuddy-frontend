@@ -4,6 +4,7 @@ import { OfferConfigurationWithId, OfferConfigurationWithOptionalId, OfferDTOWit
 import { useTranslation } from "react-i18next";
 import { api } from "../../api/api";
 import { toast } from "react-toastify";
+import _ from "lodash";
 
 type ConfigurationsProps = {
   offerId: number;
@@ -21,6 +22,7 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
   const { t } = useTranslation();
   const [editingKey, setEditingKey] = useState<number | null | undefined>(undefined);
   const [form] = Form.useForm();
+  const [isLoading, setIsLoading] = useState(false);
 
   const [newConfiguration, setNewConfiguration] = useState<OfferConfigurationWithOptionalId>({
     id: null,
@@ -37,8 +39,14 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
   };
 
   const handleSaveEditRow = async (configurationId: number) => {
+    setIsLoading(true);
     try {
       const values = await form.validateFields();
+      if (configurationExists(values)) {
+        toast.error(t("error.duplicateConfiguration"));
+        return;
+      }
+
       const updatedConfiguration = await api.editOfferConfiguration(configurationId, values);
       if (updatedConfiguration) {
         handleUpdateConfiguration(updatedConfiguration);
@@ -48,10 +56,12 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
       toast.error(t("error.editConfiguration"));
     } finally {
       setEditingKey(undefined);
+      setIsLoading(false);
     }
   };
 
   const handleDelete = async (configId: number) => {
+    setIsLoading(true);
     try {
       const updatedOffer = await api.deleteOfferConfiguration(configId);
       if (updatedOffer) { 
@@ -60,6 +70,8 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
       toast.success(t("success.deleteConfiguration"));
     } catch (error) {
       toast.error(t("error.deleteConfiguration"));
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -74,9 +86,33 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
     setEditingKey(null);
   };
 
+  const sortNestedArrays = (obj: Record<string, string[]>) => {
+    return _.mapValues(obj, (value: string[]) => {
+      return _.sortBy(value);
+    });
+  };
+
+  const configurationExists = (updatedConfig: OfferConfigurationWithOptionalId) => {
+    const updatedConfigOptions = {
+      ...updatedConfig,
+      selectedOptions: sortNestedArrays(updatedConfig.selectedOptions),
+    };
+
+    return configurations.some((config) => {
+      const configOptions = sortNestedArrays(config.selectedOptions);
+      return config.id !== editingKey && _.isEqual(configOptions, updatedConfigOptions.selectedOptions)
+    });
+  }
+
   const handleSaveNewRow = async () => {
+    setIsLoading(true);
     try {
       const values = await form.validateFields();
+      if (configurationExists(values)) {
+        toast.error(t("error.duplicateConfiguration"));
+        return;
+      }
+
       const updatedOffer = await api.addOfferConfiguration(offerId, values);
       if (updatedOffer) {
         handleUpdateOffer(updatedOffer);
@@ -85,6 +121,8 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
       setEditingKey(undefined);
     } catch (error) {
       toast.error(t("error.addConfiguration"));
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -222,6 +260,7 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
             <Button
               type="primary"
               onClick={record.id ? () => handleSaveEditRow(record.id!) : handleSaveNewRow}
+              loading={isLoading}
             >
               {t("save")}
             </Button>
@@ -244,7 +283,7 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
               cancelText={t("no")}
               disabled={editingKey !== undefined}
             >
-              <Button type="primary" danger disabled={editingKey !== undefined}>
+              <Button type="primary" danger loading={isLoading} disabled={editingKey !== undefined}>
                 {t("delete")}
               </Button>
             </Popconfirm>

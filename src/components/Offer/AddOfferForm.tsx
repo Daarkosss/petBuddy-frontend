@@ -6,14 +6,18 @@ import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 
 interface OfferFormProps {
+  currentAnimalTypes: string[];
   onSuccess: () => void;
 }
 
-const AddOfferForm: React.FC<OfferFormProps> = ({ onSuccess }) => {
+const AddOfferForm: React.FC<OfferFormProps> = ({ currentAnimalTypes, onSuccess }) => {
   const { t } = useTranslation();
 
   const [form] = Form.useForm();
   const [isLoading, setIsLoading] = useState(false);
+
+  const allAnimalTypes = ["DOG", "CAT", "BIRD", "REPTILE"];
+  const availableAnimalTypes = allAnimalTypes.filter((type) => !currentAnimalTypes.includes(type));
   
   const handleFinish = async (values: OfferDTO) => {
     setIsLoading(true);
@@ -25,6 +29,7 @@ const AddOfferForm: React.FC<OfferFormProps> = ({ onSuccess }) => {
       toast.error(t("error.addOffer"));
     } finally {
       setIsLoading(false);
+      form.resetFields();
     }
   };
 
@@ -37,13 +42,9 @@ const AddOfferForm: React.FC<OfferFormProps> = ({ onSuccess }) => {
       >
         <Select
           placeholder={t("caretakerSearch.animalTypes")}
-          options={[
-            { value: "DOG", label: t("dog") },
-            { value: "CAT", label: t("cat") },
-            { value: "BIRD", label: t("bird") },
-            { value: "REPTILE", label: t("reptile") },
-            { value: "HORSE", label: t("horse") }
-          ]}
+          options={availableAnimalTypes.map(
+            (type) => ({ value: type, label: t(type.toLowerCase()) })
+          )}
         />
       </Form.Item>
       <Form.Item
