@@ -30,7 +30,7 @@
   "amenities": "Amenities",
   "amenityTypes": {
     "toys": "Toys",
-    "scratchingPost": "Scratching Post",
+    "scratching post": "Scratching Post",
     "cage": "Cage"
   },
 
@@ -96,6 +96,7 @@
   "upload": "Upload",
   "uploadImages": "Upload images",
   "save": "Save",
+  "cancel": "Cancel",
 
   "validation": {
     "required": "Required",
@@ -120,11 +121,64 @@
 
   "error": {
     "createCaretakerProfile": "An error occurred while creating caretaker profile",
-    "editCaretakerForm": "An error occurred while editing caretaker data"
+    "editCaretakerForm": "An error occurred while editing caretaker data",
+    "addOffer": "An error occurred while creating offer",
+    "editOffer": "An error occurred while updating offer",
+    "loadOffers": "An error occurred while loading offers",
+    "deleteOffer": "An error occurred while deleting offer",
+    "deleteConfiguration": "An error occurred while deleting configuration",
+    "editConfiguration": "An error occurred while updating configuration",
+    "addConfiguration": "An error occurred while creating configuration",
+    "duplicateConfiguration": "Configuration with these selected options already exists",
+    "setAvailabilityForOffers": "An error occurred while setting availability for selected offers"
   },
 
   "success": {
     "createCaretakerProfile": "Caretaker profile has been successfully created",
-    "editCaretakerForm": "Caretaker data has been successfully updated"
-  }
+    "editCaretakerForm": "Caretaker data has been successfully updated",
+    "addOffer": "Offer has been successfully created",
+    "editOffer": "Offer has been successfully updated",
+    "deleteOffer": "Offer has been successfully deleted",
+    "deleteConfiguration": "Configuration has been successfully deleted",
+    "editConfiguration": "Configuration has been successfully updated",
+    "addConfiguration": "Configuration has been successfully created",
+    "setAvailabilityForOffers": "Availability has been successfully set for selected offers"
+  },
+
+  "dailyPrice": "Daily price",
+
+  "addOffer": "Add new offer",
+  "setAvailabilityForOffers": "Set availability for offers",
+  "editOffer": "Edit offer",
+  "addConfiguration": "Add configuration",
+  "editConfiguration": "Edit configuration",
+  "animalType": "Animal type",
+  "animalTypes": "Animal types",
+  "manage": "Manage",
+  "availability": "Availability",
+  "editDescription": "Edit description",
+  "editAmenities": "Edit amenities",
+  "editAvailability": "Edit availability",
+  "edit": "Edit",
+  "delete": "Delete",
+  "yes": "Yes",
+  "no": "No",
+
+  "deleteConfiguration": "Delete configuration",
+  "confirmConfigurationDelete": "Are you sure you want to delete this configuration?",
+  "deleteOffer": "Delete offer",
+  "confirmOfferDelete": "Are you sure you want to delete this offer with all configurations assigned?",
+  "offerConfigurations": "Offer configurations",
+
+  "yourOffers": {
+    "manageOffer": "Manage your offer",
+    "cat": "Your offer for cats",
+    "dog": "Your offer for dogs",
+    "bird": "Your offer for birds",
+    "rabbit": "Your offer for rabbits",
+    "reptile": "Your offer for reptiles"
+  },
+
+  "availabilityAlert": "Availability will be overwritten with selected dates for all offers, you choose.",
+  "noData": "No data"
 }

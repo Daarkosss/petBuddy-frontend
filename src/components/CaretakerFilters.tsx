@@ -57,14 +57,6 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
     onSearch();
   };
 
-  const renderSelectOptions = (options: Record<string, string>) => {
-    return Object.entries(options).map(([value, label]) => (
-      <Select.Option key={value} value={value}>
-        {label}
-      </Select.Option>
-    ));
-  };
-
   const renderAnimalFilters = () =>
     filters.animals?.map(({ animalType }) => (
       <div key={animalType} className="animal-filter">
@@ -95,38 +87,45 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
         </div>
         <Select
           mode="multiple"
+          showSearch={false}
           placeholder={t("size")}
           onChange={(value) =>
             onAnimalFiltersChange(animalType, { attributes: { SIZE: value as AnimalSize[] } })
           }
           value={animalFilters[animalType]?.attributes?.SIZE || []}
-        >
-          {renderSelectOptions({ SMALL: t("small"), MEDIUM: t("medium"), BIG: t("big") })}
-        </Select>
+          options={[
+            { value: "SMALL", label: t("small") },
+            { value: "MEDIUM", label: t("medium") },
+            { value: "BIG", label: t("big") }
+          ]}
+        />
         <Select
           mode="multiple"
+          showSearch={false}
           placeholder={t("sex")}
           onChange={(value) =>
             onAnimalFiltersChange(animalType, { attributes: { SEX: value as AnimalSex[] } })
           }
           value={animalFilters[animalType]?.attributes?.SEX || []}
-        >
-          {renderSelectOptions({ MALE: t("male"), SHE: t("she") })}
-        </Select>
+          options={[
+            { value: "MALE", label: t("male") },
+            { value: "SHE", label: t("she") }
+          ]}
+        />
         <Select
           mode="multiple"
+          showSearch={false}
           placeholder={t("amenities")}
           onChange={(value) =>
             onAnimalFiltersChange(animalType, { amenities: value as string[] })
           }
           value={animalFilters[animalType]?.amenities || []}
-        >
-          {renderSelectOptions({
-            toys: t("amenityTypes.toys"),
-            "scratching post": t("amenityTypes.scratchingPost"),
-            cage: t("amenityTypes.cage"),
-          })}
-        </Select>
+          options={[
+            { value: "toys", label: t("amenityTypes.toys") },
+            { value: "scratching post", label: t("amenityTypes.scratching post") },
+            { value: "cage", label: t("amenityTypes.cage") },
+          ]}
+        />
       </div>
     ));
 
@@ -154,23 +153,22 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
           onChange={(value) => onFiltersChange({ ...filters, voivodeship: value })}
           allowClear
           value={filters.voivodeship}
-        >
-          {renderSelectOptions(Voivodeship.voivodeshipMap)}
-        </Select>
+          options={Voivodeship.voivodeshipOptions}
+        />
         <Select
           mode="multiple"
+          showSearch={false}
           placeholder={t("caretakerSearch.animalTypes")}
           onChange={onAnimalTypesChange}
           value={filters.animals?.map((animal) => animal.animalType)}
-        >
-          {renderSelectOptions({
-            DOG: t("dog"),
-            CAT: t("cat"),
-            BIRD: t("bird"),
-            REPTILE: t("reptile"),
-            HORSE: t("horse"),
-          })}
-        </Select>
+          options={[
+            { value: "DOG", label: t("dog") },
+            { value: "CAT", label: t("cat") },
+            { value: "BIRD", label: t("bird") },
+            { value: "REPTILE", label: t("reptile") },
+            { value: "HORSE", label: t("horse") }
+          ]}
+        />
         {renderAnimalFilters()}
         <Button type="primary" onClick={handleSearch} className="search-button">
           {t("search")}
