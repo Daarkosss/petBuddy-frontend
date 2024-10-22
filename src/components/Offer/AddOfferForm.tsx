@@ -60,6 +60,7 @@ const AddOfferForm: React.FC<OfferFormProps> = ({ currentAnimalTypes, onSuccess 
       >
         <Select 
           mode="multiple"
+          showSearch={false}
           options={[
             { value: "toys", label: t("amenityTypes.toys") },
             { value: "scratching post", label: t("amenityTypes.scratching post") },

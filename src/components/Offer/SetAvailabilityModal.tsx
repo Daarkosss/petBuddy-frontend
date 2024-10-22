@@ -72,6 +72,7 @@ const SetAvailabilityModal: React.FC<SetAvailabilityFormProps> = ({
           <Select
             placeholder={t("caretakerSearch.animalTypes")}
             mode="multiple"
+            showSearch={false}
             options={availableOffers.map(
               (offer) => ({ value: offer.id, label: t(offer.animal.animalType.toLowerCase()) })
             )}

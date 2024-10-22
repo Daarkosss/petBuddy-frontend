@@ -179,5 +179,6 @@
     "reptile": "Your offer for reptiles"
   },
 
-  "availabilityAlert": "Availability will be overwritten with selected dates for all offers, you choose."
+  "availabilityAlert": "Availability will be overwritten with selected dates for all offers, you choose.",
+  "noData": "No data"
 }

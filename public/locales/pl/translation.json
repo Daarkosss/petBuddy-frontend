@@ -174,5 +174,6 @@
     "reptile": "Twoja oferta dla gadów"
   },
 
-  "availabilityAlert": "Dostępność zostanie nadpisana wybranymi datami dla wszystkich ofert, które zaznaczysz."
+  "availabilityAlert": "Dostępność zostanie nadpisana wybranymi datami dla wszystkich ofert, które zaznaczysz.",
+  "noData": "Brak danych"
 }
