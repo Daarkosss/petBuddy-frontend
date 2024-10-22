@@ -22,6 +22,13 @@ class Voivodeship {
     ZACHODNIOPOMORSKIE: "zachodniopomorskie",
   };
 
+  static voivodeshipOptions = Object.entries(Voivodeship.voivodeshipMap).map(
+    ([value, label]) => ({
+      value: value,
+      label: label,
+    })
+  );
+
   constructor(name: VoivodeshipDTO) {
     this.name = name;
   }
