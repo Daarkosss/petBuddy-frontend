@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import store from "../store/RootStore";
 import AddOfferForm from "../components/Offer/AddOfferForm";
 import { useTranslation } from "react-i18next";
-import SetAvailabilityForm from "../components/Offer/SetAvailabilityForm";
+import SetAvailabilityModal from "../components/Offer/SetAvailabilityModal";
 
 const OfferManagement: React.FC = () => {
   const { t } = useTranslation();
@@ -42,10 +42,6 @@ const OfferManagement: React.FC = () => {
 
   const handleSetAvailabilityForOffers = () => {
     setIsAvailabilityModalOpen(true);
-  }
-
-  const handleSuccessAvailabilitySave = () => {
-    setIsAvailabilityModalOpen(false);
   }
 
   const handleUpdateOffer = (updatedOffer: OfferDTOWithId, isDeleted = false) => {
@@ -97,23 +93,12 @@ const OfferManagement: React.FC = () => {
           currentAnimalTypes={offers.map((offer) => offer.animal.animalType)} 
           onSuccess={handleSuccessfulOfferSave} />
       </Modal>
-      <Modal
-        title={
-          <div className="offer-modal-title">
-            {t("setAvailabilityForOffers")}
-          </div>
-        }
-        open={isAvailabilityModalOpen}
-        onCancel={() => setIsAvailabilityModalOpen(false)}
-        footer={null}
-        maskClosable={false}
-      >
-        <SetAvailabilityForm 
-          availableOffers={offers}
-          handleUpdateOffers={handleUpdateOffers}
-          onSuccess={handleSuccessAvailabilitySave}
-        />
-      </Modal>
+      <SetAvailabilityModal
+        availableOffers={offers}
+        handleUpdateOffers={handleUpdateOffers}
+        isModalOpen={isAvailabilityModalOpen}
+        setIsModalOpen={setIsAvailabilityModalOpen}
+      />
     </div>
   );
 };
