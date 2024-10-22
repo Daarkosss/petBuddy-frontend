@@ -57,6 +57,7 @@ const SetAvailabilityModal: React.FC<SetAvailabilityFormProps> = ({
       onCancel={() => setIsModalOpen(false)}
       footer={null}
       maskClosable={false}
+      width={"max-content"}
     >
       <Form form={form} className="set-availability-form" layout="vertical" onFinish={handleFinish}>
         <Alert

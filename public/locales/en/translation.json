@@ -155,7 +155,7 @@
   "animalType": "Animal type",
   "animalTypes": "Animal types",
   "manage": "Manage",
-  "availability": "Availabilty",
+  "availability": "Availability",
   "editDescription": "Edit description",
   "editAmenities": "Edit amenities",
   "editAvailability": "Edit availability",
@@ -179,5 +179,5 @@
     "reptile": "Your offer for reptiles"
   },
 
-  "availabilityAlert": "Availability will be overwritten with selected dates for all offers you choose."
+  "availabilityAlert": "Availability will be overwritten with selected dates for all offers, you choose."
 }

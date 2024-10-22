@@ -66,7 +66,7 @@ const OfferManagement: React.FC = () => {
     <div className="offer-management-page">
       <div className="offer-management-header">
         <h1>{t("yourOffers.manageOffer")}</h1>
-        <Space size="middle">
+        <Space size="middle" className="offer-management-buttons">
           <Button type="primary" className="add-offer-button" onClick={handleAddOffer}>
             {t("addOffer")}
           </Button>
@@ -75,7 +75,7 @@ const OfferManagement: React.FC = () => {
           </Button>
         </Space>
       </div>
-      <Row gutter={[50, 50]} justify="center">
+      <Row justify="center" style={{ gap: "50px" }}>
         {offers.map((offer) => (
           <Col key={offer.id}>
             <OfferCard offer={offer} handleUpdateOffer={handleUpdateOffer} />

@@ -40,7 +40,6 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, handleUpdateOffer }) => {
   return (
     <div>
       <Card
-        style={{ width: 400 }}
         className="offer-card"
         cover={
           <img
