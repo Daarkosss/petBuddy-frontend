@@ -124,7 +124,8 @@
     "deleteConfiguration": "Wystąpił błąd podczas usuwania konfiguracji",
     "editConfiguration": "Wystąpił błąd podczas edycji konfiguracji",
     "addConfiguration": "Wystąpił błąd podczas tworzenia konfiguracji",
-    "duplicateConfiguration": "Konfiguracja z wybranymi parametrami juz istnieje"
+    "duplicateConfiguration": "Konfiguracja z wybranymi parametrami juz istnieje",
+    "setAvailabilityForOffers": "Wystąpił bład podczas ustawiania dostępności dla ofert"
   },
 
   "success": {
@@ -135,16 +136,19 @@
     "deleteOffer": "Oferta została pomyślnie usunięta",
     "deleteConfiguration": "Konfiguracja została pomyślnie usunięta",
     "editConfiguration": "Konfiguracja została pomyślnie zaktualizowana",
-    "addConfiguration": "Konfiguracja została pomyślnie utworzona"
+    "addConfiguration": "Konfiguracja została pomyślnie utworzona",
+    "setAvailabilityForOffers": "Dostępność została pomyślnie ustawiona dla wybranych ofert"
   },
 
   "dailyPrice": "Cena za dzień",
 
   "addOffer": "Dodaj nową ofertę",
+  "setAvailabilityForOffers": "Ustaw dostępność dla ofert",
   "editOffer": "Edytuj ofertę",
   "addConfiguration": "Dodaj konfigurację",
   "editConfiguration": "Edytuj konfigurację",
   "animalType": "Rodzaj zwierzęcia",
+  "animalTypes": "Rodzaje zwierząt",
   "manage": "Zarządzaj",
   "availability": "Dostępność",
   "editDescription": "Edytuj opis",
@@ -168,5 +172,7 @@
     "bird": "Twoja oferta dla ptaków",
     "rabbit": "Twoja oferta dla królików",
     "reptile": "Twoja oferta dla gadów"
-  }
+  },
+
+  "availabilityAlert": "Dostępność zostanie nadpisana wybranymi datami dla wszystkich ofert, które zaznaczysz."
 }

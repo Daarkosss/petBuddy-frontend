@@ -129,7 +129,8 @@
     "deleteConfiguration": "An error occurred while deleting configuration",
     "editConfiguration": "An error occurred while updating configuration",
     "addConfiguration": "An error occurred while creating configuration",
-    "duplicateConfiguration": "Configuration with these selected options already exists"
+    "duplicateConfiguration": "Configuration with these selected options already exists",
+    "setAvailabilityForOffers": "An error occurred while setting availability for selected offers"
   },
 
   "success": {
@@ -140,16 +141,19 @@
     "deleteOffer": "Offer has been successfully deleted",
     "deleteConfiguration": "Configuration has been successfully deleted",
     "editConfiguration": "Configuration has been successfully updated",
-    "addConfiguration": "Configuration has been successfully created"
+    "addConfiguration": "Configuration has been successfully created",
+    "setAvailabilityForOffers": "Availability has been successfully set for selected offers"
   },
 
   "dailyPrice": "Daily price",
 
   "addOffer": "Add new offer",
+  "setAvailabilityForOffers": "Set availability for offers",
   "editOffer": "Edit offer",
   "addConfiguration": "Add configuration",
   "editConfiguration": "Edit configuration",
   "animalType": "Animal type",
+  "animalTypes": "Animal types",
   "manage": "Manage",
   "availability": "Availabilty",
   "editDescription": "Edit description",
@@ -173,5 +177,7 @@
     "bird": "Your offer for birds",
     "rabbit": "Your offer for rabbits",
     "reptile": "Your offer for reptiles"
-  }
+  },
+
+  "availabilityAlert": "Availability will be overwritten with selected dates for all offers you choose."
 }
