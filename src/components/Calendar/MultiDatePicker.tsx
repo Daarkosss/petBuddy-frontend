@@ -8,7 +8,7 @@ import { calendar_en, calendar_pl } from "./calendarTranslations";
 interface DatePickerProps {
   handleChange: (availabilities: Value[][]) => void;
   isDisabled?: boolean;
-  dateValue: string[][] | undefined;
+  dateValue: string[][] | Value[][] |undefined;
 }
 
 const MultiDatePicker: React.FC<DatePickerProps> = ({ handleChange, isDisabled=false, dateValue }) => {

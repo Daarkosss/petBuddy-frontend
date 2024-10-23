@@ -1,8 +1,9 @@
-import { Input, Select, Button } from "antd";
+import { Input, Select, Button, Checkbox } from "antd";
 import { CaretakerSearchFilters, OfferConfiguration, AnimalSize, AnimalSex } from "../types";
 import { useTranslation } from "react-i18next";
 import Voivodeship from "../models/Voivodeship";
-import { KeyboardEvent } from "react";
+import { KeyboardEvent, useState } from "react";
+import MultiCalendar from "./Calendar/MultiCalendar";
 
 interface CaretakerFiltersProps {
   filters: CaretakerSearchFilters;
@@ -22,6 +23,8 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
   onSearch,
 }) => {
   const { t } = useTranslation();
+
+  const [oneAvailabilityForAllAnimals, setOneAvailabilityForAllAnimals] = useState(true);
 
   const handlePriceKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     const value = e.key;
@@ -165,6 +168,23 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
             { value: "HORSE", label: t("horse") }
           ]}
         />
+        {filters.animals && filters.animals.length > 0 && 
+          <div>
+            <Checkbox 
+              checked={oneAvailabilityForAllAnimals}
+              onChange={(e) => setOneAvailabilityForAllAnimals(e.target.checked)}
+            >
+              {t("oneAvailabilityForAllAnimals")}
+            </Checkbox>
+          </div>
+        }
+        {oneAvailabilityForAllAnimals && (
+          <MultiCalendar
+            dateValue={filters.availabilities}
+            handleChange={(value) => onFiltersChange({ ...filters, availabilities: value })}
+            datePanelPosition="bottom"
+          />
+        )}
         {renderAnimalFilters()}
         <Button type="primary" onClick={handleSearch} className="search-button">
           {t("search")}

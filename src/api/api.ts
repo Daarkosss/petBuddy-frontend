@@ -114,7 +114,6 @@ class API {
     }
 
     const queryString = queryParams.toString();
-
     const requestBody = filters.animals?.map((animal) => ({
       animalType: animal.animalType,
       offerConfigurations: animal.offerConfigurations.map((offer) => ({
@@ -122,7 +121,12 @@ class API {
         minPrice: offer.minPrice ? offer.minPrice : 0.01,
         maxPrice: offer.maxPrice ? offer.maxPrice : 99999.99,
       })),
-      availabilities: animal.availabilities,
+      availabilities: filters.availabilities?.map(dateRange => ({
+        availableFrom: dateRange[0]?.toString() || "",
+        availableTo: dateRange[1] 
+        ? dateRange[1]?.toString()
+        : dateRange[0]?.toString() || "",
+      }))
     }));
 
     return this.fetch<CaretakerBasicsResponse>(

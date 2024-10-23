@@ -1,6 +1,7 @@
 import { PageableDTO, SortDTO } from "./pagination.types";
 import { AccountDataDTO } from "./user.types";
 import { Availabilities, OfferConfiguration, OfferDTOWithId } from "./offer.types";
+import { Value } from "react-multi-date-picker";
 
 export type CaretakerBasicsDTO = {
   accountData: AccountDataDTO;
@@ -62,6 +63,7 @@ export type CaretakerSearchFilters = {
   cityLike?: string;
   voivodeship?: string;
   animals?: AnimalFilter[];
+  availabilities?: Value[][];
 }
 
 export type AnimalFilter = {

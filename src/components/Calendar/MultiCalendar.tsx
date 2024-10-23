@@ -1,15 +1,18 @@
 import { useTranslation } from "react-i18next";
 import { Calendar, DateObject, Value } from "react-multi-date-picker"
-import DatePanel from "react-multi-date-picker/plugins/date_panel"
+import DatePanel, { DatePanelProps } from "react-multi-date-picker/plugins/date_panel"
 import { calendar_en, calendar_pl } from "./calendarTranslations";
 
 interface CalendarProps {
   dateValue: Value[][] | undefined;
   handleChange?: (availabilities: Value[][]) => void;
   readOnly?: boolean;
+  datePanelPosition?: DatePanelProps["position"];
 }
 
-const MultiCalendar: React.FC<CalendarProps> = ({dateValue, handleChange, readOnly=false}) => {
+const MultiCalendar: React.FC<CalendarProps> = ({
+  dateValue, handleChange, readOnly=false, datePanelPosition="right"
+}) => {
   const { i18n, t } = useTranslation();
 
   return (
@@ -23,7 +26,7 @@ const MultiCalendar: React.FC<CalendarProps> = ({dateValue, handleChange, readOn
       onChange={handleChange}
       minDate={new DateObject().add(1, "days")} // Tomorrow
       plugins={[
-        <DatePanel style={{ width: 200 }} header={t("selectedDates")} />]}
+        <DatePanel header={t("selectedDates")} position={datePanelPosition}/>]}
     />
   )
 }
