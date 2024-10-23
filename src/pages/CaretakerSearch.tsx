@@ -251,6 +251,7 @@ const CaretakerList = () => {
                 items_per_page: t("perPage"),
               }
             }}
+            scroll={{ x: "max-content" }}
             onChange={handleTableChange}
           />
         </div>

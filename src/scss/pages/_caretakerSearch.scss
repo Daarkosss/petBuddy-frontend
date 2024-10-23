@@ -6,6 +6,11 @@
   display: flex;
   gap: 20px;
 
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    align-items: center;
+  }
+
   .caretaker-sidebar {
     display: flex;
     flex-direction: column;
@@ -17,6 +22,14 @@
     border: 1px solid v.$grey-light;
     background-color: v.$white;
     border-radius: 10px;
+
+    @media (max-width: 1024px) {
+      width: 700px;
+    }
+
+    @media (max-width: 768px) {
+      width: 90%;
+    }
   }
   
   .filters {
@@ -43,10 +56,22 @@
         gap: 15px;
       }
     }
+
+    .calendar-wrapper {
+      margin-top: 20px;
+    }
   }
 
   .caretaker-content {
     flex-grow: 1;
+
+    @media (max-width: 1024px) {
+      width: 90%;
+    }
+
+    @media (max-width: 768px) {
+      overflow-y: auto;
+    }
   }
 
   .caretaker-list-item {
