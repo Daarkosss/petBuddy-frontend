@@ -3,7 +3,6 @@
 .submit-button {
   float: right;
   background: v.$blue-dark;
-  width: 100px;
 
   &:hover,
   &:focus {
@@ -22,4 +21,41 @@
     background: v.$orange-light !important;
     border: v.$white;
   }
+}
+
+.view-details-button {
+  background: v.$blue-medium;
+  
+  &:hover,
+  &:focus {
+    background: v.$blue-light !important;
+  }
+}
+
+.add-button {
+  color: v.$white;
+  background: v.$orange-medium;
+  
+  &:hover,
+  &:focus {
+    color: v.$white;
+    background: v.$orange-light !important;
+    border: v.$white;
+  }
+}
+
+.add-offer-button {
+  @extend .add-button;
+  font-size: 16px;
+}
+
+.set-availability-button {
+  @extend .view-details-button;
+  font-size: 16px;
+}
+
+.add-configuration-button {
+  @extend .add-button;
+  align-self: center;
+  margin: 0 auto;
 }

@@ -1,5 +1,6 @@
 import { PageableDTO, SortDTO } from "./pagination.types";
 import { AccountDataDTO } from "./user.types";
+import { AvailabilityValues, OfferConfiguration, OfferDTOWithId, OfferWithId } from "./offer.types";
 
 export type CaretakerBasicsDTO = {
   accountData: AccountDataDTO;
@@ -12,7 +13,11 @@ export type CaretakerBasicsDTO = {
 export type CaretakerDetailsDTO = CaretakerBasicsDTO & {
   phoneNumber: string;
   description: string;
-  offers: OfferDTO[];
+  offers: OfferDTOWithId[];
+}
+
+export type CaretakerDetails = Omit<CaretakerDetailsDTO, "offers"> & {
+  offers: OfferWithId[];
 }
 
 export type AddressDTO = {
@@ -42,29 +47,6 @@ export type VoivodeshipDTO =
   | "WIELKOPOLSKIE"
   | "ZACHODNIOPOMORSKIE";
 
-export type OfferDTO = {
-  id: number;
-  description: string;
-  animal: {
-    animalType: string;
-  };
-  offerConfigurations: OfferConfigurationDTO[];
-  animalAmenities: string[];
-  availabilities: AvailabilityDTO[];
-}
-
-export type AvailabilityDTO = {
-  availableFrom: string;
-  availableTo: string;
-}
-
-export type OfferConfigurationDTO = {
-  id: number;
-  description: string;
-  dailyPrice: number;
-  selectedOptions: Record<string, string[]>;
-}
-
 export type CaretakerBasicsResponse = {
   content: CaretakerBasicsDTO[];
   pageable: PageableDTO;
@@ -84,30 +66,13 @@ export type CaretakerSearchFilters = {
   cityLike?: string;
   voivodeship?: string;
   animals?: AnimalFilter[];
+  availabilities?: AvailabilityValues;
 }
-
-export type AnimalSex = "MALE" | "SHE";
-export type AnimalSize = "SMALL" | "MEDIUM" | "BIG"; 
-
-export type Availability = {
-  availableFrom: string;
-  availableTo: string;
-}
-
-export type OfferConfiguration = {
-  attributes?: {
-    SIZE?: AnimalSize[];
-    SEX?: AnimalSex[];
-  };
-  minPrice?: number;
-  maxPrice?: number;
-  amenities?: string[];
-  availabilities: Availability[];
-};
 
 export type AnimalFilter = {
   animalType: string;
   offerConfigurations: OfferConfiguration[];
+  availabilities?: AvailabilityValues;
 };
 
 export type CaretakerFormFields = {
