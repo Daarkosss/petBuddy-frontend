@@ -8,6 +8,7 @@ import { CaretakerBasics } from "../models/Caretaker";
 import { Availability, CaretakerSearchFilters, OfferConfiguration } from "../types";
 import CaretakerFilters from "../components/CaretakerFilters";
 import store from "../store/RootStore";
+import { toast } from "react-toastify";
 
 const CaretakerList = () => {
   const { t } = useTranslation();
@@ -15,7 +16,6 @@ const CaretakerList = () => {
 
   const [caretakers, setCaretakers] = useState<CaretakerBasics[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const [pagingParams, setPagingParams] = useState({
     page: 0,
@@ -59,18 +59,13 @@ const CaretakerList = () => {
       ...prevFilters,
       animals: prevFilters.animals?.map((animal) => ({
         ...animal,
-        availabilities: prevFilters.availabilities?.map((dateRange) => ({
-          availableFrom: dateRange[0]?.toString() || "",
-          availableTo: dateRange[1]?.toString() || "",
-        })),
+        availabilities: prevFilters.availabilities
       })),
     }))
-    console.log("hej", filters);
   }
   
   const fetchCaretakers = async () => {
     setIsLoading(true);
-    setError(null);
     try {
       await assignFiltersToAnimals();
       console.log(filters);
@@ -82,7 +77,7 @@ const CaretakerList = () => {
         total: data.totalElements,
       });
     } catch (error) {
-      setError(error instanceof Error ? error.message : t("unknownError"));
+      toast.error(t("error.getCaretakers"));
     } finally {
       setIsLoading(false);
     }
@@ -216,8 +211,6 @@ const CaretakerList = () => {
       ),
     },
   ];
-
-  if (error) return <div>{error}</div>;
 
   return (
     <div>

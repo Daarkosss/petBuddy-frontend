@@ -2,10 +2,12 @@ import { toast } from "react-toastify";
 import store from "../store/RootStore";
 import { 
   CaretakerBasicsResponse, CaretakerSearchFilters, PagingParams, CaretakerFormFields, UserProfiles,
-  CaretakerDetailsDTO, OfferDTO, OfferConfigurationDTO, EditOfferDescription, Availabilities,
+  CaretakerDetailsDTO, OfferDTO, OfferConfigurationDTO, EditOfferDescription, AvailabilityRanges,
   SetAvailabilityDTO,
   OfferDTOWithId,
-  OfferConfigurationWithId
+  OfferConfigurationWithId,
+  CaretakerDetails,
+  OfferWithId
 } from "../types";
 
 const backendHost =
@@ -121,12 +123,7 @@ class API {
         minPrice: offer.minPrice ? offer.minPrice : 0.01,
         maxPrice: offer.maxPrice ? offer.maxPrice : 99999.99,
       })),
-      availabilities: filters.availabilities?.map(dateRange => ({
-        availableFrom: dateRange[0]?.toString() || "",
-        availableTo: dateRange[1] 
-        ? dateRange[1]?.toString()
-        : dateRange[0]?.toString() || "",
-      }))
+      availabilities: filters.availabilities ? this.convertValuesToAvailabilityRanges(filters.availabilities) : [],
     }));
 
     return this.fetch<CaretakerBasicsResponse>(
@@ -151,13 +148,16 @@ class API {
     }
   }
 
-  async getCaretakerDetails(email: string): Promise<CaretakerDetailsDTO> {
+  async getCaretakerDetails(email: string): Promise<CaretakerDetails> {
     try {
       const response = await this.fetch<CaretakerDetailsDTO>(
         "GET",
         `api/caretaker/${email}`
       );
-      return response;
+      return {
+        ...response,
+        offers: this.convertOffersAvailabilities(response.offers)
+      };
     } catch (error: unknown) {
       if (error instanceof Error) {
         throw new Error(`Failed to fetch caretaker profile: ${error.message}`);
@@ -184,9 +184,9 @@ class API {
     );
   }
 
-  async addOrEditOffer(offer: OfferDTO | EditOfferDescription): Promise<OfferDTOWithId | undefined> {
+  async addOrEditOffer(offer: OfferDTO | EditOfferDescription): Promise<OfferWithId | undefined> {
     if (store.user.profile?.selected_profile) {
-      return this.authorizedFetch<OfferDTOWithId>(
+      return this.authorizedFetch<OfferWithId>(
         "POST",
         "api/caretaker/offer/add-or-edit",
         offer,
@@ -195,20 +195,24 @@ class API {
     }
   }
 
-  async deleteOffer(offerId: number): Promise<OfferDTOWithId | undefined> {
+  async deleteOffer(offerId: number): Promise<OfferWithId | undefined> {
     if (store.user.profile?.selected_profile) {
-      return this.authorizedFetch<OfferDTOWithId>(
+      const response = await this.authorizedFetch<OfferDTOWithId>(
         "DELETE",
         `api/caretaker/offer/${offerId}`,
         undefined,
         { "Accept-Role": store.user.profile?.selected_profile }
       );
+      return {
+        ...response,
+        availabilities: this.convertAvailabilityRangesToValues(response.availabilities)
+      }
     }
   }
 
-  async setAmenitiesForOffer(offerId: number, offerAmenities: string[]): Promise<OfferDTOWithId | undefined> {
+  async setAmenitiesForOffer(offerId: number, offerAmenities: string[]): Promise<OfferWithId | undefined> {
     if (store.user.profile?.selected_profile) {
-      return this.authorizedFetch<OfferDTOWithId>(
+      return this.authorizedFetch<OfferWithId>(
         "PUT",
         `api/caretaker/offer/${offerId}/amenities`,
         offerAmenities,
@@ -229,28 +233,29 @@ class API {
   }
 
   async setAvailabilityForOffers(
-    offerIds: number[], 
-    availabilityRanges: Availabilities
-  ): Promise<OfferDTOWithId[] | undefined> {
+    offerIds: number[],
+    availabilities: string[][]
+  ): Promise<OfferWithId[] | undefined> {
     const offersWithAvailabilities: SetAvailabilityDTO = {
       offerIds,
-      availabilityRanges
+      availabilityRanges: this.convertValuesToAvailabilityRanges(availabilities)
     }
     if (store.user.profile?.selected_profile) {
-      return this.authorizedFetch<OfferDTOWithId[]>(
+      const response = await this.authorizedFetch<OfferDTOWithId[]>(
         "PUT",
         "api/caretaker/offer/availability",
         offersWithAvailabilities,
         { "Accept-Role": store.user.profile?.selected_profile }
       )
+      return this.convertOffersAvailabilities(response)
     }
   }
 
   async setAvailabilityForOffer(
     offerId: number, 
-    availabilityRanges: Availabilities
-  ): Promise<OfferDTOWithId | undefined> {
-    const response = await this.setAvailabilityForOffers([offerId], availabilityRanges);
+    availabilities: string[][]
+  ): Promise<OfferWithId | undefined> {
+    const response = await this.setAvailabilityForOffers([offerId], availabilities);
     if (response) {
       return response[0];
     }
@@ -259,14 +264,18 @@ class API {
   async addOfferConfiguration(
     offerId: number, 
     offerConfiguration: OfferConfigurationDTO
-  ): Promise<OfferDTOWithId | undefined> {
+  ): Promise<OfferWithId | undefined> {
     if (store.user.profile?.selected_profile) {
-      return this.authorizedFetch<OfferDTOWithId>(
+      const response = await this.authorizedFetch<OfferDTOWithId>(
         "POST",
         `api/caretaker/offer/${offerId}/configurations`,
         [offerConfiguration],
         { "Accept-Role": store.user.profile?.selected_profile }
       );
+      return {
+        ...response,
+        availabilities: this.convertAvailabilityRangesToValues(response.availabilities)
+      }
     }
   }
 
@@ -284,16 +293,45 @@ class API {
     }
   }
 
-  async deleteOfferConfiguration(configurationId: number): Promise<OfferDTOWithId | undefined> {
+  async deleteOfferConfiguration(configurationId: number): Promise<OfferWithId | undefined> {
     if (store.user.profile?.selected_profile) {
-      return this.authorizedFetch<OfferDTOWithId>(
+      const response = await this.authorizedFetch<OfferDTOWithId>(
         "DELETE",
         `api/caretaker/offer/configuration/${configurationId}`,
         undefined,
         { "Accept-Role": store.user.profile?.selected_profile }
       );
+      return {
+        ...response,
+        availabilities: this.convertAvailabilityRangesToValues(response.availabilities)
+      }
     }
   }
+
+  convertOffersAvailabilities = (offers: OfferDTOWithId[]): OfferWithId[] => {
+    return offers.map((offer) => this.convertOfferAvailabilities(offer));
+  }
+
+  convertOfferAvailabilities = (offer: OfferDTOWithId): OfferWithId => {
+    return {
+      ...offer,
+      availabilities: this.convertAvailabilityRangesToValues(offer.availabilities)
+    }
+  }
+
+  convertAvailabilityRangesToValues = (availabilities: AvailabilityRanges): string[][] => {
+    return availabilities.map((availability) => [
+      availability.availableFrom,
+      availability.availableTo || availability.availableFrom,
+    ]);
+  }
+  
+  convertValuesToAvailabilityRanges = (values: string[][]): AvailabilityRanges => {
+    return values.map(([from, to]) => ({
+      availableFrom: from?.toString() || "",
+      availableTo: to?.toString() || from?.toString() || "",
+    }));
+  };
 }
 
 export const api = new API();

@@ -125,7 +125,8 @@
     "editConfiguration": "Wystąpił błąd podczas edycji konfiguracji",
     "addConfiguration": "Wystąpił błąd podczas tworzenia konfiguracji",
     "duplicateConfiguration": "Konfiguracja z wybranymi parametrami juz istnieje",
-    "setAvailabilityForOffers": "Wystąpił bład podczas ustawiania dostępności dla ofert"
+    "setAvailabilityForOffers": "Wystąpił bład podczas ustawiania dostępności dla ofert",
+    "getCaretakers": "Wystąpił bład podczas pobrania opiekunów"
   },
 
   "success": {

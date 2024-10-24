@@ -1,6 +1,6 @@
 import React, { ChangeEvent, KeyboardEvent, useState } from "react";
 import { Button, Table, Input, Select, Space, Popconfirm, Form, TableColumnsType } from "antd";
-import { OfferConfigurationWithId, OfferConfigurationWithOptionalId, OfferDTOWithId } from "../../types";
+import { OfferConfigurationWithId, OfferConfigurationWithOptionalId, OfferWithId } from "../../types";
 import { useTranslation } from "react-i18next";
 import { api } from "../../api/api";
 import { toast } from "react-toastify";
@@ -9,7 +9,7 @@ import _ from "lodash";
 type ConfigurationsProps = {
   offerId: number;
   configurations: OfferConfigurationWithOptionalId[];
-  handleUpdateOffer: (newOffer: OfferDTOWithId) => void;
+  handleUpdateOffer: (newOffer: OfferWithId) => void;
   handleUpdateConfiguration: (newOffer: OfferConfigurationWithId) => void;
 };
 
