@@ -3,7 +3,7 @@ import { Form, Input, Button, GetProp, Upload, UploadProps, UploadFile, Select, 
 import ImgCrop from "antd-img-crop";
 import { useTranslation } from "react-i18next";
 import { api } from "../api/api";
-import { CaretakerFormFields } from "../types";
+import { CaretakerFormFields, Photo } from "../types";
 import Voivodeship from "../models/Voivodeship";
 import store from "../store/RootStore";
 import { toast } from "react-toastify";
@@ -13,7 +13,7 @@ type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 const CaretakerForm = () => {
   const { t } = useTranslation();
 
-  const [fileList, setFileList] = useState<UploadFile[]>([]); // Not send to server yet, will be done when backend ready
+  const [offerPhotos, setOfferPhotos] = useState<UploadFile[]>([]);
   const [form] = Form.useForm<CaretakerFormFields>();
   const allowedSpecialKeys = ["Backspace", "Delete", "ArrowLeft", "ArrowRight"];
   
@@ -21,12 +21,22 @@ const CaretakerForm = () => {
     if (store.user.profile?.email && store.user.profile?.hasCaretakerProfile) {
       api.getCaretakerDetails(store.user.profile?.email).then((data) => {
         form.setFieldsValue(data);
+        const initialPhotos: UploadFile[] = data.offerPhotos.map((photo: Photo, index: number) => ({
+            uid: index.toString(),
+            name: `Photo_${index + 1}`,
+            status: "done",
+            url: photo.url,
+            thumbUrl: photo.url,
+            originFileObj: new File([photo.blob], `Photo_${index + 1}`)
+          })
+        );
+        setOfferPhotos(initialPhotos);
       })
     }
   }, [form])
 
   const handleFileChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
-    setFileList(newFileList);
+    setOfferPhotos(newFileList);
   };
 
   const handleFilePreview = async (file: UploadFile) => {
@@ -86,7 +96,7 @@ const CaretakerForm = () => {
   
   const handleEditCaretaker = async (data: CaretakerFormFields) => {
     try {
-      await api.editCaretakerProfile(data);
+      await api.editCaretakerProfile(data, offerPhotos);
       toast.success(t("success.editCaretakerForm"));
     } catch (error) {
       toast.error(t("error.editCaretakerForm"));
@@ -99,6 +109,21 @@ const CaretakerForm = () => {
       handleEditCaretaker(formFields);
     } else {
       handleAddCaretaker(formFields);
+    }
+  };
+
+  const handleSetPhotos = async () => {
+    console.log(offerPhotos);
+    api.setOfferPhotos(offerPhotos);
+  }
+
+  const customUploadRequest = async (options: any) => {
+    const { file, onSuccess, onError } = options;
+    try {
+      await api.uploadOfferPhoto(file, offerPhotos);
+      onSuccess("ok");
+    } catch (error) {
+      onError(error);
     }
   };
 
@@ -210,17 +235,20 @@ const CaretakerForm = () => {
             <Form.Item name="images">
               <ImgCrop rotationSlider>
                 <Upload
+                  customRequest={customUploadRequest}
                   listType="picture-card"
-                  fileList={fileList}
+                  fileList={offerPhotos}
                   onChange={handleFileChange}
                   onPreview={handleFilePreview}
                   accept="image/*"
                 >
-                  {fileList.length < 5 && `+ ${t("upload")}`}
+                  {offerPhotos.length < 5 && `+ ${t("upload")}`}
                 </Upload>
               </ImgCrop>
             </Form.Item>
           </Card>
+
+          <Button type="primary" onClick={handleSetPhotos}>send photos</Button>
 
           <Button type="primary" htmlType="submit" className="submit-button">
             {t("save")}

@@ -8,8 +8,10 @@ export type AccountDataDTO = {
   email: string;
   name: string;
   surname: string;
-  profilePicture: {
-    blob: string;
-    url: string;
-  };
+  profilePicture: Photo;
 };
+
+export type Photo = {
+  blob: string;
+  url: string;
+}

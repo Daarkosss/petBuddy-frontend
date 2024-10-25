@@ -4,6 +4,7 @@ import {
   CaretakerBasicsResponse, CaretakerSearchFilters, PagingParams, CaretakerFormFields, UserProfiles,
   CaretakerDetailsDTO
 } from "../types";
+import { UploadFile } from "antd";
 
 const backendHost =
   import.meta.env.VITE_BACKEND_HOST || window.location.hostname;
@@ -50,15 +51,45 @@ class API {
   async authorizedFetch<T>(
     method: Method,
     path: string,
-    body?: unknown
+    body?: unknown,
+    headers?: HeadersInit
   ): Promise<T> {
     if (store.user.jwtToken) {
       return this.fetch<T>(method, path, body, {
+        ...headers,
         Authorization: `Bearer ${store.user.jwtToken}`,
       });
     } else {
       toast.error("No user token available");
       return Promise.reject(new Error("No user token available"));
+    }
+  }
+
+  async authorizedMultipartFetch<T>(
+    method: Method,
+    path: string,
+    formData: FormData,
+    headers?: HeadersInit
+  ): Promise<T> {
+    const options = {
+      method,
+      headers: {
+        ...headers,
+        "X-XSRF-TOKEN": store.user.xsrfToken,
+        Authorization: `Bearer ${store.user.jwtToken}`,
+      },
+      body: formData,
+      credentials: "include",
+    } as RequestInit;
+
+    const response = await fetch(`${PATH_PREFIX}${path}`, options);
+    const data = await response.json();
+
+    if (!response.ok) {
+      toast.error(data.message || "Wrong server response!");
+      throw new Error(data.message || "Wrong server response!");
+    } else {
+      return data;
     }
   }
 
@@ -161,17 +192,68 @@ class API {
   async addCaretakerProfile(data: CaretakerFormFields): Promise<void> {
     return this.authorizedFetch<void>(
       "POST",
-      "api/caretaker/add",
+      "api/caretaker",
       data
     );
   }
 
-  async editCaretakerProfile(data: CaretakerFormFields): Promise<void> {
-    return this.authorizedFetch<void>(
-      "PUT",
-      "api/caretaker/edit",
-      data
-    );
+  async editCaretakerProfile(formFields: CaretakerFormFields, photos: UploadFile[]): Promise<void> {
+    if (store.user.profile?.selected_profile) {
+      const formData = new FormData();
+      formData.append("caretakerData", JSON.stringify(formFields));
+      
+      photos.forEach((photo) => {
+        if (photo.originFileObj) {
+          formData.append("newOfferPhotos", photo.originFileObj);
+        }
+      })
+  
+      return this.authorizedMultipartFetch<void>(
+        "PUT",
+        "api/caretaker",
+        formData,
+        { "Accept-Role": store.user.profile.selected_profile }
+      );
+    }
+  }
+  
+  async setOfferPhotos(photos: UploadFile[]): Promise<void> {
+    if (store.user.profile?.selected_profile) {
+      const formData = new FormData();
+      
+      photos.forEach((photo) => {
+        if (photo.originFileObj) {
+          formData.append("newOfferPhotos", photo.originFileObj);
+        }
+      })
+      console.log(formData);
+  
+      return this.authorizedMultipartFetch<void>(
+        "PUT",
+        "api/caretaker/offer-photo",
+        formData,
+        { "Accept-Role": store.user.profile.selected_profile }
+      );
+    }
+  }
+
+  async uploadOfferPhoto(newPhoto: File, photosToKeep: UploadFile[]): Promise<void> {
+    if (store.user.profile?.selected_profile) {
+      const formData = new FormData();
+      formData.append("newOfferPhotos", newPhoto);
+
+      // photosToKeep.forEach((photo) => {
+      //   if (photo.originFileObj)
+      //     formData.append("offerBlobsToKeep", photo.originFileObj);
+      // });
+  
+      return this.authorizedMultipartFetch<void>(
+        "PUT",
+        "api/caretaker/offer-photo",
+        formData,
+        { "Accept-Role": store.user.profile.selected_profile }
+      );
+    }
   }
 }
 
