@@ -1,13 +1,9 @@
 import { toast } from "react-toastify";
 import store from "../store/RootStore";
 import { 
-  CaretakerBasicsResponse, CaretakerSearchFilters, PagingParams, CaretakerFormFields, UserProfiles,
-  CaretakerDetailsDTO, OfferDTO, OfferConfigurationDTO, EditOfferDescription, AvailabilityRanges,
-  SetAvailabilityDTO,
-  OfferDTOWithId,
-  OfferConfigurationWithId,
-  CaretakerDetails,
-  OfferWithId
+  CaretakerBasicsResponse, CaretakerSearchFilters, PagingParams, CaretakerFormFields, UserProfiles, CaretakerDetailsDTO,
+  OfferDTO, OfferConfigurationDTO, EditOfferDescription, AvailabilityRanges, SetAvailabilityDTO, OfferDTOWithId, 
+  OfferConfigurationWithId, CaretakerDetails, OfferWithId
 } from "../types";
 
 const backendHost =
@@ -16,12 +12,6 @@ const backendPort = import.meta.env.VITE_BACKEND_PORT || "8081";
 export const PATH_PREFIX = `http://${backendHost}:${backendPort}/`;
 
 type Method = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
-
-export type User = {
-  _id: string;
-  name: string;
-  email: string;
-};
 
 class API {
   async fetch<T>(

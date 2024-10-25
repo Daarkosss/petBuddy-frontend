@@ -15,7 +15,9 @@ const MultiDatePicker: React.FC<DatePickerProps> = ({ handleChange, isDisabled=f
   const { i18n, t } = useTranslation();
 
   const handleValueChange = (availabilities: DateObject[][]) => {
-    handleChange(availabilities.map((availability) => availability.map((date) => date.format("YYYY-MM-DD"))));
+    handleChange(availabilities.map(
+      (availability) => availability.map((date) => date.format("YYYY-MM-DD"))
+    ));
   };
 
   return (
@@ -35,7 +37,7 @@ const MultiDatePicker: React.FC<DatePickerProps> = ({ handleChange, isDisabled=f
         weekends(),
         <DatePanel
           header={t("selectedDates")}
-          style={{ width: 150 }}
+          style={{ minWidth: 150 }}
         />
       ]}
       render={(value, openCalendar) => (

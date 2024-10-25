@@ -19,7 +19,8 @@ const MultiCalendar: React.FC<CalendarProps> = ({
   const handleValueChange = (availabilities: DateObject[][]) => {
     if (handleChange) {
       handleChange(availabilities.map(
-        (availability) => availability.map((date) => date.format("YYYY-MM-DD"))));
+        (availability) => availability.map((date) => date.format("YYYY-MM-DD"))
+      ));
     }
   };
 
@@ -34,7 +35,7 @@ const MultiCalendar: React.FC<CalendarProps> = ({
       onChange={handleValueChange}
       minDate={new DateObject().add(1, "days")} // Tomorrow
       plugins={[
-        <DatePanel header={t("selectedDates")} position={datePanelPosition}/>]}
+        <DatePanel header={t("selectedDates")} position={datePanelPosition} style={{ minWidth: 150 }}/>]}
     />
   )
 }
