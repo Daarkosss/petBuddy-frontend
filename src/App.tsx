@@ -69,32 +69,18 @@ function App() {
   return (
     <Routes>
       {keycloak.authenticated ? (
-        store.user.profile?.selected_profile !== null ? (
-          <>
-            <Route path="/home" element={<Home />} />
-            <Route path="/caretaker/form" element={<CaretakerForm />} />
-            <Route path="/caretaker/search" element={<CaretakerSearch />} />
-            <Route
-              path="/profile-selection"
-              element={
-                <ProfileSelection isUserDataFetched={isUserDataFetched} />
-              }
-            />
-            <Route path="/profile-caretaker" element={<CaretakerProfile />} />
-            <Route path="/profile-client" element={<ClientProfile />} />
-            <Route path="*" element={<Navigate to="/home" />} />
-          </>
-        ) : (
-          <>
-            <Route
-              path="/profile-selection"
-              element={
-                <ProfileSelection isUserDataFetched={isUserDataFetched} />
-              }
-            />
-            <Route path="*" element={<Navigate to="/home" />} />
-          </>
-        )
+        <>
+          <Route path="/home" element={<Home />} />
+          <Route path="/caretaker/form" element={<CaretakerForm />} />
+          <Route path="/caretaker/search" element={<CaretakerSearch />} />
+          <Route
+            path="/profile-selection"
+            element={<ProfileSelection isUserDataFetched={isUserDataFetched} />}
+          />
+          <Route path="/profile-caretaker" element={<CaretakerProfile />} />
+          <Route path="/profile-client" element={<ClientProfile />} />
+          <Route path="*" element={<Navigate to="/home" />} />
+        </>
       ) : (
         <>
           <Route path="/login" element={<LoginPage />} />
