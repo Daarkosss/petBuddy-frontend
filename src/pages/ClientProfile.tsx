@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import store from "../store/RootStore";
 import "../scss/pages/_profile.scss";
-import { Header } from "../components/Header";
-import testImg from "../../public/favicon.png";
+import testImg from "../../public/pet_buddy_logo.svg";
 import { Rate } from "antd";
 import CommentContainer from "../components/CommentContainer";
 import RoundedLine from "../components/RoundedLine";
@@ -44,7 +43,6 @@ function ClientProfile() {
   }, []);
   return (
     <div>
-      <Header />
       {store.user.profile != null &&
       store.user.profile?.selected_profile === "Client" ? (
         <div className="profile-container">
