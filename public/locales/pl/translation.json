@@ -119,7 +119,8 @@
 
   "error": {
     "createCaretakerProfile": "Wystąpił błąd podczas tworzenia profilu opiekuna",
-    "editCaretakerForm": "Wystąpił błąd podczas edycji danych opiekuna"
+    "editCaretakerForm": "Wystąpił błąd podczas edycji danych opiekuna",
+    "wrongFileTypeForPhoto": "Zły typ pliku dla zdjęcia"
   },
 
   "success": {

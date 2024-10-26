@@ -48,8 +48,13 @@ const CaretakerForm = () => {
     setNewOfferPhotos([]);
   }
 
-  const handleFileChange: UploadProps["onChange"] = ({ fileList }) => {
-    setNewOfferPhotos(fileList);
+  const handleNewPhoto: UploadProps["onChange"] = ({ fileList }) => {
+    console.log(fileList);
+    if (hasFilePhotoType(fileList[fileList.length - 1])) {
+      setNewOfferPhotos(fileList);
+    } else {
+      toast.error(t("error.wrongFileTypeForPhoto"));
+    }
   };
 
   const handleFilePreview = async (file: UploadFile) => {
@@ -144,6 +149,22 @@ const CaretakerForm = () => {
       handleAddCaretaker(formFields);
     }
   };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const dummyRequest = ({ onSuccess }: any) => {
+    setTimeout(() => {
+      onSuccess("ok");
+    }, 0);
+  };
+
+  const hasFilePhotoType = (file: UploadFile) => {
+    const allowedFormats = ["image/jpeg", "image/webp", "image/png", "image/jpg"];
+    console.log(file);
+    if (!file.type || !allowedFormats.includes(file.type)) {
+      return false;
+    }
+    return true;
+  }
 
   return (
     <div className="caretaker-form-container">
@@ -262,12 +283,12 @@ const CaretakerForm = () => {
               </Form.Item>
             </Skeleton>
             <Form.Item name="newOfferPhotos" label={t("newPhotos")} hidden={currentOfferPhotos.length >= 10}>
-              <ImgCrop rotationSlider>
+              <ImgCrop beforeCrop={hasFilePhotoType} rotationSlider>
                 <Upload
-                  beforeUpload={() => false}
+                  customRequest={dummyRequest}
                   listType="picture-card"
                   fileList={newOfferPhotos}
-                  onChange={handleFileChange}
+                  onChange={handleNewPhoto}
                   onPreview={handleFilePreview}
                   accept="image/*"
                 >

@@ -10,7 +10,7 @@ export type AccountDataDTO = {
   email: string;
   name: string;
   surname: string;
-  profilePicture: Photo;
+  profilePicture: Photo | null;
 };
 
 export type Photo = {

@@ -124,7 +124,8 @@
 
   "error": {
     "createCaretakerProfile": "An error occurred while creating caretaker profile",
-    "editCaretakerForm": "An error occurred while editing caretaker data"
+    "editCaretakerForm": "An error occurred while editing caretaker data",
+    "wrongFileTypeForPhoto": "Wrong file type for photo"
   },
 
   "success": {

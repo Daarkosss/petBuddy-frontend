@@ -61,12 +61,14 @@
         background: v.$blue-light !important;
       }
     }
-  }
 
-  .caretaker-list-item img {
-    width: 150px;
-    height: 150px;
-    margin-right: 20px;
+    .profile-picture {
+      width: 150px;
+      height: 150px;
+      margin-right: 20px;
+      background-color: v.$grey-light;
+      color: v.$white;
+    }
   }
 
   .caretaker-rating {
