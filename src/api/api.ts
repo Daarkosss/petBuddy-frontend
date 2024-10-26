@@ -1,8 +1,7 @@
 import { toast } from "react-toastify";
 import store from "../store/RootStore";
 import { 
-  CaretakerBasicsResponse, CaretakerSearchFilters, PagingParams, CaretakerFormFields, UserProfiles,
-  CaretakerDetailsDTO
+  CaretakerBasicsResponse, CaretakerSearchFilters, PagingParams, CaretakerFormFields, UserProfiles, CaretakerDetailsDTO,
 } from "../types";
 import { UploadFile } from "antd";
 
@@ -152,7 +151,7 @@ class API {
 
     return this.fetch<CaretakerBasicsResponse>(
       "POST",
-      `api/caretaker?${queryString}`,
+      `api/caretaker/all?${queryString}`,
       requestBody
     );
   }
@@ -189,69 +188,53 @@ class API {
     }
   }
 
-  async addCaretakerProfile(data: CaretakerFormFields): Promise<void> {
-    return this.authorizedFetch<void>(
+  async addCaretakerProfile(
+    formFields: CaretakerFormFields,
+    photos: UploadFile[]
+  ): Promise<CaretakerDetailsDTO | void> {
+    const formData = new FormData();
+    
+    const caretakerData = new Blob([JSON.stringify(formFields)], { type: "application/json" });
+    formData.append("caretakerData", caretakerData);
+    
+    photos.forEach((photo) => {
+      if (photo.originFileObj) {
+        formData.append("newOfferPhotos", photo.originFileObj);
+      }
+    })
+
+    return this.authorizedMultipartFetch<CaretakerDetailsDTO>(
       "POST",
       "api/caretaker",
-      data
+      formData,
     );
   }
 
-  async editCaretakerProfile(formFields: CaretakerFormFields, photos: UploadFile[]): Promise<void> {
-    if (store.user.profile?.selected_profile) {
+  async editCaretakerProfile(
+    formFields: CaretakerFormFields,
+    newPhotos: UploadFile[],
+    offerBlobsToKeep: string[]
+  ): Promise<CaretakerDetailsDTO | void> {
+    if (store.user.profile?.selected_profile === "CARETAKER") {
       const formData = new FormData();
-      formData.append("caretakerData", JSON.stringify(formFields));
       
-      photos.forEach((photo) => {
+      const caretakerData = new Blob([JSON.stringify(formFields)], { type: "application/json" });
+      formData.append("caretakerData", caretakerData);
+
+      const blobsData = new Blob([JSON.stringify(offerBlobsToKeep)], { type: "application/json" });
+      formData.append("offerBlobsToKeep", blobsData); 
+      
+      newPhotos.forEach((photo) => {
         if (photo.originFileObj) {
           formData.append("newOfferPhotos", photo.originFileObj);
         }
       })
-  
-      return this.authorizedMultipartFetch<void>(
+
+      return this.authorizedMultipartFetch<CaretakerDetailsDTO>(
         "PUT",
         "api/caretaker",
         formData,
-        { "Accept-Role": store.user.profile.selected_profile }
-      );
-    }
-  }
-  
-  async setOfferPhotos(photos: UploadFile[]): Promise<void> {
-    if (store.user.profile?.selected_profile) {
-      const formData = new FormData();
-      
-      photos.forEach((photo) => {
-        if (photo.originFileObj) {
-          formData.append("newOfferPhotos", photo.originFileObj);
-        }
-      })
-      console.log(formData);
-  
-      return this.authorizedMultipartFetch<void>(
-        "PUT",
-        "api/caretaker/offer-photo",
-        formData,
-        { "Accept-Role": store.user.profile.selected_profile }
-      );
-    }
-  }
-
-  async uploadOfferPhoto(newPhoto: File, photosToKeep: UploadFile[]): Promise<void> {
-    if (store.user.profile?.selected_profile) {
-      const formData = new FormData();
-      formData.append("newOfferPhotos", newPhoto);
-
-      // photosToKeep.forEach((photo) => {
-      //   if (photo.originFileObj)
-      //     formData.append("offerBlobsToKeep", photo.originFileObj);
-      // });
-  
-      return this.authorizedMultipartFetch<void>(
-        "PUT",
-        "api/caretaker/offer-photo",
-        formData,
-        { "Accept-Role": store.user.profile.selected_profile }
+        { "Accept-Role": "CARETAKER" }
       );
     }
   }

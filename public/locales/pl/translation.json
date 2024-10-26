@@ -89,7 +89,11 @@
 
   "description": "Opis",
   "upload": "Prześlij",
-  "uploadImages": "Prześlij zdjęcia",
+  "offerPhotos": "Zdjęcia oferty",
+  "currentPhotos": "Aktualne zdjęcia",
+  "newPhotos": "Nowe zdjęcia",
+  "photosLimitMessage": "Limit zdjęć",
+  "photosLimitDescription": "Osiągnięto limit zdjęć (10). Jeśli chcesz dodać nowe, usuń któreś z aktualnych.",
   "save": "Zapisz",
 
   "validation": {

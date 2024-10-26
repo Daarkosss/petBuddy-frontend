@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import { Form, Input, Button, GetProp, Upload, UploadProps, UploadFile, Select, Card, Space } from "antd";
+import { 
+  Form, Input, Button, GetProp, Upload, UploadProps, UploadFile, Select, Card, Space, Alert, Skeleton
+} from "antd";
 import ImgCrop from "antd-img-crop";
 import { useTranslation } from "react-i18next";
 import { api } from "../api/api";
-import { CaretakerFormFields, Photo } from "../types";
+import { CaretakerDetailsDTO, CaretakerFormFields, Photo, UploadFileWithBlob } from "../types";
 import Voivodeship from "../models/Voivodeship";
 import store from "../store/RootStore";
 import { toast } from "react-toastify";
@@ -12,31 +14,42 @@ type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
 const CaretakerForm = () => {
   const { t } = useTranslation();
-
-  const [offerPhotos, setOfferPhotos] = useState<UploadFile[]>([]);
+  const [currentOfferPhotos, setCurrentOfferPhotos] = useState<UploadFileWithBlob[]>([]);
+  const [newOfferPhotos, setNewOfferPhotos] = useState<UploadFile[]>([]);
   const [form] = Form.useForm<CaretakerFormFields>();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isPhotosLoading, setIsPhotosLoading] = useState(true);
   const allowedSpecialKeys = ["Backspace", "Delete", "ArrowLeft", "ArrowRight"];
   
   useEffect(() => {
     if (store.user.profile?.email && store.user.profile?.hasCaretakerProfile) {
       api.getCaretakerDetails(store.user.profile?.email).then((data) => {
-        form.setFieldsValue(data);
-        const initialPhotos: UploadFile[] = data.offerPhotos.map((photo: Photo, index: number) => ({
-            uid: index.toString(),
-            name: `Photo_${index + 1}`,
-            status: "done",
-            url: photo.url,
-            thumbUrl: photo.url,
-            originFileObj: new File([photo.blob], `Photo_${index + 1}`)
-          })
-        );
-        setOfferPhotos(initialPhotos);
-      })
+        updateCaretakerData(data);
+      });
     }
-  }, [form])
+    setIsPhotosLoading(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [form]);
 
-  const handleFileChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
-    setOfferPhotos(newFileList);
+  const updateCaretakerData = (data: CaretakerDetailsDTO) => {
+    form.setFieldsValue(data);
+    const initialPhotos: UploadFileWithBlob[] = data.offerPhotos.map((photo: Photo, index: number) => ({
+      file: {
+        uid: index.toString(),
+        name: `Photo_${index + 1}`,
+        status: "done",
+        url: photo.url,
+        thumbUrl: photo.url,
+      },
+      blob: photo.blob
+    }));
+    
+    setCurrentOfferPhotos(initialPhotos);
+    setNewOfferPhotos([]);
+  }
+
+  const handleFileChange: UploadProps["onChange"] = ({ fileList }) => {
+    setNewOfferPhotos(fileList);
   };
 
   const handleFilePreview = async (file: UploadFile) => {
@@ -52,6 +65,11 @@ const CaretakerForm = () => {
     image.src = src;
     const imgWindow = window.open(src);
     imgWindow?.document.write(image.outerHTML);
+  };
+
+  const handleRemoveCurrentPhoto = (file: UploadFile) => {
+    const updatedPhotos = currentOfferPhotos.filter((photo) => photo.file.uid !== file.uid);
+    setCurrentOfferPhotos(updatedPhotos);
   };
 
   const renderSelectOptions = (options: Record<string, string>) => (
@@ -85,21 +103,36 @@ const CaretakerForm = () => {
   }
 
   const handleAddCaretaker = async (data: CaretakerFormFields) => {
+    setIsLoading(true);
     try {
-      await api.addCaretakerProfile(data);
+      await api.addCaretakerProfile(data, newOfferPhotos);
       toast.success(t("success.createCaretakerProfile"));
       store.user.hasCaretakerProfile = true;
+      store.user.setSelectedProfile("CARETAKER");
+      store.user.saveProfileToStorage(store.user.profile);
     } catch (error) {
       toast.error(t("error.createCaretakerProfile"));
+    } finally {
+      setIsLoading(false);
     }
   };
   
   const handleEditCaretaker = async (data: CaretakerFormFields) => {
+    setIsLoading(true);
     try {
-      await api.editCaretakerProfile(data, offerPhotos);
+      const response = await api.editCaretakerProfile(
+        data,
+        newOfferPhotos, 
+        currentOfferPhotos.map((photo) => photo.blob)
+      );
+      if (response) {
+        updateCaretakerData(response);
+      }
       toast.success(t("success.editCaretakerForm"));
     } catch (error) {
       toast.error(t("error.editCaretakerForm"));
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -109,21 +142,6 @@ const CaretakerForm = () => {
       handleEditCaretaker(formFields);
     } else {
       handleAddCaretaker(formFields);
-    }
-  };
-
-  const handleSetPhotos = async () => {
-    console.log(offerPhotos);
-    api.setOfferPhotos(offerPhotos);
-  }
-
-  const customUploadRequest = async (options: any) => {
-    const { file, onSuccess, onError } = options;
-    try {
-      await api.uploadOfferPhoto(file, offerPhotos);
-      onSuccess("ok");
-    } catch (error) {
-      onError(error);
     }
   };
 
@@ -231,26 +249,42 @@ const CaretakerForm = () => {
             </Form.Item>
           </Card>
 
-          <Card title={t("uploadImages")}>
-            <Form.Item name="images">
+          <Card title={t("offerPhotos")}>
+            <Skeleton loading={isPhotosLoading} paragraph={{ rows: 2 }}>
+              <Form.Item name="offerPhotos" label={t("currentPhotos")} hidden={currentOfferPhotos.length === 0}>
+                <Upload
+                  beforeUpload={() => false}
+                  listType="picture-card"
+                  fileList={currentOfferPhotos.map((photo) => (photo.file))}
+                  onRemove={handleRemoveCurrentPhoto}
+                  onPreview={handleFilePreview}
+                />
+              </Form.Item>
+            </Skeleton>
+            <Form.Item name="newOfferPhotos" label={t("newPhotos")} hidden={currentOfferPhotos.length >= 10}>
               <ImgCrop rotationSlider>
                 <Upload
-                  customRequest={customUploadRequest}
+                  beforeUpload={() => false}
                   listType="picture-card"
-                  fileList={offerPhotos}
+                  fileList={newOfferPhotos}
                   onChange={handleFileChange}
                   onPreview={handleFilePreview}
                   accept="image/*"
                 >
-                  {offerPhotos.length < 5 && `+ ${t("upload")}`}
+                  {currentOfferPhotos.length + newOfferPhotos.length < 10 && `+ ${t("upload")}`}
                 </Upload>
               </ImgCrop>
             </Form.Item>
+            {currentOfferPhotos.length + newOfferPhotos.length >= 10 &&
+              <Alert
+                type="warning"
+                showIcon
+                message={t("photosLimitMessage")}
+                description={t("photosLimitDescription")}
+              />
+            }
           </Card>
-
-          <Button type="primary" onClick={handleSetPhotos}>send photos</Button>
-
-          <Button type="primary" htmlType="submit" className="submit-button">
+          <Button type="primary" htmlType="submit" className="submit-button" loading={isLoading}>
             {t("save")}
           </Button>
         </Space>

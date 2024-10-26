@@ -94,7 +94,11 @@
 
   "description": "Description",
   "upload": "Upload",
-  "uploadImages": "Upload images",
+  "offerPhotos": "Offer photos",
+  "currentPhotos": "Current photos",
+  "newPhotos": "New photos",
+  "photosLimitMessage": "Photos limit",
+  "photosLimitDescription": "You reached the limit of photos (10). Delete some photos to add new ones.",
   "save": "Save",
 
   "validation": {

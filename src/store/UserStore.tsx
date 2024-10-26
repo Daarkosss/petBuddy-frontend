@@ -2,7 +2,7 @@ import { makeAutoObservable } from "mobx";
 import keycloak from "../Keycloack";
 import { getCookie, removeCookie } from "typescript-cookie";
 
-export type Profile = "Client" | "Caretaker" | null;
+export type Profile = "CLIENT" | "CARETAKER" | null;
 
 export interface UserProfile {
   email?: string;
