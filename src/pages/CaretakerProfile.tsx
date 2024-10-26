@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import store from "../store/RootStore";
 import "../scss/pages/_profile.scss";
-import { Header } from "../components/Header";
-import testImg from "../../public/favicon.png";
+import testImg from "../../public/pet_buddy_logo.svg";
 import { Rate } from "antd";
 import CommentContainer from "../components/CommentContainer";
 import RoundedLine from "../components/RoundedLine";
@@ -16,37 +15,44 @@ const CaretakerProfile: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { userEmail } = location.state || {};
-  // const { isUserProfile, profileEmail } = location.state || {};
   const [isProfileDataFetched, setIsProfileDataFetched] = useState(false);
   const [profileData, setProfileData] = useState<CaretakerDetailsDTO>();
 
+  const [isMyProfile, setIsMyProfile] = useState<boolean | null>(null);
+
   const testList = [1, 2, 3, 4, 5, 6, 7];
 
+  const getCaretakerDetails = (email: string) => {
+    api.getCaretakerDetails(email).then((data) => {
+      setProfileData(data);
+      setIsProfileDataFetched(true);
+    });
+  };
+
   useEffect(() => {
-    //did user select profile
-    if (store.user.profile?.selected_profile == null) {
-      navigate("/profile-selection");
-    } else {
-      if (
-        userEmail == null ||
-        userEmail == store.user.profile!.selected_profile
-      ) {
-        if (store.user.profile!.selected_profile === "Caretaker") {
-          api.getCaretakerDetails(store.user.profile!.email!).then((data) => {
-            setProfileData(data);
-            setIsProfileDataFetched(true);
-          });
-        } else if (store.user.profile!.selected_profile === "Client") {
-          navigate("/profile-caretaker", { state: { userEmail: userEmail } });
-        }
+    //if user is visiting their profile
+    if (
+      userEmail == null ||
+      userEmail == store.user.profile?.selected_profile
+    ) {
+      //which profile page should be showed
+      if (store.user.profile!.selected_profile === "Caretaker") {
+        getCaretakerDetails(store.user.profile!.email!);
+      } else if (store.user.profile!.selected_profile === "Client") {
+        navigate("/profile-caretaker", { state: { userEmail: userEmail } });
       }
+    } else {
+      //if userEmail has been provided
+      if (userEmail != null) {
+        getCaretakerDetails(userEmail);
+      }
+
+      //else -> not allowed navigation, redirect needed
     }
   }, []);
   return (
     <div>
-      <Header />
-      {store.user.profile != null &&
-      store.user.profile?.selected_profile === "Caretaker" ? (
+      {profileData != null ? (
         <div className="profile-container">
           <div className="profile-left-data">
             <div className="profile-left-upper-container">
@@ -73,15 +79,22 @@ const CaretakerProfile: React.FC = () => {
                 backgroundColor="#007ea7"
               />
             </div>
-            <h3>Currently you do not have caretaker profile</h3>
-            <a>+ Create caretaker profile</a>
+            {profileData != null && <div>{profileData.description}</div>}
+            {isMyProfile == true && (
+              <div>
+                <h3>Currently you do not have caretaker profile</h3>
+                <a>+ Create caretaker profile</a>
+              </div>
+            )}
           </div>
 
           <div className="profile-right-comments">
             <h1>Comments</h1>
             {/* divider */}
             {testList.map((element, index) => (
-              <CommentContainer />
+              <div key={index}>
+                <CommentContainer />
+              </div>
             ))}
           </div>
         </div>
