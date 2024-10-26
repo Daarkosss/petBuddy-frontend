@@ -1,7 +1,12 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate, useNavigation } from "react-router-dom";
 import { Table, Button, Spin, Rate } from "antd";
-import { SorterResult, TablePaginationConfig, FilterValue, ColumnsType } from "antd/es/table/interface";
+import {
+  SorterResult,
+  TablePaginationConfig,
+  FilterValue,
+  ColumnsType,
+} from "antd/es/table/interface";
 import { api } from "../api/api";
 import { useTranslation } from "react-i18next";
 import { CaretakerBasics } from "../models/Caretaker";
@@ -12,6 +17,8 @@ import store from "../store/RootStore";
 const CaretakerList = () => {
   const { t } = useTranslation();
   const location = useLocation();
+
+  const navigate = useNavigate();
 
   const [caretakers, setCaretakers] = useState<CaretakerBasics[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -30,29 +37,33 @@ const CaretakerList = () => {
     total: 0,
   });
 
-  const [filters, setFilters] = useState<CaretakerSearchFilters>(location.state?.filters || {
-    personalDataLike: "",
-    cityLike: "",
-    voivodeship: undefined,
-    animals: [],
-  });
-
-  const [animalFilters, setAnimalFilters] = useState<Record<string, OfferConfiguration>>(
-    () => {
-      const animal = location.state?.filters?.animals?.[0];
-      if (animal) {
-        return { [animal.animalType]: animal.offerConfigurations?.[0] || {} };
-      }
-      return {};
+  const [filters, setFilters] = useState<CaretakerSearchFilters>(
+    location.state?.filters || {
+      personalDataLike: "",
+      cityLike: "",
+      voivodeship: undefined,
+      animals: [],
     }
   );
-  
+
+  const [animalFilters, setAnimalFilters] = useState<
+    Record<string, OfferConfiguration>
+  >(() => {
+    const animal = location.state?.filters?.animals?.[0];
+    if (animal) {
+      return { [animal.animalType]: animal.offerConfigurations?.[0] || {} };
+    }
+    return {};
+  });
+
   const fetchCaretakers = async () => {
     setIsLoading(true);
     setError(null);
     try {
       const data = await api.getCaretakers(pagingParams, filters);
-      setCaretakers(data.content.map((caretaker) => new CaretakerBasics(caretaker)));
+      setCaretakers(
+        data.content.map((caretaker) => new CaretakerBasics(caretaker))
+      );
       setPagination({
         current: data.pageable.pageNumber + 1,
         pageSize: data.pageable.pageSize,
@@ -105,7 +116,10 @@ const CaretakerList = () => {
     }));
   };
 
-  const updateAnimalFilters = (animalType: string, updatedConfig: Partial<OfferConfiguration>) => {
+  const updateAnimalFilters = (
+    animalType: string,
+    updatedConfig: Partial<OfferConfiguration>
+  ) => {
     setAnimalFilters((prevFilters) => {
       const existingConfig = prevFilters[animalType] || {};
       const updatedConfigFull = {
@@ -159,9 +173,21 @@ const CaretakerList = () => {
         <div className="caretaker-list-item">
           <img src="https://via.placeholder.com/150" alt="avatar" />
           <div>
-            <h4>{record.accountData.name} {record.accountData.surname}</h4>
-            <p>{record.address.city}, {record.address.voivodeship.toString()}</p>
-            <Button className="view-details-button" type="primary">
+            <h4>
+              {record.accountData.name} {record.accountData.surname}
+            </h4>
+            <p>
+              {record.address.city}, {record.address.voivodeship.toString()}
+            </p>
+            <Button
+              className="view-details-button"
+              type="primary"
+              onClick={() =>
+                navigate("/profile-caretaker", {
+                  state: { userEmail: record.accountData.email },
+                })
+              }
+            >
               {t("viewDetails")}
             </Button>
           </div>
@@ -181,7 +207,9 @@ const CaretakerList = () => {
                 <Rate disabled allowHalf value={rating} />
                 <span>({record.numberOfRatings})</span>
               </div>
-              <span className="caretaker-rating-value">{rating.toFixed(2)}</span>
+              <span className="caretaker-rating-value">
+                {rating.toFixed(2)}
+              </span>
             </>
           ) : (
             <>
@@ -211,7 +239,7 @@ const CaretakerList = () => {
         <div className="caretaker-content">
           <Table
             columns={columns}
-            locale={{ 
+            locale={{
               emptyText: t("caretakerSearch.noCaretakers"),
               triggerDesc: t("caretakerSearch.triggerDesc"),
               triggerAsc: t("caretakerSearch.triggerAsc"),
@@ -226,7 +254,7 @@ const CaretakerList = () => {
               showSizeChanger: true,
               locale: {
                 items_per_page: t("perPage"),
-              }
+              },
             }}
             onChange={handleTableChange}
           />
