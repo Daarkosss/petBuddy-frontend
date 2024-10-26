@@ -89,6 +89,11 @@ export type CaretakerSearchFilters = {
 export type AnimalSex = "MALE" | "SHE";
 export type AnimalSize = "SMALL" | "MEDIUM" | "BIG"; 
 
+export type Availability = {
+  availableFrom: string;
+  availableTo: string;
+}
+
 export type OfferConfiguration = {
   attributes?: {
     SIZE?: AnimalSize[];
@@ -97,6 +102,7 @@ export type OfferConfiguration = {
   minPrice?: number;
   maxPrice?: number;
   amenities?: string[];
+  availabilities: Availability[];
 };
 
 export type AnimalFilter = {

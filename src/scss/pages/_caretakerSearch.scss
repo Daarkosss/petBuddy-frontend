@@ -52,6 +52,15 @@
   .caretaker-list-item {
     display: flex;
     align-items: center;
+
+    .view-details-button {
+      background: v.$blue-medium;
+      
+      &:hover,
+      &:focus {
+        background: v.$blue-light !important;
+      }
+    }
   }
 
   .caretaker-list-item img {
@@ -75,5 +84,18 @@
 
   .caretaker-rating-value {
     margin-left: 8px;
+  }
+
+  .ant-pagination-item {
+    a {
+      &:hover {
+        color: v.$white !important;
+      }
+    }
+
+    &-active {
+      background-color: v.$orange-medium;
+      border-color: v.$orange-medium;
+    }
   }
 }

@@ -52,7 +52,10 @@
     "streetNumber": "e.g. 102A",
     "apartmentNumber": "e.g. 7",
     "phoneNumber": "e.g. 000000000",
-    "description": "e.g. I have been taking care of animals for 2 years. My clients are always happy..."
+    "description": "e.g. I have been taking care of animals for 2 years. My clients are always happy...",
+    "sex": "e.g. Male",
+    "animalType": "e.g. Dog",
+    "date": "Press to select date"
   },
 
   "personalData": {
@@ -70,12 +73,7 @@
     "loginOrRegister": "Login or register with Keycloak"
   },
 
-  "home": {
-    "title": "Welcome home, message from backend:",
-    "requestMessage": "Request message",
-    "fetchToken": "Fetch xsrf token",
-    "changeCaretakerForm": "Change caretaker form",
-    "searchCaretakers": "Search caretakers",
+  "homePage": {
     "showProfile": "See your profile"
   },
 
@@ -89,6 +87,7 @@
   "caretakerSearch": {
     "personalData": "Personal data",
     "animalTypes": "Animal types",
+    "animalType": "Animal type",
     "minPrice": "Min price",
     "maxPrice": "Max price",
     "noCaretakers": "There are no caretakers for selected filters",
@@ -106,5 +105,30 @@
     "required": "Required",
     "zipCodeFormat": "Invalid format (00-000)",
     "phoneNumberFormat": "Invalid format (at least 9 digits)"
+  },
+
+  "landingPage": {
+    "title": "Welcome to Pet Buddy, a place where you can find a pet caretaker or start taking care of other people pets",
+    "subtitle": "Use search bar below to find caretaker or login for more options.",
+    "searchTitle": "Find the best caretaker for your pet"
+  },
+
+  "home": "Home",
+  "menu": "Menu",
+  "searchCaretakers": "Search caretakers",
+  "aboutUs": "About Us",
+
+  "date": "Date",
+  "selectedDates": "Selected dates",
+  "loginOrRegister": "Login or register",
+
+  "error": {
+    "createCaretakerProfile": "An error occurred while creating caretaker profile",
+    "editCaretakerForm": "An error occurred while editing caretaker data"
+  },
+
+  "success": {
+    "createCaretakerProfile": "Caretaker profile has been successfully created",
+    "editCaretakerForm": "Caretaker data has been successfully updated"
   }
 }

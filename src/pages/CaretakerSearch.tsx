@@ -1,15 +1,17 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { Table, Button, Spin, Rate } from "antd";
 import { SorterResult, TablePaginationConfig, FilterValue, ColumnsType } from "antd/es/table/interface";
 import { api } from "../api/api";
-import { Header } from "../components/Header";
 import { useTranslation } from "react-i18next";
 import { CaretakerBasics } from "../models/Caretaker";
 import { CaretakerSearchFilters, OfferConfiguration } from "../types";
 import CaretakerFilters from "../components/CaretakerFilters";
+import store from "../store/RootStore";
 
 const CaretakerList = () => {
   const { t } = useTranslation();
+  const location = useLocation();
 
   const [caretakers, setCaretakers] = useState<CaretakerBasics[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -28,15 +30,23 @@ const CaretakerList = () => {
     total: 0,
   });
 
-  const [filters, setFilters] = useState<CaretakerSearchFilters>({
+  const [filters, setFilters] = useState<CaretakerSearchFilters>(location.state?.filters || {
     personalDataLike: "",
     cityLike: "",
     voivodeship: undefined,
     animals: [],
   });
 
-  const [animalFilters, setAnimalFilters] = useState<Record<string, OfferConfiguration>>({});
-
+  const [animalFilters, setAnimalFilters] = useState<Record<string, OfferConfiguration>>(
+    () => {
+      const animal = location.state?.filters?.animals?.[0];
+      if (animal) {
+        return { [animal.animalType]: animal.offerConfigurations?.[0] || {} };
+      }
+      return {};
+    }
+  );
+  
   const fetchCaretakers = async () => {
     setIsLoading(true);
     setError(null);
@@ -54,6 +64,10 @@ const CaretakerList = () => {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    store.selectedMenuOption = "caretakerSearch";
+  }, []);
 
   useEffect(() => {
     fetchCaretakers();
@@ -147,7 +161,7 @@ const CaretakerList = () => {
           <div>
             <h4>{record.accountData.name} {record.accountData.surname}</h4>
             <p>{record.address.city}, {record.address.voivodeship.toString()}</p>
-            <Button href={`/caretakers/${record.accountData.email}`} type="primary">
+            <Button className="view-details-button" type="primary">
               {t("viewDetails")}
             </Button>
           </div>
@@ -184,7 +198,6 @@ const CaretakerList = () => {
 
   return (
     <div>
-      <Header />
       <div className="caretaker-container">
         <Spin spinning={isLoading} fullscreen />
         <CaretakerFilters

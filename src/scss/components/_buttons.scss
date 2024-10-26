@@ -2,11 +2,24 @@
 
 .submit-button {
   float: right;
-  background: v.$blue-medium;
+  background: v.$blue-dark;
   width: 100px;
 
   &:hover,
   &:focus {
     background: v.$blue-light !important;
+  }
+}
+
+.search-button {
+  font-size: 16px;
+  color: v.$white;
+  background: v.$orange-medium;
+  
+  &:hover,
+  &:focus {
+    color: v.$white;
+    background: v.$orange-light !important;
+    border: v.$white;
   }
 }

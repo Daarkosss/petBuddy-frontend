@@ -52,7 +52,10 @@
     "streetNumber": "np. 102A",
     "apartmentNumber": "np. 7",
     "phoneNumber": "np. 000000000",
-    "description": "np. Zajmuje się opieką nad zwierzętami już od 2 lat. Moi klienci zawsze są zadowoleni..."
+    "description": "np. Zajmuję się opieką nad zwierzętami już od 2 lat. Moi klienci zawsze są zadowoleni...",
+    "sex": "np. Samiec",
+    "animalType": "np. Pies",
+    "date": "Naciśnij, aby wybrać datę"
   },
 
   "personalData": {
@@ -70,12 +73,7 @@
     "loginOrRegister": "Zaloguj się za pomocą Keycloaka"
   },
 
-  "home": {
-    "title": "Witamy, wiadomość z backendu:",
-    "requestMessage": "Testowy request",
-    "fetchToken": "Pobierz token xsrf",
-    "changeCaretakerForm": "Zmień dane opiekuna",
-    "searchCaretakers": "Wyszukaj opiekunów",
+  "homePage": {
     "showProfile": "Odwiedź swój profil"
   },
 
@@ -89,6 +87,7 @@
   "caretakerSearch": {
     "personalData": "Dane personalne",
     "animalTypes": "Rodzaje zwierząt",
+    "animalType": "Typ zwierzęcia",
     "minPrice": "Minimalna cena",
     "maxPrice": "Maksymalna cena",
     "noCaretakers": "Brak opiekunów dla podanych parametrów",
@@ -106,5 +105,30 @@
     "required": "Wymagane",
     "zipCodeFormat": "Nieprawidłowy format (00-000)",
     "phoneNumberFormat": "Nieprawidłowy format (minimum 9 cyfr)"
+  },
+
+  "landingPage": {
+    "title": "Witamy w Pet Buddy, miejscu gdzie możesz znaleźć opiekuna dla swojego pupila lub samemu zacząć opiekować się zwierzętami innych osób",
+    "subtitle": "Użyj poniższego paska wyszukiwania, aby znaleźć opiekuna lub zaloguj się, aby uzyskać więcej opcji.",
+    "searchTitle": "Znajdz najlepszego opiekuna dla swojego pupila"
+  },
+
+  "home": "Strona główna",
+  "menu": "Menu",
+  "searchCaretakers": "Wyszukaj opiekunów",
+  "aboutUs": "O nas",
+
+  "date": "Data",
+  "selectedDates": "Wybrane daty",
+  "loginOrRegister": "Zaloguj się lub zarejestruj",
+
+  "error": {
+    "createCaretakerProfile": "Wystąpił błąd podczas tworzenia profilu opiekuna",
+    "editCaretakerForm": "Wystąpił błąd podczas edycji danych opiekuna"
+  },
+
+  "success": {
+    "createCaretakerProfile": "Profil opiekuna został pomyślnie utworzony",
+    "editCaretakerForm": "Dane opiekuna zostały pomyślnie zaktualizowane"
   }
 }

@@ -1,21 +1,24 @@
 import { useKeycloak } from "@react-keycloak/web";
-import { Route, Routes, Navigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { api } from "./api/api";
-import Home from "./pages/Home";
 import CaretakerForm from "./pages/CaretakerForm";
-import LoginPage from "./pages/LoginPage";
 import store from "./store/RootStore";
 import CaretakerSearch from "./pages/CaretakerSearch";
 import ProfileSelection from "./pages/ProfileSelection";
+import LandingPage from "./pages/LandingPage";
+import { Layout } from "antd";
+import Header from "./components/Header";
+import { observer } from "mobx-react-lite";
 import CaretakerProfile from "./pages/CaretakerProfile";
 import ClientProfile from "./pages/ClientProfile";
 
-function App() {
+const { Content } = Layout;
+
+const App = observer(() => {
   const { keycloak, initialized } = useKeycloak();
   const [isXsrfTokenFetched, setIsXsrfTokenFetched] = useState(false);
   const [isUserDataFetched, setIsUserDataFetched] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchXsrfToken = async () => {
@@ -28,12 +31,14 @@ function App() {
     const fetchUserData = async () => {
       try {
         const userData = await keycloak.loadUserProfile();
+        const userProfiles = await api.getUserProfiles();
         const userProfileData = {
           email: userData.email,
           firstName: userData.firstName,
           lastName: userData.lastName,
           token: store.user.xsrfToken,
           selected_profile: null,
+          hasCaretakerProfile: userProfiles.hasCaretakerProfile,
         };
         store.user.saveProfileToStorage(userProfileData);
         setIsUserDataFetched(true);
@@ -51,44 +56,58 @@ function App() {
           setIsUserDataFetched(true);
         }
       }
-      setIsLoading(false);
+      store.isStarting = false;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialized, keycloak.authenticated]);
 
   useEffect(() => {
     if (isXsrfTokenFetched && isUserDataFetched) {
-      setIsLoading(false);
+      store.isStarting = false;
     }
   }, [isXsrfTokenFetched, isUserDataFetched]);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   return (
-    <Routes>
-      {keycloak.authenticated ? (
-        <>
-          <Route path="/home" element={<Home />} />
-          <Route path="/caretaker/form" element={<CaretakerForm />} />
-          <Route path="/caretaker/search" element={<CaretakerSearch />} />
-          <Route
-            path="/profile-selection"
-            element={<ProfileSelection isUserDataFetched={isUserDataFetched} />}
-          />
-          <Route path="/profile-caretaker" element={<CaretakerProfile />} />
-          <Route path="/profile-client" element={<ClientProfile />} />
-          <Route path="*" element={<Navigate to="/home" />} />
-        </>
-      ) : (
-        <>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="*" element={<Navigate to="/login" />} />
-        </>
-      )}
-    </Routes>
+    <Layout>
+      <Header />
+      <Content className="page-content">
+        <Routes>
+          {keycloak.authenticated ? (
+            store.user.profile?.selected_profile ? (
+              <>
+                <Route path="/caretaker/form" element={<CaretakerForm />} />
+                <Route path="/caretaker/search" element={<CaretakerSearch />} />
+                <Route
+                  path="/profile-selection"
+                  element={
+                    <ProfileSelection isUserDataFetched={isUserDataFetched} />
+                  }
+                />
+                <Route
+                  path="/profile-caretaker"
+                  element={<CaretakerProfile />}
+                />
+                <Route path="/profile-client" element={<ClientProfile />} />
+                <Route path="*" element={<LandingPage />} />
+              </>
+            ) : (
+              <Route
+                path="/*"
+                element={
+                  <ProfileSelection isUserDataFetched={isUserDataFetched} />
+                }
+              />
+            )
+          ) : (
+            <>
+              <Route path="/caretaker/search" element={<CaretakerSearch />} />
+              <Route path="*" element={<LandingPage />} />
+            </>
+          )}
+        </Routes>
+      </Content>
+    </Layout>
   );
-}
+});
 
 export default App;
