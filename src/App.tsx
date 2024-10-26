@@ -35,7 +35,7 @@ const App = observer(() => {
           firstName: userData.firstName,
           lastName: userData.lastName,
           token: store.user.xsrfToken,
-          selected_profile: null,
+          selected_profile: store.user.profile?.selected_profile || null,
           hasCaretakerProfile: userProfiles.hasCaretakerProfile,
         };
         store.user.saveProfileToStorage(userProfileData);
