@@ -1,5 +1,5 @@
 import React from "react";
-import testImg from "../../public/favicon.png";
+import testImg from "../../public/pet_buddy_logo.svg";
 import { Card, Rate } from "antd";
 import "../scss/components/_commentContainer.scss";
 import RoundedLine from "./RoundedLine";
@@ -9,7 +9,7 @@ const CommentContainer: React.FC = () => {
     <Card className="comment-container-main">
       <div className="comment-container-top">
         <div className="comment-container-user-rating">
-          <img src={testImg} />
+          <img src={testImg} width={100} height={100} />
           <div className="comment-container-user-nick-container">
             <h5 className="comment-container-user-nick">Some user</h5>
             <p>Client</p>
