@@ -15,6 +15,8 @@ function ClientProfile() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
+
+  const { userEmail } = location.state || {};
   const { isUserProfile } = location.state || {};
   const [isProfileDataFetched, setIsProfileDataFetched] = useState(false);
   const [profileData, setProfileData] = useState<UserProfiles>();
@@ -22,19 +24,21 @@ function ClientProfile() {
   const testList = [1, 2, 3, 4, 5, 6, 7];
 
   useEffect(() => {
-    if (
-      !store.user.profile == null ||
-      !store.user.profile?.selected_profile == null
-    ) {
+    if (store.user.profile?.selected_profile == null) {
       navigate("/profile-selection");
     } else {
-      if (store.user.profile!.selected_profile === "Client") {
-        api.getUserProfiles().then((data) => {
-          setProfileData(data);
-          setIsProfileDataFetched(true);
-        });
-      } else {
-        navigate("/profile-caretaker");
+      if (
+        userEmail == null ||
+        userEmail == store.user.profile!.selected_profile
+      ) {
+        if (store.user.profile!.selected_profile === "Client") {
+          api.getUserProfiles().then((data) => {
+            setProfileData(data);
+            setIsProfileDataFetched(true);
+          });
+        } else if (store.user.profile!.selected_profile === "Caretaker") {
+          navigate("/profile-caretaker", { state: { userEmail: userEmail } });
+        }
       }
     }
   }, []);
