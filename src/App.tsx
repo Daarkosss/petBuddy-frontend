@@ -100,6 +100,7 @@ const App = observer(() => {
             )
           ) : (
             <>
+              <Route path="/profile-caretaker" element={<CaretakerProfile />} />
               <Route path="/caretaker/search" element={<CaretakerSearch />} />
               <Route path="*" element={<LandingPage />} />
             </>
