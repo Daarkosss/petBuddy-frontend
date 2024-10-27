@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { 
-  Form, Input, Button, GetProp, Upload, UploadProps, UploadFile, Select, Card, Space, Alert, Skeleton
+  Form, Input, Button, GetProp, Upload, UploadProps, UploadFile, Select, Card, Space, Alert, Skeleton,
+  Spin
 } from "antd";
 import ImgCrop from "antd-img-crop";
 import { useTranslation } from "react-i18next";
@@ -17,6 +18,7 @@ const CaretakerForm = () => {
   const [currentOfferPhotos, setCurrentOfferPhotos] = useState<UploadFileWithBlob[]>([]);
   const [newOfferPhotos, setNewOfferPhotos] = useState<UploadFile[]>([]);
   const [form] = Form.useForm<CaretakerFormFields>();
+  const [isStarting, setIsStarting] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [isPhotosLoading, setIsPhotosLoading] = useState(true);
   const allowedSpecialKeys = ["Backspace", "Delete", "ArrowLeft", "ArrowRight"];
@@ -167,150 +169,152 @@ const CaretakerForm = () => {
   }
 
   return (
-    <div className="caretaker-form-container">
-      <Form form={form} layout="vertical" onFinish={handleSubmit}>
-        <Space direction="vertical" size="large" style={{ width: "100%" }}>
-          <Card title={t("address")}>
-            <div className="card-grid-row">
-              <Form.Item
-                label={t("addressDetails.street")}
-                name={["address", "street"]}
-                rules={[{ required: true, message: t("validation.required") }]}
-              >
-                <Input
-                  maxLength={150}
-                  placeholder={t("placeholder.street")}
-                />
-              </Form.Item>
-              <Form.Item
-                label={t("addressDetails.streetNumber")}
-                name={["address", "streetNumber"]}
-                rules={[{ required: true, message: t("validation.required") }]}
-              >
-                <Input
-                  maxLength={10}
-                  placeholder={t("placeholder.streetNumber")}
-                />
-              </Form.Item>
-              <Form.Item
-                label={t("addressDetails.apartmentNumber")}
-                name={["address", "apartmentNumber"]}
-              >
-                <Input
-                  maxLength={10}
-                  placeholder={t("placeholder.apartmentNumber")}
-                />
-              </Form.Item>
-            </div>
+      <div className="caretaker-form-container">
+        <Spin size="large" spinning={isStarting}>
+          <Form form={form} layout="vertical" onFinish={handleSubmit} onLoad={() => setIsStarting(false)}>
+            <Space direction="vertical" size="large" style={{ width: "100%" }}>
+              <Card title={t("address")}>
+                <div className="card-grid-row">
+                  <Form.Item
+                    label={t("addressDetails.street")}
+                    name={["address", "street"]}
+                    rules={[{ required: true, message: t("validation.required") }]}
+                  >
+                    <Input
+                      maxLength={150}
+                      placeholder={t("placeholder.street")}
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    label={t("addressDetails.streetNumber")}
+                    name={["address", "streetNumber"]}
+                    rules={[{ required: true, message: t("validation.required") }]}
+                  >
+                    <Input
+                      maxLength={10}
+                      placeholder={t("placeholder.streetNumber")}
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    label={t("addressDetails.apartmentNumber")}
+                    name={["address", "apartmentNumber"]}
+                  >
+                    <Input
+                      maxLength={10}
+                      placeholder={t("placeholder.apartmentNumber")}
+                    />
+                  </Form.Item>
+                </div>
 
-            <div className="card-grid-row">
-              <Form.Item
-                label={t("addressDetails.zipCode")}
-                name={["address", "zipCode"]}
-                rules={[
-                  { required: true, message: t("validation.required") },
-                  { pattern: /^[0-9]{2}-[0-9]{3}$/, message: t("validation.zipCodeFormat") }
-                ]}
-              >
-                <Input
-                  maxLength={6}
-                  onKeyDown={handleZipCodeKeyDown}
-                  placeholder={t("placeholder.zipCode")}
-                />
-              </Form.Item>
-              <Form.Item
-                label={t("addressDetails.city")}
-                name={["address", "city"]}
-                rules={[{ required: true, message: t("validation.required") }]}
-              >
-                <Input
-                  maxLength={50}
-                  placeholder={t("placeholder.city")}
-                />
-              </Form.Item>
-              <Form.Item
-                label={t("addressDetails.voivodeship")}
-                name={["address", "voivodeship"]}
-                rules={[{ required: true, message: t("validation.required") }]}
-              >
-                <Select placeholder={t("placeholder.voivodeship")}>
-                  {renderSelectOptions(Voivodeship.voivodeshipMap)}
-                </Select>
-              </Form.Item>
-            </div>
-          </Card>
+                <div className="card-grid-row">
+                  <Form.Item
+                    label={t("addressDetails.zipCode")}
+                    name={["address", "zipCode"]}
+                    rules={[
+                      { required: true, message: t("validation.required") },
+                      { pattern: /^[0-9]{2}-[0-9]{3}$/, message: t("validation.zipCodeFormat") }
+                    ]}
+                  >
+                    <Input
+                      maxLength={6}
+                      onKeyDown={handleZipCodeKeyDown}
+                      placeholder={t("placeholder.zipCode")}
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    label={t("addressDetails.city")}
+                    name={["address", "city"]}
+                    rules={[{ required: true, message: t("validation.required") }]}
+                  >
+                    <Input
+                      maxLength={50}
+                      placeholder={t("placeholder.city")}
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    label={t("addressDetails.voivodeship")}
+                    name={["address", "voivodeship"]}
+                    rules={[{ required: true, message: t("validation.required") }]}
+                  >
+                    <Select placeholder={t("placeholder.voivodeship")}>
+                      {renderSelectOptions(Voivodeship.voivodeshipMap)}
+                    </Select>
+                  </Form.Item>
+                </div>
+              </Card>
 
-          <Card title={t("personalData.contactDetails")}>
-            <Form.Item
-              label={t("personalData.phoneNumber")}
-              name="phoneNumber"
-              rules={[
-                { required: true, message: t("validation.required") },
-                { pattern: /^([0-9]){9,14}$/, message: t("validation.phoneNumberFormat") },
-              ]}
-              style={{ width: "200px" }}
-            >
-              <Input
-                maxLength={14}
-                placeholder={t("placeholder.phoneNumber")}
-                onKeyDown={handleKeyDownForNumeric}
-                addonBefore="+48"
-              />
-            </Form.Item>
-          </Card>
-
-          <Card title={t("description")}>
-            <Form.Item name="description">
-              <Input.TextArea
-                showCount
-                autoSize={{ minRows: 2, maxRows: 4 }}
-                maxLength={1500}
-                placeholder={t("placeholder.description")}
-              />
-            </Form.Item>
-          </Card>
-
-          <Card title={t("offerPhotos")}>
-            <Skeleton loading={isPhotosLoading} paragraph={{ rows: 2 }}>
-              <Form.Item name="offerPhotos" label={t("currentPhotos")} hidden={currentOfferPhotos.length === 0}>
-                <Upload
-                  beforeUpload={() => false}
-                  listType="picture-card"
-                  fileList={currentOfferPhotos.map((photo) => (photo.file))}
-                  onRemove={handleRemoveCurrentPhoto}
-                  onPreview={handleFilePreview}
-                />
-              </Form.Item>
-            </Skeleton>
-            <Form.Item name="newOfferPhotos" label={t("newPhotos")} hidden={currentOfferPhotos.length >= 10}>
-              <ImgCrop beforeCrop={hasFilePhotoType} rotationSlider>
-                <Upload
-                  customRequest={dummyRequest}
-                  listType="picture-card"
-                  fileList={newOfferPhotos}
-                  onChange={handleNewPhoto}
-                  onPreview={handleFilePreview}
-                  accept="image/*"
+              <Card title={t("personalData.contactDetails")}>
+                <Form.Item
+                  label={t("personalData.phoneNumber")}
+                  name="phoneNumber"
+                  rules={[
+                    { required: true, message: t("validation.required") },
+                    { pattern: /^([0-9]){9,14}$/, message: t("validation.phoneNumberFormat") },
+                  ]}
+                  style={{ width: "200px" }}
                 >
-                  {currentOfferPhotos.length + newOfferPhotos.length < 10 && `+ ${t("upload")}`}
-                </Upload>
-              </ImgCrop>
-            </Form.Item>
-            {currentOfferPhotos.length + newOfferPhotos.length >= 10 &&
-              <Alert
-                type="warning"
-                showIcon
-                message={t("photosLimitMessage")}
-                description={t("photosLimitDescription")}
-              />
-            }
-          </Card>
-          <Button type="primary" htmlType="submit" className="submit-button" loading={isLoading}>
-            {t("save")}
-          </Button>
-        </Space>
-      </Form>
-    </div>
+                  <Input
+                    maxLength={14}
+                    placeholder={t("placeholder.phoneNumber")}
+                    onKeyDown={handleKeyDownForNumeric}
+                    addonBefore="+48"
+                  />
+                </Form.Item>
+              </Card>
+
+              <Card title={t("description")}>
+                <Form.Item name="description">
+                  <Input.TextArea
+                    showCount
+                    autoSize={{ minRows: 2, maxRows: 4 }}
+                    maxLength={1500}
+                    placeholder={t("placeholder.description")}
+                  />
+                </Form.Item>
+              </Card>
+
+              <Card title={t("offerPhotos")}>
+                <Skeleton loading={isPhotosLoading} paragraph={{ rows: 2 }}>
+                  <Form.Item name="offerPhotos" label={t("currentPhotos")} hidden={currentOfferPhotos.length === 0}>
+                    <Upload
+                      beforeUpload={() => false}
+                      listType="picture-card"
+                      fileList={currentOfferPhotos.map((photo) => (photo.file))}
+                      onRemove={handleRemoveCurrentPhoto}
+                      onPreview={handleFilePreview}
+                    />
+                  </Form.Item>
+                </Skeleton>
+                <Form.Item name="newOfferPhotos" label={t("newPhotos")} hidden={currentOfferPhotos.length >= 10}>
+                  <ImgCrop beforeCrop={hasFilePhotoType} rotationSlider>
+                    <Upload
+                      customRequest={dummyRequest}
+                      listType="picture-card"
+                      fileList={newOfferPhotos}
+                      onChange={handleNewPhoto}
+                      onPreview={handleFilePreview}
+                      accept="image/*"
+                    >
+                      {currentOfferPhotos.length + newOfferPhotos.length < 10 && `+ ${t("upload")}`}
+                    </Upload>
+                  </ImgCrop>
+                </Form.Item>
+                {currentOfferPhotos.length + newOfferPhotos.length >= 10 &&
+                  <Alert
+                    type="warning"
+                    showIcon
+                    message={t("photosLimitMessage")}
+                    description={t("photosLimitDescription")}
+                  />
+                }
+              </Card>
+              <Button type="primary" htmlType="submit" className="submit-button" loading={isLoading}>
+                {t("save")}
+              </Button>
+            </Space>
+          </Form>
+        </Spin>
+      </div>
   );
 };
 
