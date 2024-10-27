@@ -126,7 +126,7 @@
   "error": {
     "createCaretakerProfile": "An error occurred while creating caretaker profile",
     "editCaretakerForm": "An error occurred while editing caretaker data",
-    "wrongFileTypeForPhoto": "Wrong file type for photo",
+    "wrongFileTypeForPhoto": "Wrong file type for photo. Only: jpeg, jpg, png and webp files are allowed.",
     "addOffer": "An error occurred while creating offer",
     "editOffer": "An error occurred while updating offer",
     "loadOffers": "An error occurred while loading offers",
@@ -185,5 +185,8 @@
   },
 
   "availabilityAlert": "Availability will be overwritten with selected dates for all offers, you choose.",
-  "noData": "No data"
+  "noData": "No data",
+
+  "imageCropperTitle": "Adjust image",
+  "apply": "Apply"
 }

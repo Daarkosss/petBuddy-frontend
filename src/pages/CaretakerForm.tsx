@@ -286,7 +286,13 @@ const CaretakerForm = () => {
                   </Form.Item>
                 </Skeleton>
                 <Form.Item name="newOfferPhotos" label={t("newPhotos")} hidden={currentOfferPhotos.length >= 10}>
-                  <ImgCrop beforeCrop={hasFilePhotoType} rotationSlider>
+                  <ImgCrop 
+                    beforeCrop={hasFilePhotoType}
+                    rotationSlider
+                    modalTitle={t("imageCropperTitle")}
+                    modalOk={t("apply")}
+                    modalCancel={t("cancel")}
+                  >
                     <Upload
                       customRequest={dummyRequest}
                       listType="picture-card"

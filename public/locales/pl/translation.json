@@ -121,7 +121,7 @@
   "error": {
     "createCaretakerProfile": "Wystąpił błąd podczas tworzenia profilu opiekuna",
     "editCaretakerForm": "Wystąpił błąd podczas edycji danych opiekuna",
-    "wrongFileTypeForPhoto": "Zły typ pliku dla zdjęcia",
+    "wrongFileTypeForPhoto": "Zły typ pliku dla zdjęcia. Tylko pliki w formacie: jpeg, jpg, png i webp są dopuszczalne.",
     "editOffer": "Wystąpił błąd podczas edycji oferty",
     "addOffer": "Wystąpił błąd podczas tworzenia oferty",
     "loadOffers": "Wystąpił błąd podczas ładowania ofert",
@@ -180,5 +180,9 @@
   },
 
   "availabilityAlert": "Dostępność zostanie nadpisana wybranymi datami dla wszystkich ofert, które zaznaczysz.",
-  "noData": "Brak danych"
+  "noData": "Brak danych",
+
+  "imageCropperTitle": "Dostosuj zdjęcie",
+  "apply": "Zatwierdź",
+  "allowedPhotoFormats": "Dozwolone formaty zdjęć: jpg, jpeg, png, webp"
 }
