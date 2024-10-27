@@ -147,6 +147,7 @@ const OfferModal: React.FC<OfferModalProps> = ({
             <div className="value">
               <Select
                 mode="multiple"
+                showSearch={false}
                 value={editedAmenities}
                 onChange={setEditedAmenities}
                 options={[

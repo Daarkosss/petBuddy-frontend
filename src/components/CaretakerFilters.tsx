@@ -88,6 +88,7 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
         </div>
         <Select
           mode="multiple"
+          showSearch={false}
           placeholder={t("size")}
           onChange={(value) =>
             onAnimalFiltersChange(animalType, { attributes: { SIZE: value as AnimalSize[] } })
@@ -101,6 +102,7 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
         />
         <Select
           mode="multiple"
+          showSearch={false}
           placeholder={t("sex")}
           onChange={(value) =>
             onAnimalFiltersChange(animalType, { attributes: { SEX: value as AnimalSex[] } })
@@ -113,6 +115,7 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
         />
         <Select
           mode="multiple"
+          showSearch={false}
           placeholder={t("amenities")}
           onChange={(value) =>
             onAnimalFiltersChange(animalType, { amenities: value as string[] })
@@ -155,6 +158,7 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
         />
         <Select
           mode="multiple"
+          showSearch={false}
           placeholder={t("caretakerSearch.animalTypes")}
           onChange={onAnimalTypesChange}
           value={filters.animals?.map((animal) => animal.animalType)}

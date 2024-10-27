@@ -176,5 +176,6 @@
   },
 
   "availabilityAlert": "Dostępność zostanie nadpisana wybranymi datami dla wszystkich ofert, które zaznaczysz.",
-  "oneAvailabilityForAllAnimals": "Jedna dostępność dla wszystkich zwierząt"
+  "oneAvailabilityForAllAnimals": "Jedna dostępność dla wszystkich zwierząt",
+  "noData": "Brak danych"
 }

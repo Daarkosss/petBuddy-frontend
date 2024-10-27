@@ -181,5 +181,6 @@
   },
 
   "availabilityAlert": "Availability will be overwritten with selected dates for all offers, you choose.",
-  "oneAvailabilityForAllAnimals": "One availability for all animals"
+  "oneAvailabilityForAllAnimals": "One availability for all animals",
+  "noData": "No data"
 }

@@ -211,6 +211,7 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
           >
             <Select
               mode="multiple"
+              showSearch={false}
               options={[
                 { value: "MALE", label: t("male") },
                 { value: "SHE", label: t("she") },
@@ -237,6 +238,7 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
           >
             <Select
               mode="multiple"
+              showSearch={false}
               options={[
                 { value: "SMALL", label: t("small") },
                 { value: "BIG", label: t("big") },
