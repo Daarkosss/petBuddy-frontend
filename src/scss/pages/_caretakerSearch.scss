@@ -46,12 +46,8 @@
     .animal-filter {
       display: flex;
       flex-direction: column;
-      gap: 15px;
+      gap: 10px;
       margin-top: 20px;
-
-      h3 {
-        text-align: center;
-      }
 
       .prices {
         display: flex;
@@ -63,6 +59,14 @@
 
     .calendar-wrapper {
       margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    h3 {
+      font-size: 1.3rem;
+      text-align: center;
     }
   }
 

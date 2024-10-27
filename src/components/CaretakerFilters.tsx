@@ -172,6 +172,7 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
         />
         {filters.animals && filters.animals.length > 0 && 
           <div className="calendar-wrapper">
+            <h3>{t("availability")}</h3>
             <MultiCalendar
               dateValue={filters.availabilities}
               handleChange={(value) => onFiltersChange({ ...filters, availabilities: value })}
