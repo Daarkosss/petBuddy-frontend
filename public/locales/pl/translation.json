@@ -30,7 +30,7 @@
   "amenities": "Udogodnienia",
   "amenityTypes": {
     "toys": "Zabawki",
-    "scratchingPost": "Drapak",
+    "scratching post": "Drapak",
     "cage": "Klatka"
   },
 
@@ -95,6 +95,7 @@
   "photosLimitMessage": "Limit zdjęć",
   "photosLimitDescription": "Osiągnięto limit zdjęć (10). Jeśli chcesz dodać nowe, usuń któreś z aktualnych.",
   "save": "Zapisz",
+  "cancel": "Anuluj",
 
   "validation": {
     "required": "Wymagane",
@@ -120,11 +121,64 @@
   "error": {
     "createCaretakerProfile": "Wystąpił błąd podczas tworzenia profilu opiekuna",
     "editCaretakerForm": "Wystąpił błąd podczas edycji danych opiekuna",
-    "wrongFileTypeForPhoto": "Zły typ pliku dla zdjęcia"
+    "wrongFileTypeForPhoto": "Zły typ pliku dla zdjęcia",
+    "editOffer": "Wystąpił błąd podczas edycji oferty",
+    "addOffer": "Wystąpił błąd podczas tworzenia oferty",
+    "loadOffers": "Wystąpił błąd podczas ładowania ofert",
+    "deleteOffer": "Wystąpił błąd podczas usuwania oferty",
+    "deleteConfiguration": "Wystąpił błąd podczas usuwania konfiguracji",
+    "editConfiguration": "Wystąpił błąd podczas edycji konfiguracji",
+    "addConfiguration": "Wystąpił błąd podczas tworzenia konfiguracji",
+    "duplicateConfiguration": "Konfiguracja z wybranymi parametrami juz istnieje",
+    "setAvailabilityForOffers": "Wystąpił bład podczas ustawiania dostępności dla ofert"
   },
 
   "success": {
     "createCaretakerProfile": "Profil opiekuna został pomyślnie utworzony",
-    "editCaretakerForm": "Dane opiekuna zostały pomyślnie zaktualizowane"
-  }
+    "editCaretakerForm": "Dane opiekuna zostały pomyślnie zaktualizowane",
+    "addOffer": "Oferta została pomyślnie utworzona",
+    "editOffer": "Oferta została pomyślnie zaktualizowana",
+    "deleteOffer": "Oferta została pomyślnie usunięta",
+    "deleteConfiguration": "Konfiguracja została pomyślnie usunięta",
+    "editConfiguration": "Konfiguracja została pomyślnie zaktualizowana",
+    "addConfiguration": "Konfiguracja została pomyślnie utworzona",
+    "setAvailabilityForOffers": "Dostępność została pomyślnie ustawiona dla wybranych ofert"
+  },
+
+  "dailyPrice": "Cena za dzień",
+
+  "addOffer": "Dodaj nową ofertę",
+  "setAvailabilityForOffers": "Ustaw dostępność dla ofert",
+  "editOffer": "Edytuj ofertę",
+  "addConfiguration": "Dodaj konfigurację",
+  "editConfiguration": "Edytuj konfigurację",
+  "animalType": "Rodzaj zwierzęcia",
+  "animalTypes": "Rodzaje zwierząt",
+  "manage": "Zarządzaj",
+  "availability": "Dostępność",
+  "editDescription": "Edytuj opis",
+  "editAmenities": "Edytuj udogodnienia",
+  "editAvailability": "Edytuj dostępność",
+  "edit": "Edytuj",
+  "delete": "Usuń",
+  "yes": "Tak",
+  "no": "Nie",
+
+  "deleteConfiguration": "Usuń konfigurację",
+  "confirmConfigurationDelete": "Czy na pewno chcesz usunąć tę konfigurację?",
+  "deleteOffer": "Usuń ofertę",
+  "confirmOfferDelete": "Czy na pewno chcesz usunąć tę ofertę wraz z wszystkimi przypisanymi konfiguracjami?",
+  "offerConfigurations": "Konfiguracje oferty",
+
+  "yourOffers": {
+    "manageOffer": "Zarządzaj swoją ofertą",
+    "cat": "Twoja oferta dla kotów",
+    "dog": "Twoja oferta dla psów",
+    "bird": "Twoja oferta dla ptaków",
+    "rabbit": "Twoja oferta dla królików",
+    "reptile": "Twoja oferta dla gadów"
+  },
+
+  "availabilityAlert": "Dostępność zostanie nadpisana wybranymi datami dla wszystkich ofert, które zaznaczysz.",
+  "noData": "Brak danych"
 }

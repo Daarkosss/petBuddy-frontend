@@ -1,7 +1,11 @@
 import { toast } from "react-toastify";
 import store from "../store/RootStore";
 import { 
-  CaretakerBasicsResponse, CaretakerSearchFilters, PagingParams, CaretakerFormFields, UserProfiles, CaretakerDetailsDTO,
+  CaretakerBasicsResponse, CaretakerSearchFilters, PagingParams, CaretakerFormFields, UserProfiles,
+  CaretakerDetailsDTO, OfferDTO, OfferConfigurationDTO, EditOfferDescription, Availabilities,
+  SetAvailabilityDTO,
+  OfferDTOWithId,
+  OfferConfigurationWithId
 } from "../types";
 import { UploadFile } from "antd";
 
@@ -147,6 +151,7 @@ class API {
         minPrice: offer.minPrice ? offer.minPrice : 0.01,
         maxPrice: offer.maxPrice ? offer.maxPrice : 99999.99,
       })),
+      availabilities: animal.availabilities,
     }));
 
     return this.fetch<CaretakerBasicsResponse>(
@@ -235,6 +240,117 @@ class API {
         "api/caretaker",
         formData,
         { "Accept-Role": "CARETAKER" }
+      );
+    }
+  }
+
+  async addOrEditOffer(offer: OfferDTO | EditOfferDescription): Promise<OfferDTOWithId | undefined> {
+    if (store.user.profile?.selected_profile) {
+      return this.authorizedFetch<OfferDTOWithId>(
+        "POST",
+        "api/caretaker/offer/add-or-edit",
+        offer,
+        { "Accept-Role": store.user.profile?.selected_profile }
+      );
+    }
+  }
+
+  async deleteOffer(offerId: number): Promise<OfferDTOWithId | undefined> {
+    if (store.user.profile?.selected_profile) {
+      return this.authorizedFetch<OfferDTOWithId>(
+        "DELETE",
+        `api/caretaker/offer/${offerId}`,
+        undefined,
+        { "Accept-Role": store.user.profile?.selected_profile }
+      );
+    }
+  }
+
+  async setAmenitiesForOffer(offerId: number, offerAmenities: string[]): Promise<OfferDTOWithId | undefined> {
+    if (store.user.profile?.selected_profile) {
+      return this.authorizedFetch<OfferDTOWithId>(
+        "PUT",
+        `api/caretaker/offer/${offerId}/amenities`,
+        offerAmenities,
+        { "Accept-Role": store.user.profile?.selected_profile }
+      );
+    }
+  }
+
+  async deleteAmenitiesForOffer(offerId: number): Promise<void> {
+    if (store.user.profile?.selected_profile) {
+      return this.authorizedFetch<void>(
+        "DELETE",
+        `api/caretaker/offer/${offerId}/amenities`,
+        undefined,
+        { "Accept-Role": store.user.profile?.selected_profile }
+      );
+    }
+  }
+
+  async setAvailabilityForOffers(
+    offerIds: number[], 
+    availabilityRanges: Availabilities
+  ): Promise<OfferDTOWithId[] | undefined> {
+    const offersWithAvailabilities: SetAvailabilityDTO = {
+      offerIds,
+      availabilityRanges
+    }
+    if (store.user.profile?.selected_profile) {
+      return this.authorizedFetch<OfferDTOWithId[]>(
+        "PUT",
+        "api/caretaker/offer/availability",
+        offersWithAvailabilities,
+        { "Accept-Role": store.user.profile?.selected_profile }
+      )
+    }
+  }
+
+  async setAvailabilityForOffer(
+    offerId: number, 
+    availabilityRanges: Availabilities
+  ): Promise<OfferDTOWithId | undefined> {
+    const response = await this.setAvailabilityForOffers([offerId], availabilityRanges);
+    if (response) {
+      return response[0];
+    }
+  }
+
+  async addOfferConfiguration(
+    offerId: number, 
+    offerConfiguration: OfferConfigurationDTO
+  ): Promise<OfferDTOWithId | undefined> {
+    if (store.user.profile?.selected_profile) {
+      return this.authorizedFetch<OfferDTOWithId>(
+        "POST",
+        `api/caretaker/offer/${offerId}/configurations`,
+        [offerConfiguration],
+        { "Accept-Role": store.user.profile?.selected_profile }
+      );
+    }
+  }
+
+  async editOfferConfiguration(
+    configurationId: number, 
+    offerConfiguration: OfferConfigurationDTO
+  ): Promise<OfferConfigurationWithId | undefined> {
+    if (store.user.profile?.selected_profile) {
+      return this.authorizedFetch<OfferConfigurationWithId>(
+        "PUT",
+        `api/caretaker/offer/configuration/${configurationId}`,
+        offerConfiguration,
+        { "Accept-Role": store.user.profile?.selected_profile }
+      );
+    }
+  }
+
+  async deleteOfferConfiguration(configurationId: number): Promise<OfferDTOWithId | undefined> {
+    if (store.user.profile?.selected_profile) {
+      return this.authorizedFetch<OfferDTOWithId>(
+        "DELETE",
+        `api/caretaker/offer/configuration/${configurationId}`,
+        undefined,
+        { "Accept-Role": store.user.profile?.selected_profile }
       );
     }
   }

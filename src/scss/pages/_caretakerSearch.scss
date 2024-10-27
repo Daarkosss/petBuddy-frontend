@@ -52,15 +52,7 @@
   .caretaker-list-item {
     display: flex;
     align-items: center;
-
-    .view-details-button {
-      background: v.$blue-medium;
-      
-      &:hover,
-      &:focus {
-        background: v.$blue-light !important;
-      }
-    }
+  }
 
     .profile-picture {
       width: 150px;
