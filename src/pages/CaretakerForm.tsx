@@ -5,13 +5,14 @@ import {
 } from "antd";
 import ImgCrop from "antd-img-crop";
 import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 import { api } from "../api/api";
 import { CaretakerDetailsDTO, CaretakerFormFields, Photo, UploadFileWithBlob } from "../types";
 import Voivodeship from "../models/Voivodeship";
 import store from "../store/RootStore";
-import { toast } from "react-toastify";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
+const PHOTOS_LIMIT = 10;
 
 const CaretakerForm = () => {
   const { t } = useTranslation();
@@ -51,8 +52,7 @@ const CaretakerForm = () => {
   }
 
   const handleNewPhoto: UploadProps["onChange"] = ({ fileList }) => {
-    console.log(fileList);
-    if (hasFilePhotoType(fileList[fileList.length - 1])) {
+    if (hasFilePhotoType(fileList[fileList.length - 1])) { // Check last added photo
       setNewOfferPhotos(fileList);
     } else {
       toast.error(t("error.wrongFileTypeForPhoto"));
@@ -277,7 +277,6 @@ const CaretakerForm = () => {
                 <Skeleton loading={isPhotosLoading} paragraph={{ rows: 2 }}>
                   <Form.Item name="offerPhotos" label={t("currentPhotos")} hidden={currentOfferPhotos.length === 0}>
                     <Upload
-                      beforeUpload={() => false}
                       listType="picture-card"
                       fileList={currentOfferPhotos.map((photo) => (photo.file))}
                       onRemove={handleRemoveCurrentPhoto}
@@ -285,7 +284,11 @@ const CaretakerForm = () => {
                     />
                   </Form.Item>
                 </Skeleton>
-                <Form.Item name="newOfferPhotos" label={t("newPhotos")} hidden={currentOfferPhotos.length >= 10}>
+                <Form.Item 
+                  name="newOfferPhotos"
+                  label={t("newPhotos")} 
+                  hidden={currentOfferPhotos.length >= PHOTOS_LIMIT}
+                >
                   <ImgCrop 
                     beforeCrop={hasFilePhotoType}
                     rotationSlider
@@ -301,11 +304,11 @@ const CaretakerForm = () => {
                       onPreview={handleFilePreview}
                       accept="image/*"
                     >
-                      {currentOfferPhotos.length + newOfferPhotos.length < 10 && `+ ${t("upload")}`}
+                      {currentOfferPhotos.length + newOfferPhotos.length < PHOTOS_LIMIT && `+ ${t("upload")}`}
                     </Upload>
                   </ImgCrop>
                 </Form.Item>
-                {currentOfferPhotos.length + newOfferPhotos.length >= 10 &&
+                {currentOfferPhotos.length + newOfferPhotos.length >= PHOTOS_LIMIT &&
                   <Alert
                     type="warning"
                     showIcon
