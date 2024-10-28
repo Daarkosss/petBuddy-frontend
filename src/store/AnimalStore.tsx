@@ -8,11 +8,11 @@ class AnimalStore {
     makeAutoObservable(this);
   }
 
-  get allAnimalCongigurations(): AnimalConfigurations {
+  get allAnimalConfigurations(): AnimalConfigurations {
     return this.animalConfigurations;
   }
 
-  set allAnimalCongigurations(value: AnimalConfigurationsDTO) {
+  set allAnimalConfigurations(value: AnimalConfigurationsDTO) {
     this.animalConfigurations = value.reduce((acc, animal) => {
       acc[animal.animalType] = {
         animalAttributes: animal.animalAttributes,

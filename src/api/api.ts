@@ -25,7 +25,7 @@ export type User = {
 class API {
   constructor() {
     this.getAnimalsConfigurations().then((animalConfigurations) => {
-      store.animal.allAnimalCongigurations = animalConfigurations;
+      store.animal.allAnimalConfigurations = animalConfigurations;
     });
   }
 
