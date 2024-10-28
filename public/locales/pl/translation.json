@@ -6,8 +6,8 @@
   "cat": "Kot",
   "bird": "Ptak",
   "reptile": "Gad",
-  "horse": "Koń",
-
+  "fish": "Ryba",
+  
   "sex": "Płeć",
   "male": "Samiec",
   "she": "Samiczka",
@@ -31,7 +31,8 @@
   "amenityTypes": {
     "toys": "Zabawki",
     "scratching post": "Drapak",
-    "cage": "Klatka"
+    "cage": "Klatka",
+    "garden": "Ogród"
   },
 
   "address": "Adres",
@@ -175,5 +176,6 @@
   },
 
   "availabilityAlert": "Dostępność zostanie nadpisana wybranymi datami dla wszystkich ofert, które zaznaczysz.",
-  "noData": "Brak danych"
+  "noData": "Brak danych",
+  "noConfigurations": "Brak konfiguracji"
 }

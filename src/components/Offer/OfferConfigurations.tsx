@@ -1,13 +1,15 @@
 import React, { ChangeEvent, KeyboardEvent, useState } from "react";
 import { Button, Table, Input, Select, Space, Popconfirm, Form, TableColumnsType } from "antd";
-import { OfferConfigurationWithId, OfferConfigurationWithOptionalId, OfferDTOWithId } from "../../types";
 import { useTranslation } from "react-i18next";
-import { api } from "../../api/api";
 import { toast } from "react-toastify";
 import _ from "lodash";
+import { api } from "../../api/api";
+import store from "../../store/RootStore";
+import { OfferConfigurationWithId, OfferConfigurationWithOptionalId, OfferDTOWithId } from "../../types";
 
 type ConfigurationsProps = {
   offerId: number;
+  animalType: string;
   configurations: OfferConfigurationWithOptionalId[];
   handleUpdateOffer: (newOffer: OfferDTOWithId) => void;
   handleUpdateConfiguration: (newOffer: OfferConfigurationWithId) => void;
@@ -15,6 +17,7 @@ type ConfigurationsProps = {
 
 const OfferConfigurations: React.FC<ConfigurationsProps> = ({
   offerId,
+  animalType,
   configurations,
   handleUpdateOffer,
   handleUpdateConfiguration
@@ -212,10 +215,11 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
             <Select
               mode="multiple"
               showSearch={false}
-              options={[
-                { value: "MALE", label: t("male") },
-                { value: "SHE", label: t("she") },
-              ]}
+              notFoundContent={t("noData")}
+              options={store.animal.getAttributeValues(animalType, "SEX").map((sex) => ({
+                value: sex,
+                label: t(sex.toLowerCase())
+              }))}
             />
           </Form.Item>
         ) : (
@@ -239,10 +243,11 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
             <Select
               mode="multiple"
               showSearch={false}
-              options={[
-                { value: "SMALL", label: t("small") },
-                { value: "BIG", label: t("big") },
-              ]}
+              notFoundContent={t("noData")}
+              options={store.animal.getAttributeValues(animalType, "SIZE").map((size) => ({
+                value: size,
+                label: t(size.toLowerCase())
+              }))}
             />
           </Form.Item>
         ) : (
@@ -304,6 +309,7 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
           rowKey={(record: OfferConfigurationWithOptionalId) => record.id || "new"}
           pagination={false}
           scroll={{ x: "max-content" }}
+          locale={{ emptyText: t("noConfigurations") }}
         />
       </Form>
       {editingKey === undefined && 

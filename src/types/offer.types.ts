@@ -1,3 +1,5 @@
+import { Amenities } from "./animal.types";
+
 export type OfferConfigurationDTO = {
   description: string;
   dailyPrice: number;
@@ -30,7 +32,7 @@ export type OfferDTO = {
     animalType: string;
   };
   offerConfigurations: OfferConfigurationDTO[];
-  animalAmenities: string[];
+  animalAmenities: Amenities;
 }
 
 export type EditOfferDescription = Pick<OfferDTO, "animal" | "description">;
@@ -38,19 +40,16 @@ export type EditOfferDescription = Pick<OfferDTO, "animal" | "description">;
 export type OfferDTOWithId = Omit<OfferDTO, "offerConfigurations"> & {
   id: number;
   offerConfigurations: OfferConfigurationWithId[];
-  animalAmenities: string[];
+  animalAmenities: Amenities;
   availabilities: Availabilities;
 }
 
-export type AnimalSex = "MALE" | "SHE";
-export type AnimalSize = "SMALL" | "MEDIUM" | "BIG"; 
-
 export type OfferConfiguration = {
   attributes?: {
-    SIZE?: AnimalSize[];
-    SEX?: AnimalSex[];
+    SIZE?: string[];
+    SEX?: string[];
   };
   minPrice?: number;
   maxPrice?: number;
-  amenities?: string[];
+  amenities?: Amenities;
 };

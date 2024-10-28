@@ -7,6 +7,7 @@ import {
   OfferDTOWithId,
   OfferConfigurationWithId
 } from "../types";
+import { AnimalConfigurationsDTO } from "../types/animal.types";
 
 const backendHost =
   import.meta.env.VITE_BACKEND_HOST || window.location.hostname;
@@ -22,6 +23,12 @@ export type User = {
 };
 
 class API {
+  constructor() {
+    this.getAnimalsConfigurations().then((animalConfigurations) => {
+      store.animal.allAnimalCongigurations = animalConfigurations;
+    });
+  }
+
   async fetch<T>(
     method: Method,
     path: string,
@@ -289,6 +296,10 @@ class API {
         { "Accept-Role": store.user.profile?.selected_profile }
       );
     }
+  }
+
+  async getAnimalsConfigurations(): Promise<AnimalConfigurationsDTO> {
+    return this.fetch<AnimalConfigurationsDTO>("GET", "api/animal/complex");
   }
 }
 

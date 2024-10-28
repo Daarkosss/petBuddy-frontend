@@ -6,7 +6,7 @@
   "cat": "Cat",
   "bird": "Bird",
   "reptile": "Reptile",
-  "horse": "Horse",
+  "fish": "Fish",
 
   "sex": "Sex",
   "male": "Male",
@@ -31,7 +31,8 @@
   "amenityTypes": {
     "toys": "Toys",
     "scratching post": "Scratching Post",
-    "cage": "Cage"
+    "cage": "Cage",
+    "garden": "Garden"
   },
 
   "address": "Address",
@@ -180,5 +181,6 @@
   },
 
   "availabilityAlert": "Availability will be overwritten with selected dates for all offers, you choose.",
-  "noData": "No data"
+  "noData": "No data",
+  "noConfigurations": "No configurations"
 }
