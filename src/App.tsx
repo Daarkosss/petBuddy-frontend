@@ -81,7 +81,6 @@ const App = observer(() => {
                   path="/profile-selection"
                   element={<ProfileSelection isUserDataFetched={isUserDataFetched} />}
                 />
-                // navigate to "/"
                 <Route path="*" element={<Navigate to="/" />} />
               </>
             ) : (
