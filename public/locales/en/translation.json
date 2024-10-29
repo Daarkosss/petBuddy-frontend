@@ -31,7 +31,8 @@
   "amenityTypes": {
     "toys": "Toys",
     "scratching post": "Scratching Post",
-    "cage": "Cage"
+    "cage": "Cage",
+    "garden": "Garden"
   },
 
   "address": "Address",
@@ -71,10 +72,6 @@
   "loginPage": {
     "proceedInfo": "To proceed you must be logged in",
     "loginOrRegister": "Login or register with Keycloak"
-  },
-
-  "homePage": {
-    "showProfile": "See your profile"
   },
 
   "profileSelection": {
@@ -118,6 +115,7 @@
   "menu": "Menu",
   "searchCaretakers": "Search caretakers",
   "aboutUs": "About Us",
+  "profile": "Profile",
 
   "date": "Date",
   "selectedDates": "Selected dates",
@@ -181,6 +179,14 @@
     "bird": "Your offer for birds",
     "rabbit": "Your offer for rabbits",
     "reptile": "Your offer for reptiles"
+  },
+
+  "caretakerOffers": {
+    "cat": "Offer for cats",
+    "dog": "Offer for dogs",
+    "bird": "Offer for birds",
+    "rabbit": "Offer for rabbits",
+    "reptile": "Offer for reptiles"
   },
 
   "availabilityAlert": "Availability will be overwritten with selected dates for all offers, you choose.",

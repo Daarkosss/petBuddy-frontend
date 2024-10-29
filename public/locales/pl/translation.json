@@ -31,7 +31,8 @@
   "amenityTypes": {
     "toys": "Zabawki",
     "scratching post": "Drapak",
-    "cage": "Klatka"
+    "cage": "Klatka",
+    "garden": "Ogród"
   },
 
   "address": "Adres",
@@ -71,10 +72,6 @@
   "loginPage": {
     "proceedInfo": "Aby kontynuować musisz być zalogowany",
     "loginOrRegister": "Zaloguj się za pomocą Keycloaka"
-  },
-
-  "homePage": {
-    "showProfile": "Odwiedź swój profil"
   },
 
   "profileSelection": {
@@ -118,6 +115,7 @@
   "menu": "Menu",
   "searchCaretakers": "Wyszukaj opiekunów",
   "aboutUs": "O nas",
+  "profile": "Profil",
 
   "date": "Data",
   "selectedDates": "Wybrane daty",
@@ -181,6 +179,14 @@
     "bird": "Twoja oferta dla ptaków",
     "rabbit": "Twoja oferta dla królików",
     "reptile": "Twoja oferta dla gadów"
+  },
+
+  "caretakerOffers": {
+    "cat": "Oferta dla kotów",
+    "dog": "Oferta dla psów",
+    "bird": "Oferta dla ptaków",
+    "rabbit": "Oferta dla królików",
+    "reptile": "Oferta dla gadów"
   },
 
   "availabilityAlert": "Dostępność zostanie nadpisana wybranymi datami dla wszystkich ofert, które zaznaczysz.",
