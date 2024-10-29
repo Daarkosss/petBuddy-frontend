@@ -101,7 +101,8 @@
   "validation": {
     "required": "Required",
     "zipCodeFormat": "Invalid format (00-000)",
-    "phoneNumberFormat": "Invalid format (at least 9 digits)"
+    "phoneNumberFormat": "Invalid format (at least 9 digits)",
+    "price": "Invalid format (0,00)"
   },
 
   "landingPage": {
