@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import Voivodeship from "../models/Voivodeship";
 import { KeyboardEvent } from "react";
 import store from "../store/RootStore";
+import MultiCalendar from "./Calendar/MultiCalendar";
 
 interface CaretakerFiltersProps {
   filters: CaretakerSearchFilters;
@@ -156,6 +157,16 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
             label: t(animalType.toLowerCase())
           }))}
         />
+        {filters.animals && filters.animals.length > 0 && 
+          <div className="calendar-wrapper">
+            <h3>{t("availability")}</h3>
+            <MultiCalendar
+              dateValue={filters.availabilities}
+              handleChange={(value) => onFiltersChange({ ...filters, availabilities: value })}
+              datePanelPosition="bottom"
+            />
+          </div>
+        }
         {renderAnimalFilters()}
         <Button type="primary" onClick={handleSearch} className="search-button">
           {t("search")}

@@ -1,18 +1,18 @@
 import React, { ChangeEvent, KeyboardEvent, useState } from "react";
 import { Button, Table, Input, Select, Space, Popconfirm, Form, TableColumnsType } from "antd";
+import { OfferConfigurationWithId, OfferConfigurationWithOptionalId, OfferWithId } from "../../types";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import _ from "lodash";
 import { api } from "../../api/api";
 import store from "../../store/RootStore";
-import { OfferConfigurationWithId, OfferConfigurationWithOptionalId, OfferDTOWithId } from "../../types";
 import { ColumnType } from "antd/es/table";
 
 type ConfigurationsProps = {
   offerId: number;
   animalType: string;
   configurations: OfferConfigurationWithOptionalId[];
-  handleUpdateOffer: (newOffer: OfferDTOWithId) => void;
+  handleUpdateOffer: (newOffer: OfferWithId) => void;
   handleUpdateConfiguration: (newOffer: OfferConfigurationWithId) => void;
 };
 
