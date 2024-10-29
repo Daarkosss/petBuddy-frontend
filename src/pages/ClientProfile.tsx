@@ -20,31 +20,31 @@ function ClientProfile() {
   const [isProfileDataFetched, setIsProfileDataFetched] = useState(false);
   const [profileData, setProfileData] = useState<UserProfiles>();
 
+  const [isMyProfile, setIsMyProfile] = useState<boolean | null>(null);
+
   const testList = [1, 2, 3, 4, 5, 6, 7];
 
+  const getClientDetails = () => {
+    api.getUserProfiles().then((data) => {
+      setProfileData(data);
+    });
+  };
+
   useEffect(() => {
-    if (store.user.profile?.selected_profile == null) {
-      navigate("/profile-selection");
-    } else {
-      if (
-        userEmail == null ||
-        userEmail == store.user.profile!.selected_profile
-      ) {
-        if (store.user.profile!.selected_profile === "Client") {
-          api.getUserProfiles().then((data) => {
-            setProfileData(data);
-            setIsProfileDataFetched(true);
-          });
-        } else if (store.user.profile!.selected_profile === "Caretaker") {
-          navigate("/profile-caretaker", { state: { userEmail: userEmail } });
-        }
-      }
+    //if user is here, they has to visit their profile
+    store.selectedMenuOption = "home";
+
+    //which profile page should be showed
+    if (store.user.profile!.selected_profile === "CLIENT") {
+      getClientDetails();
+    } else if (store.user.profile!.selected_profile === "CARETAKER") {
+      navigate("/profile-caretaker");
     }
   }, []);
   return (
     <div>
       {store.user.profile != null &&
-      store.user.profile?.selected_profile === "Client" ? (
+      store.user.profile?.selected_profile === "CLIENT" ? (
         <div className="profile-container">
           <div className="profile-left-data">
             <div className="profile-left-upper-container">
@@ -57,7 +57,7 @@ function ClientProfile() {
               </div>
             </div>
             <div>
-              <h2>User caretaker profile</h2>
+              <h2>User client profile</h2>
               <RoundedLine
                 width={"100%"}
                 height={"2px"}
@@ -65,14 +65,36 @@ function ClientProfile() {
               />
             </div>
 
-            {profileData?.hasCaretakerProfile ? (
+            {/* {profileData?.hasCaretakerProfile ? (
               <a>See caretaker profile</a>
             ) : (
               <div>
                 <h3>Currently you do not have caretaker profile</h3>
                 <a>+ Create caretaker profile</a>
               </div>
-            )}
+            )} */}
+            {profileData != null ? (
+              profileData?.hasCaretakerProfile ? (
+                <div>
+                  <button
+                    onClick={() => {
+                      store.user.setSelectedProfile("CARETAKER");
+                      store.user.saveProfileToStorage(store.user.profile);
+                      navigate("/profile-caretaker");
+                    }}
+                  >
+                    <h3>Change to caretaker profile</h3>
+                  </button>
+                </div>
+              ) : (
+                <div>
+                  <h3>Currently you do not have caretaker profile</h3>
+                  <button onClick={() => navigate("/caretaker/form")}>
+                    + Create caretaker profile
+                  </button>
+                </div>
+              )
+            ) : null}
           </div>
         </div>
       ) : (
