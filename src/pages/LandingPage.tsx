@@ -33,7 +33,7 @@ const LandingPage = () => {
       </div>
 
       <div className="main-image">
-        <img src="/caretakerImage.png" alt="Dog and Woman" />
+        <img src="/caretaker-image.jpg" alt="Dog and Man" />
       </div>
 
       <div className="search-container">

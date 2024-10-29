@@ -51,7 +51,7 @@ const CaretakerList = () => {
   >(() => {
     const animal = location.state?.filters?.animals?.[0];
     if (animal) {
-      return { [animal.animalType]: animal.offerConfigurations?.[0] || {} };
+      return { [animal.animalType]: animal.availabilities || [] };
     }
     return {};
   });

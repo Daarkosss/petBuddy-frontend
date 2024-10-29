@@ -97,6 +97,8 @@ const CaretakerForm = () => {
       await api.addCaretakerProfile(data);
       toast.success(t("success.createCaretakerProfile"));
       store.user.hasCaretakerProfile = true;
+      store.user.setSelectedProfile("CARETAKER");
+      store.user.saveProfileToStorage(store.user.profile);
     } catch (error) {
       toast.error(t("error.createCaretakerProfile"));
     }

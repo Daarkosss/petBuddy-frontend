@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import Voivodeship from "../models/Voivodeship";
 import { CaretakerSearchFilters } from "../types";
 import { Dispatch, SetStateAction } from "react";
-import MultiDatePicker from "./MultiDatePicker";
+import MultiDatePicker from "./Calendar/MultiDatePicker";
 import { Value } from "react-multi-date-picker";
 
 interface SearchBarProps {
@@ -16,14 +16,6 @@ interface SearchBarProps {
 
 const SearchBar: React.FC<SearchBarProps> = ({ filters, setFilters, handleSearch }) => {
   const { t } = useTranslation();
-
-  const renderSelectOptions = (options: Record<string, string>) => {
-    return Object.entries(options).map(([value, label]) => (
-      <Select.Option key={value} value={value}>
-        {label}
-      </Select.Option>
-    ));
-  };
 
   const handleCityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilters({ ...filters, cityLike: e.target.value });
@@ -40,10 +32,6 @@ const SearchBar: React.FC<SearchBarProps> = ({ filters, setFilters, handleSearch
     });
   };
 
-  const formatDateTime = (date: string): string => { // Temporary format until backend is not corrected
-    return `${date} 00:00:00.000 +0100`;
-  };
-
   const handleAvailabilitiesChange = (availabilities: Value[][]) => {
     setFilters((prev) => {
       if (!prev.animals || prev.animals.length === 0) {
@@ -54,12 +42,10 @@ const SearchBar: React.FC<SearchBarProps> = ({ filters, setFilters, handleSearch
         ...prev,
         animals: [{ 
           ...prev.animals[0],
-          offerConfigurations: [{
-            availabilities: availabilities.map((dateRange) => ({
-              availableFrom: formatDateTime(dateRange[0] as string) || "",
-              availableTo: formatDateTime(dateRange[1] as string) || "",
-            })),
-          }],
+          availabilities: availabilities.map((dateRange) => ({
+            availableFrom: dateRange[0]?.toString() || "",
+            availableTo: dateRange[1]?.toString() || "",
+          })),
         }],
       };
     });
@@ -88,9 +74,8 @@ const SearchBar: React.FC<SearchBarProps> = ({ filters, setFilters, handleSearch
           style={{ width: "180px" }}
           value={filters.voivodeship}
           onChange={handleVoivodeshipChange}
-        >
-          {renderSelectOptions(Voivodeship.voivodeshipMap)}
-        </Select>
+          options={Voivodeship.voivodeshipOptions}
+        />
       </Form.Item>
 
       <Form.Item layout="vertical" label={t("caretakerSearch.animalType")}>
@@ -98,23 +83,24 @@ const SearchBar: React.FC<SearchBarProps> = ({ filters, setFilters, handleSearch
           className="search-select"
           placeholder={t("placeholder.animalType")}
           onChange={handleAnimalTypeChange}
-        >
-          {renderSelectOptions({
-            DOG: t("dog"),
-            CAT: t("cat"),
-            BIRD: t("bird"),
-            REPTILE: t("reptile"),
-            HORSE: t("horse"),
-          })}
-        </Select>
+          options={[
+            { value: "DOG", label: t("dog") },
+            { value: "CAT", label: t("cat") },
+            { value: "BIRD", label: t("bird") },
+            { value: "REPTILE", label: t("reptile") },
+            { value: "HORSE", label: t("horse") }
+          ]}
+        />
       </Form.Item>
 
       <Form.Item layout="vertical" label={t("date")}>
         <MultiDatePicker
           handleChange={handleAvailabilitiesChange}
-          dateValue={filters.animals?.[0]?.offerConfigurations?.[0]?.availabilities.map(
-            (date) => [date.availableFrom, date.availableTo]
-          )}
+          dateValue={filters.animals?.[0]?.availabilities
+            ? filters.animals[0].availabilities.map(
+              (date) => [date.availableFrom, date.availableTo])
+            : []
+          }
           isDisabled={filters.animals?.length === 0}
         />
       </Form.Item>
