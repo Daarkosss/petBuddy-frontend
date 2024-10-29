@@ -158,9 +158,9 @@ class API {
     }
   }
 
-  async getCurrentCaretakerDetails(): Promise<CaretakerDetailsDTO> {
+  async getCurrentCaretakerDetails(): Promise<CaretakerDetails> {
     try {
-      const response = await this.authorizedFetch<CaretakerDetailsDTO>(
+      const response = await this.authorizedFetch<CaretakerDetails>(
         "GET",
         "api/caretaker",
         undefined,
