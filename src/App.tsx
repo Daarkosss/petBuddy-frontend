@@ -11,6 +11,7 @@ import OfferManagement from "./pages/OfferManagement";
 import LandingPage from "./pages/LandingPage";
 import Header from "./components/Header";
 import { observer } from "mobx-react-lite";
+import CareReservationForm from "./components/CareReservationForm";
 
 const { Content } = Layout;
 
@@ -77,6 +78,7 @@ const App = observer(() => {
                 <Route path="/caretaker/form" element={<CaretakerForm />} />
                 <Route path="/caretaker/search" element={<CaretakerSearch />} />
                 <Route path="/caretaker/offers" element={<OfferManagement />} />
+                <Route path="/care/reservation" element={<CareReservationForm />} />
                 <Route
                   path="/profile-selection"
                   element={<ProfileSelection isUserDataFetched={isUserDataFetched} />}

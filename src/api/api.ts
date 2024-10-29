@@ -7,6 +7,7 @@ import {
   OfferDTOWithId,
   OfferConfigurationWithId
 } from "../types";
+import { CareReservation } from "../types/care.types";
 
 const backendHost =
   import.meta.env.VITE_BACKEND_HOST || window.location.hostname;
@@ -287,6 +288,17 @@ class API {
         `api/caretaker/offer/configuration/${configurationId}`,
         undefined,
         { "Accept-Role": store.user.profile?.selected_profile }
+      );
+    }
+  }
+
+  async makeCareReservation(caretakerEmail: string, careReservation: CareReservation): Promise<void> {
+    if (store.user.profile?.selected_profile === "CLIENT") {
+      return this.authorizedFetch<void>(
+        "POST",
+        `api/care/${caretakerEmail}`,
+        careReservation,
+        { "Accept-Role": "CLIENT"}
       );
     }
   }

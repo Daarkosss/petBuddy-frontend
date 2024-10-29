@@ -1,0 +1,20 @@
+@use "../helpers/variables" as v;
+
+.care-reservation-container {
+  max-width: 800px;
+  margin: 5vh auto;
+  padding: 20px;
+  background-color: v.$white;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+  .form {
+    display: flex;
+    background-color: v.$white;
+    flex-direction: column;
+    gap: 20px;
+    width: 400px;
+    padding: 20px;
+    border-radius: 10px;
+  }
+}
