@@ -4,7 +4,7 @@ export type CareReservation = {
   description: string,
   dailyPrice: number,
   animalType: string,
-  animalAttributeIds: AnimalAttributes
+  animalAttributes: AnimalAttributes
 }
 
 type AnimalAttributes = {
