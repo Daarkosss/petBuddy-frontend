@@ -2,13 +2,14 @@ import React, { useEffect, useState } from "react";
 import store from "../store/RootStore";
 import "../scss/pages/_profile.scss";
 import testImg from "../../public/pet_buddy_logo.svg";
-import { Rate } from "antd";
+import { Button, Card, Rate } from "antd";
 import CommentContainer from "../components/CommentContainer";
 import RoundedLine from "../components/RoundedLine";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { api } from "../api/api";
 import { CaretakerDetailsDTO } from "../types";
+import OfferCard from "../components/Offer/OfferCard";
 
 const CaretakerProfile: React.FC = () => {
   const { t } = useTranslation();
@@ -17,6 +18,10 @@ const CaretakerProfile: React.FC = () => {
   const { userEmail } = location.state || {};
   const [isProfileDataFetched, setIsProfileDataFetched] = useState(false);
   const [profileData, setProfileData] = useState<CaretakerDetailsDTO>();
+  const [hasClientProfile, setHasClientProfile] = useState<boolean | null>();
+  const [hasCaretakerProfile, setHasCaretakerProfile] = useState<
+    boolean | null
+  >();
 
   const [isMyProfile, setIsMyProfile] = useState<boolean | null>(null);
 
@@ -25,26 +30,41 @@ const CaretakerProfile: React.FC = () => {
   const getCaretakerDetails = (email: string) => {
     api.getCaretakerDetails(email).then((data) => {
       setProfileData(data);
+      console.log(`profile data offers: ${JSON.stringify(data.offers)}`);
       setIsProfileDataFetched(true);
     });
   };
 
+  const checkUserAvailableProfiles = () => {
+    api.getUserProfiles().then((data) => {
+      setHasClientProfile(data.hasClientProfile);
+      setHasCaretakerProfile(data.hasCaretakerProfile);
+    });
+  };
+
   useEffect(() => {
+    store.selectedMenuOption = "home";
+
     //if user is visiting their profile
     if (
       userEmail == null ||
       userEmail == store.user.profile?.selected_profile
     ) {
+      //user is visiting their proifle
+      setIsMyProfile(true);
+
       //which profile page should be showed
-      if (store.user.profile!.selected_profile === "Caretaker") {
+      if (store.user.profile!.selected_profile === "CARETAKER") {
         getCaretakerDetails(store.user.profile!.email!);
-      } else if (store.user.profile!.selected_profile === "Client") {
+      } else if (store.user.profile!.selected_profile === "CLIENT") {
         navigate("/profile-caretaker", { state: { userEmail: userEmail } });
       }
+      checkUserAvailableProfiles();
     } else {
       //if userEmail has been provided
       if (userEmail != null) {
         getCaretakerDetails(userEmail);
+        setIsMyProfile(false);
       }
 
       //else -> not allowed navigation, redirect needed
@@ -56,18 +76,44 @@ const CaretakerProfile: React.FC = () => {
         <div className="profile-container">
           <div className="profile-left-data">
             <div className="profile-left-upper-container">
-              <img width={400} src={testImg} />
+              <div>
+                <img width={400} src={testImg} className="profile-image" />
+
+                {isMyProfile == true && (
+                  <Button type="primary">Change image</Button>
+                )}
+              </div>
               <div className="profile-user">
-                <h1 className="profile-user-nick">Jan Kowalski - Client</h1>
+                <div className="profile-user-nick">
+                  <h1>{profileData.accountData.name}</h1>
+                  <h3> - Caretaker</h3>
+                </div>
                 <div className="profile-rating">
-                  <span>({"4.0 / 5.0"})</span>
+                  <span>
+                    (
+                    {`${
+                      profileData.avgRating != null ? profileData.avgRating : 0
+                    }/ 5.0`}
+                    )
+                  </span>
                   <Rate
                     disabled
                     allowHalf
-                    value={4}
+                    value={
+                      profileData.avgRating != null ? profileData.avgRating : 0
+                    }
                     className="profile-rating-stars"
                   />
-                  <span>({20})</span>
+                  <span>({profileData.numberOfRatings})</span>
+                </div>
+                <div className="profile-actions">
+                  {isMyProfile == false &&
+                    store.user.profile?.selected_profile === "CLIENT" && (
+                      <div className="profile-actions">
+                        <Button type="primary">Follow caretaker</Button>
+                        <Button type="primary">Open chat</Button>
+                      </div>
+                    )}
                 </div>
               </div>
             </div>
@@ -79,23 +125,75 @@ const CaretakerProfile: React.FC = () => {
                 backgroundColor="#007ea7"
               />
             </div>
+            <h4>Description</h4>
             {profileData != null && <div>{profileData.description}</div>}
+            {/* {isMyProfile == true &&
+              hasClientProfile != null &&
+              (hasClientProfile ? (
+                <div>
+                  <h3>Currently you do not have caretaker profile</h3>
+                  <a>+ Create caretaker profile</a>
+                </div>
+              ) : (
+                <div>
+                  <a>Visit your client profile</a>
+                </div>
+              ))} */}
+
             {isMyProfile == true && (
               <div>
-                <h3>Currently you do not have caretaker profile</h3>
-                <a>+ Create caretaker profile</a>
+                <button
+                  onClick={() => {
+                    store.user.setSelectedProfile("CLIENT");
+                    store.user.saveProfileToStorage(store.user.profile);
+                    navigate("/profile-client");
+                  }}
+                >
+                  <h3>Change to client profile</h3>
+                </button>
               </div>
             )}
+            <div>
+              <h1>Comments</h1>
+              {/* divider */}
+              {isMyProfile == false && (
+                <Button type="primary">Add comment</Button>
+              )}
+              {testList.map((element, index) => (
+                <div key={index}>
+                  <CommentContainer />
+                </div>
+              ))}
+            </div>
           </div>
 
-          <div className="profile-right-comments">
-            <h1>Comments</h1>
-            {/* divider */}
-            {testList.map((element, index) => (
-              <div key={index}>
-                <CommentContainer />
-              </div>
-            ))}
+          <div className="profile-right">
+            <h1>Offers</h1>
+            <div className="profile-right-offers">
+              {/* divider */}
+              {profileData != null ? (
+                profileData.offers.length > 0 ? (
+                  profileData.offers.map((element, index) => (
+                    <div key={index}>
+                      <OfferCard
+                        offer={element}
+                        handleUpdateOffer={(e, b) => {}}
+                        // canBeEdited={isMyProfile}
+                      />
+                    </div>
+                  ))
+                ) : (
+                  <div>
+                    <div>Currently there are no offers to show</div>
+                    {isMyProfile == true && (
+                      <button>
+                        <h3>+ Add offer</h3>
+                      </button>
+                    )}
+                  </div>
+                )
+              ) : null}
+            </div>
           </div>
         </div>
       ) : (
