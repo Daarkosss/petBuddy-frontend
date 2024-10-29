@@ -19,17 +19,22 @@ const PageHeader = observer(() => {
     {
       key: "home",
       label: t("home"),
-      onClick: () => navigate("/")
+      onClick: () => navigate("/"),
     },
     {
       key: "caretakerSearch",
       label: t("searchCaretakers"),
-      onClick: () => navigate("/caretaker/search")
+      onClick: () => navigate("/caretaker/search"),
     },
     {
       key: "aboutUs",
       label: t("aboutUs"),
-    }
+    },
+    {
+      key: "profile",
+      label: t("profile"),
+      onClick: () => navigate("/profile-client"),
+    },
   ];
 
   const menu = (
