@@ -1,15 +1,14 @@
 import { useTranslation } from "react-i18next";
-import { OfferDTOWithId } from "../../types";
+import { OfferWithId } from "../../types";
 import MultiCalendar from "../Calendar/MultiCalendar";
 import { Alert, Button, Form, Modal, Select } from "antd";
 import { api } from "../../api/api";
 import { toast } from "react-toastify";
-import { Value } from "react-multi-date-picker";
 import { useEffect } from "react";
 
 interface SetAvailabilityFormProps {
-  availableOffers: OfferDTOWithId[]
-  handleUpdateOffers: (updatedOffers: OfferDTOWithId[]) => void;
+  availableOffers: OfferWithId[]
+  handleUpdateOffers: (updatedOffers: OfferWithId[]) => void;
   isModalOpen: boolean;
   setIsModalOpen: (value: boolean) => void
 }
@@ -29,13 +28,7 @@ const SetAvailabilityModal: React.FC<SetAvailabilityFormProps> = ({
   const handleFinish = async () => {
     try {
       const values = await form.validateFields();
-      const availabilityRanges = values.availability.map((dateRange: Value[]) => ({
-        availableFrom: dateRange[0]?.toString() || "",
-        availableTo: dateRange[1] 
-        ? dateRange[1]?.toString()
-        : dateRange[0]?.toString() || "",
-      }));
-      const updatedOffers = await api.setAvailabilityForOffers(values.offerIds, availabilityRanges);
+      const updatedOffers = await api.setAvailabilityForOffers(values.offerIds, values.availabilities);
       if (updatedOffers) {
         handleUpdateOffers(updatedOffers);
       }
@@ -58,6 +51,7 @@ const SetAvailabilityModal: React.FC<SetAvailabilityFormProps> = ({
       footer={null}
       maskClosable={false}
       width={"max-content"}
+      forceRender
     >
       <Form form={form} className="set-availability-form" layout="vertical" onFinish={handleFinish}>
         <Alert
@@ -79,13 +73,12 @@ const SetAvailabilityModal: React.FC<SetAvailabilityFormProps> = ({
           />
         </Form.Item>
         <Form.Item
-          name="availability"
+          name="availabilities"
           label={t("availability")}
-          initialValue={[]}
         >
           <MultiCalendar 
-            dateValue={form.getFieldValue("availability")}
-            handleChange={(availability) => form.setFieldValue("availability", availability)}
+            dateValue={form.getFieldValue("availabilities")}
+            handleChange={(availabilities) => form.setFieldValue("availabilities", availabilities)}
           />
         </Form.Item>
         <Button type="primary" htmlType="submit" className="submit-button">
