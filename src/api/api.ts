@@ -171,6 +171,25 @@ class API {
     }
   }
 
+  async getCurrentCaretakerDetails(): Promise<CaretakerDetailsDTO> {
+    try {
+      const response = await this.authorizedFetch<CaretakerDetailsDTO>(
+        "GET",
+        "api/caretaker",
+        undefined,
+        { "Accept-Role": "CARETAKER" }
+      );
+      return response;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new Error(`Failed to fetch caretaker profile: ${error.message}`);
+      }
+      throw new Error(
+        "An unknown error occurred while fetching caretaker profile"
+      );
+    }
+  }
+
   async addCaretakerProfile(data: CaretakerFormFields): Promise<void> {
     return this.authorizedFetch<void>(
       "POST",

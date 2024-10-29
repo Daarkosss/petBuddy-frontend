@@ -23,7 +23,7 @@ const OfferManagement: React.FC = () => {
   const loadOffers = async () => {
     try {
       if (store.user.profile?.email) {
-        const data = await api.getCaretakerDetails(store.user.profile?.email);
+        const data = await api.getCurrentCaretakerDetails();
         setOffers(data.offers);
       }
     } catch (error) {
