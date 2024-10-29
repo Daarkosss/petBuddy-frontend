@@ -1,11 +1,20 @@
 import { toast } from "react-toastify";
 import store from "../store/RootStore";
-import { 
-  CaretakerBasicsResponse, CaretakerSearchFilters, PagingParams, CaretakerFormFields, UserProfiles,
-  CaretakerDetailsDTO, OfferDTO, OfferConfigurationDTO, EditOfferDescription, Availabilities,
+import {
+  CaretakerBasicsResponse,
+  CaretakerSearchFilters,
+  PagingParams,
+  CaretakerFormFields,
+  UserProfiles,
+  CaretakerDetailsDTO,
+  OfferDTO,
+  OfferConfigurationDTO,
+  EditOfferDescription,
+  Availabilities,
   SetAvailabilityDTO,
   OfferDTOWithId,
-  OfferConfigurationWithId
+  OfferConfigurationWithId,
+  AccountDataDTO,
 } from "../types";
 
 const backendHost =
@@ -164,23 +173,35 @@ class API {
     }
   }
 
+  async getClientDetails(acceptRole: string): Promise<AccountDataDTO> {
+    try {
+      const response = await this.authorizedFetch<AccountDataDTO>(
+        "GET",
+        `api/client`,
+        { "Accept-Role": acceptRole }
+      );
+      return response;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new Error(`Failed to fetch caretaker profile: ${error.message}`);
+      }
+      throw new Error(
+        "An unknown error occurred while fetching caretaker profile"
+      );
+    }
+  }
+
   async addCaretakerProfile(data: CaretakerFormFields): Promise<void> {
-    return this.authorizedFetch<void>(
-      "POST",
-      "api/caretaker/add",
-      data
-    );
+    return this.authorizedFetch<void>("POST", "api/caretaker/add", data);
   }
 
   async editCaretakerProfile(data: CaretakerFormFields): Promise<void> {
-    return this.authorizedFetch<void>(
-      "PUT",
-      "api/caretaker/edit",
-      data
-    );
+    return this.authorizedFetch<void>("PUT", "api/caretaker/edit", data);
   }
 
-  async addOrEditOffer(offer: OfferDTO | EditOfferDescription): Promise<OfferDTOWithId | undefined> {
+  async addOrEditOffer(
+    offer: OfferDTO | EditOfferDescription
+  ): Promise<OfferDTOWithId | undefined> {
     if (store.user.profile?.selected_profile) {
       return this.authorizedFetch<OfferDTOWithId>(
         "POST",
@@ -202,7 +223,10 @@ class API {
     }
   }
 
-  async setAmenitiesForOffer(offerId: number, offerAmenities: string[]): Promise<OfferDTOWithId | undefined> {
+  async setAmenitiesForOffer(
+    offerId: number,
+    offerAmenities: string[]
+  ): Promise<OfferDTOWithId | undefined> {
     if (store.user.profile?.selected_profile) {
       return this.authorizedFetch<OfferDTOWithId>(
         "PUT",
@@ -225,35 +249,38 @@ class API {
   }
 
   async setAvailabilityForOffers(
-    offerIds: number[], 
+    offerIds: number[],
     availabilityRanges: Availabilities
   ): Promise<OfferDTOWithId[] | undefined> {
     const offersWithAvailabilities: SetAvailabilityDTO = {
       offerIds,
-      availabilityRanges
-    }
+      availabilityRanges,
+    };
     if (store.user.profile?.selected_profile) {
       return this.authorizedFetch<OfferDTOWithId[]>(
         "PUT",
         "api/caretaker/offer/availability",
         offersWithAvailabilities,
         { "Accept-Role": store.user.profile?.selected_profile }
-      )
+      );
     }
   }
 
   async setAvailabilityForOffer(
-    offerId: number, 
+    offerId: number,
     availabilityRanges: Availabilities
   ): Promise<OfferDTOWithId | undefined> {
-    const response = await this.setAvailabilityForOffers([offerId], availabilityRanges);
+    const response = await this.setAvailabilityForOffers(
+      [offerId],
+      availabilityRanges
+    );
     if (response) {
       return response[0];
     }
   }
 
   async addOfferConfiguration(
-    offerId: number, 
+    offerId: number,
     offerConfiguration: OfferConfigurationDTO
   ): Promise<OfferDTOWithId | undefined> {
     if (store.user.profile?.selected_profile) {
@@ -267,7 +294,7 @@ class API {
   }
 
   async editOfferConfiguration(
-    configurationId: number, 
+    configurationId: number,
     offerConfiguration: OfferConfigurationDTO
   ): Promise<OfferConfigurationWithId | undefined> {
     if (store.user.profile?.selected_profile) {
@@ -280,7 +307,9 @@ class API {
     }
   }
 
-  async deleteOfferConfiguration(configurationId: number): Promise<OfferDTOWithId | undefined> {
+  async deleteOfferConfiguration(
+    configurationId: number
+  ): Promise<OfferDTOWithId | undefined> {
     if (store.user.profile?.selected_profile) {
       return this.authorizedFetch<OfferDTOWithId>(
         "DELETE",
