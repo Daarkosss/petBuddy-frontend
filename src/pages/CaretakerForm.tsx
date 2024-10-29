@@ -7,7 +7,7 @@ import ImgCrop from "antd-img-crop";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { api } from "../api/api";
-import { CaretakerDetailsDTO, CaretakerFormFields, Photo, UploadFileWithBlob } from "../types";
+import { CaretakerDetails, CaretakerFormFields, Photo, UploadFileWithBlob } from "../types";
 import Voivodeship from "../models/Voivodeship";
 import store from "../store/RootStore";
 
@@ -27,7 +27,7 @@ const CaretakerForm = () => {
   useEffect(() => {
     if (store.user.profile?.email && store.user.profile?.hasCaretakerProfile) {
       api.getCurrentCaretakerDetails().then((data) => {
-        form.setFieldsValue(data);
+        updateCaretakerData(data);
       })
     }
     setIsPhotosLoading(false);

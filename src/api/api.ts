@@ -189,13 +189,16 @@ class API {
 
   async getCurrentCaretakerDetails(): Promise<CaretakerDetails> {
     try {
-      const response = await this.authorizedFetch<CaretakerDetails>(
+      const response = await this.authorizedFetch<CaretakerDetailsDTO>(
         "GET",
         "api/caretaker",
         undefined,
         { "Accept-Role": "CARETAKER" }
       );
-      return response;
+      return {
+        ...response,
+        offers: this.convertOffersAvailabilities(response.offers)
+      };
     } catch (error: unknown) {
       if (error instanceof Error) {
         throw new Error(`Failed to fetch caretaker profile: ${error.message}`);
@@ -209,7 +212,7 @@ class API {
   async addCaretakerProfile(
     formFields: CaretakerFormFields,
     photos: UploadFile[]
-  ): Promise<CaretakerDetailsDTO | void> {
+  ): Promise<CaretakerDetails | void> {
     const formData = new FormData();
     
     const caretakerData = new Blob([JSON.stringify(formFields)], { type: "application/json" });
@@ -221,18 +224,22 @@ class API {
       }
     })
 
-    return this.authorizedMultipartFetch<CaretakerDetailsDTO>(
+    const response = await this.authorizedMultipartFetch<CaretakerDetailsDTO>(
       "POST",
       "api/caretaker",
       formData,
     );
+    return {
+      ...response,
+      offers: this.convertOffersAvailabilities(response.offers)
+    }
   }
 
   async editCaretakerProfile(
     formFields: CaretakerFormFields,
     newPhotos: UploadFile[],
     offerBlobsToKeep: string[]
-  ): Promise<CaretakerDetailsDTO | void> {
+  ): Promise<CaretakerDetails | void> {
     if (store.user.profile?.selected_profile === "CARETAKER") {
       const formData = new FormData();
       
@@ -248,12 +255,16 @@ class API {
         }
       })
 
-      return this.authorizedMultipartFetch<CaretakerDetailsDTO>(
+      const response = await this.authorizedMultipartFetch<CaretakerDetailsDTO>(
         "PUT",
         "api/caretaker",
         formData,
         { "Accept-Role": "CARETAKER" }
       );
+      return {
+        ...response,
+        offers: this.convertOffersAvailabilities(response.offers)
+      }
     }
   }
 
