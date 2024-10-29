@@ -167,6 +167,7 @@ const OfferModal: React.FC<OfferModalProps> = ({
                 showSearch={false}
                 value={editedAmenities}
                 onChange={setEditedAmenities}
+                notFoundContent={t("noData")}
                 options={store.animal.getAmenities(offer.animal.animalType).map((amenity) => ({
                   value: amenity,
                   label: t(`amenityTypes.${amenity}`)

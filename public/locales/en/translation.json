@@ -17,6 +17,8 @@
   "medium": "Medium",
   "big": "Big",
 
+  "dangerous": "Is dangerous?",
+
   "search": "Search",
   "filters": "Filters",
   "price": "Price",

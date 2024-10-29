@@ -86,34 +86,22 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
           />
           <div>zł</div>
         </div>
-        <Select
-          mode="multiple"
-          showSearch={false}
-          placeholder={t("size")}
-          onChange={(value) =>
-            onAnimalFiltersChange(animalType, { attributes: { SIZE: value } })
-          }
-          value={animalFilters[animalType]?.attributes?.SIZE || []}
-          notFoundContent={t("noData")}
-          options={store.animal.getAttributeValues(animalType, "SIZE").map((size) => ({
-            value: size,
-            label: t(size.toLowerCase())
-          }))}
-        />
-        <Select
-          mode="multiple"
-          showSearch={false}
-          placeholder={t("sex")}
-          onChange={(value) =>
-            onAnimalFiltersChange(animalType, { attributes: { SEX: value } })
-          }
-          value={animalFilters[animalType]?.attributes?.SEX || []}
-          notFoundContent={t("noData")}
-          options={store.animal.getAttributeValues(animalType, "SEX").map((sex) => ({
-            value: sex,
-            label: t(sex.toLowerCase())
-          }))}
-        />
+        {store.animal.getAnimalAttributeKeys(animalType).map((attributeKey) => (
+          <Select
+            mode="multiple"
+            showSearch={false}
+            placeholder={t(attributeKey.toLowerCase())}
+            onChange={(value) =>
+              onAnimalFiltersChange(animalType, { attributes: { [attributeKey]: value } })
+            }
+            value={animalFilters[animalType]?.attributes?.[attributeKey] || []}
+            notFoundContent={t("noData")}
+            options={store.animal.getAttributeValues(animalType, attributeKey).map((value) => ({
+              value,
+              label: t(value.toLowerCase())
+            }))}
+          />
+        ))}
         <Select
           mode="multiple"
           showSearch={false}

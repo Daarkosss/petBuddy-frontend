@@ -1,4 +1,4 @@
-import { Amenities } from "./animal.types";
+import { Amenities, AnimalAttributes } from "./animal.types";
 
 export type OfferConfigurationDTO = {
   description: string;
@@ -45,9 +45,10 @@ export type OfferDTOWithId = Omit<OfferDTO, "offerConfigurations"> & {
 }
 
 export type OfferConfiguration = {
-  attributes?: {
-    SIZE?: string[];
-    SEX?: string[];
+  attributes: {
+    [key: string]: {
+      animalAttributes: AnimalAttributes;
+    };
   };
   minPrice?: number;
   maxPrice?: number;
