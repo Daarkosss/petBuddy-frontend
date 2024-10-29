@@ -154,35 +154,35 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
   };
 
   const selectedOptionsColumns: ColumnType<OfferConfigurationWithOptionalId>[] = store.animal
-  .getAnimalAttributeKeys(animalType)
-  .map((attributeKey) => ({
-    title: t(attributeKey.toLowerCase()),
-    dataIndex: ["selectedOptions", attributeKey],
-    onCell: () => ({
-      style: { width: 150 },
-    }),
-    render: (values: string[], record: OfferConfigurationWithOptionalId) => {
-      const editable = isEditing(record);
-      return editable ? (
-        <Form.Item
-          name={["selectedOptions", attributeKey]}
-          rules={[{ required: true, message: t("validation.required") }]}
-        >
-          <Select
-            mode="multiple"
-            showSearch={false}
-            notFoundContent={t("noData")}
-            options={store.animal.getAttributeValues(animalType, attributeKey).map((value) => ({
-              value,
-              label: t(value.toLowerCase())
-            }))}
-          />
-        </Form.Item>
-      ) : (
-        values.map((value) => t(value.toLowerCase())).join(", ")
-      );
-    },
-  }));
+    .getAnimalAttributeKeys(animalType)
+    .map((attributeKey) => ({
+      title: t(attributeKey.toLowerCase()),
+      dataIndex: ["selectedOptions", attributeKey],
+      onCell: () => ({
+        style: { width: 150 },
+      }),
+      render: (values: string[], record: OfferConfigurationWithOptionalId) => {
+        const editable = isEditing(record);
+        return editable ? (
+          <Form.Item
+            name={["selectedOptions", attributeKey]}
+            rules={[{ required: true, message: t("validation.required") }]}
+          >
+            <Select
+              mode="multiple"
+              showSearch={false}
+              notFoundContent={t("noData")}
+              options={store.animal.getAttributeValues(animalType, attributeKey).map((value) => ({
+                value,
+                label: t(value.toLowerCase())
+              }))}
+            />
+          </Form.Item>
+        ) : (
+          values ? values.map((value) => t(value.toLowerCase())).join(", ") : ""
+        );
+      },
+    }));
 
   const allColumns: TableColumnsType<OfferConfigurationWithOptionalId> = [
     {
