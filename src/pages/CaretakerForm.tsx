@@ -26,15 +26,15 @@ const CaretakerForm = () => {
   
   useEffect(() => {
     if (store.user.profile?.email && store.user.profile?.hasCaretakerProfile) {
-      api.getCaretakerDetails(store.user.profile?.email).then((data) => {
-        updateCaretakerData(data);
-      });
+      api.getCurrentCaretakerDetails().then((data) => {
+        form.setFieldsValue(data);
+      })
     }
     setIsPhotosLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form]);
 
-  const updateCaretakerData = (data: CaretakerDetailsDTO) => {
+  const updateCaretakerData = (data: CaretakerDetails) => {
     form.setFieldsValue(data);
     const initialPhotos: UploadFileWithBlob[] = data.offerPhotos.map((photo: Photo, index: number) => ({
       file: {

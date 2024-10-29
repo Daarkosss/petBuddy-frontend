@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Row, Col, Button, Modal, Space } from "antd";
-import { OfferDTOWithId } from "../types";
+import { OfferWithId } from "../types";
 import OfferCard from "../components/Offer/OfferCard";
 import { api } from "../api/api";
 import { toast } from "react-toastify";
@@ -11,7 +11,7 @@ import SetAvailabilityModal from "../components/Offer/SetAvailabilityModal";
 
 const OfferManagement: React.FC = () => {
   const { t } = useTranslation();
-  const [offers, setOffers] = useState<OfferDTOWithId[]>([]);
+  const [offers, setOffers] = useState<OfferWithId[]>([]);
   const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
   const [isAvailabilityModalOpen, setIsAvailabilityModalOpen] = useState(false);
 
@@ -23,7 +23,7 @@ const OfferManagement: React.FC = () => {
   const loadOffers = async () => {
     try {
       if (store.user.profile?.email) {
-        const data = await api.getCaretakerDetails(store.user.profile?.email);
+        const data = await api.getCurrentCaretakerDetails();
         setOffers(data.offers);
       }
     } catch (error) {
@@ -44,7 +44,7 @@ const OfferManagement: React.FC = () => {
     setIsAvailabilityModalOpen(true);
   }
 
-  const handleUpdateOffer = (updatedOffer: OfferDTOWithId, isDeleted = false) => {
+  const handleUpdateOffer = (updatedOffer: OfferWithId, isDeleted = false) => {
     if (isDeleted) {
       setOffers((prevOffers) => prevOffers.filter(
         (offer) => offer.id !== updatedOffer.id
@@ -56,7 +56,7 @@ const OfferManagement: React.FC = () => {
     }
   };
 
-  const handleUpdateOffers = (updatedOffers: OfferDTOWithId[]) => {
+  const handleUpdateOffers = (updatedOffers: OfferWithId[]) => {
     setOffers((prevOffers) => prevOffers.map(
       (offer) => updatedOffers.find((updatedOffer) => updatedOffer.id === offer.id) || offer
     ));

@@ -17,6 +17,8 @@
   "medium": "Medium",
   "big": "Big",
 
+  "dangerous": "Dangerous?",
+
   "search": "Search",
   "filters": "Filters",
   "price": "Price",
@@ -135,7 +137,8 @@
     "editConfiguration": "An error occurred while updating configuration",
     "addConfiguration": "An error occurred while creating configuration",
     "duplicateConfiguration": "Configuration with these selected options already exists",
-    "setAvailabilityForOffers": "An error occurred while setting availability for selected offers"
+    "setAvailabilityForOffers": "An error occurred while setting availability for selected offers",
+    "getCaretakers": "An error occurred while loading caretakers"
   },
 
   "success": {
@@ -188,5 +191,6 @@
   "noData": "No data",
 
   "imageCropperTitle": "Adjust image",
-  "apply": "Apply"
+  "apply": "Apply",
+  "oneAvailabilityForAllAnimals": "One availability for all animals"
 }

@@ -3,10 +3,9 @@ import { Button, Form, Select, Input } from "antd";
 import { SearchOutlined, EnvironmentOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 import Voivodeship from "../models/Voivodeship";
-import { CaretakerSearchFilters } from "../types";
+import { AvailabilityValues, CaretakerSearchFilters } from "../types";
 import { Dispatch, SetStateAction } from "react";
 import MultiDatePicker from "./Calendar/MultiDatePicker";
-import { Value } from "react-multi-date-picker";
 
 interface SearchBarProps {
   filters: CaretakerSearchFilters;
@@ -32,20 +31,16 @@ const SearchBar: React.FC<SearchBarProps> = ({ filters, setFilters, handleSearch
     });
   };
 
-  const handleAvailabilitiesChange = (availabilities: Value[][]) => {
+  const handleAvailabilitiesChange = (availabilities: AvailabilityValues) => {
     setFilters((prev) => {
       if (!prev.animals || prev.animals.length === 0) {
         return prev;
       }
-  
       return {
         ...prev,
+        availabilities: availabilities,
         animals: [{ 
-          ...prev.animals[0],
-          availabilities: availabilities.map((dateRange) => ({
-            availableFrom: dateRange[0]?.toString() || "",
-            availableTo: dateRange[1]?.toString() || "",
-          })),
+          ...prev.animals[0]
         }],
       };
     });
@@ -96,11 +91,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ filters, setFilters, handleSearch
       <Form.Item layout="vertical" label={t("date")}>
         <MultiDatePicker
           handleChange={handleAvailabilitiesChange}
-          dateValue={filters.animals?.[0]?.availabilities
-            ? filters.animals[0].availabilities.map(
-              (date) => [date.availableFrom, date.availableTo])
-            : []
-          }
+          dateValue={filters.availabilities}
           isDisabled={filters.animals?.length === 0}
         />
       </Form.Item>

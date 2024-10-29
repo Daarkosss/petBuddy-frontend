@@ -5,6 +5,7 @@ import store from "../store/RootStore";
 import { CaretakerSearchFilters } from "../types";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "../components/SearchBar";
+import { Value } from "react-multi-date-picker";
 
 const LandingPage = () => {
   const { t } = useTranslation();
@@ -14,7 +15,8 @@ const LandingPage = () => {
     personalDataLike: "",
     cityLike: "",
     voivodeship: undefined,
-    animals: []
+    animals: [],
+    availabilities: [],
   });
 
   useEffect(() => {
@@ -22,7 +24,16 @@ const LandingPage = () => {
   }, []);
 
   const handleSearch = async () => {
-    navigate("/caretaker/search", { state: { filters } });
+    const filtersToPass = {
+      ...filters, 
+      availabilities: filters.availabilities?.map((dateRange: Value[]) => ({
+        availableFrom: dateRange[0]?.toString() || "",
+        availableTo: dateRange[1] 
+        ? dateRange[1]?.toString()
+        : dateRange[0]?.toString() || "",
+      }))
+    };
+    navigate("/caretaker/search", { state: { filters: filtersToPass } });
   };
 
   return (
@@ -33,7 +44,7 @@ const LandingPage = () => {
       </div>
 
       <div className="main-image">
-        <img src="/caretakerImage.png" alt="Dog and Woman" />
+        <img src="/caretaker-image.jpg" alt="Dog and Man" />
       </div>
 
       <div className="search-container">

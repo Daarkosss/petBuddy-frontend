@@ -5,10 +5,11 @@ import { SorterResult, TablePaginationConfig, FilterValue, ColumnsType } from "a
 import { api } from "../api/api";
 import { useTranslation } from "react-i18next";
 import { CaretakerBasics } from "../models/Caretaker";
-import { CaretakerSearchFilters, OfferConfiguration } from "../types";
+import { Availability, CaretakerSearchFilters, OfferConfiguration } from "../types";
 import CaretakerFilters from "../components/CaretakerFilters";
 import store from "../store/RootStore";
 import { UserOutlined } from "@ant-design/icons";
+import { toast } from "react-toastify";
 
 const CaretakerList = () => {
   const { t } = useTranslation();
@@ -16,7 +17,6 @@ const CaretakerList = () => {
 
   const [caretakers, setCaretakers] = useState<CaretakerBasics[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const [pagingParams, setPagingParams] = useState({
     page: 0,
@@ -31,11 +31,18 @@ const CaretakerList = () => {
     total: 0,
   });
 
-  const [filters, setFilters] = useState<CaretakerSearchFilters>(location.state?.filters || {
+  const [filters, setFilters] = useState<CaretakerSearchFilters>(
+    location.state?.filters && {
+      ...location.state.filters,
+      availabilities: location.state?.filters?.availabilities.map(
+        (value: Availability) => [value.availableFrom, value.availableTo]
+      ) 
+    } || {
     personalDataLike: "",
     cityLike: "",
     voivodeship: undefined,
     animals: [],
+    availabilities: [],
   });
 
   const [animalFilters, setAnimalFilters] = useState<Record<string, OfferConfiguration>>(
@@ -47,11 +54,22 @@ const CaretakerList = () => {
       return {};
     }
   );
+
+  const assignFiltersToAnimals = async () => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      animals: prevFilters.animals?.map((animal) => ({
+        ...animal,
+        availabilities: prevFilters.availabilities
+      })),
+    }))
+  }
   
   const fetchCaretakers = async () => {
     setIsLoading(true);
-    setError(null);
     try {
+      await assignFiltersToAnimals();
+      console.log(filters);
       const data = await api.getCaretakers(pagingParams, filters);
       setCaretakers(data.content.map((caretaker) => new CaretakerBasics(caretaker)));
       setPagination({
@@ -60,7 +78,7 @@ const CaretakerList = () => {
         total: data.totalElements,
       });
     } catch (error) {
-      setError(error instanceof Error ? error.message : t("unknownError"));
+      toast.error(t("error.getCaretakers"));
     } finally {
       setIsLoading(false);
     }
@@ -200,8 +218,6 @@ const CaretakerList = () => {
     },
   ];
 
-  if (error) return <div>{error}</div>;
-
   return (
     <div>
       <div className="caretaker-container">
@@ -234,6 +250,7 @@ const CaretakerList = () => {
                 items_per_page: t("perPage"),
               }
             }}
+            scroll={{ x: "max-content" }}
             onChange={handleTableChange}
           />
         </div>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Card, Popconfirm} from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
-import { OfferConfigurationWithId, OfferDTOWithId } from "../../types";
+import { OfferConfigurationWithId, OfferWithId } from "../../types";
 import { t } from "i18next";
 import Meta from "antd/es/card/Meta";
 import { api } from "../../api/api";
@@ -9,8 +9,8 @@ import { toast } from "react-toastify";
 import OfferModal from "./OfferModal";
 
 type OfferCardProps = {
-  offer: OfferDTOWithId;
-  handleUpdateOffer: (updatedOffer: OfferDTOWithId, isDeleted?: boolean) => void;
+  offer: OfferWithId;
+  handleUpdateOffer: (updatedOffer: OfferWithId, isDeleted?: boolean) => void;
 };
 
 const OfferCard: React.FC<OfferCardProps> = ({ offer, handleUpdateOffer }) => {
