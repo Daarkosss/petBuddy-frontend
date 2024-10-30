@@ -331,9 +331,7 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
         ) : (
           <Button
             type="primary"
-            onClick={
-              record.id ? () => handleSaveEditRow(record.id!) : handleSaveNewRow
-            }
+            onClick={record.id ? () => {} : () => {}}
             loading={isLoading}
           >
             {t("sendRequest")}
