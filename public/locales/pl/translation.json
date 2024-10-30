@@ -187,7 +187,5 @@
 
   "imageCropperTitle": "Dostosuj zdjęcie",
   "apply": "Zatwierdź",
-  "allowedPhotoFormats": "Dozwolone formaty zdjęć: jpg, jpeg, png, webp",
-  "oneAvailabilityForAllAnimals": "Jedna dostępność dla wszystkich zwierząt",
-  "noData": "Brak danych"
+  "oneAvailabilityForAllAnimals": "Jedna dostępność dla wszystkich zwierząt"
 }

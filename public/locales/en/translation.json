@@ -70,11 +70,6 @@
   
   "perPage": "per page",
 
-  "loginPage": {
-    "proceedInfo": "To proceed you must be logged in",
-    "loginOrRegister": "Login or register with Keycloak"
-  },
-
   "profileSelection": {
     "title": "Choose your profile",
     "client": "Client",
