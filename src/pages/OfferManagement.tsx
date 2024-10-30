@@ -42,35 +42,49 @@ const OfferManagement: React.FC = () => {
 
   const handleSetAvailabilityForOffers = () => {
     setIsAvailabilityModalOpen(true);
-  }
+  };
 
   const handleUpdateOffer = (updatedOffer: OfferWithId, isDeleted = false) => {
     if (isDeleted) {
-      setOffers((prevOffers) => prevOffers.filter(
-        (offer) => offer.id !== updatedOffer.id
-      ));
+      setOffers((prevOffers) =>
+        prevOffers.filter((offer) => offer.id !== updatedOffer.id)
+      );
     } else {
-      setOffers((prevOffers) => prevOffers.map(
-        (offer) => (offer.id === updatedOffer.id ? updatedOffer : offer)
-      ));
+      setOffers((prevOffers) =>
+        prevOffers.map((offer) =>
+          offer.id === updatedOffer.id ? updatedOffer : offer
+        )
+      );
     }
   };
 
   const handleUpdateOffers = (updatedOffers: OfferWithId[]) => {
-    setOffers((prevOffers) => prevOffers.map(
-      (offer) => updatedOffers.find((updatedOffer) => updatedOffer.id === offer.id) || offer
-    ));
-  }
+    setOffers((prevOffers) =>
+      prevOffers.map(
+        (offer) =>
+          updatedOffers.find((updatedOffer) => updatedOffer.id === offer.id) ||
+          offer
+      )
+    );
+  };
 
   return (
     <div className="offer-management-page">
       <div className="offer-management-header">
         <h1>{t("yourOffers.manageOffer")}</h1>
         <Space size="middle" className="offer-management-buttons">
-          <Button type="primary" className="add-offer-button" onClick={handleAddOffer}>
+          <Button
+            type="primary"
+            className="add-offer-button"
+            onClick={handleAddOffer}
+          >
             {t("addOffer")}
           </Button>
-          <Button type="primary" className="set-availability-button" onClick={handleSetAvailabilityForOffers}>
+          <Button
+            type="primary"
+            className="set-availability-button"
+            onClick={handleSetAvailabilityForOffers}
+          >
             {t("setAvailabilityForOffers")}
           </Button>
         </Space>
@@ -78,7 +92,11 @@ const OfferManagement: React.FC = () => {
       <Row justify="center" style={{ gap: "50px" }}>
         {offers.map((offer) => (
           <Col key={offer.id}>
-            <OfferCard offer={offer} handleUpdateOffer={handleUpdateOffer} />
+            <OfferCard
+              offer={offer}
+              handleUpdateOffer={handleUpdateOffer}
+              canBeEdited={true}
+            />
           </Col>
         ))}
       </Row>
@@ -89,9 +107,10 @@ const OfferManagement: React.FC = () => {
         footer={null}
         maskClosable={false}
       >
-        <AddOfferForm 
-          currentAnimalTypes={offers.map((offer) => offer.animal.animalType)} 
-          onSuccess={handleSuccessfulOfferSave} />
+        <AddOfferForm
+          currentAnimalTypes={offers.map((offer) => offer.animal.animalType)}
+          onSuccess={handleSuccessfulOfferSave}
+        />
       </Modal>
       <SetAvailabilityModal
         availableOffers={offers}

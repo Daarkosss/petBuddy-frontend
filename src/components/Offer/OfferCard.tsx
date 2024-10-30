@@ -10,7 +10,7 @@ import OfferModal from "./OfferModal";
 
 type OfferCardProps = {
   offer: OfferWithId;
-  canBeEdited: boolean;
+  canBeEdited?: boolean;
   handleUpdateOffer: (updatedOffer: OfferWithId, isDeleted?: boolean) => void;
 };
 

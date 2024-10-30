@@ -48,6 +48,7 @@ const CaretakerProfile: React.FC = () => {
         size
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
   useEffect(() => {
@@ -76,6 +77,7 @@ const CaretakerProfile: React.FC = () => {
         setIsMyProfile(false);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <div>
@@ -291,7 +293,7 @@ const CaretakerProfile: React.FC = () => {
             <h1>{t("profilePage.offers")}</h1>
             <div className="profile-right-offers">
               {/* divider */}
-              {profileData != null ? (
+              {profileData !== null ? (
                 profileData.offers.length > 0 ? (
                   profileData.offers.map((element, index) => (
                     <div key={index}>

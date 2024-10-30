@@ -30,6 +30,7 @@ function ClientProfile() {
     } else if (store.user.profile!.selected_profile === "CARETAKER") {
       navigate("/profile-caretaker");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <div>
