@@ -15,6 +15,7 @@ import {
   OfferDTOWithId,
   OfferConfigurationWithId,
   AccountDataDTO,
+  CaretakerRatingsResponse,
 } from "../types";
 
 const backendHost =
@@ -136,7 +137,7 @@ class API {
 
     return this.fetch<CaretakerBasicsResponse>(
       "POST",
-      `api/caretaker?${queryString}`,
+      `api/caretaker/all?${queryString}`,
       requestBody
     );
   }
@@ -179,6 +180,45 @@ class API {
         "GET",
         `api/client`,
         { "Accept-Role": acceptRole }
+      );
+      return response;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new Error(`Failed to fetch caretaker profile: ${error.message}`);
+      }
+      throw new Error(
+        "An unknown error occurred while fetching caretaker profile"
+      );
+    }
+  }
+
+  //TODO: popraw
+  async getCaretakerRatings(
+    email: string,
+    page: number | null,
+    size: number | null,
+    sortDirection: string | null,
+    sortBy: string[] | null
+  ): Promise<CaretakerRatingsResponse> {
+    try {
+      let endpoint = `api/caretaker/${email}/rating`;
+      if (page != null) {
+        endpoint = endpoint.concat(`?page=${page}`);
+      }
+
+      if (size != null) {
+        endpoint = endpoint.concat("", `&size=${size}`);
+      }
+      if (sortDirection != null) {
+        endpoint = endpoint.concat("", `&sortDirection=${sortDirection}`);
+      }
+
+      if (sortBy != null) {
+        endpoint = endpoint.concat("", `&sortBy=${sortBy}`);
+      }
+      const response = await this.authorizedFetch<CaretakerRatingsResponse>(
+        "GET",
+        endpoint
       );
       return response;
     } catch (error: unknown) {
