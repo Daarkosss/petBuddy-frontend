@@ -3,32 +3,31 @@ import testImg from "../../public/pet_buddy_logo.svg";
 import { Card, Rate } from "antd";
 import "../scss/components/_commentContainer.scss";
 import RoundedLine from "./RoundedLine";
+import { CaretakerRatingDTO } from "../types";
 
-const CommentContainer: React.FC = () => {
+const CommentContainer: React.FC<CaretakerRatingDTO> = ({
+  clientEmail,
+  caretakerEmail,
+  rating,
+  comment,
+}) => {
   return (
     <Card className="comment-container-main">
       <div className="comment-container-top">
         <div className="comment-container-user-rating">
           <img src={testImg} width={100} height={100} />
           <div className="comment-container-user-nick-container">
-            <h5 className="comment-container-user-nick">Some user</h5>
-            <p>Client</p>
-          </div>
-          <div className="comment-container-rating">
-            <span>({"4.0 / 5.0"})</span>
-            <Rate
-              disabled
-              allowHalf
-              value={4}
-              className="comment-container-rating-stars"
-            />
+            <h5 className="comment-container-user-nick">{clientEmail}</h5>
           </div>
         </div>
-        <p>24.07.2024</p>
+        <div className="comment-container-rating">
+          <span>({`${rating} / 5`})</span>
+          <Rate disabled allowHalf value={rating} />
+        </div>
       </div>
       <RoundedLine width={"100%"} height={"2px"} backgroundColor="#E1F7FF" />
       <div className="comment-container-bottom">
-        <p>Jakiś komentarz</p>
+        <p>{comment}</p>
       </div>
     </Card>
   );
