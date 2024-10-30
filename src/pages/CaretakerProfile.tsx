@@ -8,7 +8,7 @@ import RoundedLine from "../components/RoundedLine";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { api } from "../api/api";
-import { CaretakerDetailsDTO, CaretakerRatingsResponse } from "../types";
+import { CaretakerDetails, CaretakerRatingsResponse } from "../types";
 import OfferCard from "../components/Offer/OfferCard";
 
 const CaretakerProfile: React.FC = () => {
@@ -16,16 +16,9 @@ const CaretakerProfile: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { userEmail } = location.state || {};
-  const [isProfileDataFetched, setIsProfileDataFetched] = useState(false);
-  const [profileData, setProfileData] = useState<CaretakerDetailsDTO>();
-  const [hasClientProfile, setHasClientProfile] = useState<boolean | null>();
-  const [hasCaretakerProfile, setHasCaretakerProfile] = useState<
-    boolean | null
-  >();
+  const [profileData, setProfileData] = useState<CaretakerDetails>();
 
   const [isMyProfile, setIsMyProfile] = useState<boolean | null>(null);
-
-  const testList = [1, 2, 3, 4, 5, 6, 7];
 
   const [page, setPage] = useState<number>(0);
   const [size, setSize] = useState<number>(10);
@@ -34,14 +27,6 @@ const CaretakerProfile: React.FC = () => {
   const getCaretakerDetails = (email: string) => {
     api.getCaretakerDetails(email).then((data) => {
       setProfileData(data);
-      setIsProfileDataFetched(true);
-    });
-  };
-
-  const checkUserAvailableProfiles = () => {
-    api.getUserProfiles().then((data) => {
-      setHasClientProfile(data.hasClientProfile);
-      setHasCaretakerProfile(data.hasCaretakerProfile);
     });
   };
 
@@ -77,11 +62,10 @@ const CaretakerProfile: React.FC = () => {
       setIsMyProfile(true);
 
       //which profile page should be showed
-      if (store.user.profile!.selected_profile === "CARETAKER") {
+      if (store.user.profile?.selected_profile === "CARETAKER") {
         getCaretakerDetails(store.user.profile!.email!);
         getCaretakerRatings(store.user.profile!.email!, page, size);
-        checkUserAvailableProfiles();
-      } else if (store.user.profile!.selected_profile === "CLIENT") {
+      } else if (store.user.profile?.selected_profile === "CLIENT") {
         navigate("/profile-caretaker", { state: { userEmail: userEmail } });
       }
     } else {
@@ -233,13 +217,14 @@ const CaretakerProfile: React.FC = () => {
 
               <h1>{t("profilePage.ratings")}</h1>
               {/* divider */}
-              {isMyProfile == false && (
-                <div className="profile-add-a-comment">
-                  <Button type="primary" className="add-button">
-                    {t("profilePage.rate")}
-                  </Button>
-                </div>
-              )}
+              {isMyProfile == false &&
+                store.user.profile?.selected_profile != "CARETAKER" && (
+                  <div className="profile-add-a-comment">
+                    <Button type="primary" className="add-button">
+                      {t("profilePage.rate")}
+                    </Button>
+                  </div>
+                )}
 
               <div className="profile-comments-container">
                 {ratings != null ? (
