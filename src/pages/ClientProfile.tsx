@@ -45,6 +45,54 @@ function ClientProfile() {
                 </Button>
               </div>
             </div>
+
+            <div className="profile-offers-smaller-screen">
+              <div className="profile-client-data-container-smaller-screen">
+                <Card className="profile-client-card">
+                  <div className="profile-user">
+                    <div className="profile-user-nick">
+                      <h1>
+                        {profileData.accountData.name}{" "}
+                        {profileData.accountData.surname}
+                      </h1>
+                    </div>
+                  </div>
+                  <div>
+                    <h2>{t("profilePage.userClientProfile")}</h2>
+                    <RoundedLine
+                      width={"100%"}
+                      height={"2px"}
+                      backgroundColor="#003459"
+                    />
+                  </div>
+                  {profileData.hasCaretakerProfile ? (
+                    <div>
+                      <Button
+                        type="primary"
+                        className="profile-action-button"
+                        onClick={() => {
+                          store.user.setSelectedProfile("CARETAKER");
+                          store.user.saveProfileToStorage(store.user.profile);
+                          navigate("/profile-caretaker");
+                        }}
+                      >
+                        {t("profilePage.changeToCaretakerProfile")}
+                      </Button>
+                    </div>
+                  ) : (
+                    <div>
+                      <h3>{t("profilePage.noCaretakerProfile")}</h3>
+                      <Button
+                        type="primary"
+                        onClick={() => navigate("/caretaker/form")}
+                      >
+                        + {t("profileSelection.createCaretaker")}
+                      </Button>
+                    </div>
+                  )}
+                </Card>
+              </div>
+            </div>
           </div>
           <div className="profile-right">
             <div className="profile-client-data-container">
