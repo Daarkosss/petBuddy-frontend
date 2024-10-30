@@ -81,6 +81,26 @@
     "createCaretaker": "Utwórz profil opiekuna"
   },
 
+  "profilePage": {
+    "changeImage": "Zmień zdięcie",
+    "followCaretaker": "Obserwuj",
+    "openChat": "Otwórz chat",
+    "userCaretakerProfile": "Profil opiekuna tego użytkownika",
+    "userClientProfile": "Profil klienta",
+    "editProfile": "Edytuj profil",
+    "description": "Opis",
+    "changeToClientProfile": "Przejdź na profil klienta",
+    "changeToCaretakerProfile": "Przejdź na profil opiekuna",
+    "offers": "Oferty",
+    "noOffersToShow": "Brak ofert do wyświetlenia",
+    "addOffer": "Dodaj ofertę",
+    "ratings": "Oceny",
+    "rate": "Oceń",
+    "noRatingsToShow": "Brak ocen do wyświetlenia",
+    "page": "strona",
+    "noCaretakerProfile": "Nie posiadasz jeszcze profilu opiekuna"
+  },
+
   "caretakerSearch": {
     "personalData": "Dane personalne",
     "animalTypes": "Rodzaje zwierząt",
@@ -157,12 +177,14 @@
   "animalType": "Rodzaj zwierzęcia",
   "animalTypes": "Rodzaje zwierząt",
   "manage": "Zarządzaj",
+  "requestCare": "Poproś o opiekę",
   "availability": "Dostępność",
   "editDescription": "Edytuj opis",
   "editAmenities": "Edytuj udogodnienia",
   "editAvailability": "Edytuj dostępność",
   "edit": "Edytuj",
   "delete": "Usuń",
+  "sendRequest": "Wyślij prośbę",
   "yes": "Tak",
   "no": "Nie",
 
