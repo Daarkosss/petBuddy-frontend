@@ -57,21 +57,22 @@ const CaretakerProfile: React.FC = () => {
     //if user is visiting their profile
     if (
       userEmail === null ||
+      userEmail === undefined ||
       userEmail === store.user.profile?.selected_profile
     ) {
       //user is visiting their proifle
       setIsMyProfile(true);
 
       //which profile page should be showed
-      if (store.user.profile?.selected_profile === "CARETAKER") {
+      if (store.user.profile!.selected_profile === "CARETAKER") {
         getCaretakerDetails(store.user.profile!.email!);
         getCaretakerRatings(store.user.profile!.email!, page, size);
-      } else if (store.user.profile?.selected_profile === "CLIENT") {
+      } else if (store.user.profile!.selected_profile === "CLIENT") {
         navigate("/profile-caretaker", { state: { userEmail: userEmail } });
       }
     } else {
       //if userEmail has been provided
-      if (userEmail !== null) {
+      if (userEmail !== null && userEmail !== undefined) {
         getCaretakerDetails(userEmail);
         getCaretakerRatings(userEmail, page, size);
         setIsMyProfile(false);
