@@ -8,7 +8,7 @@ import RoundedLine from "../components/RoundedLine";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { api } from "../api/api";
-import { CaretakerDetailsDTO } from "../types";
+import { CaretakerDetailsDTO, CaretakerRatingsResponse } from "../types";
 import OfferCard from "../components/Offer/OfferCard";
 
 const CaretakerProfile: React.FC = () => {
@@ -27,10 +27,13 @@ const CaretakerProfile: React.FC = () => {
 
   const testList = [1, 2, 3, 4, 5, 6, 7];
 
+  const [page, setPage] = useState<number>(0);
+  const [size, setSize] = useState<number>(10);
+  const [ratings, setRatings] = useState<CaretakerRatingsResponse>();
+
   const getCaretakerDetails = (email: string) => {
     api.getCaretakerDetails(email).then((data) => {
       setProfileData(data);
-      console.log(`profile data offers: ${JSON.stringify(data.offers)}`);
       setIsProfileDataFetched(true);
     });
   };
@@ -42,8 +45,28 @@ const CaretakerProfile: React.FC = () => {
     });
   };
 
+  const getCaretakerRatings = (
+    email: string,
+    page: number | null,
+    size: number | null
+  ) => {
+    api.getCaretakerRatings(email, page, size, null, null).then((data) => {
+      setRatings({ ...data });
+    });
+  };
+
   useEffect(() => {
-    store.selectedMenuOption = "home";
+    if (isMyProfile != null) {
+      getCaretakerRatings(
+        isMyProfile == true ? store.user.profile!.selected_profile : userEmail,
+        page,
+        size
+      );
+    }
+  }, [page]);
+
+  useEffect(() => {
+    store.selectedMenuOption = "profile";
 
     //if user is visiting their profile
     if (
@@ -56,14 +79,16 @@ const CaretakerProfile: React.FC = () => {
       //which profile page should be showed
       if (store.user.profile!.selected_profile === "CARETAKER") {
         getCaretakerDetails(store.user.profile!.email!);
+        getCaretakerRatings(store.user.profile!.email!, page, size);
+        checkUserAvailableProfiles();
       } else if (store.user.profile!.selected_profile === "CLIENT") {
         navigate("/profile-caretaker", { state: { userEmail: userEmail } });
       }
-      checkUserAvailableProfiles();
     } else {
       //if userEmail has been provided
       if (userEmail != null) {
         getCaretakerDetails(userEmail);
+        getCaretakerRatings(userEmail, page, size);
         setIsMyProfile(false);
       }
 
@@ -77,16 +102,21 @@ const CaretakerProfile: React.FC = () => {
           <div className="profile-left-data">
             <div className="profile-left-upper-container">
               <div>
-                <img width={400} src={testImg} className="profile-image" />
+                <img src={testImg} className="profile-image" />
 
                 {isMyProfile == true && (
-                  <Button type="primary">Change image</Button>
+                  <Button type="primary" className="profile-action-button">
+                    {t("profilePage.changeImage")}
+                  </Button>
                 )}
               </div>
               <div className="profile-user">
                 <div className="profile-user-nick">
-                  <h1>{profileData.accountData.name}</h1>
-                  <h3> - Caretaker</h3>
+                  <h1>
+                    {profileData.accountData.name}{" "}
+                    {profileData.accountData.surname}
+                  </h1>
+                  <h3> - {t("profileSelection.caretaker")}</h3>
                 </div>
                 <div className="profile-rating">
                   <span>
@@ -110,65 +140,169 @@ const CaretakerProfile: React.FC = () => {
                   {isMyProfile == false &&
                     store.user.profile?.selected_profile === "CLIENT" && (
                       <div className="profile-actions">
-                        <Button type="primary">Follow caretaker</Button>
-                        <Button type="primary">Open chat</Button>
+                        <Button
+                          type="primary"
+                          className="profile-action-button"
+                        >
+                          {t("profilePage.followCaretaker")}
+                        </Button>
+                        <Button
+                          type="primary"
+                          className="profile-action-button"
+                        >
+                          {t("profilePage.openChat")}
+                        </Button>
                       </div>
                     )}
                 </div>
               </div>
             </div>
             <div>
-              <h2>User caretaker profile</h2>
+              <h2>{t("profilePage.userClientProfile")}</h2>
               <RoundedLine
                 width={"100%"}
                 height={"2px"}
-                backgroundColor="#007ea7"
+                backgroundColor="#003459"
               />
             </div>
-            <h4>Description</h4>
+            {isMyProfile == true && (
+              <div>
+                <Button
+                  type="primary"
+                  className="profile-action-button"
+                  onClick={() => {
+                    navigate("/caretaker/form");
+                  }}
+                >
+                  {t("profilePage.editProfile")}
+                </Button>
+              </div>
+            )}
+            <h4>{t("profilePage.description")}</h4>
             {profileData != null && <div>{profileData.description}</div>}
-            {/* {isMyProfile == true &&
-              hasClientProfile != null &&
-              (hasClientProfile ? (
-                <div>
-                  <h3>Currently you do not have caretaker profile</h3>
-                  <a>+ Create caretaker profile</a>
-                </div>
-              ) : (
-                <div>
-                  <a>Visit your client profile</a>
-                </div>
-              ))} */}
 
             {isMyProfile == true && (
               <div>
-                <button
+                <Button
+                  type="primary"
+                  className="profile-action-button"
                   onClick={() => {
                     store.user.setSelectedProfile("CLIENT");
                     store.user.saveProfileToStorage(store.user.profile);
                     navigate("/profile-client");
                   }}
                 >
-                  <h3>Change to client profile</h3>
-                </button>
+                  {t("profilePage.changeToClientProfile")}
+                </Button>
               </div>
             )}
             <div>
-              <h1>Comments</h1>
+              <div className="profile-offers-smaller-screen">
+                <h1>{t("profilePage.offers")}</h1>
+                {/* divider */}
+                {profileData != null ? (
+                  profileData.offers.length > 0 ? (
+                    profileData.offers.map((element, index) => (
+                      <div
+                        key={index}
+                        className="profile-offer-card-smaller-screen"
+                      >
+                        <OfferCard
+                          offer={element}
+                          handleUpdateOffer={(e, b) => {}}
+                          canBeEdited={isMyProfile ?? false}
+                        />
+                      </div>
+                    ))
+                  ) : (
+                    <div className="profile-no-offers">
+                      <Card>
+                        <div>{t("profilePage.noOffersToShow")}</div>
+                        {isMyProfile == true && (
+                          <div className="profile-no-offers-add-offer-button">
+                            <Button type="primary" className="add-button">
+                              + {t("profilePage.addOffer")}
+                            </Button>
+                          </div>
+                        )}
+                      </Card>
+                    </div>
+                  )
+                ) : null}
+              </div>
+
+              <h1>{t("profilePage.ratings")}</h1>
               {/* divider */}
               {isMyProfile == false && (
-                <Button type="primary">Add comment</Button>
-              )}
-              {testList.map((element, index) => (
-                <div key={index}>
-                  <CommentContainer />
+                <div className="profile-add-a-comment">
+                  <Button type="primary" className="add-button">
+                    {t("profilePage.rate")}
+                  </Button>
                 </div>
-              ))}
+              )}
+
+              <div className="profile-comments-container">
+                {ratings != null ? (
+                  ratings.content.length > 0 ? (
+                    ratings!.content.map((element, index) => (
+                      <div key={index}>
+                        <CommentContainer
+                          clientEmail={element.clientEmail}
+                          caretakerEmail={element.caretakerEmail}
+                          rating={element.rating}
+                          comment={element.comment}
+                        />
+                      </div>
+                    ))
+                  ) : (
+                    <div>{t("profilePage.noRatingsToShow")}</div>
+                  )
+                ) : null}
+              </div>
+              {ratings != null && ratings.content.length > 0 && (
+                <div className="profile-comments-page">
+                  <div className="profile-comments-page-buttons">
+                    <Button
+                      type="primary"
+                      className="profile-action-button"
+                      onClick={() => {
+                        if (page > 0) {
+                          setPage((prevPage) => prevPage - 1);
+                        }
+                      }}
+                    >
+                      {"<"}
+                    </Button>
+                    <Button
+                      type="primary"
+                      className="profile-action-button"
+                      onClick={() => {
+                        if (ratings != null) {
+                          if (
+                            page + 1 <
+                            Math.floor(profileData.numberOfRatings / size)
+                          ) {
+                            setPage((prevPage) => prevPage + 1);
+                          }
+                        }
+                      }}
+                    >
+                      {">"}
+                    </Button>
+                  </div>
+                  <div>
+                    {t("profilePage.page")}:{" "}
+                    {`${page + 1} / ${Math.floor(
+                      profileData.numberOfRatings / size
+                    )}`}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
           <div className="profile-right">
-            <h1>Offers</h1>
+            <h1>{t("profilePage.offers")}</h1>
             <div className="profile-right-offers">
               {/* divider */}
               {profileData != null ? (
@@ -178,18 +312,22 @@ const CaretakerProfile: React.FC = () => {
                       <OfferCard
                         offer={element}
                         handleUpdateOffer={(e, b) => {}}
-                        // canBeEdited={isMyProfile}
+                        canBeEdited={isMyProfile ?? false}
                       />
                     </div>
                   ))
                 ) : (
-                  <div>
-                    <div>Currently there are no offers to show</div>
-                    {isMyProfile == true && (
-                      <button>
-                        <h3>+ Add offer</h3>
-                      </button>
-                    )}
+                  <div className="profile-no-offers">
+                    <Card>
+                      <div>{t("profilePage.noOffersToShow")}</div>
+                      {isMyProfile == true && (
+                        <div className="profile-no-offers-add-offer-button">
+                          <Button type="primary" className="add-button">
+                            + {t("profilePage.addOffer")}
+                          </Button>
+                        </div>
+                      )}
+                    </Card>
                   </div>
                 )
               ) : null}
