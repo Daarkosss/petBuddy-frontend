@@ -65,7 +65,7 @@ function ClientProfile() {
                   </div>
                 </div>
                 <div>
-                  <h2>{t("profilePage.userCaretakerProfile")}</h2>
+                  <h2>{t("profilePage.userClientProfile")}</h2>
                   <RoundedLine
                     width={"100%"}
                     height={"2px"}
