@@ -235,7 +235,7 @@ class API {
       if (sortBy != null) {
         endpoint = endpoint.concat("", `&sortBy=${sortBy}`);
       }
-      const response = await this.authorizedFetch<CaretakerRatingsResponse>(
+      const response = await this.fetch<CaretakerRatingsResponse>(
         "GET",
         endpoint
       );
