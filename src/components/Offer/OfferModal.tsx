@@ -14,7 +14,7 @@ import MultiCalendar from "../Calendar/MultiCalendar";
 
 type OfferModalProps = {
   offer: OfferWithId;
-  canBeEdited: boolean;
+  canBeEdited?: boolean;
   handleUpdateOffer: (updatedOffer: OfferWithId, isDeleted?: boolean) => void;
   handleUpdateConfiguration: (
     updatedConfiguration: OfferConfigurationWithId
@@ -234,7 +234,11 @@ const OfferModal: React.FC<OfferModalProps> = ({
             </div>
           ) : (
             <div>
-              <MultiCalendar dateValue={offer.availabilities} readOnly />
+              <MultiCalendar
+                dateValue={offer.availabilities}
+                readOnly
+                showRemoveButton={canBeEdited}
+              />
             </div>
           )}
         </div>

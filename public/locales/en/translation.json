@@ -141,6 +141,7 @@
 
   "date": "Date",
   "selectedDates": "Selected dates",
+  "availableDates": "Available dates",
   "loginOrRegister": "Login or register",
 
   "error": {
