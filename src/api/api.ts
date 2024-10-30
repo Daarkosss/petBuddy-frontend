@@ -197,7 +197,7 @@ class API {
     try {
       const response = await this.authorizedFetch<AccountDataDTO>(
         "GET",
-        `api/client`,
+        "api/client",
         { "Accept-Role": acceptRole }
       );
       return response;
@@ -221,18 +221,18 @@ class API {
   ): Promise<CaretakerRatingsResponse> {
     try {
       let endpoint = `api/caretaker/${email}/rating`;
-      if (page != null) {
+      if (page !== null) {
         endpoint = endpoint.concat(`?page=${page}`);
       }
 
-      if (size != null) {
+      if (size !== null) {
         endpoint = endpoint.concat("", `&size=${size}`);
       }
-      if (sortDirection != null) {
+      if (sortDirection !== null) {
         endpoint = endpoint.concat("", `&sortDirection=${sortDirection}`);
       }
 
-      if (sortBy != null) {
+      if (sortBy !== null) {
         endpoint = endpoint.concat("", `&sortBy=${sortBy}`);
       }
       const response = await this.fetch<CaretakerRatingsResponse>(

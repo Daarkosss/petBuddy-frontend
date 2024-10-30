@@ -3,11 +3,15 @@ import testImg from "../../public/pet_buddy_logo.svg";
 import { Card, Rate } from "antd";
 import "../scss/components/_commentContainer.scss";
 import RoundedLine from "./RoundedLine";
-import { CaretakerRatingDTO } from "../types";
 
-const CommentContainer: React.FC<CaretakerRatingDTO> = ({
+interface Rating {
+  clientEmail: string;
+  rating: number;
+  comment: string;
+}
+
+const CommentContainer: React.FC<Rating> = ({
   clientEmail,
-  caretakerEmail,
   rating,
   comment,
 }) => {

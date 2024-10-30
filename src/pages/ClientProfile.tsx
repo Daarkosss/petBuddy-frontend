@@ -1,26 +1,18 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import store from "../store/RootStore";
 import "../scss/pages/_profile.scss";
 import testImg from "../../public/pet_buddy_logo.svg";
-import { Button, Card, Rate } from "antd";
-import CommentContainer from "../components/CommentContainer";
+import { Button, Card } from "antd";
 import RoundedLine from "../components/RoundedLine";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { api } from "../api/api";
-import { CaretakerDetailsDTO, UserProfiles } from "../types";
+import { UserProfiles } from "../types";
 
 function ClientProfile() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  // const location = useLocation();
-
-  // const { userEmail } = location.state || {};
-  // const { isUserProfile } = location.state || {};
-  // const [isProfileDataFetched, setIsProfileDataFetched] = useState(false);
   const [profileData, setProfileData] = useState<UserProfiles>();
-
-  // const testList = [1, 2, 3, 4, 5, 6, 7];
 
   const getClientDetails = () => {
     api.getUserProfiles().then((data) => {
@@ -41,7 +33,7 @@ function ClientProfile() {
   }, []);
   return (
     <div>
-      {profileData != null ? (
+      {profileData !== null && profileData !== undefined ? (
         <div className="profile-container">
           <div className="profile-left-data">
             <div className="profile-left-upper-container">

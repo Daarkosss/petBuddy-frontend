@@ -21,7 +21,7 @@ const CaretakerProfile: React.FC = () => {
   const [isMyProfile, setIsMyProfile] = useState<boolean | null>(null);
 
   const [page, setPage] = useState<number>(0);
-  const [size, setSize] = useState<number>(10);
+  const size = 10;
   const [ratings, setRatings] = useState<CaretakerRatingsResponse>();
 
   const getCaretakerDetails = (email: string) => {
@@ -41,9 +41,9 @@ const CaretakerProfile: React.FC = () => {
   };
 
   useEffect(() => {
-    if (isMyProfile != null) {
+    if (isMyProfile !== null) {
       getCaretakerRatings(
-        isMyProfile == true ? store.user.profile!.selected_profile : userEmail,
+        isMyProfile === true ? store.user.profile!.selected_profile : userEmail,
         page,
         size
       );
@@ -55,8 +55,8 @@ const CaretakerProfile: React.FC = () => {
 
     //if user is visiting their profile
     if (
-      userEmail == null ||
-      userEmail == store.user.profile?.selected_profile
+      userEmail === null ||
+      userEmail === store.user.profile?.selected_profile
     ) {
       //user is visiting their proifle
       setIsMyProfile(true);
@@ -70,25 +70,23 @@ const CaretakerProfile: React.FC = () => {
       }
     } else {
       //if userEmail has been provided
-      if (userEmail != null) {
+      if (userEmail !== null) {
         getCaretakerDetails(userEmail);
         getCaretakerRatings(userEmail, page, size);
         setIsMyProfile(false);
       }
-
-      //else -> not allowed navigation, redirect needed
     }
   }, []);
   return (
     <div>
-      {profileData != null ? (
+      {profileData !== null && profileData !== undefined ? (
         <div className="profile-container">
           <div className="profile-left-data">
             <div className="profile-left-upper-container">
               <div>
                 <img src={testImg} className="profile-image" />
 
-                {isMyProfile == true && (
+                {isMyProfile === true && (
                   <Button type="primary" className="profile-action-button">
                     {t("profilePage.changeImage")}
                   </Button>
@@ -106,7 +104,7 @@ const CaretakerProfile: React.FC = () => {
                   <span>
                     (
                     {`${
-                      profileData.avgRating != null ? profileData.avgRating : 0
+                      profileData.avgRating !== null ? profileData.avgRating : 0
                     }/ 5.0`}
                     )
                   </span>
@@ -114,14 +112,14 @@ const CaretakerProfile: React.FC = () => {
                     disabled
                     allowHalf
                     value={
-                      profileData.avgRating != null ? profileData.avgRating : 0
+                      profileData.avgRating !== null ? profileData.avgRating : 0
                     }
                     className="profile-rating-stars"
                   />
                   <span>({profileData.numberOfRatings})</span>
                 </div>
                 <div className="profile-actions">
-                  {isMyProfile == false &&
+                  {isMyProfile === false &&
                     store.user.profile?.selected_profile === "CLIENT" && (
                       <div className="profile-actions">
                         <Button
@@ -149,7 +147,7 @@ const CaretakerProfile: React.FC = () => {
                 backgroundColor="#003459"
               />
             </div>
-            {isMyProfile == true && (
+            {isMyProfile === true && (
               <div>
                 <Button
                   type="primary"
@@ -163,9 +161,11 @@ const CaretakerProfile: React.FC = () => {
               </div>
             )}
             <h4>{t("profilePage.description")}</h4>
-            {profileData != null && <div>{profileData.description}</div>}
+            {profileData !== null && profileData !== undefined && (
+              <div>{profileData.description}</div>
+            )}
 
-            {isMyProfile == true && (
+            {isMyProfile === true && (
               <div>
                 <Button
                   type="primary"
@@ -184,7 +184,7 @@ const CaretakerProfile: React.FC = () => {
               <div className="profile-offers-smaller-screen">
                 <h1>{t("profilePage.offers")}</h1>
                 {/* divider */}
-                {profileData != null ? (
+                {profileData !== null && profileData !== undefined ? (
                   profileData.offers.length > 0 ? (
                     profileData.offers.map((element, index) => (
                       <div
@@ -193,7 +193,7 @@ const CaretakerProfile: React.FC = () => {
                       >
                         <OfferCard
                           offer={element}
-                          handleUpdateOffer={(e, b) => {}}
+                          handleUpdateOffer={() => {}}
                           canBeEdited={isMyProfile ?? false}
                         />
                       </div>
@@ -202,7 +202,7 @@ const CaretakerProfile: React.FC = () => {
                     <div className="profile-no-offers">
                       <Card>
                         <div>{t("profilePage.noOffersToShow")}</div>
-                        {isMyProfile == true && (
+                        {isMyProfile === true && (
                           <div className="profile-no-offers-add-offer-button">
                             <Button type="primary" className="add-button">
                               + {t("profilePage.addOffer")}
@@ -217,8 +217,8 @@ const CaretakerProfile: React.FC = () => {
 
               <h1>{t("profilePage.ratings")}</h1>
               {/* divider */}
-              {isMyProfile == false &&
-                store.user.profile?.selected_profile != "CARETAKER" && (
+              {isMyProfile === false &&
+                store.user.profile?.selected_profile !== "CARETAKER" && (
                   <div className="profile-add-a-comment">
                     <Button type="primary" className="add-button">
                       {t("profilePage.rate")}
@@ -227,13 +227,12 @@ const CaretakerProfile: React.FC = () => {
                 )}
 
               <div className="profile-comments-container">
-                {ratings != null ? (
+                {ratings !== null && ratings !== undefined ? (
                   ratings.content.length > 0 ? (
                     ratings!.content.map((element, index) => (
                       <div key={index}>
                         <CommentContainer
                           clientEmail={element.clientEmail}
-                          caretakerEmail={element.caretakerEmail}
                           rating={element.rating}
                           comment={element.comment}
                         />
@@ -244,45 +243,47 @@ const CaretakerProfile: React.FC = () => {
                   )
                 ) : null}
               </div>
-              {ratings != null && ratings.content.length > 0 && (
-                <div className="profile-comments-page">
-                  <div className="profile-comments-page-buttons">
-                    <Button
-                      type="primary"
-                      className="profile-action-button"
-                      onClick={() => {
-                        if (page > 0) {
-                          setPage((prevPage) => prevPage - 1);
-                        }
-                      }}
-                    >
-                      {"<"}
-                    </Button>
-                    <Button
-                      type="primary"
-                      className="profile-action-button"
-                      onClick={() => {
-                        if (ratings != null) {
-                          if (
-                            page + 1 <
-                            Math.floor(profileData.numberOfRatings / size)
-                          ) {
-                            setPage((prevPage) => prevPage + 1);
+              {ratings !== null &&
+                ratings !== undefined &&
+                ratings.content.length > 0 && (
+                  <div className="profile-comments-page">
+                    <div className="profile-comments-page-buttons">
+                      <Button
+                        type="primary"
+                        className="profile-action-button"
+                        onClick={() => {
+                          if (page > 0) {
+                            setPage((prevPage) => prevPage - 1);
                           }
-                        }
-                      }}
-                    >
-                      {">"}
-                    </Button>
+                        }}
+                      >
+                        {"<"}
+                      </Button>
+                      <Button
+                        type="primary"
+                        className="profile-action-button"
+                        onClick={() => {
+                          if (ratings !== null) {
+                            if (
+                              page + 1 <
+                              Math.floor(profileData.numberOfRatings / size)
+                            ) {
+                              setPage((prevPage) => prevPage + 1);
+                            }
+                          }
+                        }}
+                      >
+                        {">"}
+                      </Button>
+                    </div>
+                    <div>
+                      {t("profilePage.page")}:{" "}
+                      {`${page + 1} / ${Math.floor(
+                        profileData.numberOfRatings / size
+                      )}`}
+                    </div>
                   </div>
-                  <div>
-                    {t("profilePage.page")}:{" "}
-                    {`${page + 1} / ${Math.floor(
-                      profileData.numberOfRatings / size
-                    )}`}
-                  </div>
-                </div>
-              )}
+                )}
             </div>
           </div>
 
@@ -296,7 +297,7 @@ const CaretakerProfile: React.FC = () => {
                     <div key={index}>
                       <OfferCard
                         offer={element}
-                        handleUpdateOffer={(e, b) => {}}
+                        handleUpdateOffer={() => {}}
                         canBeEdited={isMyProfile ?? false}
                       />
                     </div>
@@ -305,7 +306,7 @@ const CaretakerProfile: React.FC = () => {
                   <div className="profile-no-offers">
                     <Card>
                       <div>{t("profilePage.noOffersToShow")}</div>
-                      {isMyProfile == true && (
+                      {isMyProfile === true && (
                         <div className="profile-no-offers-add-offer-button">
                           <Button type="primary" className="add-button">
                             + {t("profilePage.addOffer")}
