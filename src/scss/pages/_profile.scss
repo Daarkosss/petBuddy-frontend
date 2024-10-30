@@ -80,6 +80,12 @@
         margin-bottom: 20px;
       }
 
+      .profile-offer-card-smaller-screen {
+        display: flex;
+        justify-content: center;
+        overflow-x: auto;
+      }
+
       .profile-no-offers {
         display: flex;
         flex-direction: column;
