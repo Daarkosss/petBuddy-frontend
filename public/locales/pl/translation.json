@@ -17,6 +17,8 @@
   "medium": "Średni",
   "big": "Duży",
 
+  "dangerous": "Niebezpieczny?",
+
   "search": "Szukaj",
   "filters": "Filtry",
   "price": "Cena",
@@ -152,7 +154,8 @@
     "editConfiguration": "Wystąpił błąd podczas edycji konfiguracji",
     "addConfiguration": "Wystąpił błąd podczas tworzenia konfiguracji",
     "duplicateConfiguration": "Konfiguracja z wybranymi parametrami juz istnieje",
-    "setAvailabilityForOffers": "Wystąpił bład podczas ustawiania dostępności dla ofert"
+    "setAvailabilityForOffers": "Wystąpił bład podczas ustawiania dostępności dla ofert",
+    "getCaretakers": "Wystąpił bład podczas pobrania opiekunów"
   },
 
   "success": {
@@ -212,5 +215,6 @@
   },
 
   "availabilityAlert": "Dostępność zostanie nadpisana wybranymi datami dla wszystkich ofert, które zaznaczysz.",
+  "oneAvailabilityForAllAnimals": "Jedna dostępność dla wszystkich zwierząt",
   "noData": "Brak danych"
 }

@@ -1,9 +1,10 @@
 import { PageableDTO, SortDTO } from "./pagination.types";
 import { AccountDataDTO } from "./user.types";
 import {
-  Availabilities,
+  AvailabilityValues,
   OfferConfiguration,
   OfferDTOWithId,
+  OfferWithId,
 } from "./offer.types";
 
 export type CaretakerRatingDTO = {
@@ -46,6 +47,10 @@ export type CaretakerDetailsDTO = CaretakerBasicsDTO & {
   phoneNumber: string;
   description: string;
   offers: OfferDTOWithId[];
+};
+
+export type CaretakerDetails = Omit<CaretakerDetailsDTO, "offers"> & {
+  offers: OfferWithId[];
 };
 
 export type AddressDTO = {
@@ -94,12 +99,13 @@ export type CaretakerSearchFilters = {
   cityLike?: string;
   voivodeship?: string;
   animals?: AnimalFilter[];
+  availabilities?: AvailabilityValues;
 };
 
 export type AnimalFilter = {
   animalType: string;
   offerConfigurations: OfferConfiguration[];
-  availabilities?: Availabilities;
+  availabilities?: AvailabilityValues;
 };
 
 export type CaretakerFormFields = {

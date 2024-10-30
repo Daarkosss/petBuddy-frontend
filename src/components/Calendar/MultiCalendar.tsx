@@ -1,16 +1,28 @@
 import { useTranslation } from "react-i18next";
-import { Calendar, DateObject, Value } from "react-multi-date-picker"
-import DatePanel from "react-multi-date-picker/plugins/date_panel"
+import { Calendar, DateObject } from "react-multi-date-picker"
+import DatePanel, { DatePanelProps } from "react-multi-date-picker/plugins/date_panel"
 import { calendar_en, calendar_pl } from "./calendarTranslations";
+import { AvailabilityValues } from "../../types";
 
 interface CalendarProps {
-  dateValue: Value[][] | undefined;
-  handleChange?: (availabilities: Value[][]) => void;
+  dateValue: string[][] | undefined;
+  handleChange?: (availabilities: AvailabilityValues) => void;
   readOnly?: boolean;
+  datePanelPosition?: DatePanelProps["position"];
 }
 
-const MultiCalendar: React.FC<CalendarProps> = ({dateValue, handleChange, readOnly=false}) => {
+const MultiCalendar: React.FC<CalendarProps> = ({
+  dateValue, handleChange, readOnly=false, datePanelPosition="right"
+}) => {
   const { i18n, t } = useTranslation();
+
+  const handleValueChange = (availabilities: DateObject[][]) => {
+    if (handleChange) {
+      handleChange(availabilities.map(
+        (availability) => availability.map((date) => date.format("YYYY-MM-DD"))
+      ));
+    }
+  };
 
   return (
     <Calendar
@@ -20,10 +32,10 @@ const MultiCalendar: React.FC<CalendarProps> = ({dateValue, handleChange, readOn
       readOnly={readOnly}
       format="YYYY-MM-DD"
       locale={i18n.language === "pl" ? calendar_pl : calendar_en}
-      onChange={handleChange}
+      onChange={handleValueChange}
       minDate={new DateObject().add(1, "days")} // Tomorrow
       plugins={[
-        <DatePanel style={{ width: 200 }} header={t("selectedDates")} />]}
+        <DatePanel header={t("selectedDates")} position={datePanelPosition} style={{ minWidth: 150 }}/>]}
     />
   )
 }

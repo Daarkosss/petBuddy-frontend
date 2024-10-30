@@ -30,7 +30,7 @@ const CaretakerForm = () => {
 
   useEffect(() => {
     if (store.user.profile?.email && store.user.profile?.hasCaretakerProfile) {
-      api.getCaretakerDetails(store.user.profile?.email).then((data) => {
+      api.getCurrentCaretakerDetails().then((data) => {
         form.setFieldsValue(data);
       });
     }

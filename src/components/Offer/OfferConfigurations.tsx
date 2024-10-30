@@ -12,7 +12,7 @@ import {
 import {
   OfferConfigurationWithId,
   OfferConfigurationWithOptionalId,
-  OfferDTOWithId,
+  OfferWithId,
 } from "../../types";
 import { useTranslation } from "react-i18next";
 import { api } from "../../api/api";
@@ -22,7 +22,7 @@ import _ from "lodash";
 type ConfigurationsProps = {
   offerId: number;
   configurations: OfferConfigurationWithOptionalId[];
-  handleUpdateOffer: (newOffer: OfferDTOWithId) => void;
+  handleUpdateOffer: (newOffer: OfferWithId) => void;
   handleUpdateConfiguration: (newOffer: OfferConfigurationWithId) => void;
   canBeEdited: boolean;
 };
