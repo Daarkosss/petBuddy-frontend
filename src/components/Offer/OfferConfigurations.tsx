@@ -24,6 +24,7 @@ type ConfigurationsProps = {
   configurations: OfferConfigurationWithOptionalId[];
   handleUpdateOffer: (newOffer: OfferDTOWithId) => void;
   handleUpdateConfiguration: (newOffer: OfferConfigurationWithId) => void;
+  canBeEdited: boolean;
 };
 
 const OfferConfigurations: React.FC<ConfigurationsProps> = ({
@@ -31,6 +32,7 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
   configurations,
   handleUpdateOffer,
   handleUpdateConfiguration,
+  canBeEdited = true,
 }) => {
   const { t } = useTranslation();
   const [editingKey, setEditingKey] = useState<number | null | undefined>(
@@ -256,7 +258,6 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
       }),
       render: (values: string[], record: OfferConfigurationWithOptionalId) => {
         const editable = isEditing(record);
-        console.log(`values ${values}`);
         return editable ? (
           <Form.Item
             name={["selectedOptions", "SIZE"]}
@@ -277,54 +278,66 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
       },
     },
     {
-      title: t("manage"),
+      title: canBeEdited ? t("manage") : t("requestCare"),
       onCell: () => ({
         style: { minWidth: 150, maxWidth: 200 },
       }),
       render: (record: OfferConfigurationWithOptionalId) => {
         const editable = isEditing(record);
-        return editable ? (
-          <Space size="small">
-            <Button
-              type="primary"
-              onClick={
-                record.id
-                  ? () => handleSaveEditRow(record.id!)
-                  : handleSaveNewRow
-              }
-              loading={isLoading}
-            >
-              {t("save")}
-            </Button>
-            <Button onClick={handleCancelNewRow}>{t("cancel")}</Button>
-          </Space>
-        ) : (
-          <Space size="small">
-            <Button
-              type="primary"
-              onClick={() => handleEdit(record)}
-              disabled={editingKey !== undefined}
-            >
-              {t("edit")}
-            </Button>
-            <Popconfirm
-              title={t("deleteConfiguration")}
-              description={t("confirmConfigurationDelete")}
-              onConfirm={() => handleDelete(record.id!)}
-              okText={t("yes")}
-              cancelText={t("no")}
-              disabled={editingKey !== undefined}
-            >
+        return canBeEdited ? (
+          editable ? (
+            <Space size="small">
               <Button
                 type="primary"
-                danger
+                onClick={
+                  record.id
+                    ? () => handleSaveEditRow(record.id!)
+                    : handleSaveNewRow
+                }
                 loading={isLoading}
+              >
+                {t("save")}
+              </Button>
+              <Button onClick={handleCancelNewRow}>{t("cancel")}</Button>
+            </Space>
+          ) : (
+            <Space size="small">
+              <Button
+                type="primary"
+                onClick={() => handleEdit(record)}
                 disabled={editingKey !== undefined}
               >
-                {t("delete")}
+                {t("edit")}
               </Button>
-            </Popconfirm>
-          </Space>
+              <Popconfirm
+                title={t("deleteConfiguration")}
+                description={t("confirmConfigurationDelete")}
+                onConfirm={() => handleDelete(record.id!)}
+                okText={t("yes")}
+                cancelText={t("no")}
+                disabled={editingKey !== undefined}
+              >
+                <Button
+                  type="primary"
+                  danger
+                  loading={isLoading}
+                  disabled={editingKey !== undefined}
+                >
+                  {t("delete")}
+                </Button>
+              </Popconfirm>
+            </Space>
+          )
+        ) : (
+          <Button
+            type="primary"
+            onClick={
+              record.id ? () => handleSaveEditRow(record.id!) : handleSaveNewRow
+            }
+            loading={isLoading}
+          >
+            {t("sendRequest")}
+          </Button>
         );
       },
     },
@@ -347,7 +360,7 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
           scroll={{ x: "max-content" }}
         />
       </Form>
-      {editingKey === undefined && (
+      {editingKey === undefined && canBeEdited && (
         <Button
           type="primary"
           className="add-configuration-button"

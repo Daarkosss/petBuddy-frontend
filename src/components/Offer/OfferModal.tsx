@@ -15,6 +15,7 @@ import MultiCalendar from "../Calendar/MultiCalendar";
 
 type OfferModalProps = {
   offer: OfferDTOWithId;
+  canBeEdited: boolean;
   handleUpdateOffer: (
     updatedOffer: OfferDTOWithId,
     isDeleted?: boolean
@@ -32,8 +33,8 @@ const OfferModal: React.FC<OfferModalProps> = ({
   handleUpdateConfiguration,
   isModalOpen,
   closeModal,
+  canBeEdited = true,
 }) => {
-  console.log(`oferta: ${JSON.stringify(offer)}`);
   const [isEditingDescription, setIsEditingDescription] = useState(false);
   const [isEditingAmenities, setIsEditingAmenities] = useState(false);
   const [isEditingAvailability, setIsEditingAvailability] = useState(false);
@@ -129,7 +130,9 @@ const OfferModal: React.FC<OfferModalProps> = ({
     <Modal
       title={
         <div className="offer-modal-title">
-          {t(`yourOffers.${offer.animal.animalType.toLowerCase()}`)}
+          {canBeEdited
+            ? t(`yourOffers.${offer.animal.animalType.toLowerCase()}`)
+            : t(`caretakerOffers.${offer.animal.animalType.toLowerCase()}`)}
         </div>
       }
       open={isModalOpen}
@@ -142,7 +145,7 @@ const OfferModal: React.FC<OfferModalProps> = ({
         <div className="offer-field">
           <div className="label">
             {t("description")}
-            {!isEditingDescription && (
+            {!isEditingDescription && canBeEdited && (
               <EditOutlined onClick={handleStartEditingDescription} />
             )}
           </div>
@@ -179,7 +182,7 @@ const OfferModal: React.FC<OfferModalProps> = ({
         <div className="offer-field">
           <div className="label">
             {t("amenities")}
-            {!isEditingAmenities && (
+            {!isEditingAmenities && canBeEdited && (
               <EditOutlined onClick={handleStartEditingAmenities} />
             )}
           </div>
@@ -224,7 +227,7 @@ const OfferModal: React.FC<OfferModalProps> = ({
         <div className="offer-field">
           <div className="label">
             {t("availability")}
-            {!isEditingAvailability && (
+            {!isEditingAvailability && canBeEdited && (
               <EditOutlined onClick={handleStartEditingAvailability} />
             )}
           </div>
@@ -270,6 +273,7 @@ const OfferModal: React.FC<OfferModalProps> = ({
                   configurations={offer.offerConfigurations}
                   handleUpdateOffer={handleUpdateOffer}
                   handleUpdateConfiguration={handleUpdateConfiguration}
+                  canBeEdited={canBeEdited}
                 />
               ),
             },
