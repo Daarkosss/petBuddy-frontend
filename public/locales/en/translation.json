@@ -6,7 +6,7 @@
   "cat": "Cat",
   "bird": "Bird",
   "reptile": "Reptile",
-  "horse": "Horse",
+  "fish": "Fish",
 
   "sex": "Sex",
   "male": "Male",
@@ -16,6 +16,8 @@
   "small": "Small",
   "medium": "Medium",
   "big": "Big",
+
+  "dangerous": "Dangerous?",
 
   "search": "Search",
   "filters": "Filters",
@@ -31,7 +33,8 @@
   "amenityTypes": {
     "toys": "Toys",
     "scratching post": "Scratching Post",
-    "cage": "Cage"
+    "cage": "Cage",
+    "garden": "Garden"
   },
 
   "address": "Address",
@@ -68,11 +71,6 @@
   
   "perPage": "per page",
 
-  "loginPage": {
-    "proceedInfo": "To proceed you must be logged in",
-    "loginOrRegister": "Login or register with Keycloak"
-  },
-
   "profileSelection": {
     "title": "Choose your profile",
     "client": "Client",
@@ -94,7 +92,11 @@
 
   "description": "Description",
   "upload": "Upload",
-  "uploadImages": "Upload images",
+  "offerPhotos": "Offer photos",
+  "currentPhotos": "Current photos",
+  "newPhotos": "New photos",
+  "photosLimitMessage": "Photos limit",
+  "photosLimitDescription": "You reached the limit of photos (10). Delete some photos to add new ones.",
   "save": "Save",
   "cancel": "Cancel",
 
@@ -123,6 +125,7 @@
   "error": {
     "createCaretakerProfile": "An error occurred while creating caretaker profile",
     "editCaretakerForm": "An error occurred while editing caretaker data",
+    "wrongFileTypeForPhoto": "Wrong file type for photo. Only: jpeg, jpg, png and webp files are allowed.",
     "addOffer": "An error occurred while creating offer",
     "editOffer": "An error occurred while updating offer",
     "loadOffers": "An error occurred while loading offers",
@@ -131,7 +134,8 @@
     "editConfiguration": "An error occurred while updating configuration",
     "addConfiguration": "An error occurred while creating configuration",
     "duplicateConfiguration": "Configuration with these selected options already exists",
-    "setAvailabilityForOffers": "An error occurred while setting availability for selected offers"
+    "setAvailabilityForOffers": "An error occurred while setting availability for selected offers",
+    "getCaretakers": "An error occurred while loading caretakers"
   },
 
   "success": {
@@ -181,5 +185,10 @@
   },
 
   "availabilityAlert": "Availability will be overwritten with selected dates for all offers, you choose.",
-  "noData": "No data"
+  "noData": "No data",
+  "noConfigurations": "No configurations",
+
+  "imageCropperTitle": "Adjust image",
+  "apply": "Apply",
+  "oneAvailabilityForAllAnimals": "One availability for all animals"
 }

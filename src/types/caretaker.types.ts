@@ -1,6 +1,6 @@
 import { PageableDTO, SortDTO } from "./pagination.types";
-import { AccountDataDTO } from "./user.types";
-import { Availabilities, OfferConfiguration, OfferDTOWithId } from "./offer.types";
+import { AccountDataDTO, Photo } from "./user.types";
+import { AvailabilityValues, OfferConfiguration, OfferDTOWithId, OfferWithId } from "./offer.types";
 
 export type CaretakerBasicsDTO = {
   accountData: AccountDataDTO;
@@ -14,6 +14,11 @@ export type CaretakerDetailsDTO = CaretakerBasicsDTO & {
   phoneNumber: string;
   description: string;
   offers: OfferDTOWithId[];
+  offerPhotos: Photo[];
+}
+
+export type CaretakerDetails = Omit<CaretakerDetailsDTO, "offers"> & {
+  offers: OfferWithId[];
 }
 
 export type AddressDTO = {
@@ -62,12 +67,13 @@ export type CaretakerSearchFilters = {
   cityLike?: string;
   voivodeship?: string;
   animals?: AnimalFilter[];
+  availabilities?: AvailabilityValues;
 }
 
 export type AnimalFilter = {
   animalType: string;
   offerConfigurations: OfferConfiguration[];
-  availabilities?: Availabilities;
+  availabilities?: AvailabilityValues;
 };
 
 export type CaretakerFormFields = {

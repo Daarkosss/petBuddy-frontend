@@ -1,13 +1,13 @@
 import { toast } from "react-toastify";
 import store from "../store/RootStore";
 import { 
-  CaretakerBasicsResponse, CaretakerSearchFilters, PagingParams, CaretakerFormFields, UserProfiles,
-  CaretakerDetailsDTO, OfferDTO, OfferConfigurationDTO, EditOfferDescription, Availabilities,
-  SetAvailabilityDTO,
-  OfferDTOWithId,
-  OfferConfigurationWithId
+  CaretakerBasicsResponse, CaretakerSearchFilters, PagingParams, CaretakerFormFields, UserProfiles, CaretakerDetailsDTO,
+  OfferDTO, OfferConfigurationDTO, EditOfferDescription, AvailabilityRanges, SetAvailabilityDTO, OfferDTOWithId, 
+  OfferConfigurationWithId, CaretakerDetails, OfferWithId
 } from "../types";
 import { CareReservation } from "../types/care.types";
+import { AnimalConfigurationsDTO } from "../types/animal.types";
+import { UploadFile } from "antd";
 
 const backendHost =
   import.meta.env.VITE_BACKEND_HOST || window.location.hostname;
@@ -16,13 +16,13 @@ export const PATH_PREFIX = `http://${backendHost}:${backendPort}/`;
 
 type Method = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
-export type User = {
-  _id: string;
-  name: string;
-  email: string;
-};
-
 class API {
+  constructor() {
+    this.getAnimalsConfigurations().then((animalConfigurations) => {
+      store.animal.allAnimalConfigurations = animalConfigurations;
+    });
+  }
+
   async fetch<T>(
     method: Method,
     path: string,
@@ -65,6 +65,34 @@ class API {
     } else {
       toast.error("No user token available");
       return Promise.reject(new Error("No user token available"));
+    }
+  }
+
+  async authorizedMultipartFetch<T>(
+    method: Method,
+    path: string,
+    formData: FormData,
+    headers?: HeadersInit
+  ): Promise<T> {
+    const options = {
+      method,
+      headers: {
+        ...headers,
+        "X-XSRF-TOKEN": store.user.xsrfToken,
+        Authorization: `Bearer ${store.user.jwtToken}`,
+      },
+      body: formData,
+      credentials: "include",
+    } as RequestInit;
+
+    const response = await fetch(`${PATH_PREFIX}${path}`, options);
+    const data = await response.json();
+
+    if (!response.ok) {
+      toast.error(data.message || "Wrong server response!");
+      throw new Error(data.message || "Wrong server response!");
+    } else {
+      return data;
     }
   }
 
@@ -115,7 +143,6 @@ class API {
     }
 
     const queryString = queryParams.toString();
-
     const requestBody = filters.animals?.map((animal) => ({
       animalType: animal.animalType,
       offerConfigurations: animal.offerConfigurations.map((offer) => ({
@@ -123,12 +150,12 @@ class API {
         minPrice: offer.minPrice ? offer.minPrice : 0.01,
         maxPrice: offer.maxPrice ? offer.maxPrice : 99999.99,
       })),
-      availabilities: animal.availabilities,
+      availabilities: filters.availabilities ? this.convertValuesToAvailabilityRanges(filters.availabilities) : [],
     }));
 
     return this.fetch<CaretakerBasicsResponse>(
       "POST",
-      `api/caretaker?${queryString}`,
+      `api/caretaker/all?${queryString}`,
       requestBody
     );
   }
@@ -148,13 +175,16 @@ class API {
     }
   }
 
-  async getCaretakerDetails(email: string): Promise<CaretakerDetailsDTO> {
+  async getCaretakerDetails(email: string): Promise<CaretakerDetails> {
     try {
       const response = await this.fetch<CaretakerDetailsDTO>(
         "GET",
         `api/caretaker/${email}`
       );
-      return response;
+      return {
+        ...response,
+        offers: this.convertOffersAvailabilities(response.offers)
+      };
     } catch (error: unknown) {
       if (error instanceof Error) {
         throw new Error(`Failed to fetch caretaker profile: ${error.message}`);
@@ -165,25 +195,90 @@ class API {
     }
   }
 
-  async addCaretakerProfile(data: CaretakerFormFields): Promise<void> {
-    return this.authorizedFetch<void>(
+  async getCurrentCaretakerDetails(): Promise<CaretakerDetails> {
+    try {
+      const response = await this.authorizedFetch<CaretakerDetailsDTO>(
+        "GET",
+        "api/caretaker",
+        undefined,
+        { "Accept-Role": "CARETAKER" }
+      );
+      return {
+        ...response,
+        offers: this.convertOffersAvailabilities(response.offers)
+      };
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new Error(`Failed to fetch caretaker profile: ${error.message}`);
+      }
+      throw new Error(
+        "An unknown error occurred while fetching caretaker profile"
+      );
+    }
+  }
+
+  async addCaretakerProfile(
+    formFields: CaretakerFormFields,
+    photos: UploadFile[]
+  ): Promise<CaretakerDetails | void> {
+    const formData = new FormData();
+    
+    const caretakerData = new Blob([JSON.stringify(formFields)], { type: "application/json" });
+    formData.append("caretakerData", caretakerData);
+    
+    photos.forEach((photo) => {
+      if (photo.originFileObj) {
+        formData.append("newOfferPhotos", photo.originFileObj);
+      }
+    })
+
+    const response = await this.authorizedMultipartFetch<CaretakerDetailsDTO>(
       "POST",
-      "api/caretaker/add",
-      data
+      "api/caretaker",
+      formData,
     );
+    return {
+      ...response,
+      offers: this.convertOffersAvailabilities(response.offers)
+    }
   }
 
-  async editCaretakerProfile(data: CaretakerFormFields): Promise<void> {
-    return this.authorizedFetch<void>(
-      "PUT",
-      "api/caretaker/edit",
-      data
-    );
+  async editCaretakerProfile(
+    formFields: CaretakerFormFields,
+    newPhotos: UploadFile[],
+    offerBlobsToKeep: string[]
+  ): Promise<CaretakerDetails | void> {
+    if (store.user.profile?.selected_profile === "CARETAKER") {
+      const formData = new FormData();
+      
+      const caretakerData = new Blob([JSON.stringify(formFields)], { type: "application/json" });
+      formData.append("caretakerData", caretakerData);
+
+      const blobsData = new Blob([JSON.stringify(offerBlobsToKeep)], { type: "application/json" });
+      formData.append("offerBlobsToKeep", blobsData); 
+      
+      newPhotos.forEach((photo) => {
+        if (photo.originFileObj) {
+          formData.append("newOfferPhotos", photo.originFileObj);
+        }
+      })
+
+      const response = await this.authorizedMultipartFetch<CaretakerDetailsDTO>(
+        "PUT",
+        "api/caretaker",
+        formData,
+        { "Accept-Role": "CARETAKER" }
+      );
+      return {
+        ...response,
+        offers: this.convertOffersAvailabilities(response.offers)
+      }
+    }
   }
 
-  async addOrEditOffer(offer: OfferDTO | EditOfferDescription): Promise<OfferDTOWithId | undefined> {
+  async addOrEditOffer(offer: OfferDTO | EditOfferDescription): Promise<OfferWithId | undefined> {
     if (store.user.profile?.selected_profile) {
-      return this.authorizedFetch<OfferDTOWithId>(
+      return this.authorizedFetch<OfferWithId>(
         "POST",
         "api/caretaker/offer/add-or-edit",
         offer,
@@ -192,20 +287,24 @@ class API {
     }
   }
 
-  async deleteOffer(offerId: number): Promise<OfferDTOWithId | undefined> {
+  async deleteOffer(offerId: number): Promise<OfferWithId | undefined> {
     if (store.user.profile?.selected_profile) {
-      return this.authorizedFetch<OfferDTOWithId>(
+      const response = await this.authorizedFetch<OfferDTOWithId>(
         "DELETE",
         `api/caretaker/offer/${offerId}`,
         undefined,
         { "Accept-Role": store.user.profile?.selected_profile }
       );
+      return {
+        ...response,
+        availabilities: this.convertAvailabilityRangesToValues(response.availabilities)
+      }
     }
   }
 
-  async setAmenitiesForOffer(offerId: number, offerAmenities: string[]): Promise<OfferDTOWithId | undefined> {
+  async setAmenitiesForOffer(offerId: number, offerAmenities: string[]): Promise<OfferWithId | undefined> {
     if (store.user.profile?.selected_profile) {
-      return this.authorizedFetch<OfferDTOWithId>(
+      return this.authorizedFetch<OfferWithId>(
         "PUT",
         `api/caretaker/offer/${offerId}/amenities`,
         offerAmenities,
@@ -226,28 +325,29 @@ class API {
   }
 
   async setAvailabilityForOffers(
-    offerIds: number[], 
-    availabilityRanges: Availabilities
-  ): Promise<OfferDTOWithId[] | undefined> {
+    offerIds: number[],
+    availabilities: string[][]
+  ): Promise<OfferWithId[] | undefined> {
     const offersWithAvailabilities: SetAvailabilityDTO = {
       offerIds,
-      availabilityRanges
+      availabilityRanges: this.convertValuesToAvailabilityRanges(availabilities)
     }
     if (store.user.profile?.selected_profile) {
-      return this.authorizedFetch<OfferDTOWithId[]>(
+      const response = await this.authorizedFetch<OfferDTOWithId[]>(
         "PUT",
         "api/caretaker/offer/availability",
         offersWithAvailabilities,
         { "Accept-Role": store.user.profile?.selected_profile }
       )
+      return this.convertOffersAvailabilities(response)
     }
   }
 
   async setAvailabilityForOffer(
     offerId: number, 
-    availabilityRanges: Availabilities
-  ): Promise<OfferDTOWithId | undefined> {
-    const response = await this.setAvailabilityForOffers([offerId], availabilityRanges);
+    availabilities: string[][]
+  ): Promise<OfferWithId | undefined> {
+    const response = await this.setAvailabilityForOffers([offerId], availabilities);
     if (response) {
       return response[0];
     }
@@ -256,14 +356,18 @@ class API {
   async addOfferConfiguration(
     offerId: number, 
     offerConfiguration: OfferConfigurationDTO
-  ): Promise<OfferDTOWithId | undefined> {
+  ): Promise<OfferWithId | undefined> {
     if (store.user.profile?.selected_profile) {
-      return this.authorizedFetch<OfferDTOWithId>(
+      const response = await this.authorizedFetch<OfferDTOWithId>(
         "POST",
         `api/caretaker/offer/${offerId}/configurations`,
         [offerConfiguration],
         { "Accept-Role": store.user.profile?.selected_profile }
       );
+      return {
+        ...response,
+        availabilities: this.convertAvailabilityRangesToValues(response.availabilities)
+      }
     }
   }
 
@@ -281,17 +385,36 @@ class API {
     }
   }
 
-  async deleteOfferConfiguration(configurationId: number): Promise<OfferDTOWithId | undefined> {
+  async deleteOfferConfiguration(configurationId: number): Promise<OfferWithId | undefined> {
     if (store.user.profile?.selected_profile) {
-      return this.authorizedFetch<OfferDTOWithId>(
+      const response = await this.authorizedFetch<OfferDTOWithId>(
         "DELETE",
         `api/caretaker/offer/configuration/${configurationId}`,
         undefined,
         { "Accept-Role": store.user.profile?.selected_profile }
       );
+      return {
+        ...response,
+        availabilities: this.convertAvailabilityRangesToValues(response.availabilities)
+      }
     }
   }
 
+  convertOffersAvailabilities = (offers: OfferDTOWithId[]): OfferWithId[] => {
+    return offers.map((offer) => this.convertOfferAvailabilities(offer));
+  }
+
+  convertOfferAvailabilities = (offer: OfferDTOWithId): OfferWithId => {
+    return {
+      ...offer,
+      availabilities: this.convertAvailabilityRangesToValues(offer.availabilities)
+    }
+  }
+
+  async getAnimalsConfigurations(): Promise<AnimalConfigurationsDTO> {
+    return this.fetch<AnimalConfigurationsDTO>("GET", "api/animal/complex");
+  }
+  
   async makeCareReservation(caretakerEmail: string, careReservation: CareReservation): Promise<void> {
     if (store.user.profile?.selected_profile === "CLIENT") {
       return this.authorizedFetch<void>(
@@ -302,6 +425,20 @@ class API {
       );
     }
   }
+  
+  convertAvailabilityRangesToValues = (availabilities: AvailabilityRanges): string[][] => {
+    return availabilities.map((availability) => [
+      availability.availableFrom,
+      availability.availableTo || availability.availableFrom,
+    ]);
+  }
+  
+  convertValuesToAvailabilityRanges = (values: string[][]): AvailabilityRanges => {
+    return values.map(([from, to]) => ({
+      availableFrom: from?.toString() || "",
+      availableTo: to?.toString() || from?.toString() || "",
+    }));
+  };
 }
 
 export const api = new API();
