@@ -5,6 +5,7 @@ import {
   OfferDTO, OfferConfigurationDTO, EditOfferDescription, AvailabilityRanges, SetAvailabilityDTO, OfferDTOWithId, 
   OfferConfigurationWithId, CaretakerDetails, OfferWithId
 } from "../types";
+import { AnimalConfigurationsDTO } from "../types/animal.types";
 import { UploadFile } from "antd";
 
 const backendHost =
@@ -15,6 +16,12 @@ export const PATH_PREFIX = `http://${backendHost}:${backendPort}/`;
 type Method = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
 class API {
+  constructor() {
+    this.getAnimalsConfigurations().then((animalConfigurations) => {
+      store.animal.allAnimalConfigurations = animalConfigurations;
+    });
+  }
+
   async fetch<T>(
     method: Method,
     path: string,
@@ -403,6 +410,10 @@ class API {
     }
   }
 
+  async getAnimalsConfigurations(): Promise<AnimalConfigurationsDTO> {
+    return this.fetch<AnimalConfigurationsDTO>("GET", "api/animal/complex");
+  }
+  
   convertAvailabilityRangesToValues = (availabilities: AvailabilityRanges): string[][] => {
     return availabilities.map((availability) => [
       availability.availableFrom,

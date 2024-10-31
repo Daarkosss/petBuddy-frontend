@@ -2,12 +2,15 @@ import React, { ChangeEvent, KeyboardEvent, useState } from "react";
 import { Button, Table, Input, Select, Space, Popconfirm, Form, TableColumnsType } from "antd";
 import { OfferConfigurationWithId, OfferConfigurationWithOptionalId, OfferWithId } from "../../types";
 import { useTranslation } from "react-i18next";
-import { api } from "../../api/api";
 import { toast } from "react-toastify";
 import _ from "lodash";
+import { api } from "../../api/api";
+import store from "../../store/RootStore";
+import { ColumnType } from "antd/es/table";
 
 type ConfigurationsProps = {
   offerId: number;
+  animalType: string;
   configurations: OfferConfigurationWithOptionalId[];
   handleUpdateOffer: (newOffer: OfferWithId) => void;
   handleUpdateConfiguration: (newOffer: OfferConfigurationWithId) => void;
@@ -15,6 +18,7 @@ type ConfigurationsProps = {
 
 const OfferConfigurations: React.FC<ConfigurationsProps> = ({
   offerId,
+  animalType,
   configurations,
   handleUpdateOffer,
   handleUpdateConfiguration
@@ -28,7 +32,7 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
     id: null,
     description: "",
     dailyPrice: 0,
-    selectedOptions: { SEX: [], SIZE: [] },
+    selectedOptions: {},
   });
 
   const isEditing = (record: OfferConfigurationWithOptionalId) => record.id === editingKey;
@@ -81,7 +85,7 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
       id: null,
       description: "",
       dailyPrice: 0,
-      selectedOptions: { SEX: [], SIZE: [] },
+      selectedOptions: {},
     });
     setEditingKey(null);
   };
@@ -148,7 +152,39 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
       form.setFieldsValue({ dailyPrice: value.slice(0, -1) });
     }
   };
-  const columns: TableColumnsType<OfferConfigurationWithOptionalId> = [
+
+  const selectedOptionsColumns: ColumnType<OfferConfigurationWithOptionalId>[] = store.animal
+    .getAnimalAttributeKeys(animalType)
+    .map((attributeKey) => ({
+      title: t(attributeKey.toLowerCase()),
+      dataIndex: ["selectedOptions", attributeKey],
+      onCell: () => ({
+        style: { width: 150 },
+      }),
+      render: (values: string[], record: OfferConfigurationWithOptionalId) => {
+        const editable = isEditing(record);
+        return editable ? (
+          <Form.Item
+            name={["selectedOptions", attributeKey]}
+            rules={[{ required: true, message: t("validation.required") }]}
+          >
+            <Select
+              mode="multiple"
+              showSearch={false}
+              notFoundContent={t("noData")}
+              options={store.animal.getAttributeValues(animalType, attributeKey).map((value) => ({
+                value,
+                label: t(value.toLowerCase())
+              }))}
+            />
+          </Form.Item>
+        ) : (
+          values ? values.map((value) => t(value.toLowerCase())).join(", ") : ""
+        );
+      },
+    }));
+
+  const allColumns: TableColumnsType<OfferConfigurationWithOptionalId> = [
     {
       title: t("description"),
       dataIndex: "description",
@@ -196,60 +232,7 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
         );
       },
     },
-    {
-      title: t("sex"),
-      dataIndex: ["selectedOptions", "SEX"],
-      onCell: () => ({
-        style: { width: 150 },
-      }),
-      render: (values: string[], record: OfferConfigurationWithOptionalId) => {
-        const editable = isEditing(record);
-        return editable ? (
-          <Form.Item
-            name={["selectedOptions", "SEX"]}
-            rules={[{ required: true, message: t("validation.required") }]}
-          >
-            <Select
-              mode="multiple"
-              showSearch={false}
-              options={[
-                { value: "MALE", label: t("male") },
-                { value: "SHE", label: t("she") },
-              ]}
-            />
-          </Form.Item>
-        ) : (
-          values.map((value) => t(value.toLowerCase())).join(", ")
-        );
-      },
-    },
-    {
-      title: t("size"),
-      dataIndex: ["selectedOptions", "SIZE"],
-      onCell: () => ({
-        style: { width: 150 },
-      }),
-      render: (values: string[], record: OfferConfigurationWithOptionalId) => {
-        const editable = isEditing(record);
-        return editable ? (
-          <Form.Item
-            name={["selectedOptions", "SIZE"]}
-            rules={[{ required: true, message: t("validation.required") }]}
-          >
-            <Select
-              mode="multiple"
-              showSearch={false}
-              options={[
-                { value: "SMALL", label: t("small") },
-                { value: "BIG", label: t("big") },
-              ]}
-            />
-          </Form.Item>
-        ) : (
-          values.map((value) => t(value.toLowerCase())).join(", ")
-        );
-      },
-    },
+    ...selectedOptionsColumns,
     {
       title: t("manage"),
       onCell: () => ({
@@ -300,10 +283,11 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
       <Form form={form} component={false}>
         <Table
           dataSource={editingKey === null ? [...configurations, newConfiguration] : configurations}
-          columns={columns}
+          columns={allColumns}
           rowKey={(record: OfferConfigurationWithOptionalId) => record.id || "new"}
           pagination={false}
           scroll={{ x: "max-content" }}
+          locale={{ emptyText: t("noConfigurations") }}
         />
       </Form>
       {editingKey === undefined && 
