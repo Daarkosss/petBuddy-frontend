@@ -65,45 +65,47 @@ const App = observer(() => {
     }
   }, [isXsrfTokenFetched, isUserDataFetched]);
 
-  return (
-    <Layout>
-      <Header/>
-      <Content className="page-content">
-        <Routes>
-          {keycloak.authenticated ? (
-            store.user.profile?.selected_profile ? (
-              <>
-                <Route path="/" element={<LandingPage />} />
-                <Route path="/caretaker/form" element={<CaretakerForm />} />
-                <Route path="/caretaker/search" element={<CaretakerSearch />} />
-                <Route path="/caretaker/offers" element={<OfferManagement />} />
-                <Route
-                  path="/profile-selection"
-                  element={<ProfileSelection isUserDataFetched={isUserDataFetched} />}
-                />
-                <Route path="*" element={<Navigate to="/" />} />
-              </>
+  if (!store.isStarting) {
+    return (
+      <Layout>
+        <Header/>
+        <Content className="page-content">
+          <Routes>
+            {keycloak.authenticated ? (
+              store.user.profile?.selected_profile ? (
+                <>
+                  <Route path="/" element={<LandingPage />} />
+                  <Route path="/caretaker/form" element={<CaretakerForm />} />
+                  <Route path="/caretaker/search" element={<CaretakerSearch />} />
+                  <Route path="/caretaker/offers" element={<OfferManagement />} />
+                  <Route
+                    path="/profile-selection"
+                    element={<ProfileSelection isUserDataFetched={isUserDataFetched} />}
+                  />
+                  <Route path="*" element={<Navigate to="/" replace />} />
+                </>
+              ) : (
+                <>
+                  <Route
+                    path="/profile-selection"
+                    element={<ProfileSelection isUserDataFetched={isUserDataFetched} />}
+                  />
+                  <Route path="/caretaker/form" element={<CaretakerForm />} />
+                  <Route path="*" element={<Navigate to="/profile-selection" replace />} />
+                </>
+              )
             ) : (
               <>
-                <Route
-                  path="/profile-selection"
-                  element={<ProfileSelection isUserDataFetched={isUserDataFetched} />}
-                />
-                <Route path="/caretaker/form" element={<CaretakerForm />} />
-                <Route path="*" element={<Navigate to="/profile-selection" />} />
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/caretaker/search" element={<CaretakerSearch />} />
+                <Route path="*" element={<Navigate to="/" replace />} />
               </>
-            )
-          ) : (
-            <>
-              <Route path="/" element={<LandingPage />} />
-              <Route path="/caretaker/search" element={<CaretakerSearch />} />
-              <Route path="*" element={<Navigate to="/" />}/>
-            </>
-          )}
-        </Routes>
-      </Content>
-    </Layout>
-  );
+            )}
+          </Routes>
+        </Content>
+      </Layout>
+    );
+  }
 });
 
 export default App;
