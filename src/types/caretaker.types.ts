@@ -1,5 +1,5 @@
 import { PageableDTO, SortDTO } from "./pagination.types";
-import { AccountDataDTO } from "./user.types";
+import { AccountDataDTO, Photo } from "./user.types";
 import { AvailabilityValues, OfferConfiguration, OfferDTOWithId, OfferWithId } from "./offer.types";
 
 export type CaretakerBasicsDTO = {
@@ -14,6 +14,7 @@ export type CaretakerDetailsDTO = CaretakerBasicsDTO & {
   phoneNumber: string;
   description: string;
   offers: OfferDTOWithId[];
+  offerPhotos: Photo[];
 }
 
 export type CaretakerDetails = Omit<CaretakerDetailsDTO, "offers"> & {

@@ -92,7 +92,11 @@
 
   "description": "Opis",
   "upload": "Prześlij",
-  "uploadImages": "Prześlij zdjęcia",
+  "offerPhotos": "Zdjęcia oferty",
+  "currentPhotos": "Aktualne zdjęcia",
+  "newPhotos": "Nowe zdjęcia",
+  "photosLimitMessage": "Limit zdjęć",
+  "photosLimitDescription": "Osiągnięto limit zdjęć (10). Jeśli chcesz dodać nowe, usuń któreś z aktualnych.",
   "save": "Zapisz",
   "cancel": "Anuluj",
 
@@ -120,6 +124,7 @@
   "error": {
     "createCaretakerProfile": "Wystąpił błąd podczas tworzenia profilu opiekuna",
     "editCaretakerForm": "Wystąpił błąd podczas edycji danych opiekuna",
+    "wrongFileTypeForPhoto": "Zły typ pliku dla zdjęcia. Tylko pliki w formacie: jpeg, jpg, png i webp są dopuszczalne.",
     "editOffer": "Wystąpił błąd podczas edycji oferty",
     "addOffer": "Wystąpił błąd podczas tworzenia oferty",
     "loadOffers": "Wystąpił błąd podczas ładowania ofert",
@@ -181,6 +186,8 @@
   "availabilityAlert": "Dostępność zostanie nadpisana wybranymi datami dla wszystkich ofert, które zaznaczysz.",
   "noData": "Brak danych",
   "noConfigurations": "Brak konfiguracji",
-  "oneAvailabilityForAllAnimals": "Jedna dostępność dla wszystkich zwierząt",
-  "noData": "Brak danych"
+
+  "imageCropperTitle": "Dostosuj zdjęcie",
+  "apply": "Zatwierdź",
+  "oneAvailabilityForAllAnimals": "Jedna dostępność dla wszystkich zwierząt"
 }

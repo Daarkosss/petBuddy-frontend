@@ -41,6 +41,7 @@ const PageHeader = observer(() => {
           setDrawerVisible(false);
         },
       }))}
+      selectedKeys={[store.selectedMenuOption]}
     />
   );
 

@@ -1,3 +1,5 @@
+import { UploadFile } from "antd";
+
 export type UserProfiles = {
   accountData: AccountDataDTO;
   hasClientProfile: boolean;
@@ -8,8 +10,15 @@ export type AccountDataDTO = {
   email: string;
   name: string;
   surname: string;
-  profilePicture: {
-    blob: string;
-    url: string;
-  };
+  profilePicture: Photo | null;
 };
+
+export type Photo = {
+  blob: string;
+  url: string;
+}
+
+export type UploadFileWithBlob = {
+  file: UploadFile;
+  blob: string;
+}
