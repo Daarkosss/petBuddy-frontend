@@ -2,7 +2,17 @@ import React, { useEffect, useState } from "react";
 import store from "../store/RootStore";
 import "../scss/pages/_profile.scss";
 import testImg from "../../public/pet_buddy_logo.svg";
-import { Button, Card, Rate } from "antd";
+import {
+  Button,
+  Card,
+  GetProp,
+  Rate,
+  Upload,
+  UploadFile,
+  UploadProps,
+  Avatar,
+} from "antd";
+import { PictureOutlined, UserOutlined } from "@ant-design/icons";
 import CommentContainer from "../components/CommentContainer";
 import RoundedLine from "../components/RoundedLine";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -10,6 +20,9 @@ import { useTranslation } from "react-i18next";
 import { api } from "../api/api";
 import { CaretakerDetails, CaretakerRatingsResponse } from "../types";
 import OfferCard from "../components/Offer/OfferCard";
+import ImgCrop from "antd-img-crop";
+
+type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
 const CaretakerProfile: React.FC = () => {
   const { t } = useTranslation();
@@ -24,9 +37,14 @@ const CaretakerProfile: React.FC = () => {
   const size = 10;
   const [ratings, setRatings] = useState<CaretakerRatingsResponse>();
 
+  const [profilePicture, setProfilePicture] = useState<string | null>(null);
+
   const getCaretakerDetails = (email: string) => {
     api.getCaretakerDetails(email).then((data) => {
       setProfileData(data);
+      if (data.accountData.profilePicture !== null) {
+        setProfilePicture(data.accountData.profilePicture.url);
+      }
     });
   };
 
@@ -80,21 +98,75 @@ const CaretakerProfile: React.FC = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handleFilePreview = async (file: UploadFile) => {
+    let src = file.url as string;
+    if (!src) {
+      src = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file.originFileObj as FileType);
+        reader.onload = () => resolve(reader.result as string);
+      });
+    }
+    const image = new Image();
+    image.src = src;
+    const imgWindow = window.open(src);
+    imgWindow?.document.write(image.outerHTML);
+  };
+
+  const handleFileChange: UploadProps["onChange"] = async ({
+    fileList: newFileList,
+  }) => {
+    // const profilePicture = (await new Promise((resolve) => {
+    //   const reader = new FileReader();
+    //   reader.readAsDataURL(newFileList[0].originFileObj as FileType);
+    //   reader.onload = () => resolve(reader.result as string);
+    // })) as string;
+    // try {
+    //   const respone = await api.uploadProfilePicture(profilePicture);
+    //   setProfilePicture(respone.profilePicture.url);
+    // } catch (e: unknown) {
+    //   if (e instanceof Error) {
+    //     console.log(`ERROR: ${e.message}`);
+    //   }
+    // }
+  };
+
   return (
     <div>
       {profileData !== null && profileData !== undefined ? (
         <div className="profile-container">
           <div className="profile-left-data">
             <div className="profile-left-upper-container">
-              <div>
-                <img src={testImg} className="profile-image" />
-
-                {isMyProfile === true && (
-                  <Button type="primary" className="profile-action-button">
-                    {t("profilePage.changeImage")}
-                  </Button>
+              <div className="profile-picture-container">
+                {profilePicture !== null ? (
+                  <img src={profilePicture} className="profile-image" />
+                ) : (
+                  <Avatar
+                    size={250}
+                    className="profile-image"
+                    icon={<UserOutlined />}
+                  />
                 )}
               </div>
+              {isMyProfile === true && (
+                <ImgCrop rotationSlider>
+                  <Upload
+                    name="file"
+                    onChange={handleFileChange}
+                    onPreview={handleFilePreview}
+                    accept="image/*"
+                  >
+                    <Button
+                      icon={<PictureOutlined />}
+                      type="primary"
+                      className="profile-action-button"
+                    >
+                      {t("profilePage.changeImage")}
+                    </Button>
+                  </Upload>
+                </ImgCrop>
+              )}
               <div className="profile-user">
                 <div className="profile-user-nick">
                   <h1>
