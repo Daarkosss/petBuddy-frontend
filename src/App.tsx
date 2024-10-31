@@ -1,5 +1,5 @@
 import { useKeycloak } from "@react-keycloak/web";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Layout } from "antd";
 import { api } from "./api/api";
@@ -36,7 +36,7 @@ const App = observer(() => {
           firstName: userData.firstName,
           lastName: userData.lastName,
           token: store.user.xsrfToken,
-          selected_profile: null,
+          selected_profile: store.user.profile?.selected_profile || null,
           hasCaretakerProfile: userProfiles.hasCaretakerProfile,
         };
         store.user.saveProfileToStorage(userProfileData);
@@ -49,11 +49,10 @@ const App = observer(() => {
     if (initialized) {
       if (keycloak.authenticated) {
         fetchXsrfToken();
-        if (store.user.profile === null) {
-          fetchUserData();
-        } else {
-          setIsUserDataFetched(true);
-        }
+        fetchUserData();
+        setIsUserDataFetched(true);
+      } else {
+        store.reset();
       }
       store.isStarting = false;
     }
@@ -74,6 +73,7 @@ const App = observer(() => {
           {keycloak.authenticated ? (
             store.user.profile?.selected_profile ? (
               <>
+                <Route path="/" element={<LandingPage />} />
                 <Route path="/caretaker/form" element={<CaretakerForm />} />
                 <Route path="/caretaker/search" element={<CaretakerSearch />} />
                 <Route path="/caretaker/offers" element={<OfferManagement />} />
@@ -81,15 +81,16 @@ const App = observer(() => {
                   path="/profile-selection"
                   element={<ProfileSelection isUserDataFetched={isUserDataFetched} />}
                 />
-                <Route path="*" element={<LandingPage />} />
+                <Route path="*" element={<Navigate to="/" />} />
               </>
             ) : (
               <>
                 <Route
-                  path="/*"
+                  path="/profile-selection"
                   element={<ProfileSelection isUserDataFetched={isUserDataFetched} />}
                 />
                 <Route path="/caretaker/form" element={<CaretakerForm />} />
+                <Route path="*" element={<Navigate to="/profile-selection" />} />
               </>
             )
           ) : (
