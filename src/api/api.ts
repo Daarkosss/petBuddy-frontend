@@ -19,6 +19,7 @@ import {
   AccountDataDTO,
   CaretakerRatingsResponse,
 } from "../types";
+import { UploadFile } from "antd";
 
 const backendHost =
   import.meta.env.VITE_BACKEND_HOST || window.location.hostname;
@@ -70,6 +71,34 @@ class API {
     } else {
       toast.error("No user token available");
       return Promise.reject(new Error("No user token available"));
+    }
+  }
+
+  async authorizedMultipartFetch<T>(
+    method: Method,
+    path: string,
+    formData: FormData,
+    headers?: HeadersInit
+  ): Promise<T> {
+    const options = {
+      method,
+      headers: {
+        ...headers,
+        "X-XSRF-TOKEN": store.user.xsrfToken,
+        Authorization: `Bearer ${store.user.jwtToken}`,
+      },
+      body: formData,
+      credentials: "include",
+    } as RequestInit;
+
+    const response = await fetch(`${PATH_PREFIX}${path}`, options);
+    const data = await response.json();
+
+    if (!response.ok) {
+      toast.error(data.message || "Wrong server response!");
+      throw new Error(data.message || "Wrong server response!");
+    } else {
+      return data;
     }
   }
 
@@ -176,13 +205,16 @@ class API {
 
   async getCurrentCaretakerDetails(): Promise<CaretakerDetails> {
     try {
-      const response = await this.authorizedFetch<CaretakerDetails>(
+      const response = await this.authorizedFetch<CaretakerDetailsDTO>(
         "GET",
         "api/caretaker",
         undefined,
         { "Accept-Role": "CARETAKER" }
       );
-      return response;
+      return {
+        ...response,
+        offers: this.convertOffersAvailabilities(response.offers),
+      };
     } catch (error: unknown) {
       if (error instanceof Error) {
         throw new Error(`Failed to fetch caretaker profile: ${error.message}`);
@@ -250,12 +282,69 @@ class API {
     }
   }
 
-  async addCaretakerProfile(data: CaretakerFormFields): Promise<void> {
-    return this.authorizedFetch<void>("POST", "api/caretaker/add", data);
+  async addCaretakerProfile(
+    formFields: CaretakerFormFields,
+    photos: UploadFile[]
+  ): Promise<CaretakerDetails | void> {
+    const formData = new FormData();
+
+    const caretakerData = new Blob([JSON.stringify(formFields)], {
+      type: "application/json",
+    });
+    formData.append("caretakerData", caretakerData);
+
+    photos.forEach((photo) => {
+      if (photo.originFileObj) {
+        formData.append("newOfferPhotos", photo.originFileObj);
+      }
+    });
+
+    const response = await this.authorizedMultipartFetch<CaretakerDetailsDTO>(
+      "POST",
+      "api/caretaker",
+      formData
+    );
+    return {
+      ...response,
+      offers: this.convertOffersAvailabilities(response.offers),
+    };
   }
 
-  async editCaretakerProfile(data: CaretakerFormFields): Promise<void> {
-    return this.authorizedFetch<void>("PUT", "api/caretaker/edit", data);
+  async editCaretakerProfile(
+    formFields: CaretakerFormFields,
+    newPhotos: UploadFile[],
+    offerBlobsToKeep: string[]
+  ): Promise<CaretakerDetails | void> {
+    if (store.user.profile?.selected_profile === "CARETAKER") {
+      const formData = new FormData();
+
+      const caretakerData = new Blob([JSON.stringify(formFields)], {
+        type: "application/json",
+      });
+      formData.append("caretakerData", caretakerData);
+
+      const blobsData = new Blob([JSON.stringify(offerBlobsToKeep)], {
+        type: "application/json",
+      });
+      formData.append("offerBlobsToKeep", blobsData);
+
+      newPhotos.forEach((photo) => {
+        if (photo.originFileObj) {
+          formData.append("newOfferPhotos", photo.originFileObj);
+        }
+      });
+
+      const response = await this.authorizedMultipartFetch<CaretakerDetailsDTO>(
+        "PUT",
+        "api/caretaker",
+        formData,
+        { "Accept-Role": "CARETAKER" }
+      );
+      return {
+        ...response,
+        offers: this.convertOffersAvailabilities(response.offers),
+      };
+    }
   }
 
   async addOrEditOffer(
