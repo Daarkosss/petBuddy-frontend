@@ -37,6 +37,8 @@ const CaretakerProfile: React.FC = () => {
   const size = 10;
   const [ratings, setRatings] = useState<CaretakerRatingsResponse>();
 
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
+
   const [profilePicture, setProfilePicture] = useState<string | null>(null);
 
   const getCaretakerDetails = (email: string) => {
@@ -117,19 +119,15 @@ const CaretakerProfile: React.FC = () => {
   const handleFileChange: UploadProps["onChange"] = async ({
     fileList: newFileList,
   }) => {
-    // const profilePicture = (await new Promise((resolve) => {
-    //   const reader = new FileReader();
-    //   reader.readAsDataURL(newFileList[0].originFileObj as FileType);
-    //   reader.onload = () => resolve(reader.result as string);
-    // })) as string;
     // try {
-    //   const respone = await api.uploadProfilePicture(profilePicture);
+    //   const respone = await api.uploadProfilePicture(newFileList[0]);
     //   setProfilePicture(respone.profilePicture.url);
     // } catch (e: unknown) {
     //   if (e instanceof Error) {
     //     console.log(`ERROR: ${e.message}`);
     //   }
     // }
+    setFileList([]);
   };
 
   return (
@@ -152,6 +150,8 @@ const CaretakerProfile: React.FC = () => {
               {isMyProfile === true && (
                 <ImgCrop rotationSlider>
                   <Upload
+                    fileList={fileList}
+                    showUploadList={false}
                     name="file"
                     onChange={handleFileChange}
                     onPreview={handleFilePreview}
