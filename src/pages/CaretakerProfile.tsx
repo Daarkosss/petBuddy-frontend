@@ -119,14 +119,16 @@ const CaretakerProfile: React.FC = () => {
   const handleFileChange: UploadProps["onChange"] = async ({
     fileList: newFileList,
   }) => {
-    // try {
-    //   const respone = await api.uploadProfilePicture(newFileList[0]);
-    //   setProfilePicture(respone.profilePicture.url);
-    // } catch (e: unknown) {
-    //   if (e instanceof Error) {
-    //     console.log(`ERROR: ${e.message}`);
-    //   }
-    // }
+    newFileList[0].originFileObj;
+    try {
+      const respone = await api.uploadProfilePicture(newFileList[0]);
+      if (respone.profilePicture !== null)
+        setProfilePicture(respone.profilePicture.url);
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        console.log(`ERROR: ${e.message}`);
+      }
+    }
     setFileList([]);
   };
 
