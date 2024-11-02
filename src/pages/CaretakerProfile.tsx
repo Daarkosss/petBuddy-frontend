@@ -145,6 +145,7 @@ const CaretakerProfile: React.FC = () => {
     return true;
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const dummyRequest = ({ onSuccess }: any) => {
     setTimeout(() => {
       onSuccess("ok");

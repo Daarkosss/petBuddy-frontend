@@ -82,6 +82,7 @@ function ClientProfile() {
     imgWindow?.document.write(image.outerHTML);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const dummyRequest = ({ onSuccess }: any) => {
     setTimeout(() => {
       onSuccess("ok");
