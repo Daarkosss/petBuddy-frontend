@@ -469,6 +469,21 @@ class API {
     }
   }
 
+  async uploadProfilePicture(
+    profilePicture: UploadFile
+  ): Promise<AccountDataDTO> {
+    const formData = new FormData();
+    if (profilePicture.originFileObj) {
+      formData.append("profilePicture", profilePicture.originFileObj);
+    }
+
+    return this.authorizedMultipartFetch<AccountDataDTO>(
+      "POST",
+      "api/user/profile-picture",
+      formData
+    );
+  }
+
   async deleteOfferConfiguration(
     configurationId: number
   ): Promise<OfferWithId | undefined> {
