@@ -259,9 +259,9 @@ class API {
     sortBy: string[] | null
   ): Promise<CaretakerRatingsResponse> {
     try {
-      let endpoint = `api/caretaker/${email}/rating`;
+      let endpoint = `api/rating/${email}?`;
       if (page !== null) {
-        endpoint = endpoint.concat(`?page=${page}`);
+        endpoint = endpoint.concat(`page=${page}`);
       }
 
       if (size !== null) {
@@ -485,7 +485,7 @@ class API {
     }
 
     return this.authorizedMultipartFetch<AccountDataDTO>(
-      "POST",
+      "PUT",
       "api/user/profile-picture",
       formData
     );
