@@ -6,7 +6,7 @@
   "cat": "Cat",
   "bird": "Bird",
   "reptile": "Reptile",
-  "horse": "Horse",
+  "fish": "Fish",
 
   "sex": "Sex",
   "male": "Male",
@@ -217,6 +217,7 @@
 
   "availabilityAlert": "Availability will be overwritten with selected dates for all offers, you choose.",
   "noData": "No data",
+  "noConfigurations": "No configurations",
 
   "imageCropperTitle": "Adjust image",
   "apply": "Apply",

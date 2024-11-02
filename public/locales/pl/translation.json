@@ -6,7 +6,7 @@
   "cat": "Kot",
   "bird": "Ptak",
   "reptile": "Gad",
-  "horse": "Koń",
+  "fish": "Ryba",
 
   "sex": "Płeć",
   "male": "Samiec",
@@ -34,7 +34,7 @@
     "toys": "Zabawki",
     "scratching post": "Drapak",
     "cage": "Klatka",
-    "garden": "Ogród"
+    "garden": "Ogród"
   },
 
   "address": "Adres",
@@ -222,6 +222,7 @@
 
   "availabilityAlert": "Dostępność zostanie nadpisana wybranymi datami dla wszystkich ofert, które zaznaczysz.",
   "noData": "Brak danych",
+  "noConfigurations": "Brak konfiguracji",
 
   "imageCropperTitle": "Dostosuj zdjęcie",
   "apply": "Zatwierdź",

@@ -49,6 +49,7 @@ const CaretakerForm = () => {
       });
     }
     setIsPhotosLoading(false);
+    setIsStarting(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form]);
 
@@ -204,12 +205,7 @@ const CaretakerForm = () => {
   return (
     <div className="caretaker-form-container">
       <Spin size="large" spinning={isStarting}>
-        <Form
-          form={form}
-          layout="vertical"
-          onFinish={handleSubmit}
-          onLoad={() => setIsStarting(false)}
-        >
+        <Form form={form} layout="vertical" onFinish={handleSubmit}>
           <Space direction="vertical" size="large" style={{ width: "100%" }}>
             <Card title={t("address")}>
               <div className="card-grid-row">

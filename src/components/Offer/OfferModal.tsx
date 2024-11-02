@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import { api } from "../../api/api";
 import { EditOutlined } from "@ant-design/icons";
 import MultiCalendar from "../Calendar/MultiCalendar";
+import store from "../../store/RootStore";
 
 type OfferModalProps = {
   offer: OfferWithId;
@@ -172,17 +173,17 @@ const OfferModal: React.FC<OfferModalProps> = ({
             <div className="value">
               <Select
                 mode="multiple"
+                style={{ maxWidth: 500 }}
                 showSearch={false}
                 value={editedAmenities}
                 onChange={setEditedAmenities}
-                options={[
-                  { value: "toys", label: t("amenityTypes.toys") },
-                  {
-                    value: "scratching post",
-                    label: t("amenityTypes.scratching post"),
-                  },
-                  { value: "cage", label: t("amenityTypes.cage") },
-                ]}
+                notFoundContent={t("noData")}
+                options={store.animal
+                  .getAmenities(offer.animal.animalType)
+                  .map((amenity) => ({
+                    value: amenity,
+                    label: t(`amenityTypes.${amenity}`),
+                  }))}
               />
               <Space>
                 <Button
@@ -250,6 +251,7 @@ const OfferModal: React.FC<OfferModalProps> = ({
               children: (
                 <OfferConfigurations
                   offerId={offer.id}
+                  animalType={offer.animal.animalType}
                   configurations={offer.offerConfigurations}
                   handleUpdateOffer={handleUpdateOffer}
                   handleUpdateConfiguration={handleUpdateConfiguration}
