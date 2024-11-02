@@ -164,10 +164,6 @@
 
       gap: 20px;
 
-      /* hide scrollbar */
-      scrollbar-width: none; /* Firefox */
-      -ms-overflow-style: none; /* Internet Explorer 10+ */
-
       .profile-no-offers {
         display: flex;
         flex-direction: column;
@@ -187,11 +183,6 @@
         }
       }
     }
-  }
-
-  /* hide scrollbar */
-  .profile-right-comments::-webkit-scrollbar {
-    display: none; /* Chrome, Safari i Opera */
   }
 
   /* hide scrollbar */
