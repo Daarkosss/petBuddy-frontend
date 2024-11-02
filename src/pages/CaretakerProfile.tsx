@@ -55,11 +55,7 @@ const CaretakerProfile: React.FC = () => {
     store.selectedMenuOption = "profile";
 
     //if user is visiting their profile
-    if (
-      userEmail === null ||
-      userEmail === undefined ||
-      userEmail === store.user.profile?.selected_profile
-    ) {
+    if (userEmail === store.user.profile?.selected_profile) {
       //user is visiting their proifle
       setIsMyProfile(true);
 
