@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import store from "../store/RootStore";
 import "../scss/pages/_profile.scss";
-import testImg from "../../public/pet_buddy_logo.svg";
 import {
   Button,
   Card,
@@ -21,6 +20,7 @@ import { api } from "../api/api";
 import { CaretakerDetails, CaretakerRatingsResponse } from "../types";
 import OfferCard from "../components/Offer/OfferCard";
 import ImgCrop from "antd-img-crop";
+import { toast } from "react-toastify";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
@@ -131,6 +131,25 @@ const CaretakerProfile: React.FC = () => {
     }
     setFileList([]);
   };
+  const hasFilePhotoType = (file: UploadFile) => {
+    const allowedFormats = [
+      "image/jpeg",
+      "image/webp",
+      "image/png",
+      "image/jpg",
+    ];
+    if (!file.type || !allowedFormats.includes(file.type)) {
+      toast.error(t("error.wrongFileTypeForPhoto"));
+      return false;
+    }
+    return true;
+  };
+
+  const dummyRequest = ({ onSuccess }: any) => {
+    setTimeout(() => {
+      onSuccess("ok");
+    }, 0);
+  };
 
   return (
     <div>
@@ -150,8 +169,9 @@ const CaretakerProfile: React.FC = () => {
                 )}
               </div>
               {isMyProfile === true && (
-                <ImgCrop rotationSlider>
+                <ImgCrop rotationSlider beforeCrop={hasFilePhotoType}>
                   <Upload
+                    customRequest={dummyRequest}
                     fileList={fileList}
                     showUploadList={false}
                     name="file"
