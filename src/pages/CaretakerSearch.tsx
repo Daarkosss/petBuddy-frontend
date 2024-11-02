@@ -17,6 +17,7 @@ import {
 } from "../types";
 import CaretakerFilters from "../components/CaretakerFilters";
 import store from "../store/RootStore";
+import { UserOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
 
 const CaretakerList = () => {
@@ -192,7 +193,12 @@ const CaretakerList = () => {
       key: "caretaker",
       render: (_: unknown, record: CaretakerBasics) => (
         <div className="caretaker-list-item">
-          <img src="https://via.placeholder.com/150" alt="avatar" />
+          <div className="profile-picture">
+            {record.accountData.profilePicture 
+              ? <img src={record.accountData.profilePicture.url} alt="avatar" />
+              : <UserOutlined style={{ fontSize: "150px" }} />
+            }
+          </div>
           <div>
             <h4>
               {record.accountData.name} {record.accountData.surname}

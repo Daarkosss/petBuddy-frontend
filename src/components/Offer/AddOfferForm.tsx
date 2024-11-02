@@ -4,6 +4,7 @@ import { OfferDTO } from "../../types";
 import { api } from "../../api/api";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
+import store from "../../store/RootStore";
 
 interface OfferFormProps {
   currentAnimalTypes: string[];
@@ -12,12 +13,11 @@ interface OfferFormProps {
 
 const AddOfferForm: React.FC<OfferFormProps> = ({ currentAnimalTypes, onSuccess }) => {
   const { t } = useTranslation();
-
   const [form] = Form.useForm();
   const [isLoading, setIsLoading] = useState(false);
+  const animalType = Form.useWatch(["animal", "animalType"], form);
 
-  const allAnimalTypes = ["DOG", "CAT", "BIRD", "REPTILE"];
-  const availableAnimalTypes = allAnimalTypes.filter((type) => !currentAnimalTypes.includes(type));
+  const availableAnimalTypes = store.animal.allAnimalTypes.filter((type) => !currentAnimalTypes.includes(type));
   
   const handleFinish = async (values: OfferDTO) => {
     setIsLoading(true);
@@ -61,11 +61,11 @@ const AddOfferForm: React.FC<OfferFormProps> = ({ currentAnimalTypes, onSuccess 
         <Select 
           mode="multiple"
           showSearch={false}
-          options={[
-            { value: "toys", label: t("amenityTypes.toys") },
-            { value: "scratching post", label: t("amenityTypes.scratching post") },
-            { value: "cage", label: t("amenityTypes.cage") },
-          ]}
+          notFoundContent={t("noData")}
+          options={store.animal.getAmenities(animalType).map((amenity) => ({
+            value: amenity,
+            label: t(`amenityTypes.${amenity}`)
+          }))}
         />
       </Form.Item>
       <Button type="primary" htmlType="submit" loading={isLoading}>
