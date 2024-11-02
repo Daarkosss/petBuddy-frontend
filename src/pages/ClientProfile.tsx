@@ -28,7 +28,9 @@ function ClientProfile() {
     if (store.user.profile!.selected_profile === "CLIENT") {
       getClientDetails();
     } else if (store.user.profile!.selected_profile === "CARETAKER") {
-      navigate("/profile-caretaker");
+      navigate("/profile-caretaker", {
+        state: { userEmail: store.user.profile?.email },
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -132,6 +134,7 @@ function ClientProfile() {
                     <h3>{t("profilePage.noCaretakerProfile")}</h3>
                     <Button
                       type="primary"
+                      className="profile-action-button"
                       onClick={() => navigate("/caretaker/form")}
                     >
                       + {t("profileSelection.createCaretaker")}
