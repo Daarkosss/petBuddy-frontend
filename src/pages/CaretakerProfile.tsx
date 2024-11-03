@@ -4,11 +4,8 @@ import "../scss/pages/_profile.scss";
 import {
   Button,
   Card,
-  GetProp,
   Rate,
   Upload,
-  UploadFile,
-  UploadProps,
   Avatar,
 } from "antd";
 import { PictureOutlined, UserOutlined } from "@ant-design/icons";
@@ -20,9 +17,7 @@ import { api } from "../api/api";
 import { CaretakerDetails, CaretakerRatingsResponse } from "../types";
 import OfferCard from "../components/Offer/OfferCard";
 import ImgCrop from "antd-img-crop";
-import { toast } from "react-toastify";
-
-type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
+import { handleFilePreview, hasFilePhotoType } from "../functions/imageUploader";
 
 const CaretakerProfile: React.FC = () => {
   const { t } = useTranslation();
@@ -36,8 +31,6 @@ const CaretakerProfile: React.FC = () => {
   const [page, setPage] = useState<number>(0);
   const size = 10;
   const [ratings, setRatings] = useState<CaretakerRatingsResponse>();
-
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const [profilePicture, setProfilePicture] = useState<string | null>(null);
 
@@ -101,56 +94,23 @@ const CaretakerProfile: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleFilePreview = async (file: UploadFile) => {
-    let src = file.url as string;
-    if (!src) {
-      src = await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file.originFileObj as FileType);
-        reader.onload = () => resolve(reader.result as string);
-      });
-    }
-    const image = new Image();
-    image.src = src;
-    const imgWindow = window.open(src);
-    imgWindow?.document.write(image.outerHTML);
-  };
-
-  const handleFileChange: UploadProps["onChange"] = async ({
-    fileList: newFileList,
-  }) => {
-    newFileList[0].originFileObj;
-    try {
-      const respone = await api.uploadProfilePicture(newFileList[0]);
-      if (respone.profilePicture !== null)
-        setProfilePicture(respone.profilePicture.url);
-    } catch (e: unknown) {
-      if (e instanceof Error) {
-        console.log(`ERROR: ${e.message}`);
-      }
-    }
-    setFileList([]);
-  };
-  const hasFilePhotoType = (file: UploadFile) => {
-    const allowedFormats = [
-      "image/jpeg",
-      "image/webp",
-      "image/png",
-      "image/jpg",
-    ];
-    if (!file.type || !allowedFormats.includes(file.type)) {
-      toast.error(t("error.wrongFileTypeForPhoto"));
-      return false;
-    }
-    return true;
-  };
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const dummyRequest = ({ onSuccess }: any) => {
-    setTimeout(() => {
-      onSuccess("ok");
-    }, 0);
-  };
+  const handleCustomPhotoRequest = async (options: any) => {
+  const { file, onSuccess, onError } = options;
+
+  try {
+    const response = await api.uploadProfilePicture(file);
+    if (response.profilePicture !== null) {
+      setProfilePicture(response.profilePicture.url);
+    }
+    onSuccess?.("ok");
+  } catch (e: unknown) {
+    onError?.(e);
+    if (e instanceof Error) {
+      console.log(`ERROR: ${e.message}`);
+    }
+  }
+};
 
   return (
     <div>
@@ -172,11 +132,9 @@ const CaretakerProfile: React.FC = () => {
               {isMyProfile === true && (
                 <ImgCrop rotationSlider beforeCrop={hasFilePhotoType}>
                   <Upload
-                    customRequest={dummyRequest}
-                    fileList={fileList}
+                    customRequest={handleCustomPhotoRequest}
                     showUploadList={false}
                     name="file"
-                    onChange={handleFileChange}
                     onPreview={handleFilePreview}
                     accept="image/*"
                   >

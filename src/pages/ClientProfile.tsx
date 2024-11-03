@@ -5,10 +5,7 @@ import {
   Avatar,
   Button,
   Card,
-  GetProp,
   Upload,
-  UploadFile,
-  UploadProps,
 } from "antd";
 import RoundedLine from "../components/RoundedLine";
 import { useNavigate } from "react-router-dom";
@@ -17,16 +14,14 @@ import { api } from "../api/api";
 import { UserProfiles } from "../types";
 import { PictureOutlined, UserOutlined } from "@ant-design/icons";
 import ImgCrop from "antd-img-crop";
-import { toast } from "react-toastify";
+import { handleFilePreview, hasFilePhotoType } from "../functions/imageUploader";
 
-type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
 function ClientProfile() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [profileData, setProfileData] = useState<UserProfiles>();
   const [profilePicture, setProfilePicture] = useState<string | null>(null);
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const getClientDetails = () => {
     api.getUserProfiles().then((data) => {
@@ -37,56 +32,22 @@ function ClientProfile() {
     });
   };
 
-  const handleFileChange: UploadProps["onChange"] = async ({
-    fileList: newFileList,
-  }) => {
-    newFileList[0].originFileObj;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleCustomPhotoRequest = async (options: any) => {
+    const { file, onSuccess, onError } = options;
+
     try {
-      const respone = await api.uploadProfilePicture(newFileList[0]);
-      if (respone.profilePicture !== null)
-        setProfilePicture(respone.profilePicture.url);
+      const response = await api.uploadProfilePicture(file);
+      if (response.profilePicture !== null) {
+        setProfilePicture(response.profilePicture.url);
+      }
+      onSuccess?.("ok");
     } catch (e: unknown) {
+      onError?.(e);
       if (e instanceof Error) {
         console.log(`ERROR: ${e.message}`);
       }
     }
-    setFileList([]);
-  };
-
-  const hasFilePhotoType = (file: UploadFile) => {
-    const allowedFormats = [
-      "image/jpeg",
-      "image/webp",
-      "image/png",
-      "image/jpg",
-    ];
-    if (!file.type || !allowedFormats.includes(file.type)) {
-      toast.error(t("error.wrongFileTypeForPhoto"));
-      return false;
-    }
-    return true;
-  };
-
-  const handleFilePreview = async (file: UploadFile) => {
-    let src = file.url as string;
-    if (!src) {
-      src = await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file.originFileObj as FileType);
-        reader.onload = () => resolve(reader.result as string);
-      });
-    }
-    const image = new Image();
-    image.src = src;
-    const imgWindow = window.open(src);
-    imgWindow?.document.write(image.outerHTML);
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const dummyRequest = ({ onSuccess }: any) => {
-    setTimeout(() => {
-      onSuccess("ok");
-    }, 0);
   };
 
   useEffect(() => {
@@ -101,6 +62,7 @@ function ClientProfile() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   return (
     <div>
       {profileData !== null && profileData !== undefined ? (
@@ -120,11 +82,9 @@ function ClientProfile() {
               </div>
               <ImgCrop rotationSlider beforeCrop={hasFilePhotoType}>
                 <Upload
-                  customRequest={dummyRequest}
-                  fileList={fileList}
+                  customRequest={handleCustomPhotoRequest}
                   showUploadList={false}
                   name="file"
-                  onChange={handleFileChange}
                   onPreview={handleFilePreview}
                   accept="image/*"
                 >

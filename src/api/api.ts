@@ -477,12 +477,10 @@ class API {
   }
 
   async uploadProfilePicture(
-    profilePicture: UploadFile
+    profilePicture: File
   ): Promise<AccountDataDTO> {
     const formData = new FormData();
-    if (profilePicture.originFileObj) {
-      formData.append("profilePicture", profilePicture.originFileObj);
-    }
+    formData.append("profilePicture", profilePicture);
 
     return this.authorizedMultipartFetch<AccountDataDTO>(
       "PUT",
