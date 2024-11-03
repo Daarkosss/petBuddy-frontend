@@ -25,7 +25,7 @@ import {
 } from "../types";
 import Voivodeship from "../models/Voivodeship";
 import store from "../store/RootStore";
-import { dummyRequest, handleFilePreview, hasFilePhotoType } from "../functions/imageUploader";
+import { dummyRequest, handleFilePreview, hasFilePhotoType } from "../functions/imageHandle";
 
 const PHOTOS_LIMIT = 10;
 

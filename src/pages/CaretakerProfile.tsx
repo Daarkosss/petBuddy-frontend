@@ -17,7 +17,7 @@ import { api } from "../api/api";
 import { CaretakerDetails, CaretakerRatingsResponse } from "../types";
 import OfferCard from "../components/Offer/OfferCard";
 import ImgCrop from "antd-img-crop";
-import { handleFilePreview, hasFilePhotoType } from "../functions/imageUploader";
+import { handleFilePreview, hasFilePhotoType } from "../functions/imageHandle";
 
 const CaretakerProfile: React.FC = () => {
   const { t } = useTranslation();

@@ -14,7 +14,7 @@ import { api } from "../api/api";
 import { UserProfiles } from "../types";
 import { PictureOutlined, UserOutlined } from "@ant-design/icons";
 import ImgCrop from "antd-img-crop";
-import { handleFilePreview, hasFilePhotoType } from "../functions/imageUploader";
+import { handleFilePreview, hasFilePhotoType } from "../functions/imageHandle";
 
 
 function ClientProfile() {
