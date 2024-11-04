@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from "react";
 import store from "../store/RootStore";
 import "../scss/pages/_profile.scss";
-import testImg from "../../public/pet_buddy_logo.svg";
-import { Button, Card, Rate } from "antd";
+import {
+  Button,
+  Card,
+  Rate,
+  Upload,
+  Avatar,
+} from "antd";
+import { PictureOutlined, UserOutlined } from "@ant-design/icons";
 import CommentContainer from "../components/CommentContainer";
 import RoundedLine from "../components/RoundedLine";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -10,6 +16,8 @@ import { useTranslation } from "react-i18next";
 import { api } from "../api/api";
 import { CaretakerDetails, CaretakerRatingsResponse } from "../types";
 import OfferCard from "../components/Offer/OfferCard";
+import ImgCrop from "antd-img-crop";
+import { handleFilePreview, hasFilePhotoType } from "../functions/imageHandle";
 
 const CaretakerProfile: React.FC = () => {
   const { t } = useTranslation();
@@ -24,9 +32,14 @@ const CaretakerProfile: React.FC = () => {
   const size = 10;
   const [ratings, setRatings] = useState<CaretakerRatingsResponse>();
 
+  const [profilePicture, setProfilePicture] = useState<string | null>(null);
+
   const getCaretakerDetails = (email: string) => {
     api.getCaretakerDetails(email).then((data) => {
       setProfileData(data);
+      if (data.accountData.profilePicture !== null) {
+        setProfilePicture(data.accountData.profilePicture.url);
+      }
     });
   };
 
@@ -76,21 +89,61 @@ const CaretakerProfile: React.FC = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleCustomPhotoRequest = async (options: any) => {
+  const { file, onSuccess, onError } = options;
+
+  try {
+    const response = await api.uploadProfilePicture(file);
+    if (response.profilePicture !== null) {
+      setProfilePicture(response.profilePicture.url);
+    }
+    onSuccess?.("ok");
+  } catch (e: unknown) {
+    onError?.(e);
+    if (e instanceof Error) {
+      console.log(`ERROR: ${e.message}`);
+    }
+  }
+};
+
   return (
     <div>
       {profileData !== null && profileData !== undefined ? (
         <div className="profile-container">
           <div className="profile-left-data">
             <div className="profile-left-upper-container">
-              <div>
-                <img src={testImg} className="profile-image" />
-
-                {isMyProfile === true && (
-                  <Button type="primary" className="profile-action-button">
-                    {t("profilePage.changeImage")}
-                  </Button>
+              <div className="profile-picture-container">
+                {profilePicture !== null ? (
+                  <img src={profilePicture} className="profile-image" />
+                ) : (
+                  <Avatar
+                    size={250}
+                    className="profile-image"
+                    icon={<UserOutlined />}
+                  />
                 )}
               </div>
+              {isMyProfile === true && (
+                <ImgCrop rotationSlider beforeCrop={hasFilePhotoType}>
+                  <Upload
+                    customRequest={handleCustomPhotoRequest}
+                    showUploadList={false}
+                    name="file"
+                    onPreview={handleFilePreview}
+                    accept="image/*"
+                  >
+                    <Button
+                      icon={<PictureOutlined />}
+                      type="primary"
+                      className="profile-action-button"
+                    >
+                      {t("profilePage.changeImage")}
+                    </Button>
+                  </Upload>
+                </ImgCrop>
+              )}
               <div className="profile-user">
                 <div className="profile-user-nick">
                   <h1>

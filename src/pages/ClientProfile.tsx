@@ -1,23 +1,53 @@
 import { useEffect, useState } from "react";
 import store from "../store/RootStore";
 import "../scss/pages/_profile.scss";
-import testImg from "../../public/pet_buddy_logo.svg";
-import { Button, Card } from "antd";
+import {
+  Avatar,
+  Button,
+  Card,
+  Upload,
+} from "antd";
 import RoundedLine from "../components/RoundedLine";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { api } from "../api/api";
 import { UserProfiles } from "../types";
+import { PictureOutlined, UserOutlined } from "@ant-design/icons";
+import ImgCrop from "antd-img-crop";
+import { handleFilePreview, hasFilePhotoType } from "../functions/imageHandle";
+
 
 function ClientProfile() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [profileData, setProfileData] = useState<UserProfiles>();
+  const [profilePicture, setProfilePicture] = useState<string | null>(null);
 
   const getClientDetails = () => {
     api.getUserProfiles().then((data) => {
       setProfileData(data);
+      if (data.accountData.profilePicture !== null) {
+        setProfilePicture(data.accountData.profilePicture.url);
+      }
     });
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleCustomPhotoRequest = async (options: any) => {
+    const { file, onSuccess, onError } = options;
+
+    try {
+      const response = await api.uploadProfilePicture(file);
+      if (response.profilePicture !== null) {
+        setProfilePicture(response.profilePicture.url);
+      }
+      onSuccess?.("ok");
+    } catch (e: unknown) {
+      onError?.(e);
+      if (e instanceof Error) {
+        console.log(`ERROR: ${e.message}`);
+      }
+    }
   };
 
   useEffect(() => {
@@ -34,18 +64,41 @@ function ClientProfile() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   return (
     <div>
       {profileData !== null && profileData !== undefined ? (
         <div className="profile-container">
           <div className="profile-left-data">
             <div className="profile-left-upper-container">
-              <div>
-                <img src={testImg} className="profile-image" />
-                <Button type="primary" className="profile-action-button">
-                  {t("profilePage.changeImage")}
-                </Button>
+              <div className="profile-picture-container">
+                {profilePicture !== null ? (
+                  <img src={profilePicture} className="profile-image" />
+                ) : (
+                  <Avatar
+                    size={250}
+                    className="profile-image"
+                    icon={<UserOutlined />}
+                  />
+                )}
               </div>
+              <ImgCrop rotationSlider beforeCrop={hasFilePhotoType}>
+                <Upload
+                  customRequest={handleCustomPhotoRequest}
+                  showUploadList={false}
+                  name="file"
+                  onPreview={handleFilePreview}
+                  accept="image/*"
+                >
+                  <Button
+                    icon={<PictureOutlined />}
+                    type="primary"
+                    className="profile-action-button"
+                  >
+                    {t("profilePage.changeImage")}
+                  </Button>
+                </Upload>
+              </ImgCrop>
             </div>
 
             <div className="profile-offers-smaller-screen">
@@ -86,6 +139,7 @@ function ClientProfile() {
                       <h3>{t("profilePage.noCaretakerProfile")}</h3>
                       <Button
                         type="primary"
+                        className="profile-action-button"
                         onClick={() => navigate("/caretaker/form")}
                       >
                         + {t("profileSelection.createCaretaker")}

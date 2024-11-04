@@ -261,7 +261,7 @@ class API {
     try {
       let endpoint = `api/rating/${email}`;
       if (page !== null) {
-        endpoint = endpoint.concat(`?page=${page}`);
+        endpoint = endpoint.concat(`page=${page}`);
       }
 
       if (size !== null) {
@@ -474,6 +474,17 @@ class API {
         { "Accept-Role": store.user.profile?.selected_profile }
       );
     }
+  }
+
+  async uploadProfilePicture(profilePicture: File): Promise<AccountDataDTO> {
+    const formData = new FormData();
+    formData.append("profilePicture", profilePicture);
+
+    return this.authorizedMultipartFetch<AccountDataDTO>(
+      "PUT",
+      "api/user/profile-picture",
+      formData
+    );
   }
 
   async deleteOfferConfiguration(

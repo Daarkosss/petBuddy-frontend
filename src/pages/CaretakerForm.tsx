@@ -3,7 +3,6 @@ import {
   Form,
   Input,
   Button,
-  GetProp,
   Upload,
   UploadProps,
   UploadFile,
@@ -26,8 +25,12 @@ import {
 } from "../types";
 import Voivodeship from "../models/Voivodeship";
 import store from "../store/RootStore";
+import {
+  dummyRequest,
+  handleFilePreview,
+  hasFilePhotoType,
+} from "../functions/imageHandle";
 
-type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 const PHOTOS_LIMIT = 10;
 
 const CaretakerForm = () => {
@@ -79,21 +82,6 @@ const CaretakerForm = () => {
     } else {
       toast.error(t("error.wrongFileTypeForPhoto"));
     }
-  };
-
-  const handleFilePreview = async (file: UploadFile) => {
-    let src = file.url as string;
-    if (!src) {
-      src = await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file.originFileObj as FileType);
-        reader.onload = () => resolve(reader.result as string);
-      });
-    }
-    const image = new Image();
-    image.src = src;
-    const imgWindow = window.open(src);
-    imgWindow?.document.write(image.outerHTML);
   };
 
   const handleRemoveCurrentPhoto = (file: UploadFile) => {
@@ -179,27 +167,6 @@ const CaretakerForm = () => {
     } else {
       handleAddCaretaker(formFields);
     }
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const dummyRequest = ({ onSuccess }: any) => {
-    setTimeout(() => {
-      onSuccess("ok");
-    }, 0);
-  };
-
-  const hasFilePhotoType = (file: UploadFile) => {
-    const allowedFormats = [
-      "image/jpeg",
-      "image/webp",
-      "image/png",
-      "image/jpg",
-    ];
-    console.log(file);
-    if (!file.type || !allowedFormats.includes(file.type)) {
-      return false;
-    }
-    return true;
   };
 
   return (
