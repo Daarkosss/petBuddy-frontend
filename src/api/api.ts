@@ -1,9 +1,23 @@
 import { toast } from "react-toastify";
 import store from "../store/RootStore";
-import { 
-  CaretakerBasicsResponse, CaretakerSearchFilters, PagingParams, CaretakerFormFields, UserProfiles, CaretakerDetailsDTO,
-  OfferDTO, OfferConfigurationDTO, EditOfferDescription, AvailabilityRanges, SetAvailabilityDTO, OfferDTOWithId, 
-  OfferConfigurationWithId, CaretakerDetails, OfferWithId
+import {
+  CaretakerBasicsResponse,
+  CaretakerSearchFilters,
+  PagingParams,
+  CaretakerFormFields,
+  UserProfiles,
+  CaretakerDetailsDTO,
+  OfferDTO,
+  OfferConfigurationDTO,
+  EditOfferDescription,
+  AvailabilityRanges,
+  SetAvailabilityDTO,
+  OfferDTOWithId,
+  OfferConfigurationWithId,
+  CaretakerDetails,
+  OfferWithId,
+  AccountDataDTO,
+  CaretakerRatingsResponse,
 } from "../types";
 import { AnimalConfigurationsDTO } from "../types/animal.types";
 import { UploadFile } from "antd";
@@ -149,7 +163,9 @@ class API {
         minPrice: offer.minPrice ? offer.minPrice : 0.01,
         maxPrice: offer.maxPrice ? offer.maxPrice : 99999.99,
       })),
-      availabilities: filters.availabilities ? this.convertValuesToAvailabilityRanges(filters.availabilities) : [],
+      availabilities: filters.availabilities
+        ? this.convertValuesToAvailabilityRanges(filters.availabilities)
+        : [],
     }));
 
     return this.fetch<CaretakerBasicsResponse>(
@@ -182,7 +198,7 @@ class API {
       );
       return {
         ...response,
-        offers: this.convertOffersAvailabilities(response.offers)
+        offers: this.convertOffersAvailabilities(response.offers),
       };
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -204,8 +220,65 @@ class API {
       );
       return {
         ...response,
-        offers: this.convertOffersAvailabilities(response.offers)
+        offers: this.convertOffersAvailabilities(response.offers),
       };
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new Error(`Failed to fetch caretaker profile: ${error.message}`);
+      }
+      throw new Error(
+        "An unknown error occurred while fetching caretaker profile"
+      );
+    }
+  }
+
+  async getClientDetails(acceptRole: string): Promise<AccountDataDTO> {
+    try {
+      const response = await this.authorizedFetch<AccountDataDTO>(
+        "GET",
+        "api/client",
+        { "Accept-Role": acceptRole }
+      );
+      return response;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new Error(`Failed to fetch caretaker profile: ${error.message}`);
+      }
+      throw new Error(
+        "An unknown error occurred while fetching caretaker profile"
+      );
+    }
+  }
+
+  //TODO: popraw
+  async getCaretakerRatings(
+    email: string,
+    page: number | null,
+    size: number | null,
+    sortDirection: string | null,
+    sortBy: string[] | null
+  ): Promise<CaretakerRatingsResponse> {
+    try {
+      let endpoint = `api/rating/${email}`;
+      if (page !== null) {
+        endpoint = endpoint.concat(`?page=${page}`);
+      }
+
+      if (size !== null) {
+        endpoint = endpoint.concat("", `&size=${size}`);
+      }
+      if (sortDirection !== null) {
+        endpoint = endpoint.concat("", `&sortDirection=${sortDirection}`);
+      }
+
+      if (sortBy !== null) {
+        endpoint = endpoint.concat("", `&sortBy=${sortBy}`);
+      }
+      const response = await this.fetch<CaretakerRatingsResponse>(
+        "GET",
+        endpoint
+      );
+      return response;
     } catch (error: unknown) {
       if (error instanceof Error) {
         throw new Error(`Failed to fetch caretaker profile: ${error.message}`);
@@ -221,25 +294,27 @@ class API {
     photos: UploadFile[]
   ): Promise<CaretakerDetails | void> {
     const formData = new FormData();
-    
-    const caretakerData = new Blob([JSON.stringify(formFields)], { type: "application/json" });
+
+    const caretakerData = new Blob([JSON.stringify(formFields)], {
+      type: "application/json",
+    });
     formData.append("caretakerData", caretakerData);
-    
+
     photos.forEach((photo) => {
       if (photo.originFileObj) {
         formData.append("newOfferPhotos", photo.originFileObj);
       }
-    })
+    });
 
     const response = await this.authorizedMultipartFetch<CaretakerDetailsDTO>(
       "POST",
       "api/caretaker",
-      formData,
+      formData
     );
     return {
       ...response,
-      offers: this.convertOffersAvailabilities(response.offers)
-    }
+      offers: this.convertOffersAvailabilities(response.offers),
+    };
   }
 
   async editCaretakerProfile(
@@ -249,18 +324,22 @@ class API {
   ): Promise<CaretakerDetails | void> {
     if (store.user.profile?.selected_profile === "CARETAKER") {
       const formData = new FormData();
-      
-      const caretakerData = new Blob([JSON.stringify(formFields)], { type: "application/json" });
+
+      const caretakerData = new Blob([JSON.stringify(formFields)], {
+        type: "application/json",
+      });
       formData.append("caretakerData", caretakerData);
 
-      const blobsData = new Blob([JSON.stringify(offerBlobsToKeep)], { type: "application/json" });
-      formData.append("offerBlobsToKeep", blobsData); 
-      
+      const blobsData = new Blob([JSON.stringify(offerBlobsToKeep)], {
+        type: "application/json",
+      });
+      formData.append("offerBlobsToKeep", blobsData);
+
       newPhotos.forEach((photo) => {
         if (photo.originFileObj) {
           formData.append("newOfferPhotos", photo.originFileObj);
         }
-      })
+      });
 
       const response = await this.authorizedMultipartFetch<CaretakerDetailsDTO>(
         "PUT",
@@ -270,12 +349,14 @@ class API {
       );
       return {
         ...response,
-        offers: this.convertOffersAvailabilities(response.offers)
-      }
+        offers: this.convertOffersAvailabilities(response.offers),
+      };
     }
   }
 
-  async addOrEditOffer(offer: OfferDTO | EditOfferDescription): Promise<OfferWithId | undefined> {
+  async addOrEditOffer(
+    offer: OfferDTO | EditOfferDescription
+  ): Promise<OfferWithId | undefined> {
     if (store.user.profile?.selected_profile) {
       return this.authorizedFetch<OfferWithId>(
         "POST",
@@ -296,12 +377,17 @@ class API {
       );
       return {
         ...response,
-        availabilities: this.convertAvailabilityRangesToValues(response.availabilities)
-      }
+        availabilities: this.convertAvailabilityRangesToValues(
+          response.availabilities
+        ),
+      };
     }
   }
 
-  async setAmenitiesForOffer(offerId: number, offerAmenities: string[]): Promise<OfferWithId | undefined> {
+  async setAmenitiesForOffer(
+    offerId: number,
+    offerAmenities: string[]
+  ): Promise<OfferWithId | undefined> {
     if (store.user.profile?.selected_profile) {
       return this.authorizedFetch<OfferWithId>(
         "PUT",
@@ -329,31 +415,35 @@ class API {
   ): Promise<OfferWithId[] | undefined> {
     const offersWithAvailabilities: SetAvailabilityDTO = {
       offerIds,
-      availabilityRanges: this.convertValuesToAvailabilityRanges(availabilities)
-    }
+      availabilityRanges:
+        this.convertValuesToAvailabilityRanges(availabilities),
+    };
     if (store.user.profile?.selected_profile) {
       const response = await this.authorizedFetch<OfferDTOWithId[]>(
         "PUT",
         "api/caretaker/offer/availability",
         offersWithAvailabilities,
         { "Accept-Role": store.user.profile?.selected_profile }
-      )
-      return this.convertOffersAvailabilities(response)
+      );
+      return this.convertOffersAvailabilities(response);
     }
   }
 
   async setAvailabilityForOffer(
-    offerId: number, 
+    offerId: number,
     availabilities: string[][]
   ): Promise<OfferWithId | undefined> {
-    const response = await this.setAvailabilityForOffers([offerId], availabilities);
+    const response = await this.setAvailabilityForOffers(
+      [offerId],
+      availabilities
+    );
     if (response) {
       return response[0];
     }
   }
 
   async addOfferConfiguration(
-    offerId: number, 
+    offerId: number,
     offerConfiguration: OfferConfigurationDTO
   ): Promise<OfferWithId | undefined> {
     if (store.user.profile?.selected_profile) {
@@ -365,13 +455,15 @@ class API {
       );
       return {
         ...response,
-        availabilities: this.convertAvailabilityRangesToValues(response.availabilities)
-      }
+        availabilities: this.convertAvailabilityRangesToValues(
+          response.availabilities
+        ),
+      };
     }
   }
 
   async editOfferConfiguration(
-    configurationId: number, 
+    configurationId: number,
     offerConfiguration: OfferConfigurationDTO
   ): Promise<OfferConfigurationWithId | undefined> {
     if (store.user.profile?.selected_profile) {
@@ -384,7 +476,9 @@ class API {
     }
   }
 
-  async deleteOfferConfiguration(configurationId: number): Promise<OfferWithId | undefined> {
+  async deleteOfferConfiguration(
+    configurationId: number
+  ): Promise<OfferWithId | undefined> {
     if (store.user.profile?.selected_profile) {
       const response = await this.authorizedFetch<OfferDTOWithId>(
         "DELETE",
@@ -394,34 +488,42 @@ class API {
       );
       return {
         ...response,
-        availabilities: this.convertAvailabilityRangesToValues(response.availabilities)
-      }
+        availabilities: this.convertAvailabilityRangesToValues(
+          response.availabilities
+        ),
+      };
     }
   }
 
   convertOffersAvailabilities = (offers: OfferDTOWithId[]): OfferWithId[] => {
     return offers.map((offer) => this.convertOfferAvailabilities(offer));
-  }
+  };
 
   convertOfferAvailabilities = (offer: OfferDTOWithId): OfferWithId => {
     return {
       ...offer,
-      availabilities: this.convertAvailabilityRangesToValues(offer.availabilities)
-    }
-  }
+      availabilities: this.convertAvailabilityRangesToValues(
+        offer.availabilities
+      ),
+    };
+  };
 
   async getAnimalsConfigurations(): Promise<AnimalConfigurationsDTO> {
     return this.fetch<AnimalConfigurationsDTO>("GET", "api/animal/complex");
   }
-  
-  convertAvailabilityRangesToValues = (availabilities: AvailabilityRanges): string[][] => {
+
+  convertAvailabilityRangesToValues = (
+    availabilities: AvailabilityRanges
+  ): string[][] => {
     return availabilities.map((availability) => [
       availability.availableFrom,
       availability.availableTo || availability.availableFrom,
     ]);
-  }
-  
-  convertValuesToAvailabilityRanges = (values: string[][]): AvailabilityRanges => {
+  };
+
+  convertValuesToAvailabilityRanges = (
+    values: string[][]
+  ): AvailabilityRanges => {
     return values.map(([from, to]) => ({
       availableFrom: from?.toString() || "",
       availableTo: to?.toString() || from?.toString() || "",

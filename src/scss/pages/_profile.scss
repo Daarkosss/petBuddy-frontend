@@ -1,0 +1,192 @@
+@use "../helpers/variables" as v;
+
+.profile-container {
+  display: flex;
+  height: calc(100vh - 64px);
+  color: v.$blue-dark;
+
+  .profile-left-data {
+    background-color: v.$white;
+    flex: 3;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow-y: auto;
+    // min-width: 750px;
+
+    .profile-left-upper-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: start;
+      gap: 20px;
+
+      // @media (max-width: 1500px) {
+      //   flex-direction: column;
+      // }
+
+      .profile-image {
+        border-radius: 50%; /* przycinanie do kształtu koła */
+        object-fit: cover;
+        border: 4px solid v.$blue-dark;
+        width: 100%;
+      }
+
+      .profile-user {
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        align-items: start;
+        width: 100%;
+        height: 100%;
+
+        .profile-user-nick {
+          text-align: center;
+        }
+
+        .profile-rating {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: start;
+          gap: 10px;
+          height: 100%;
+        }
+
+        .profile-actions {
+          height: 100%;
+          display: flex;
+          flex-direction: row;
+          margin-top: 10px;
+          justify-content: end;
+          gap: 10px;
+          //   @media (max-width: 1500px) {
+          //     flex-direction: row;
+          //     margin-top: 10px;
+          //   }
+        }
+      }
+    }
+
+    .profile-offers-smaller-screen {
+      display: none;
+      @media (max-width: 780px) {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        background-color: v.$blue-dark;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+      }
+
+      .profile-client-data-container-smaller-screen {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+      }
+
+      .profile-offer-card-smaller-screen {
+        display: flex;
+        justify-content: center;
+      }
+
+      .profile-no-offers {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        gap: 20px;
+
+        .profile-no-offers-add-offer-button {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          width: 100%;
+          margin-top: 10px;
+        }
+      }
+    }
+
+    .profile-add-a-comment {
+      margin-top: 10px;
+      margin-bottom: 20px;
+    }
+
+    .profile-comments-page {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: end;
+      gap: 10px;
+
+      .profile-comments-page-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+      }
+    }
+  }
+
+  .profile-right {
+    display: flex;
+    max-height: 100vh;
+    flex: 5;
+    overflow-x: auto;
+    flex-direction: column;
+    color: v.$white;
+
+    @media (max-width: 780px) {
+      display: none;
+    }
+
+    .profile-client-data-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .profile-client-card {
+        margin: 10px;
+        width: 50%;
+      }
+    }
+
+    .profile-right-offers {
+      overflow-x: auto;
+      display: flex;
+      flex-direction: row;
+      justify-content: start;
+      padding: 20px;
+      height: 100%;
+
+      gap: 20px;
+
+      .profile-no-offers {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        gap: 20px;
+
+        .profile-no-offers-add-offer-button {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          width: 100%;
+          margin-top: 10px;
+        }
+      }
+    }
+  }
+
+  /* hide scrollbar */
+  .profile-left-data::-webkit-scrollbar {
+    display: none; /* Chrome, Safari i Opera */
+  }
+}

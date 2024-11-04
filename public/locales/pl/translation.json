@@ -7,7 +7,7 @@
   "bird": "Ptak",
   "reptile": "Gad",
   "fish": "Ryba",
-  
+
   "sex": "Płeć",
   "male": "Samiec",
   "she": "Samiczka",
@@ -71,11 +71,36 @@
 
   "perPage": "na stronę",
 
+  "loginPage": {
+    "proceedInfo": "Aby kontynuować musisz być zalogowany",
+    "loginOrRegister": "Zaloguj się za pomocą Keycloaka"
+  },
+
   "profileSelection": {
     "title": "Wybierz profil",
     "client": "Klient",
     "caretaker": "Opiekun",
     "createCaretaker": "Utwórz profil opiekuna"
+  },
+
+  "profilePage": {
+    "changeImage": "Zmień zdięcie",
+    "followCaretaker": "Obserwuj",
+    "openChat": "Otwórz chat",
+    "userCaretakerProfile": "Profil opiekuna tego użytkownika",
+    "userClientProfile": "Profil klienta",
+    "editProfile": "Edytuj profil",
+    "description": "Opis",
+    "changeToClientProfile": "Przejdź na profil klienta",
+    "changeToCaretakerProfile": "Przejdź na profil opiekuna",
+    "offers": "Oferty",
+    "noOffersToShow": "Brak ofert do wyświetlenia",
+    "addOffer": "Dodaj ofertę",
+    "ratings": "Oceny",
+    "rate": "Oceń",
+    "noRatingsToShow": "Brak ocen do wyświetlenia",
+    "page": "strona",
+    "noCaretakerProfile": "Nie posiadasz jeszcze profilu opiekuna"
   },
 
   "caretakerSearch": {
@@ -111,14 +136,16 @@
     "subtitle": "Użyj poniższego paska wyszukiwania, aby znaleźć opiekuna lub zaloguj się, aby uzyskać więcej opcji.",
     "searchTitle": "Znajdz najlepszego opiekuna dla swojego pupila"
   },
-  
+
   "home": "Strona główna",
   "menu": "Menu",
   "searchCaretakers": "Wyszukaj opiekunów",
   "aboutUs": "O nas",
+  "profile": "Profil",
 
   "date": "Data",
   "selectedDates": "Wybrane daty",
+  "availableDates": "Dostępne terminy",
   "loginOrRegister": "Zaloguj się lub zarejestruj",
 
   "error": {
@@ -159,12 +186,14 @@
   "animalType": "Rodzaj zwierzęcia",
   "animalTypes": "Rodzaje zwierząt",
   "manage": "Zarządzaj",
+  "requestCare": "Poproś o opiekę",
   "availability": "Dostępność",
   "editDescription": "Edytuj opis",
   "editAmenities": "Edytuj udogodnienia",
   "editAvailability": "Edytuj dostępność",
   "edit": "Edytuj",
   "delete": "Usuń",
+  "sendRequest": "Wyślij prośbę",
   "yes": "Tak",
   "no": "Nie",
 
@@ -181,6 +210,14 @@
     "bird": "Twoja oferta dla ptaków",
     "rabbit": "Twoja oferta dla królików",
     "reptile": "Twoja oferta dla gadów"
+  },
+
+  "caretakerOffers": {
+    "cat": "Oferta dla kotów",
+    "dog": "Oferta dla psów",
+    "bird": "Oferta dla ptaków",
+    "rabbit": "Oferta dla królików",
+    "reptile": "Oferta dla gadów"
   },
 
   "availabilityAlert": "Dostępność zostanie nadpisana wybranymi datami dla wszystkich ofert, które zaznaczysz.",

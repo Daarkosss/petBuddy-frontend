@@ -11,6 +11,8 @@ import OfferManagement from "./pages/OfferManagement";
 import LandingPage from "./pages/LandingPage";
 import Header from "./components/Header";
 import { observer } from "mobx-react-lite";
+import CaretakerProfile from "./pages/CaretakerProfile";
+import ClientProfile from "./pages/ClientProfile";
 
 const { Content } = Layout;
 
@@ -68,7 +70,7 @@ const App = observer(() => {
   if (!store.isStarting) {
     return (
       <Layout>
-        <Header/>
+        <Header />
         <Content className="page-content">
           <Routes>
             {keycloak.authenticated ? (
@@ -76,29 +78,50 @@ const App = observer(() => {
                 <>
                   <Route path="/" element={<LandingPage />} />
                   <Route path="/caretaker/form" element={<CaretakerForm />} />
-                  <Route path="/caretaker/search" element={<CaretakerSearch />} />
-                  <Route path="/caretaker/offers" element={<OfferManagement />} />
+                  <Route
+                    path="/caretaker/search"
+                    element={<CaretakerSearch />}
+                  />
+                  <Route
+                    path="/caretaker/offers"
+                    element={<OfferManagement />}
+                  />
                   <Route
                     path="/profile-selection"
-                    element={<ProfileSelection isUserDataFetched={isUserDataFetched} />}
+                    element={
+                      <ProfileSelection isUserDataFetched={isUserDataFetched} />
+                    }
                   />
+                  <Route
+                    path="/profile-caretaker"
+                    element={<CaretakerProfile />}
+                  />
+                  <Route path="/profile-client" element={<ClientProfile />} />
                   <Route path="*" element={<Navigate to="/" replace />} />
                 </>
               ) : (
                 <>
                   <Route
                     path="/profile-selection"
-                    element={<ProfileSelection isUserDataFetched={isUserDataFetched} />}
+                    element={
+                      <ProfileSelection isUserDataFetched={isUserDataFetched} />
+                    }
                   />
                   <Route path="/caretaker/form" element={<CaretakerForm />} />
-                  <Route path="*" element={<Navigate to="/profile-selection" replace />} />
+                  <Route
+                    path="*"
+                    element={<Navigate to="/profile-selection" replace />}
+                  />
                 </>
               )
             ) : (
               <>
-                <Route path="/" element={<LandingPage />} />
+                <Route
+                  path="/profile-caretaker"
+                  element={<CaretakerProfile />}
+                />
                 <Route path="/caretaker/search" element={<CaretakerSearch />} />
-                <Route path="*" element={<Navigate to="/" replace />} />
+                <Route path="*" element={<LandingPage />} />
               </>
             )}
           </Routes>

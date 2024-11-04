@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Card, Popconfirm} from "antd";
+import { Button, Card, Popconfirm } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import { OfferConfigurationWithId, OfferWithId } from "../../types";
 import { t } from "i18next";
@@ -10,10 +10,15 @@ import OfferModal from "./OfferModal";
 
 type OfferCardProps = {
   offer: OfferWithId;
+  canBeEdited?: boolean;
   handleUpdateOffer: (updatedOffer: OfferWithId, isDeleted?: boolean) => void;
 };
 
-const OfferCard: React.FC<OfferCardProps> = ({ offer, handleUpdateOffer }) => {
+const OfferCard: React.FC<OfferCardProps> = ({
+  offer,
+  handleUpdateOffer,
+  canBeEdited = true,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleDeleteOffer = async () => {
@@ -28,14 +33,45 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, handleUpdateOffer }) => {
     }
   };
 
-  const handleUpdateConfiguration = (updatedConfiguration: OfferConfigurationWithId) => {
+  const handleUpdateConfiguration = (
+    updatedConfiguration: OfferConfigurationWithId
+  ) => {
     const updatedConfigurations = offer.offerConfigurations.map((config) =>
       config.id === updatedConfiguration.id ? updatedConfiguration : config
     );
-    
-    const updatedOffer = { ...offer, offerConfigurations: updatedConfigurations };
+
+    const updatedOffer = {
+      ...offer,
+      offerConfigurations: updatedConfigurations,
+    };
     handleUpdateOffer(updatedOffer);
   };
+
+  const actions = [
+    <Button
+      type="primary"
+      className="view-details-button"
+      onClick={() => setIsModalOpen(true)}
+    >
+      {t("viewDetails")}
+    </Button>,
+  ];
+
+  if (canBeEdited) {
+    actions.push(
+      <Popconfirm
+        title={t("deleteOffer")}
+        description={t("confirmOfferDelete")}
+        onConfirm={handleDeleteOffer}
+        okText={t("yes")}
+        cancelText={t("no")}
+      >
+        <Button type="primary" danger>
+          <DeleteOutlined />
+        </Button>
+      </Popconfirm>
+    );
+  }
 
   return (
     <div>
@@ -47,22 +83,7 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, handleUpdateOffer }) => {
             alt={offer.animal.animalType}
           />
         }
-        actions={[
-          <Button type="primary" className="view-details-button" onClick={() => setIsModalOpen(true)}>
-            {t("viewDetails")}
-          </Button>,
-          <Popconfirm
-            title={t("deleteOffer")}
-            description={t("confirmOfferDelete")}
-            onConfirm={handleDeleteOffer}
-            okText={t("yes")}
-            cancelText={t("no")}
-          >
-            <Button type="primary" danger>
-              <DeleteOutlined />
-            </Button>
-          </Popconfirm>
-        ]}
+        actions={actions}
       >
         <Meta
           title={t(`yourOffers.${offer.animal.animalType.toLowerCase()}`)}
@@ -75,6 +96,7 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, handleUpdateOffer }) => {
         closeModal={() => setIsModalOpen(false)}
         handleUpdateOffer={handleUpdateOffer}
         handleUpdateConfiguration={handleUpdateConfiguration}
+        canBeEdited={canBeEdited}
       />
     </div>
   );

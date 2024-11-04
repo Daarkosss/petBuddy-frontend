@@ -68,7 +68,7 @@
     "email": "E-mail",
     "contactDetails": "Contact details"
   },
-  
+
   "perPage": "per page",
 
   "profileSelection": {
@@ -76,6 +76,26 @@
     "client": "Client",
     "caretaker": "Caretaker",
     "createCaretaker": "Create caretaker profile"
+  },
+
+  "profilePage": {
+    "changeImage": "Change image",
+    "followCaretaker": "Follow",
+    "openChat": "Open chat",
+    "userCaretakerProfile": "User caretaker profile",
+    "userClientProfile": "Client profile",
+    "editProfile": "Edit profile",
+    "description": "Description",
+    "changeToClientProfile": "Change to client profile",
+    "changeToCaretakerProfile": "Change to caretaker profile",
+    "offers": "Offers",
+    "noOffersToShow": "Currently there are no offers to show",
+    "addOffer": "Add offer",
+    "ratings": "Ratings",
+    "rate": "Rate",
+    "noRatingsToShow": "There are no ratings to show",
+    "page": "page",
+    "noCaretakerProfile": "Currently you do not have caretaker profile"
   },
 
   "caretakerSearch": {
@@ -116,9 +136,11 @@
   "menu": "Menu",
   "searchCaretakers": "Search caretakers",
   "aboutUs": "About Us",
+  "profile": "Profile",
 
   "date": "Date",
   "selectedDates": "Selected dates",
+  "availableDates": "Available dates",
   "loginOrRegister": "Login or register",
 
   "error": {
@@ -159,12 +181,14 @@
   "animalType": "Animal type",
   "animalTypes": "Animal types",
   "manage": "Manage",
+  "requestCare": "Request care",
   "availability": "Availability",
   "editDescription": "Edit description",
   "editAmenities": "Edit amenities",
   "editAvailability": "Edit availability",
   "edit": "Edit",
   "delete": "Delete",
+  "sendRequest": "Send a request",
   "yes": "Yes",
   "no": "No",
 
@@ -181,6 +205,14 @@
     "bird": "Your offer for birds",
     "rabbit": "Your offer for rabbits",
     "reptile": "Your offer for reptiles"
+  },
+
+  "caretakerOffers": {
+    "cat": "Offer for cats",
+    "dog": "Offer for dogs",
+    "bird": "Offer for birds",
+    "rabbit": "Offer for rabbits",
+    "reptile": "Offer for reptiles"
   },
 
   "availabilityAlert": "Availability will be overwritten with selected dates for all offers, you choose.",
