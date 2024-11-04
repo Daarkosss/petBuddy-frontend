@@ -15,7 +15,7 @@ const PageHeader = observer(() => {
   const { keycloak } = useKeycloak();
   const [drawerVisible, setDrawerVisible] = useState(false);
 
-  const menuItems = [
+  const initialMenuItems = [
     {
       key: "home",
       label: t("home"),
@@ -30,12 +30,22 @@ const PageHeader = observer(() => {
       key: "aboutUs",
       label: t("aboutUs"),
     },
-    {
-      key: "profile",
-      label: t("profile"),
-      onClick: () => navigate("/profile-client"),
-    },
   ];
+
+  const menuItems =
+    keycloak.authenticated === false
+      ? initialMenuItems
+      : [
+          ...initialMenuItems,
+          {
+            key: "profile",
+            label: t("profile"),
+            onClick: () =>
+              navigate("/profile-client", {
+                state: { userEmail: store.user.profile?.email },
+              }),
+          },
+        ];
 
   const menu = (
     <Menu

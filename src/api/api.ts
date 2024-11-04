@@ -259,7 +259,7 @@ class API {
     sortBy: string[] | null
   ): Promise<CaretakerRatingsResponse> {
     try {
-      let endpoint = `api/rating/${email}?`;
+      let endpoint = `api/rating/${email}`;
       if (page !== null) {
         endpoint = endpoint.concat(`page=${page}`);
       }
@@ -476,9 +476,7 @@ class API {
     }
   }
 
-  async uploadProfilePicture(
-    profilePicture: File
-  ): Promise<AccountDataDTO> {
+  async uploadProfilePicture(profilePicture: File): Promise<AccountDataDTO> {
     const formData = new FormData();
     formData.append("profilePicture", profilePicture);
 
