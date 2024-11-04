@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { Modal, Collapse, Input, Space, Button, Select } from "antd";
-import { EditOfferDescription, OfferConfigurationWithId, OfferWithId } from "../../types";
+import {
+  EditOfferDescription,
+  OfferConfigurationWithId,
+  OfferWithId,
+} from "../../types";
 import { t } from "i18next";
 import OfferConfigurations from "./OfferConfigurations";
 import { toast } from "react-toastify";
@@ -11,14 +15,22 @@ import store from "../../store/RootStore";
 
 type OfferModalProps = {
   offer: OfferWithId;
+  canBeEdited?: boolean;
   handleUpdateOffer: (updatedOffer: OfferWithId, isDeleted?: boolean) => void;
-  handleUpdateConfiguration: (updatedConfiguration: OfferConfigurationWithId) => void;
+  handleUpdateConfiguration: (
+    updatedConfiguration: OfferConfigurationWithId
+  ) => void;
   isModalOpen: boolean;
   closeModal: () => void;
 };
 
-const OfferModal: React.FC<OfferModalProps> = ({ 
-  offer, handleUpdateOffer, handleUpdateConfiguration, isModalOpen, closeModal
+const OfferModal: React.FC<OfferModalProps> = ({
+  offer,
+  handleUpdateOffer,
+  handleUpdateConfiguration,
+  isModalOpen,
+  closeModal,
+  canBeEdited = true,
 }) => {
   const [isEditingDescription, setIsEditingDescription] = useState(false);
   const [isEditingAmenities, setIsEditingAmenities] = useState(false);
@@ -26,18 +38,20 @@ const OfferModal: React.FC<OfferModalProps> = ({
 
   const [editedDescription, setEditedDescription] = useState(offer.description);
   const [editedAmenities, setEditedAmenities] = useState(offer.animalAmenities);
-  const [editedAvailability, setEditedAvailability] = useState(offer.availabilities);
+  const [editedAvailability, setEditedAvailability] = useState(
+    offer.availabilities
+  );
 
   const handleStartEditingDescription = () => {
     setIsEditingDescription(true);
     setEditedDescription(offer.description);
-  }
+  };
 
   const handleSaveDescription = async () => {
     try {
-      const offerWithDescription: EditOfferDescription = { 
+      const offerWithDescription: EditOfferDescription = {
         animal: offer.animal,
-        description: editedDescription
+        description: editedDescription,
       };
       const updatedOffer = await api.addOrEditOffer(offerWithDescription);
       if (updatedOffer) {
@@ -54,11 +68,14 @@ const OfferModal: React.FC<OfferModalProps> = ({
   const handleStartEditingAmenities = () => {
     setIsEditingAmenities(true);
     setEditedAmenities(offer.animalAmenities);
-  }
+  };
 
   const handleSaveAmenities = async () => {
     try {
-      const updatedOffer = await api.setAmenitiesForOffer(offer.id, editedAmenities);
+      const updatedOffer = await api.setAmenitiesForOffer(
+        offer.id,
+        editedAmenities
+      );
       if (updatedOffer) {
         handleUpdateOffer(updatedOffer);
       }
@@ -72,12 +89,15 @@ const OfferModal: React.FC<OfferModalProps> = ({
 
   const handleStartEditingAvailability = () => {
     setIsEditingAvailability(true);
-    setEditedAvailability(offer.availabilities)
+    setEditedAvailability(offer.availabilities);
   };
 
   const handleSaveAvailability = async () => {
     try {
-      const updatedOffer = await api.setAvailabilityForOffer(offer.id, editedAvailability);
+      const updatedOffer = await api.setAvailabilityForOffer(
+        offer.id,
+        editedAvailability
+      );
       if (updatedOffer) {
         handleUpdateOffer(updatedOffer);
       }
@@ -89,12 +109,13 @@ const OfferModal: React.FC<OfferModalProps> = ({
     }
   };
 
-
   return (
     <Modal
       title={
         <div className="offer-modal-title">
-          {t(`yourOffers.${offer.animal.animalType.toLowerCase()}`)}
+          {canBeEdited
+            ? t(`yourOffers.${offer.animal.animalType.toLowerCase()}`)
+            : t(`caretakerOffers.${offer.animal.animalType.toLowerCase()}`)}
         </div>
       }
       open={isModalOpen}
@@ -107,7 +128,7 @@ const OfferModal: React.FC<OfferModalProps> = ({
         <div className="offer-field">
           <div className="label">
             {t("description")}
-            {!isEditingDescription && (
+            {!isEditingDescription && canBeEdited && (
               <EditOutlined onClick={handleStartEditingDescription} />
             )}
           </div>
@@ -120,7 +141,11 @@ const OfferModal: React.FC<OfferModalProps> = ({
                 style={{ maxWidth: 700 }}
               />
               <Space>
-                <Button type="primary" className="submit-button" onClick={handleSaveDescription}>
+                <Button
+                  type="primary"
+                  className="submit-button"
+                  onClick={handleSaveDescription}
+                >
                   {t("save")}
                 </Button>
                 <Button onClick={() => setIsEditingDescription(false)}>
@@ -129,9 +154,9 @@ const OfferModal: React.FC<OfferModalProps> = ({
               </Space>
             </div>
           ) : (
-            <Input.TextArea 
-              value={offer.description} 
-              autoSize={{ minRows: 2, maxRows: 4 }} 
+            <Input.TextArea
+              value={offer.description}
+              autoSize={{ minRows: 2, maxRows: 4 }}
               disabled
               style={{ maxWidth: 700 }}
             />
@@ -140,7 +165,7 @@ const OfferModal: React.FC<OfferModalProps> = ({
         <div className="offer-field">
           <div className="label">
             {t("amenities")}
-            {!isEditingAmenities && (
+            {!isEditingAmenities && canBeEdited && (
               <EditOutlined onClick={handleStartEditingAmenities} />
             )}
           </div>
@@ -153,13 +178,19 @@ const OfferModal: React.FC<OfferModalProps> = ({
                 value={editedAmenities}
                 onChange={setEditedAmenities}
                 notFoundContent={t("noData")}
-                options={store.animal.getAmenities(offer.animal.animalType).map((amenity) => ({
-                  value: amenity,
-                  label: t(`amenityTypes.${amenity}`)
-                }))}
+                options={store.animal
+                  .getAmenities(offer.animal.animalType)
+                  .map((amenity) => ({
+                    value: amenity,
+                    label: t(`amenityTypes.${amenity}`),
+                  }))}
               />
               <Space>
-                <Button type="primary" className="submit-button" onClick={handleSaveAmenities}>
+                <Button
+                  type="primary"
+                  className="submit-button"
+                  onClick={handleSaveAmenities}
+                >
                   {t("save")}
                 </Button>
                 <Button onClick={() => setIsEditingAmenities(false)}>
@@ -168,14 +199,18 @@ const OfferModal: React.FC<OfferModalProps> = ({
               </Space>
             </div>
           ) : (
-            <div>{offer.animalAmenities.map((value) => t(`amenityTypes.${value}`)).join(", ")}</div>
+            <div>
+              {offer.animalAmenities
+                .map((value) => t(`amenityTypes.${value}`))
+                .join(", ")}
+            </div>
           )}
         </div>
 
         <div className="offer-field">
           <div className="label">
             {t("availability")}
-            {!isEditingAvailability && (
+            {!isEditingAvailability && canBeEdited && (
               <EditOutlined onClick={handleStartEditingAvailability} />
             )}
           </div>
@@ -186,7 +221,11 @@ const OfferModal: React.FC<OfferModalProps> = ({
                 handleChange={setEditedAvailability}
               />
               <Space>
-                <Button type="primary" className="submit-button" onClick={handleSaveAvailability}>
+                <Button
+                  type="primary"
+                  className="submit-button"
+                  onClick={handleSaveAvailability}
+                >
                   {t("save")}
                 </Button>
                 <Button onClick={() => setIsEditingAvailability(false)}>
@@ -199,23 +238,27 @@ const OfferModal: React.FC<OfferModalProps> = ({
               <MultiCalendar
                 dateValue={offer.availabilities}
                 readOnly
+                showRemoveButton={canBeEdited}
               />
             </div>
           )}
         </div>
-        <Collapse 
+        <Collapse
           items={[
             {
               key: "panel",
               label: t("offerConfigurations"),
-              children: <OfferConfigurations
-                offerId={offer.id}
-                animalType={offer.animal.animalType}
-                configurations={offer.offerConfigurations}
-                handleUpdateOffer={handleUpdateOffer}
-                handleUpdateConfiguration={handleUpdateConfiguration}
-              />
-            }
+              children: (
+                <OfferConfigurations
+                  offerId={offer.id}
+                  animalType={offer.animal.animalType}
+                  configurations={offer.offerConfigurations}
+                  handleUpdateOffer={handleUpdateOffer}
+                  handleUpdateConfiguration={handleUpdateConfiguration}
+                  canBeEdited={canBeEdited}
+                />
+              ),
+            },
           ]}
         />
       </div>

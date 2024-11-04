@@ -19,7 +19,7 @@
   font-size: 16px;
   color: v.$white;
   background: v.$orange-medium;
-  
+
   &:hover,
   &:focus {
     color: v.$white;
@@ -30,7 +30,7 @@
 
 .view-details-button {
   background: v.$blue-medium;
-  
+
   &:hover,
   &:focus {
     background: v.$blue-light !important;
@@ -40,12 +40,22 @@
 .add-button {
   color: v.$white;
   background: v.$orange-medium;
-  
+
   &:hover,
   &:focus {
     color: v.$white;
     background: v.$orange-light !important;
     border: v.$white;
+  }
+}
+
+.profile-action-button {
+  color: v.$white;
+  background: v.$blue-medium;
+
+  &:hover,
+  &:focus {
+    background: v.$blue-light !important;
   }
 }
 

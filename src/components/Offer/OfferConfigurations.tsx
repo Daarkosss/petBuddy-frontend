@@ -1,6 +1,19 @@
 import React, { ChangeEvent, KeyboardEvent, useState } from "react";
-import { Button, Table, Input, Select, Space, Popconfirm, Form, TableColumnsType } from "antd";
-import { OfferConfigurationWithId, OfferConfigurationWithOptionalId, OfferWithId } from "../../types";
+import {
+  Button,
+  Table,
+  Input,
+  Select,
+  Space,
+  Popconfirm,
+  Form,
+  TableColumnsType,
+} from "antd";
+import {
+  OfferConfigurationWithId,
+  OfferConfigurationWithOptionalId,
+  OfferWithId,
+} from "../../types";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import _ from "lodash";
@@ -14,6 +27,7 @@ type ConfigurationsProps = {
   configurations: OfferConfigurationWithOptionalId[];
   handleUpdateOffer: (newOffer: OfferWithId) => void;
   handleUpdateConfiguration: (newOffer: OfferConfigurationWithId) => void;
+  canBeEdited: boolean;
 };
 
 const OfferConfigurations: React.FC<ConfigurationsProps> = ({
@@ -21,21 +35,26 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
   animalType,
   configurations,
   handleUpdateOffer,
-  handleUpdateConfiguration
+  handleUpdateConfiguration,
+  canBeEdited = true,
 }) => {
   const { t } = useTranslation();
-  const [editingKey, setEditingKey] = useState<number | null | undefined>(undefined);
+  const [editingKey, setEditingKey] = useState<number | null | undefined>(
+    undefined
+  );
   const [form] = Form.useForm();
   const [isLoading, setIsLoading] = useState(false);
 
-  const [newConfiguration, setNewConfiguration] = useState<OfferConfigurationWithOptionalId>({
-    id: null,
-    description: "",
-    dailyPrice: 0,
-    selectedOptions: {},
-  });
+  const [newConfiguration, setNewConfiguration] =
+    useState<OfferConfigurationWithOptionalId>({
+      id: null,
+      description: "",
+      dailyPrice: 0,
+      selectedOptions: {},
+    });
 
-  const isEditing = (record: OfferConfigurationWithOptionalId) => record.id === editingKey;
+  const isEditing = (record: OfferConfigurationWithOptionalId) =>
+    record.id === editingKey;
 
   const handleEdit = (record: OfferConfigurationWithOptionalId) => {
     setEditingKey(record.id);
@@ -51,7 +70,10 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
         return;
       }
 
-      const updatedConfiguration = await api.editOfferConfiguration(configurationId, values);
+      const updatedConfiguration = await api.editOfferConfiguration(
+        configurationId,
+        values
+      );
       if (updatedConfiguration) {
         handleUpdateConfiguration(updatedConfiguration);
       }
@@ -68,7 +90,7 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
     setIsLoading(true);
     try {
       const updatedOffer = await api.deleteOfferConfiguration(configId);
-      if (updatedOffer) { 
+      if (updatedOffer) {
         handleUpdateOffer(updatedOffer);
       }
       toast.success(t("success.deleteConfiguration"));
@@ -96,7 +118,9 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
     });
   };
 
-  const configurationExists = (updatedConfig: OfferConfigurationWithOptionalId) => {
+  const configurationExists = (
+    updatedConfig: OfferConfigurationWithOptionalId
+  ) => {
     const updatedConfigOptions = {
       ...updatedConfig,
       selectedOptions: sortNestedArrays(updatedConfig.selectedOptions),
@@ -104,9 +128,12 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
 
     return configurations.some((config) => {
       const configOptions = sortNestedArrays(config.selectedOptions);
-      return config.id !== editingKey && _.isEqual(configOptions, updatedConfigOptions.selectedOptions)
+      return (
+        config.id !== editingKey &&
+        _.isEqual(configOptions, updatedConfigOptions.selectedOptions)
+      );
     });
-  }
+  };
 
   const handleSaveNewRow = async () => {
     setIsLoading(true);
@@ -147,15 +174,14 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
   const handlePriceChange = (e: ChangeEvent<HTMLInputElement>) => {
     const regex = /^\d{0,5}(\.\d{0,2})?$/;
     const value = e.target.value;
-    
+
     if (!regex.test(value)) {
       form.setFieldsValue({ dailyPrice: value.slice(0, -1) });
     }
   };
 
-  const selectedOptionsColumns: ColumnType<OfferConfigurationWithOptionalId>[] = store.animal
-    .getAnimalAttributeKeys(animalType)
-    .map((attributeKey) => ({
+  const selectedOptionsColumns: ColumnType<OfferConfigurationWithOptionalId>[] =
+    store.animal.getAnimalAttributeKeys(animalType).map((attributeKey) => ({
       title: t(attributeKey.toLowerCase()),
       dataIndex: ["selectedOptions", attributeKey],
       onCell: () => ({
@@ -172,14 +198,18 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
               mode="multiple"
               showSearch={false}
               notFoundContent={t("noData")}
-              options={store.animal.getAttributeValues(animalType, attributeKey).map((value) => ({
-                value,
-                label: t(value.toLowerCase())
-              }))}
+              options={store.animal
+                .getAttributeValues(animalType, attributeKey)
+                .map((value) => ({
+                  value,
+                  label: t(value.toLowerCase()),
+                }))}
             />
           </Form.Item>
+        ) : values ? (
+          values.map((value) => t(value.toLowerCase())).join(", ")
         ) : (
-          values ? values.map((value) => t(value.toLowerCase())).join(", ") : ""
+          ""
         );
       },
     }));
@@ -240,39 +270,58 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
       }),
       render: (record: OfferConfigurationWithOptionalId) => {
         const editable = isEditing(record);
-        return editable ? (
-          <Space size="small">
-            <Button
-              type="primary"
-              onClick={record.id ? () => handleSaveEditRow(record.id!) : handleSaveNewRow}
-              loading={isLoading}
-            >
-              {t("save")}
-            </Button>
-            <Button onClick={handleCancelNewRow}>{t("cancel")}</Button>
-          </Space>
-        ) : (
-          <Space size="small">
-            <Button 
-              type="primary" 
-              onClick={() => handleEdit(record)} 
-              disabled={editingKey !== undefined}
-            >
-              {t("edit")}
-            </Button>
-            <Popconfirm
-              title={t("deleteConfiguration")}
-              description={t("confirmConfigurationDelete")}
-              onConfirm={() => handleDelete(record.id!)}
-              okText={t("yes")}
-              cancelText={t("no")}
-              disabled={editingKey !== undefined}
-            >
-              <Button type="primary" danger loading={isLoading} disabled={editingKey !== undefined}>
-                {t("delete")}
+        return canBeEdited ? (
+          editable ? (
+            <Space size="small">
+              <Button
+                type="primary"
+                onClick={
+                  record.id
+                    ? () => handleSaveEditRow(record.id!)
+                    : handleSaveNewRow
+                }
+                loading={isLoading}
+              >
+                {t("save")}
               </Button>
-            </Popconfirm>
-          </Space>
+              <Button onClick={handleCancelNewRow}>{t("cancel")}</Button>
+            </Space>
+          ) : (
+            <Space size="small">
+              <Button
+                type="primary"
+                onClick={() => handleEdit(record)}
+                disabled={editingKey !== undefined}
+              >
+                {t("edit")}
+              </Button>
+              <Popconfirm
+                title={t("deleteConfiguration")}
+                description={t("confirmConfigurationDelete")}
+                onConfirm={() => handleDelete(record.id!)}
+                okText={t("yes")}
+                cancelText={t("no")}
+                disabled={editingKey !== undefined}
+              >
+                <Button
+                  type="primary"
+                  danger
+                  loading={isLoading}
+                  disabled={editingKey !== undefined}
+                >
+                  {t("delete")}
+                </Button>
+              </Popconfirm>
+            </Space>
+          )
+        ) : (
+          <Button
+            type="primary"
+            onClick={record.id ? () => {} : () => {}}
+            loading={isLoading}
+          >
+            {t("sendRequest")}
+          </Button>
         );
       },
     },
@@ -282,15 +331,21 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
     <div className="offer-configurations">
       <Form form={form} component={false}>
         <Table
-          dataSource={editingKey === null ? [...configurations, newConfiguration] : configurations}
+          dataSource={
+            editingKey === null
+              ? [...configurations, newConfiguration]
+              : configurations
+          }
           columns={allColumns}
-          rowKey={(record: OfferConfigurationWithOptionalId) => record.id || "new"}
+          rowKey={(record: OfferConfigurationWithOptionalId) =>
+            record.id || "new"
+          }
           pagination={false}
           scroll={{ x: "max-content" }}
           locale={{ emptyText: t("noConfigurations") }}
         />
       </Form>
-      {editingKey === undefined && 
+      {editingKey === undefined && canBeEdited && (
         <Button
           type="primary"
           className="add-configuration-button"
@@ -299,7 +354,7 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
         >
           {t("addConfiguration")}
         </Button>
-      }
+      )}
     </div>
   );
 };

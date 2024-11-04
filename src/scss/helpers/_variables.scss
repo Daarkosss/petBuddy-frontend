@@ -11,14 +11,24 @@ $grey-dark: #474747;
 $black: #000000;
 
 // Shades of blue
-$blue-very-light: #E1F7FF;
-$blue-light: #00A8E8;
-$blue-medium: #007EA7;
+$blue-very-light: #e1f7ff;
+$blue-light: #00a8e8;
+$blue-medium: #007ea7;
 $blue-dark: #003459;
 $blue-very-dark: #00253f;
 
 // Shades of orange
-$orange-light: #FFB800;
-$orange-medium: #D78400;
+$orange-light: #ffb800;
+$orange-medium: #d78400;
 
-$home-background-gradient: linear-gradient(to right, $blue-dark, $blue-very-dark);
+//hierarchy colors
+$primary-color: #6439ff;
+$secondary-color: #4f75ff;
+$tertiary-color: #00ccdd;
+$accent_color: #7cf5ff;
+
+$home-background-gradient: linear-gradient(
+  to right,
+  $blue-dark,
+  $blue-very-dark
+);
