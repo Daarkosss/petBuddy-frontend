@@ -60,7 +60,7 @@
     "date": "Naciśnij, aby wybrać datę",
     "dailyPrice": "np. 52",
     "selectFromList": "Wybierz z listy",
-    "animalDescription": "np. Moj pies jest bardzo uroczy..."
+    "animalDescription": "np. Moj pupil musi jeść specjalną karmę..."
   },
 
   "personalData": {
@@ -106,7 +106,7 @@
     "required": "Wymagane",
     "zipCodeFormat": "Nieprawidłowy format (00-000)",
     "phoneNumberFormat": "Nieprawidłowy format (minimum 9 cyfr)",
-    "price": "Nieprawidłowy forat (0,00)"
+    "price": "Nieprawidłowy format (0,00)"
   },
 
   "landingPage": {

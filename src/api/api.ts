@@ -3,9 +3,10 @@ import store from "../store/RootStore";
 import { 
   CaretakerBasicsResponse, CaretakerSearchFilters, PagingParams, CaretakerFormFields, UserProfiles, CaretakerDetailsDTO,
   OfferDTO, OfferConfigurationDTO, EditOfferDescription, AvailabilityRanges, SetAvailabilityDTO, OfferDTOWithId, 
-  OfferConfigurationWithId, CaretakerDetails, OfferWithId
+  OfferConfigurationWithId, CaretakerDetails, OfferWithId,
+  AvailabilityValues
 } from "../types";
-import { CareReservation } from "../types/care.types";
+import { CareReservation, CareReservationDTO } from "../types/care.types";
 import { AnimalConfigurationsDTO } from "../types/animal.types";
 import { UploadFile } from "antd";
 
@@ -417,23 +418,33 @@ class API {
   
   async makeCareReservation(caretakerEmail: string, careReservation: CareReservation): Promise<void> {
     if (store.user.profile?.selected_profile === "CLIENT") {
+      const [dateFrom, dateTo] = careReservation.dateRange;
+      const body: CareReservationDTO = {
+        animalType: careReservation.animalType,
+        animalAttributes: careReservation.animalAttributes,
+        description: careReservation.description,
+        dailyPrice: careReservation.dailyPrice,
+        careStart: dateFrom?.toString() || "",
+        careEnd: dateTo?.toString() || dateFrom?.toString() || ""
+      };
+
       return this.authorizedFetch<void>(
         "POST",
         `api/care/${caretakerEmail}`,
-        careReservation,
+        body,
         { "Accept-Role": "CLIENT"}
       );
     }
   }
   
-  convertAvailabilityRangesToValues = (availabilities: AvailabilityRanges): string[][] => {
+  convertAvailabilityRangesToValues = (availabilities: AvailabilityRanges): AvailabilityValues => {
     return availabilities.map((availability) => [
       availability.availableFrom,
       availability.availableTo || availability.availableFrom,
     ]);
   }
   
-  convertValuesToAvailabilityRanges = (values: string[][]): AvailabilityRanges => {
+  convertValuesToAvailabilityRanges = (values: AvailabilityValues): AvailabilityRanges => {
     return values.map(([from, to]) => ({
       availableFrom: from?.toString() || "",
       availableTo: to?.toString() || from?.toString() || "",
