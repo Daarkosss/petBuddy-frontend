@@ -56,9 +56,11 @@
     "apartmentNumber": "np. 7",
     "phoneNumber": "np. 000000000",
     "description": "np. Zajmuję się opieką nad zwierzętami już od 2 lat. Moi klienci zawsze są zadowoleni...",
-    "sex": "np. Samiec",
     "animalType": "np. Pies",
-    "date": "Naciśnij, aby wybrać datę"
+    "date": "Naciśnij, aby wybrać datę",
+    "dailyPrice": "np. 52",
+    "selectFromList": "Wybierz z listy",
+    "animalDescription": "np. Moj pies jest bardzo uroczy..."
   },
 
   "personalData": {
@@ -190,5 +192,10 @@
 
   "imageCropperTitle": "Dostosuj zdjęcie",
   "apply": "Zatwierdź",
-  "oneAvailabilityForAllAnimals": "Jedna dostępność dla wszystkich zwierząt"
+  "oneAvailabilityForAllAnimals": "Jedna dostępność dla wszystkich zwierząt",
+
+  "careReservation": {
+    "title": "Rezerwacja opieki",
+    "askForCare": "Poproś o opiekę"
+  }
 }

@@ -49,7 +49,7 @@ const CareReservationForm = () => {
     <div className="care-reservation-container">
       <img src="/images/cat-card.jpg" alt="Logo"/>
       <div className="form-container">
-        <h1>{t("careReservationTitle")}</h1>
+        <h1>{t("careReservation.title")}</h1>
         <Form 
           form={form} 
           onFinish={handleFinish}
@@ -79,7 +79,6 @@ const CareReservationForm = () => {
                   value={value}
                   onFocus={openCalendar}
                   placeholder={t("placeholder.date")}
-                  style={{ width: 200 }}
                 />
               )}
             />
@@ -95,7 +94,7 @@ const CareReservationForm = () => {
             <Input 
               type="number"
               min={0}
-              placeholder={t("dailyPrice")}
+              placeholder={t("placeholder.dailyPrice")}
               onKeyDown={handlePriceKeyDown}
             />
           </Form.Item>
@@ -107,6 +106,7 @@ const CareReservationForm = () => {
             <Select
               mode="multiple"
               showSearch={false}
+              placeholder={t("placeholder.selectFromList")}
               options={[
                 { value: "MALE", label: t("male") },
                 { value: "SHE", label: t("she") },
@@ -121,6 +121,7 @@ const CareReservationForm = () => {
             <Select
               mode="multiple"
               showSearch={false}
+              placeholder={t("placeholder.selectFromList")}
               options={[
                 { value: "SMALL", label: t("small") },
                 { value: "BIG", label: t("big") },
@@ -132,10 +133,13 @@ const CareReservationForm = () => {
             label={t("description")}
             rules={[{ required: true, message: t("validation.required") }]}
           >
-            <Input.TextArea autoSize={{ minRows: 2, maxRows: 5 }} />
+            <Input.TextArea
+              placeholder={t("placeholder.animalDescription")}
+              autoSize={{ minRows: 2, maxRows: 5 }}
+            />
           </Form.Item>
           <Button type="primary" className="submit-button centered" htmlType="submit" loading={isLoading}>
-            {t("makeReservation")}
+            {t("careReservation.askForCare")}
           </Button>
         </Form>
       </div>

@@ -56,9 +56,11 @@
     "apartmentNumber": "e.g. 7",
     "phoneNumber": "e.g. 000000000",
     "description": "e.g. I have been taking care of animals for 2 years. My clients are always happy...",
-    "sex": "e.g. Male",
     "animalType": "e.g. Dog",
-    "date": "Press to select date"
+    "date": "Press to select date",
+    "dailyPrice": "e.g. 52",
+    "selectFromList": "Select from the list",
+    "animalDescription": "e.g. My dog is very cute..."
   },
 
   "personalData": {
@@ -190,5 +192,10 @@
 
   "imageCropperTitle": "Adjust image",
   "apply": "Apply",
-  "oneAvailabilityForAllAnimals": "One availability for all animals"
+  "oneAvailabilityForAllAnimals": "One availability for all animals",
+
+  "careReservation": {
+    "title": "Care reservation",
+    "askForCare": "Ask for care"
+  }
 }
