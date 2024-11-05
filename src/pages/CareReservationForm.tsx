@@ -22,6 +22,7 @@ const CareReservationForm = () => {
 
   const animalType: string = location.state?.animalType || "DOG"
   const availabilities: AvailabilityValues = location.state?.availabilities;
+  Form.useWatch("endDate", form);
 
   useEffect(() => {
     if (!location.state) {
@@ -106,39 +107,44 @@ const CareReservationForm = () => {
           className="form"
           labelCol={{ span: 7 }}
         >
-          <Form.Item
-            label={t("care.startDate")}
-            name="startDate"
-            rules={[{ required: true, message: t("validation.required") }]}
-          >
-            <DatePicker
-              format="YYYY-MM-DD"
-              value={startDate}
-              onChange={handleStartDateChange}
-              mapDays={({ date }) => {
-                const formattedDate = date.format("YYYY-MM-DD");
-                return {
-                  disabled: !availabilities.some(range => isDateInRange(formattedDate, range))
-                };
-              }}
-            />
-          </Form.Item>
-          <Form.Item
-            label={t("care.endDate")}
-            name="endDate"
-            rules={[{ required: true, message: t("validation.required") }]}
-          >
-            <DatePicker
-              key={startDate || endDateOptions[0]}
-              format="YYYY-MM-DD"
-              value={endDate}
-              onChange={handleEndDateChange}
-              currentDate={startDate ? new DateObject(startDate) : undefined}
-              minDate={startDate || endDateOptions[0]}
-              maxDate={endDateOptions[1]}
-              disabled={!startDate}
-            />
-          </Form.Item>
+          <DatePicker
+            format="YYYY-MM-DD"
+            value={startDate}
+            onChange={handleStartDateChange}
+            mapDays={({ date }) => {
+              const formattedDate = date.format("YYYY-MM-DD");
+              return {
+                disabled: !availabilities.some(range => isDateInRange(formattedDate, range))
+              };
+            }}
+            render={(value, openCalendar) => (
+              <Input
+                value={value}
+                onFocus={openCalendar}
+                placeholder={t("placeholder.date")}
+                style={{ width: 185 }}
+              />
+            )}
+          />
+          <DatePicker
+            key={startDate || endDateOptions[0]}
+            format="YYYY-MM-DD"
+            value={endDate}
+            onChange={handleEndDateChange}
+            currentDate={startDate ? new DateObject(startDate) : undefined}
+            minDate={startDate || endDateOptions[0]}
+            maxDate={endDateOptions[1]}
+            disabled={!startDate}
+            render={(value, openCalendar) => (
+              <Input
+                value={value}
+                disabled={!startDate}
+                onFocus={openCalendar}
+                placeholder={t("placeholder.date")}
+                style={{ width: 185 }}
+              />
+            )}
+          />
           <Form.Item
             name="dailyPrice"
             label={t("dailyPrice")}
