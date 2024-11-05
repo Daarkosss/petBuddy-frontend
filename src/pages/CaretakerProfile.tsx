@@ -18,6 +18,7 @@ import { CaretakerDetails, CaretakerRatingsResponse } from "../types";
 import OfferCard from "../components/Offer/OfferCard";
 import ImgCrop from "antd-img-crop";
 import { handleFilePreview, hasFilePhotoType } from "../functions/imageHandle";
+import OfferManagement from "./OfferManagement";
 
 const CaretakerProfile: React.FC = () => {
   const { t } = useTranslation();
@@ -109,7 +110,7 @@ const CaretakerProfile: React.FC = () => {
 
   return (
     <div>
-      {profileData !== null && profileData !== undefined ? (
+      {profileData !== null && profileData !== undefined &&
         <div className="profile-container">
           <div className="profile-left-data">
             <div className="profile-left-upper-container">
@@ -233,10 +234,11 @@ const CaretakerProfile: React.FC = () => {
             )}
             <div>
               <div className="profile-offers-smaller-screen">
-                <h1>{t("profilePage.offers")}</h1>
-
-                {profileData !== null && profileData !== undefined ? (
-                  profileData.offers.length > 0 ? (
+              {isMyProfile
+                ? <OfferManagement />
+                : <>
+                  <h1>{t("profilePage.offers")}</h1>
+                  {profileData !== null && profileData !== undefined && profileData.offers.length > 0 ? (
                     profileData.offers.map((element, index) => (
                       <div
                         key={index}
@@ -245,7 +247,7 @@ const CaretakerProfile: React.FC = () => {
                         <OfferCard
                           offer={element}
                           handleUpdateOffer={() => {}}
-                          canBeEdited={isMyProfile ?? false}
+                          canBeEdited={false}
                         />
                       </div>
                     ))
@@ -253,21 +255,18 @@ const CaretakerProfile: React.FC = () => {
                     <div className="profile-no-offers">
                       <Card>
                         <div>{t("profilePage.noOffersToShow")}</div>
-                        {isMyProfile === true && (
-                          <div className="profile-no-offers-add-offer-button">
-                            <Button type="primary" className="add-button">
-                              + {t("profilePage.addOffer")}
-                            </Button>
-                          </div>
-                        )}
+                        <div className="profile-no-offers-add-offer-button">
+                          <Button type="primary" className="add-button">
+                            + {t("profilePage.addOffer")}
+                          </Button>
+                        </div>
                       </Card>
                     </div>
-                  )
-                ) : null}
-              </div>
-
+                  )}
+                </>
+              }
+            </div>
               <h1>{t("profilePage.ratings")}</h1>
-              {/* divider */}
               {isMyProfile === false &&
                 store.user.profile?.selected_profile !== "CARETAKER" && (
                   <div className="profile-add-a-comment">
@@ -276,9 +275,8 @@ const CaretakerProfile: React.FC = () => {
                     </Button>
                   </div>
                 )}
-
               <div className="profile-comments-container">
-                {ratings !== null && ratings !== undefined ? (
+                {ratings !== null && ratings !== undefined && 
                   ratings.content.length > 0 ? (
                     ratings!.content.map((element, index) => (
                       <div key={index}>
@@ -292,7 +290,7 @@ const CaretakerProfile: React.FC = () => {
                   ) : (
                     <div>{t("profilePage.noRatingsToShow")}</div>
                   )
-                ) : null}
+                }
               </div>
               {ratings !== null &&
                 ratings !== undefined &&
@@ -339,41 +337,34 @@ const CaretakerProfile: React.FC = () => {
           </div>
 
           <div className="profile-right">
-            <h1>{t("profilePage.offers")}</h1>
-            <div className="profile-right-offers">
-              {/* divider */}
-              {profileData !== null ? (
-                profileData.offers.length > 0 ? (
-                  profileData.offers.map((element, index) => (
-                    <div key={index}>
-                      <OfferCard
-                        offer={element}
-                        handleUpdateOffer={() => {}}
-                        canBeEdited={isMyProfile ?? false}
-                      />
+            {isMyProfile
+              ? <OfferManagement />
+              : <>
+                <h1>{t("profilePage.offers")}</h1>
+                <div className="profile-right-offers">
+                  {profileData && profileData.offers.length > 0 ? (
+                    profileData.offers.map((element, index) => (
+                      <div key={index}>
+                        <OfferCard
+                          offer={element}
+                          handleUpdateOffer={() => {}}
+                          canBeEdited={isMyProfile ?? false}
+                        />
+                      </div>
+                    ))
+                  ) : (
+                    <div className="profile-no-offers">
+                      <Card>
+                        <div>{t("profilePage.noOffersToShow")}</div>
+                      </Card>
                     </div>
-                  ))
-                ) : (
-                  <div className="profile-no-offers">
-                    <Card>
-                      <div>{t("profilePage.noOffersToShow")}</div>
-                      {isMyProfile === true && (
-                        <div className="profile-no-offers-add-offer-button">
-                          <Button type="primary" className="add-button">
-                            + {t("profilePage.addOffer")}
-                          </Button>
-                        </div>
-                      )}
-                    </Card>
-                  </div>
-                )
-              ) : null}
-            </div>
+                  )}
+                </div>
+              </>
+            }
           </div>
         </div>
-      ) : (
-        <div>Loading ...</div>
-      )}
+      }
     </div>
   );
 };

@@ -266,7 +266,7 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
     },
     ...selectedOptionsColumns,
     {
-      title: t("manage"),
+      title: t("actions"),
       onCell: () => ({
         style: { minWidth: 150, maxWidth: 200 },
       }),

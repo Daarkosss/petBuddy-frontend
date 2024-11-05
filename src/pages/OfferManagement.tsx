@@ -100,6 +100,11 @@ const OfferManagement: React.FC = () => {
           </Col>
         ))}
       </Row>
+      {offers.length === 0 && (
+        <h3 className="no-offers-message">
+          {t("profilePage.noOffersToShow")}
+        </h3>
+      )}
       <Modal
         title={t("addOffer")}
         open={isOfferModalOpen}
