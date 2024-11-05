@@ -176,7 +176,7 @@ const CaretakerForm = () => {
   return (
     <div className="caretaker-form-container">
       <Spin size="large" spinning={isStarting}>
-        <Form form={form} layout="vertical" onFinish={handleSubmit}>
+        <Form form={form} layout="vertical" onFinish={handleSubmit} scrollToFirstError>
           <Space direction="vertical" size="large" style={{ width: "100%" }}>
             <Card title={t("address")}>
               <div className="card-grid-row">

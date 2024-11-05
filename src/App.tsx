@@ -55,7 +55,7 @@ const App = observer(() => {
         fetchUserData();
         setIsUserDataFetched(true);
       } else {
-        store.reset();
+        store.user.reset();
       }
       store.isStarting = false;
     }
