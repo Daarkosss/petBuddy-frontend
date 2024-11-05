@@ -6,6 +6,11 @@
   display: flex;
   gap: 20px;
 
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    align-items: center;
+  }
+
   .caretaker-sidebar {
     display: flex;
     flex-direction: column;
@@ -17,11 +22,20 @@
     border: 1px solid v.$grey-light;
     background-color: v.$white;
     border-radius: 10px;
+
+    @media (max-width: 1024px) {
+      width: 500px;
+    }
+
+    @media (max-width: 768px) {
+      width: 80%;
+    }
   }
   
   .filters {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 15px;
     width: 100%;
 
@@ -32,8 +46,7 @@
     .animal-filter {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      gap: 15px;
+      gap: 10px;
       margin-top: 20px;
 
       .prices {
@@ -43,10 +56,30 @@
         gap: 15px;
       }
     }
+
+    .calendar-wrapper {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    h3 {
+      font-size: 1.3rem;
+      text-align: center;
+    }
   }
 
   .caretaker-content {
     flex-grow: 1;
+
+    @media (max-width: 1024px) {
+      width: 90%;
+    }
+
+    @media (max-width: 768px) {
+      overflow-y: auto;
+    }
   }
 
   .caretaker-list-item {
@@ -54,11 +87,14 @@
     align-items: center;
   }
 
-  .caretaker-list-item img {
-    width: 150px;
-    height: 150px;
-    margin-right: 20px;
-  }
+    .profile-picture {
+      width: 150px;
+      height: 150px;
+      margin-right: 20px;
+      background-color: v.$grey-light;
+      color: v.$white;
+    }
+
 
   .caretaker-rating {
     display: flex;
@@ -75,5 +111,18 @@
 
   .caretaker-rating-value {
     margin-left: 8px;
+  }
+
+  .ant-pagination-item {
+    a {
+      &:hover {
+        color: v.$white !important;
+      }
+    }
+
+    &-active {
+      background-color: v.$orange-medium;
+      border-color: v.$orange-medium;
+    }
   }
 }

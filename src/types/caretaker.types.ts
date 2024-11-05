@@ -1,5 +1,39 @@
 import { PageableDTO, SortDTO } from "./pagination.types";
-import { AccountDataDTO } from "./user.types";
+import { AccountDataDTO, Photo } from "./user.types";
+import {
+  AvailabilityValues,
+  OfferConfiguration,
+  OfferDTOWithId,
+  OfferWithId,
+} from "./offer.types";
+
+export type CaretakerRatingDTO = {
+  clientEmail: string;
+  caretakerEmail: string;
+  rating: number;
+  comment: string;
+};
+
+export type CaretakerRatingsResponse = {
+  totalPages: number;
+  totalElements: number;
+  size: number;
+  content: CaretakerRatingDTO[];
+  number: number;
+  sort: SortDTO[];
+  numberOfElements: number;
+  pageable: {
+    offset: number;
+    sort: SortDTO[];
+    unpaged: true;
+    paged: true;
+    pageSize: number;
+    pageNumber: number;
+  };
+  first: boolean;
+  last: boolean;
+  empty: boolean;
+};
 
 export type CaretakerBasicsDTO = {
   accountData: AccountDataDTO;
@@ -7,13 +41,18 @@ export type CaretakerBasicsDTO = {
   animals: string[];
   numberOfRatings: number;
   avgRating: number | null;
-}
+};
 
 export type CaretakerDetailsDTO = CaretakerBasicsDTO & {
   phoneNumber: string;
   description: string;
-  offers: OfferDTO[];
-}
+  offers: OfferDTOWithId[];
+  offerPhotos: Photo[];
+};
+
+export type CaretakerDetails = Omit<CaretakerDetailsDTO, "offers"> & {
+  offers: OfferWithId[];
+};
 
 export type AddressDTO = {
   city: string;
@@ -22,7 +61,7 @@ export type AddressDTO = {
   street: string;
   streetNumber: string;
   apartmentNumber: string;
-}
+};
 
 export type VoivodeshipDTO =
   | "DOLNOSLASKIE"
@@ -42,29 +81,6 @@ export type VoivodeshipDTO =
   | "WIELKOPOLSKIE"
   | "ZACHODNIOPOMORSKIE";
 
-export type OfferDTO = {
-  id: number;
-  description: string;
-  animal: {
-    animalType: string;
-  };
-  offerConfigurations: OfferConfigurationDTO[];
-  animalAmenities: string[];
-  availabilities: AvailabilityDTO[];
-}
-
-export type AvailabilityDTO = {
-  availableFrom: string;
-  availableTo: string;
-}
-
-export type OfferConfigurationDTO = {
-  id: number;
-  description: string;
-  dailyPrice: number;
-  selectedOptions: Record<string, string[]>;
-}
-
 export type CaretakerBasicsResponse = {
   content: CaretakerBasicsDTO[];
   pageable: PageableDTO;
@@ -77,35 +93,24 @@ export type CaretakerBasicsResponse = {
   last: boolean;
   numberOfElements: number;
   empty: boolean;
-}
+};
 
 export type CaretakerSearchFilters = {
   personalDataLike?: string;
   cityLike?: string;
   voivodeship?: string;
   animals?: AnimalFilter[];
-}
-
-export type AnimalSex = "MALE" | "SHE";
-export type AnimalSize = "SMALL" | "MEDIUM" | "BIG"; 
-
-export type OfferConfiguration = {
-  attributes?: {
-    SIZE?: AnimalSize[];
-    SEX?: AnimalSex[];
-  };
-  minPrice?: number;
-  maxPrice?: number;
-  amenities?: string[];
+  availabilities?: AvailabilityValues;
 };
 
 export type AnimalFilter = {
   animalType: string;
   offerConfigurations: OfferConfiguration[];
+  availabilities?: AvailabilityValues;
 };
 
 export type CaretakerFormFields = {
   phoneNumber: string;
   description: string;
   address: AddressDTO;
-}
+};

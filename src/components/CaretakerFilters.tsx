@@ -1,8 +1,10 @@
 import { Input, Select, Button } from "antd";
-import { CaretakerSearchFilters, OfferConfiguration, AnimalSize, AnimalSex } from "../types";
+import { CaretakerSearchFilters, OfferConfiguration } from "../types";
 import { useTranslation } from "react-i18next";
 import Voivodeship from "../models/Voivodeship";
 import { KeyboardEvent } from "react";
+import store from "../store/RootStore";
+import MultiCalendar from "./Calendar/MultiCalendar";
 
 interface CaretakerFiltersProps {
   filters: CaretakerSearchFilters;
@@ -57,14 +59,6 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
     onSearch();
   };
 
-  const renderSelectOptions = (options: Record<string, string>) => {
-    return Object.entries(options).map(([value, label]) => (
-      <Select.Option key={value} value={value}>
-        {label}
-      </Select.Option>
-    ));
-  };
-
   const renderAnimalFilters = () =>
     filters.animals?.map(({ animalType }) => (
       <div key={animalType} className="animal-filter">
@@ -93,40 +87,36 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
           />
           <div>zł</div>
         </div>
+        {store.animal.getAnimalAttributeKeys(animalType).map((attributeKey) => (
+          <Select
+            mode="multiple"
+            showSearch={false}
+            placeholder={t(attributeKey.toLowerCase())}
+            onChange={(value) =>
+              onAnimalFiltersChange(animalType, { attributes: { [attributeKey]: value } })
+            }
+            value={animalFilters[animalType]?.attributes?.[attributeKey] || []}
+            notFoundContent={t("noData")}
+            options={store.animal.getAttributeValues(animalType, attributeKey).map((value) => ({
+              value,
+              label: t(value.toLowerCase())
+            }))}
+          />
+        ))}
         <Select
           mode="multiple"
-          placeholder={t("size")}
-          onChange={(value) =>
-            onAnimalFiltersChange(animalType, { attributes: { SIZE: value as AnimalSize[] } })
-          }
-          value={animalFilters[animalType]?.attributes?.SIZE || []}
-        >
-          {renderSelectOptions({ SMALL: t("small"), MEDIUM: t("medium"), BIG: t("big") })}
-        </Select>
-        <Select
-          mode="multiple"
-          placeholder={t("sex")}
-          onChange={(value) =>
-            onAnimalFiltersChange(animalType, { attributes: { SEX: value as AnimalSex[] } })
-          }
-          value={animalFilters[animalType]?.attributes?.SEX || []}
-        >
-          {renderSelectOptions({ MALE: t("male"), SHE: t("she") })}
-        </Select>
-        <Select
-          mode="multiple"
+          showSearch={false}
           placeholder={t("amenities")}
           onChange={(value) =>
             onAnimalFiltersChange(animalType, { amenities: value as string[] })
           }
           value={animalFilters[animalType]?.amenities || []}
-        >
-          {renderSelectOptions({
-            toys: t("amenityTypes.toys"),
-            "scratching post": t("amenityTypes.scratchingPost"),
-            cage: t("amenityTypes.cage"),
-          })}
-        </Select>
+          notFoundContent={t("noData")}
+          options={store.animal.getAmenities(animalType).map((amenity) => ({
+            value: amenity,
+            label: t(`amenityTypes.${amenity}`)
+          }))}
+        />
       </div>
     ));
 
@@ -154,25 +144,31 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
           onChange={(value) => onFiltersChange({ ...filters, voivodeship: value })}
           allowClear
           value={filters.voivodeship}
-        >
-          {renderSelectOptions(Voivodeship.voivodeshipMap)}
-        </Select>
+          options={Voivodeship.voivodeshipOptions}
+        />
         <Select
           mode="multiple"
+          showSearch={false}
           placeholder={t("caretakerSearch.animalTypes")}
           onChange={onAnimalTypesChange}
           value={filters.animals?.map((animal) => animal.animalType)}
-        >
-          {renderSelectOptions({
-            DOG: t("dog"),
-            CAT: t("cat"),
-            BIRD: t("bird"),
-            REPTILE: t("reptile"),
-            HORSE: t("horse"),
-          })}
-        </Select>
+          options={store.animal.allAnimalTypes.map((animalType) => ({
+            value: animalType,
+            label: t(animalType.toLowerCase())
+          }))}
+        />
+        {filters.animals && filters.animals.length > 0 && 
+          <div className="calendar-wrapper">
+            <h3>{t("availability")}</h3>
+            <MultiCalendar
+              dateValue={filters.availabilities}
+              handleChange={(value) => onFiltersChange({ ...filters, availabilities: value })}
+              datePanelPosition="bottom"
+            />
+          </div>
+        }
         {renderAnimalFilters()}
-        <Button type="primary" onClick={handleSearch} className="button-search">
+        <Button type="primary" onClick={handleSearch} className="search-button">
           {t("search")}
         </Button>
       </div>

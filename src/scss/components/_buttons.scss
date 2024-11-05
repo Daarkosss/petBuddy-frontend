@@ -2,11 +2,70 @@
 
 .submit-button {
   float: right;
-  background: v.$blue-medium;
-  width: 100px;
+  background: v.$blue-dark;
 
   &:hover,
   &:focus {
     background: v.$blue-light !important;
   }
+}
+
+.search-button {
+  font-size: 16px;
+  color: v.$white;
+  background: v.$orange-medium;
+
+  &:hover,
+  &:focus {
+    color: v.$white;
+    background: v.$orange-light !important;
+    border: v.$white;
+  }
+}
+
+.view-details-button {
+  background: v.$blue-medium;
+
+  &:hover,
+  &:focus {
+    background: v.$blue-light !important;
+  }
+}
+
+.add-button {
+  color: v.$white;
+  background: v.$orange-medium;
+
+  &:hover,
+  &:focus {
+    color: v.$white;
+    background: v.$orange-light !important;
+    border: v.$white;
+  }
+}
+
+.profile-action-button {
+  color: v.$white;
+  background: v.$blue-medium;
+
+  &:hover,
+  &:focus {
+    background: v.$blue-light !important;
+  }
+}
+
+.add-offer-button {
+  @extend .add-button;
+  font-size: 16px;
+}
+
+.set-availability-button {
+  @extend .view-details-button;
+  font-size: 16px;
+}
+
+.add-configuration-button {
+  @extend .add-button;
+  align-self: center;
+  margin: 0 auto;
 }

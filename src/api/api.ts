@@ -7,7 +7,20 @@ import {
   CaretakerFormFields,
   UserProfiles,
   CaretakerDetailsDTO,
+  OfferDTO,
+  OfferConfigurationDTO,
+  EditOfferDescription,
+  AvailabilityRanges,
+  SetAvailabilityDTO,
+  OfferDTOWithId,
+  OfferConfigurationWithId,
+  CaretakerDetails,
+  OfferWithId,
+  AccountDataDTO,
+  CaretakerRatingsResponse,
 } from "../types";
+import { AnimalConfigurationsDTO } from "../types/animal.types";
+import { UploadFile } from "antd";
 import { ChatMessagesResponse, ChatRoom } from "../types/chat.types";
 
 const backendHost =
@@ -17,13 +30,13 @@ export const PATH_PREFIX = `http://${backendHost}:${backendPort}/`;
 
 type Method = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
-export type User = {
-  _id: string;
-  name: string;
-  email: string;
-};
-
 class API {
+  constructor() {
+    this.getAnimalsConfigurations().then((animalConfigurations) => {
+      store.animal.allAnimalConfigurations = animalConfigurations;
+    });
+  }
+
   async fetch<T>(
     method: Method,
     path: string,
@@ -59,15 +72,45 @@ class API {
     method: Method,
     path: string,
     body?: unknown,
-    headers: HeadersInit = {}
+    headers?: HeadersInit
   ): Promise<T> {
     if (store.user.jwtToken) {
       return this.fetch<T>(method, path, body, {
+        ...headers,
         Authorization: `Bearer ${store.user.jwtToken}`,
         ...headers,
       });
     } else {
+      toast.error("No user token available");
       return Promise.reject(new Error("No user token available"));
+    }
+  }
+
+  async authorizedMultipartFetch<T>(
+    method: Method,
+    path: string,
+    formData: FormData,
+    headers?: HeadersInit
+  ): Promise<T> {
+    const options = {
+      method,
+      headers: {
+        ...headers,
+        "X-XSRF-TOKEN": store.user.xsrfToken,
+        Authorization: `Bearer ${store.user.jwtToken}`,
+      },
+      body: formData,
+      credentials: "include",
+    } as RequestInit;
+
+    const response = await fetch(`${PATH_PREFIX}${path}`, options);
+    const data = await response.json();
+
+    if (!response.ok) {
+      toast.error(data.message || "Wrong server response!");
+      throw new Error(data.message || "Wrong server response!");
+    } else {
+      return data;
     }
   }
 
@@ -118,7 +161,6 @@ class API {
     }
 
     const queryString = queryParams.toString();
-
     const requestBody = filters.animals?.map((animal) => ({
       animalType: animal.animalType,
       offerConfigurations: animal.offerConfigurations.map((offer) => ({
@@ -126,11 +168,14 @@ class API {
         minPrice: offer.minPrice ? offer.minPrice : 0.01,
         maxPrice: offer.maxPrice ? offer.maxPrice : 99999.99,
       })),
+      availabilities: filters.availabilities
+        ? this.convertValuesToAvailabilityRanges(filters.availabilities)
+        : [],
     }));
 
-    return this.authorizedFetch<CaretakerBasicsResponse>(
+    return this.fetch<CaretakerBasicsResponse>(
       "POST",
-      `api/caretaker?${queryString}`,
+      `api/caretaker/all?${queryString}`,
       requestBody
     );
   }
@@ -150,11 +195,54 @@ class API {
     }
   }
 
-  async getCaretakerDetails(email: string): Promise<CaretakerDetailsDTO> {
+  async getCaretakerDetails(email: string): Promise<CaretakerDetails> {
+    try {
+      const response = await this.fetch<CaretakerDetailsDTO>(
+        "GET",
+        `api/caretaker/${email}`
+      );
+      return {
+        ...response,
+        offers: this.convertOffersAvailabilities(response.offers),
+      };
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new Error(`Failed to fetch caretaker profile: ${error.message}`);
+      }
+      throw new Error(
+        "An unknown error occurred while fetching caretaker profile"
+      );
+    }
+  }
+
+  async getCurrentCaretakerDetails(): Promise<CaretakerDetails> {
     try {
       const response = await this.authorizedFetch<CaretakerDetailsDTO>(
         "GET",
-        `api/caretaker/${email}`
+        "api/caretaker",
+        undefined,
+        { "Accept-Role": "CARETAKER" }
+      );
+      return {
+        ...response,
+        offers: this.convertOffersAvailabilities(response.offers),
+      };
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new Error(`Failed to fetch caretaker profile: ${error.message}`);
+      }
+      throw new Error(
+        "An unknown error occurred while fetching caretaker profile"
+      );
+    }
+  }
+
+  async getClientDetails(acceptRole: string): Promise<AccountDataDTO> {
+    try {
+      const response = await this.authorizedFetch<AccountDataDTO>(
+        "GET",
+        "api/client",
+        { "Accept-Role": acceptRole }
       );
       return response;
     } catch (error: unknown) {
@@ -167,94 +255,296 @@ class API {
     }
   }
 
-  async addCaretakerProfile(data: CaretakerFormFields): Promise<void> {
-    return this.authorizedFetch<void>("POST", "api/caretaker/add", data);
-  }
+  //TODO: popraw
+  async getCaretakerRatings(
+    email: string,
+    page: number | null,
+    size: number | null,
+    sortDirection: string | null,
+    sortBy: string[] | null
+  ): Promise<CaretakerRatingsResponse> {
+    try {
+      let endpoint = `api/rating/${email}`;
+      if (page !== null) {
+        endpoint = endpoint.concat(`page=${page}`);
+      }
 
-  async editCaretakerProfile(data: CaretakerFormFields): Promise<void> {
-    return this.authorizedFetch<void>("PUT", "api/caretaker/edit", data);
-  }
+      if (size !== null) {
+        endpoint = endpoint.concat("", `&size=${size}`);
+      }
+      if (sortDirection !== null) {
+        endpoint = endpoint.concat("", `&sortDirection=${sortDirection}`);
+      }
 
-  async initializeChatRoom(
-    messageReceiverEmail: string,
-    content: string,
-    acceptTimezone: string | null
-  ): Promise<void> {
-    const headers: HeadersInit = {
-      "Accept-Role": store.user.profile!.selected_profile!.toUpperCase(),
-    };
-    if (acceptTimezone !== null) {
-      headers["Accept-Timezone"] = acceptTimezone;
+      if (sortBy !== null) {
+        endpoint = endpoint.concat("", `&sortBy=${sortBy}`);
+      }
+      const response = await this.fetch<CaretakerRatingsResponse>(
+        "GET",
+        endpoint
+      );
+      return response;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new Error(`Failed to fetch caretaker profile: ${error.message}`);
+      }
+      throw new Error(
+        "An unknown error occurred while fetching caretaker profile"
+      );
     }
-    return this.authorizedFetch<void>(
+  }
+
+  async addCaretakerProfile(
+    formFields: CaretakerFormFields,
+    photos: UploadFile[]
+  ): Promise<CaretakerDetails | void> {
+    const formData = new FormData();
+
+    const caretakerData = new Blob([JSON.stringify(formFields)], {
+      type: "application/json",
+    });
+    formData.append("caretakerData", caretakerData);
+
+    photos.forEach((photo) => {
+      if (photo.originFileObj) {
+        formData.append("newOfferPhotos", photo.originFileObj);
+      }
+    });
+
+    const response = await this.authorizedMultipartFetch<CaretakerDetailsDTO>(
       "POST",
-      `api/chat/${messageReceiverEmail}`,
-      {
-        content: content,
-      },
-      headers
+      "api/caretaker",
+      formData
+    );
+    return {
+      ...response,
+      offers: this.convertOffersAvailabilities(response.offers),
+    };
+  }
+
+  async editCaretakerProfile(
+    formFields: CaretakerFormFields,
+    newPhotos: UploadFile[],
+    offerBlobsToKeep: string[]
+  ): Promise<CaretakerDetails | void> {
+    if (store.user.profile?.selected_profile === "CARETAKER") {
+      const formData = new FormData();
+
+      const caretakerData = new Blob([JSON.stringify(formFields)], {
+        type: "application/json",
+      });
+      formData.append("caretakerData", caretakerData);
+
+      const blobsData = new Blob([JSON.stringify(offerBlobsToKeep)], {
+        type: "application/json",
+      });
+      formData.append("offerBlobsToKeep", blobsData);
+
+      newPhotos.forEach((photo) => {
+        if (photo.originFileObj) {
+          formData.append("newOfferPhotos", photo.originFileObj);
+        }
+      });
+
+      const response = await this.authorizedMultipartFetch<CaretakerDetailsDTO>(
+        "PUT",
+        "api/caretaker",
+        formData,
+        { "Accept-Role": "CARETAKER" }
+      );
+      return {
+        ...response,
+        offers: this.convertOffersAvailabilities(response.offers),
+      };
+    }
+  }
+
+  async addOrEditOffer(
+    offer: OfferDTO | EditOfferDescription
+  ): Promise<OfferWithId | undefined> {
+    if (store.user.profile?.selected_profile) {
+      return this.authorizedFetch<OfferWithId>(
+        "POST",
+        "api/caretaker/offer/add-or-edit",
+        offer,
+        { "Accept-Role": store.user.profile?.selected_profile }
+      );
+    }
+  }
+
+  async deleteOffer(offerId: number): Promise<OfferWithId | undefined> {
+    if (store.user.profile?.selected_profile) {
+      const response = await this.authorizedFetch<OfferDTOWithId>(
+        "DELETE",
+        `api/caretaker/offer/${offerId}`,
+        undefined,
+        { "Accept-Role": store.user.profile?.selected_profile }
+      );
+      return {
+        ...response,
+        availabilities: this.convertAvailabilityRangesToValues(
+          response.availabilities
+        ),
+      };
+    }
+  }
+
+  async setAmenitiesForOffer(
+    offerId: number,
+    offerAmenities: string[]
+  ): Promise<OfferWithId | undefined> {
+    if (store.user.profile?.selected_profile) {
+      return this.authorizedFetch<OfferWithId>(
+        "PUT",
+        `api/caretaker/offer/${offerId}/amenities`,
+        offerAmenities,
+        { "Accept-Role": store.user.profile?.selected_profile }
+      );
+    }
+  }
+
+  async deleteAmenitiesForOffer(offerId: number): Promise<void> {
+    if (store.user.profile?.selected_profile) {
+      return this.authorizedFetch<void>(
+        "DELETE",
+        `api/caretaker/offer/${offerId}/amenities`,
+        undefined,
+        { "Accept-Role": store.user.profile?.selected_profile }
+      );
+    }
+  }
+
+  async setAvailabilityForOffers(
+    offerIds: number[],
+    availabilities: string[][]
+  ): Promise<OfferWithId[] | undefined> {
+    const offersWithAvailabilities: SetAvailabilityDTO = {
+      offerIds,
+      availabilityRanges:
+        this.convertValuesToAvailabilityRanges(availabilities),
+    };
+    if (store.user.profile?.selected_profile) {
+      const response = await this.authorizedFetch<OfferDTOWithId[]>(
+        "PUT",
+        "api/caretaker/offer/availability",
+        offersWithAvailabilities,
+        { "Accept-Role": store.user.profile?.selected_profile }
+      );
+      return this.convertOffersAvailabilities(response);
+    }
+  }
+
+  async setAvailabilityForOffer(
+    offerId: number,
+    availabilities: string[][]
+  ): Promise<OfferWithId | undefined> {
+    const response = await this.setAvailabilityForOffers(
+      [offerId],
+      availabilities
+    );
+    if (response) {
+      return response[0];
+    }
+  }
+
+  async addOfferConfiguration(
+    offerId: number,
+    offerConfiguration: OfferConfigurationDTO
+  ): Promise<OfferWithId | undefined> {
+    if (store.user.profile?.selected_profile) {
+      const response = await this.authorizedFetch<OfferDTOWithId>(
+        "POST",
+        `api/caretaker/offer/${offerId}/configurations`,
+        [offerConfiguration],
+        { "Accept-Role": store.user.profile?.selected_profile }
+      );
+      return {
+        ...response,
+        availabilities: this.convertAvailabilityRangesToValues(
+          response.availabilities
+        ),
+      };
+    }
+  }
+
+  async editOfferConfiguration(
+    configurationId: number,
+    offerConfiguration: OfferConfigurationDTO
+  ): Promise<OfferConfigurationWithId | undefined> {
+    if (store.user.profile?.selected_profile) {
+      return this.authorizedFetch<OfferConfigurationWithId>(
+        "PUT",
+        `api/caretaker/offer/configuration/${configurationId}`,
+        offerConfiguration,
+        { "Accept-Role": store.user.profile?.selected_profile }
+      );
+    }
+  }
+
+  async uploadProfilePicture(profilePicture: File): Promise<AccountDataDTO> {
+    const formData = new FormData();
+    formData.append("profilePicture", profilePicture);
+
+    return this.authorizedMultipartFetch<AccountDataDTO>(
+      "PUT",
+      "api/user/profile-picture",
+      formData
     );
   }
 
-  async getChatRoomWithGivenUser(
-    participantEmail: string,
-    acceptTimezone: string | null
-  ): Promise<ChatRoom> {
-    try {
-      const headers: HeadersInit = {
-        "Accept-Role": store.user.profile!.selected_profile!.toUpperCase(),
+  async deleteOfferConfiguration(
+    configurationId: number
+  ): Promise<OfferWithId | undefined> {
+    if (store.user.profile?.selected_profile) {
+      const response = await this.authorizedFetch<OfferDTOWithId>(
+        "DELETE",
+        `api/caretaker/offer/configuration/${configurationId}`,
+        undefined,
+        { "Accept-Role": store.user.profile?.selected_profile }
+      );
+      return {
+        ...response,
+        availabilities: this.convertAvailabilityRangesToValues(
+          response.availabilities
+        ),
       };
-      if (acceptTimezone !== null) {
-        headers["Accept-Timezone"] = acceptTimezone;
-      }
-      console.log();
-      const response = await this.authorizedFetch<ChatRoom>(
-        "GET",
-        `api/chat/${participantEmail}`,
-        null,
-        headers
-      );
-      return response;
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        throw new Error(`Failed to find chat: ${error.message}`);
-      }
-      throw new Error(
-        "An unknown error occurred while fetching caretaker profile"
-      );
     }
   }
 
-  async getMessagesFromSpecifiedChatRoom(
-    chatId: number,
-    page: string | null,
-    size: string | null,
-    acceptTimezone: string | null
-  ): Promise<ChatMessagesResponse> {
-    try {
-      const headers: HeadersInit = {
-        "Accept-Role": store.user.profile!.selected_profile!.toUpperCase(),
-      };
-      if (acceptTimezone !== null) {
-        headers["Accept-Timezone"] = acceptTimezone;
-      }
-      console.log();
-      const response = await this.authorizedFetch<ChatMessagesResponse>(
-        "GET",
-        `api/chat/${chatId}/messages?page=${page}&size=${size}`,
-        null,
-        headers
-      );
-      return response;
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        throw new Error(`Failed to find chat: ${error.message}`);
-      }
-      throw new Error(
-        "An unknown error occurred while fetching caretaker profile"
-      );
-    }
+  convertOffersAvailabilities = (offers: OfferDTOWithId[]): OfferWithId[] => {
+    return offers.map((offer) => this.convertOfferAvailabilities(offer));
+  };
+
+  convertOfferAvailabilities = (offer: OfferDTOWithId): OfferWithId => {
+    return {
+      ...offer,
+      availabilities: this.convertAvailabilityRangesToValues(
+        offer.availabilities
+      ),
+    };
+  };
+
+  async getAnimalsConfigurations(): Promise<AnimalConfigurationsDTO> {
+    return this.fetch<AnimalConfigurationsDTO>("GET", "api/animal/complex");
   }
+
+  convertAvailabilityRangesToValues = (
+    availabilities: AvailabilityRanges
+  ): string[][] => {
+    return availabilities.map((availability) => [
+      availability.availableFrom,
+      availability.availableTo || availability.availableFrom,
+    ]);
+  };
+
+  convertValuesToAvailabilityRanges = (
+    values: string[][]
+  ): AvailabilityRanges => {
+    return values.map(([from, to]) => ({
+      availableFrom: from?.toString() || "",
+      availableTo: to?.toString() || from?.toString() || "",
+    }));
+  };
 }
 
 export const api = new API();

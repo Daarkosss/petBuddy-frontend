@@ -1,19 +1,33 @@
 import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Table, Button, Spin, Rate } from "antd";
-import { SorterResult, TablePaginationConfig, FilterValue, ColumnsType } from "antd/es/table/interface";
+import {
+  SorterResult,
+  TablePaginationConfig,
+  FilterValue,
+  ColumnsType,
+} from "antd/es/table/interface";
 import { api } from "../api/api";
-import { Header } from "../components/Header";
 import { useTranslation } from "react-i18next";
 import { CaretakerBasics } from "../models/Caretaker";
-import { CaretakerSearchFilters, OfferConfiguration } from "../types";
+import {
+  Availability,
+  CaretakerSearchFilters,
+  OfferConfiguration,
+} from "../types";
 import CaretakerFilters from "../components/CaretakerFilters";
+import store from "../store/RootStore";
+import { UserOutlined } from "@ant-design/icons";
+import { toast } from "react-toastify";
 
 const CaretakerList = () => {
   const { t } = useTranslation();
+  const location = useLocation();
+
+  const navigate = useNavigate();
 
   const [caretakers, setCaretakers] = useState<CaretakerBasics[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const [pagingParams, setPagingParams] = useState({
     page: 0,
@@ -28,32 +42,65 @@ const CaretakerList = () => {
     total: 0,
   });
 
-  const [filters, setFilters] = useState<CaretakerSearchFilters>({
-    personalDataLike: "",
-    cityLike: "",
-    voivodeship: undefined,
-    animals: [],
+  const [filters, setFilters] = useState<CaretakerSearchFilters>(
+    (location.state?.filters && {
+      ...location.state.filters,
+      availabilities: location.state?.filters?.availabilities.map(
+        (value: Availability) => [value.availableFrom, value.availableTo]
+      ),
+    }) || {
+      personalDataLike: "",
+      cityLike: "",
+      voivodeship: undefined,
+      animals: [],
+      availabilities: [],
+    }
+  );
+
+  const [animalFilters, setAnimalFilters] = useState<
+    Record<string, OfferConfiguration>
+  >(() => {
+    const animal = location.state?.filters?.animals?.[0];
+    if (animal) {
+      return { [animal.animalType]: animal.availabilities || [] };
+    }
+    return {};
   });
 
-  const [animalFilters, setAnimalFilters] = useState<Record<string, OfferConfiguration>>({});
+  const assignFiltersToAnimals = async () => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      animals: prevFilters.animals?.map((animal) => ({
+        ...animal,
+        availabilities: prevFilters.availabilities,
+      })),
+    }));
+  };
 
   const fetchCaretakers = async () => {
     setIsLoading(true);
-    setError(null);
     try {
+      await assignFiltersToAnimals();
+      console.log(filters);
       const data = await api.getCaretakers(pagingParams, filters);
-      setCaretakers(data.content.map((caretaker) => new CaretakerBasics(caretaker)));
+      setCaretakers(
+        data.content.map((caretaker) => new CaretakerBasics(caretaker))
+      );
       setPagination({
         current: data.pageable.pageNumber + 1,
         pageSize: data.pageable.pageSize,
         total: data.totalElements,
       });
     } catch (error) {
-      setError(error instanceof Error ? error.message : t("unknownError"));
+      toast.error(t("error.getCaretakers"));
     } finally {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    store.selectedMenuOption = "caretakerSearch";
+  }, []);
 
   useEffect(() => {
     fetchCaretakers();
@@ -91,7 +138,10 @@ const CaretakerList = () => {
     }));
   };
 
-  const updateAnimalFilters = (animalType: string, updatedConfig: Partial<OfferConfiguration>) => {
+  const updateAnimalFilters = (
+    animalType: string,
+    updatedConfig: Partial<OfferConfiguration>
+  ) => {
     setAnimalFilters((prevFilters) => {
       const existingConfig = prevFilters[animalType] || {};
       const updatedConfigFull = {
@@ -143,11 +193,28 @@ const CaretakerList = () => {
       key: "caretaker",
       render: (_: unknown, record: CaretakerBasics) => (
         <div className="caretaker-list-item">
-          <img src="https://via.placeholder.com/150" alt="avatar" />
+          <div className="profile-picture">
+            {record.accountData.profilePicture 
+              ? <img src={record.accountData.profilePicture.url} alt="avatar" />
+              : <UserOutlined style={{ fontSize: "150px" }} />
+            }
+          </div>
           <div>
-            <h4>{record.accountData.name} {record.accountData.surname}</h4>
-            <p>{record.address.city}, {record.address.voivodeship.toString()}</p>
-            <Button href={`/caretakers/${record.accountData.email}`} type="primary">
+            <h4>
+              {record.accountData.name} {record.accountData.surname}
+            </h4>
+            <p>
+              {record.address.city}, {record.address.voivodeship.toString()}
+            </p>
+            <Button
+              className="view-details-button"
+              type="primary"
+              onClick={() =>
+                navigate("/profile-caretaker", {
+                  state: { userEmail: record.accountData.email },
+                })
+              }
+            >
               {t("viewDetails")}
             </Button>
           </div>
@@ -167,7 +234,9 @@ const CaretakerList = () => {
                 <Rate disabled allowHalf value={rating} />
                 <span>({record.numberOfRatings})</span>
               </div>
-              <span className="caretaker-rating-value">{rating.toFixed(2)}</span>
+              <span className="caretaker-rating-value">
+                {rating.toFixed(2)}
+              </span>
             </>
           ) : (
             <>
@@ -180,11 +249,8 @@ const CaretakerList = () => {
     },
   ];
 
-  if (error) return <div>{error}</div>;
-
   return (
     <div>
-      <Header />
       <div className="caretaker-container">
         <Spin spinning={isLoading} fullscreen />
         <CaretakerFilters
@@ -198,7 +264,7 @@ const CaretakerList = () => {
         <div className="caretaker-content">
           <Table
             columns={columns}
-            locale={{ 
+            locale={{
               emptyText: t("caretakerSearch.noCaretakers"),
               triggerDesc: t("caretakerSearch.triggerDesc"),
               triggerAsc: t("caretakerSearch.triggerAsc"),
@@ -213,8 +279,9 @@ const CaretakerList = () => {
               showSizeChanger: true,
               locale: {
                 items_per_page: t("perPage"),
-              }
+              },
             }}
+            scroll={{ x: "max-content" }}
             onChange={handleTableChange}
           />
         </div>

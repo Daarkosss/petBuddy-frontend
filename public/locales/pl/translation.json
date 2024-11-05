@@ -6,7 +6,7 @@
   "cat": "Kot",
   "bird": "Ptak",
   "reptile": "Gad",
-  "horse": "Koń",
+  "fish": "Ryba",
 
   "sex": "Płeć",
   "male": "Samiec",
@@ -16,6 +16,8 @@
   "small": "Mały",
   "medium": "Średni",
   "big": "Duży",
+
+  "dangerous": "Niebezpieczny?",
 
   "search": "Szukaj",
   "filters": "Filtry",
@@ -30,8 +32,9 @@
   "amenities": "Udogodnienia",
   "amenityTypes": {
     "toys": "Zabawki",
-    "scratchingPost": "Drapak",
-    "cage": "Klatka"
+    "scratching post": "Drapak",
+    "cage": "Klatka",
+    "garden": "Ogród"
   },
 
   "address": "Adres",
@@ -52,7 +55,10 @@
     "streetNumber": "np. 102A",
     "apartmentNumber": "np. 7",
     "phoneNumber": "np. 000000000",
-    "description": "np. Zajmuje się opieką nad zwierzętami już od 2 lat. Moi klienci zawsze są zadowoleni..."
+    "description": "np. Zajmuję się opieką nad zwierzętami już od 2 lat. Moi klienci zawsze są zadowoleni...",
+    "sex": "np. Samiec",
+    "animalType": "np. Pies",
+    "date": "Naciśnij, aby wybrać datę"
   },
 
   "personalData": {
@@ -70,14 +76,6 @@
     "loginOrRegister": "Zaloguj się za pomocą Keycloaka"
   },
 
-  "home": {
-    "title": "Witamy, wiadomość z backendu:",
-    "requestMessage": "Testowy request",
-    "fetchToken": "Pobierz token xsrf",
-    "changeCaretakerForm": "Zmień dane opiekuna",
-    "searchCaretakers": "Wyszukaj opiekunów"
-  },
-
   "profileSelection": {
     "title": "Wybierz profil",
     "client": "Klient",
@@ -85,9 +83,30 @@
     "createCaretaker": "Utwórz profil opiekuna"
   },
 
+  "profilePage": {
+    "changeImage": "Zmień zdięcie",
+    "followCaretaker": "Obserwuj",
+    "openChat": "Otwórz chat",
+    "userCaretakerProfile": "Profil opiekuna tego użytkownika",
+    "userClientProfile": "Profil klienta",
+    "editProfile": "Edytuj profil",
+    "description": "Opis",
+    "changeToClientProfile": "Przejdź na profil klienta",
+    "changeToCaretakerProfile": "Przejdź na profil opiekuna",
+    "offers": "Oferty",
+    "noOffersToShow": "Brak ofert do wyświetlenia",
+    "addOffer": "Dodaj ofertę",
+    "ratings": "Oceny",
+    "rate": "Oceń",
+    "noRatingsToShow": "Brak ocen do wyświetlenia",
+    "page": "strona",
+    "noCaretakerProfile": "Nie posiadasz jeszcze profilu opiekuna"
+  },
+
   "caretakerSearch": {
     "personalData": "Dane personalne",
     "animalTypes": "Rodzaje zwierząt",
+    "animalType": "Typ zwierzęcia",
     "minPrice": "Minimalna cena",
     "maxPrice": "Maksymalna cena",
     "noCaretakers": "Brak opiekunów dla podanych parametrów",
@@ -98,8 +117,13 @@
 
   "description": "Opis",
   "upload": "Prześlij",
-  "uploadImages": "Prześlij zdjęcia",
+  "offerPhotos": "Zdjęcia oferty",
+  "currentPhotos": "Aktualne zdjęcia",
+  "newPhotos": "Nowe zdjęcia",
+  "photosLimitMessage": "Limit zdjęć",
+  "photosLimitDescription": "Osiągnięto limit zdjęć (10). Jeśli chcesz dodać nowe, usuń któreś z aktualnych.",
   "save": "Zapisz",
+  "cancel": "Anuluj",
 
   "validation": {
     "required": "Wymagane",
@@ -107,13 +131,100 @@
     "phoneNumberFormat": "Nieprawidłowy format (minimum 9 cyfr)"
   },
 
+  "landingPage": {
+    "title": "Witamy w Pet Buddy, miejscu gdzie możesz znaleźć opiekuna dla swojego pupila lub samemu zacząć opiekować się zwierzętami innych osób",
+    "subtitle": "Użyj poniższego paska wyszukiwania, aby znaleźć opiekuna lub zaloguj się, aby uzyskać więcej opcji.",
+    "searchTitle": "Znajdz najlepszego opiekuna dla swojego pupila"
+  },
+
+  "home": "Strona główna",
+  "menu": "Menu",
+  "searchCaretakers": "Wyszukaj opiekunów",
+  "aboutUs": "O nas",
+  "profile": "Profil",
+
+  "date": "Data",
+  "selectedDates": "Wybrane daty",
+  "availableDates": "Dostępne terminy",
+  "loginOrRegister": "Zaloguj się lub zarejestruj",
+
   "error": {
     "createCaretakerProfile": "Wystąpił błąd podczas tworzenia profilu opiekuna",
-    "editCaretakerForm": "Wystąpił błąd podczas edycji danych opiekuna"
+    "editCaretakerForm": "Wystąpił błąd podczas edycji danych opiekuna",
+    "wrongFileTypeForPhoto": "Zły typ pliku dla zdjęcia. Tylko pliki w formacie: jpeg, jpg, png i webp są dopuszczalne.",
+    "editOffer": "Wystąpił błąd podczas edycji oferty",
+    "addOffer": "Wystąpił błąd podczas tworzenia oferty",
+    "loadOffers": "Wystąpił błąd podczas ładowania ofert",
+    "deleteOffer": "Wystąpił błąd podczas usuwania oferty",
+    "deleteConfiguration": "Wystąpił błąd podczas usuwania konfiguracji",
+    "editConfiguration": "Wystąpił błąd podczas edycji konfiguracji",
+    "addConfiguration": "Wystąpił błąd podczas tworzenia konfiguracji",
+    "duplicateConfiguration": "Konfiguracja z wybranymi parametrami juz istnieje",
+    "setAvailabilityForOffers": "Wystąpił bład podczas ustawiania dostępności dla ofert",
+    "getCaretakers": "Wystąpił bład podczas pobrania opiekunów"
   },
 
   "success": {
     "createCaretakerProfile": "Profil opiekuna został pomyślnie utworzony",
-    "editCaretakerForm": "Dane opiekuna zostały pomyślnie zaktualizowane"
-  }
+    "editCaretakerForm": "Dane opiekuna zostały pomyślnie zaktualizowane",
+    "addOffer": "Oferta została pomyślnie utworzona",
+    "editOffer": "Oferta została pomyślnie zaktualizowana",
+    "deleteOffer": "Oferta została pomyślnie usunięta",
+    "deleteConfiguration": "Konfiguracja została pomyślnie usunięta",
+    "editConfiguration": "Konfiguracja została pomyślnie zaktualizowana",
+    "addConfiguration": "Konfiguracja została pomyślnie utworzona",
+    "setAvailabilityForOffers": "Dostępność została pomyślnie ustawiona dla wybranych ofert"
+  },
+
+  "dailyPrice": "Cena za dzień",
+
+  "addOffer": "Dodaj nową ofertę",
+  "setAvailabilityForOffers": "Ustaw dostępność dla ofert",
+  "editOffer": "Edytuj ofertę",
+  "addConfiguration": "Dodaj konfigurację",
+  "editConfiguration": "Edytuj konfigurację",
+  "animalType": "Rodzaj zwierzęcia",
+  "animalTypes": "Rodzaje zwierząt",
+  "manage": "Zarządzaj",
+  "requestCare": "Poproś o opiekę",
+  "availability": "Dostępność",
+  "editDescription": "Edytuj opis",
+  "editAmenities": "Edytuj udogodnienia",
+  "editAvailability": "Edytuj dostępność",
+  "edit": "Edytuj",
+  "delete": "Usuń",
+  "sendRequest": "Wyślij prośbę",
+  "yes": "Tak",
+  "no": "Nie",
+
+  "deleteConfiguration": "Usuń konfigurację",
+  "confirmConfigurationDelete": "Czy na pewno chcesz usunąć tę konfigurację?",
+  "deleteOffer": "Usuń ofertę",
+  "confirmOfferDelete": "Czy na pewno chcesz usunąć tę ofertę wraz z wszystkimi przypisanymi konfiguracjami?",
+  "offerConfigurations": "Konfiguracje oferty",
+
+  "yourOffers": {
+    "manageOffer": "Zarządzaj swoją ofertą",
+    "cat": "Twoja oferta dla kotów",
+    "dog": "Twoja oferta dla psów",
+    "bird": "Twoja oferta dla ptaków",
+    "rabbit": "Twoja oferta dla królików",
+    "reptile": "Twoja oferta dla gadów"
+  },
+
+  "caretakerOffers": {
+    "cat": "Oferta dla kotów",
+    "dog": "Oferta dla psów",
+    "bird": "Oferta dla ptaków",
+    "rabbit": "Oferta dla królików",
+    "reptile": "Oferta dla gadów"
+  },
+
+  "availabilityAlert": "Dostępność zostanie nadpisana wybranymi datami dla wszystkich ofert, które zaznaczysz.",
+  "noData": "Brak danych",
+  "noConfigurations": "Brak konfiguracji",
+
+  "imageCropperTitle": "Dostosuj zdjęcie",
+  "apply": "Zatwierdź",
+  "oneAvailabilityForAllAnimals": "Jedna dostępność dla wszystkich zwierząt"
 }

@@ -4,17 +4,31 @@ $primary-font: "Roboto", sans-serif;
 
 // Shades of grey
 $white: #ffffff;
-$grey-very-light: #e4e4e4;
-$grey-light: #cacaca;
+$grey-very-light: #d9d9d9;
+$grey-light: #bfbfbf;
 $grey-medium: #9e9e9e;
 $grey-dark: #474747;
 $black: #000000;
 
 // Shades of blue
-$blue-very-light: #E1F7FF;
-$blue-light: #00A8E8;
-$blue-medium: #007EA7;
+$blue-very-light: #e1f7ff;
+$blue-light: #00a8e8;
+$blue-medium: #007ea7;
 $blue-dark: #003459;
-$blue-very-dark: #00171F;
+$blue-very-dark: #00253f;
 
-$home-background-gradient: linear-gradient(to right, $blue-very-light, darken($blue-very-light, 3%));
+// Shades of orange
+$orange-light: #ffb800;
+$orange-medium: #d78400;
+
+//hierarchy colors
+$primary-color: #6439ff;
+$secondary-color: #4f75ff;
+$tertiary-color: #00ccdd;
+$accent_color: #7cf5ff;
+
+$home-background-gradient: linear-gradient(
+  to right,
+  $blue-dark,
+  $blue-very-dark
+);

@@ -1,19 +1,25 @@
 import { useKeycloak } from "@react-keycloak/web";
-import { Route, Routes, Navigate } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { Layout } from "antd";
 import { api } from "./api/api";
-import Home from "./pages/Home";
 import CaretakerForm from "./pages/CaretakerForm";
-import LoginPage from "./pages/LoginPage";
 import store from "./store/RootStore";
 import CaretakerSearch from "./pages/CaretakerSearch";
 import ProfileSelection from "./pages/ProfileSelection";
+import OfferManagement from "./pages/OfferManagement";
+import LandingPage from "./pages/LandingPage";
+import Header from "./components/Header";
+import { observer } from "mobx-react-lite";
+import CaretakerProfile from "./pages/CaretakerProfile";
+import ClientProfile from "./pages/ClientProfile";
 
-function App() {
+const { Content } = Layout;
+
+const App = observer(() => {
   const { keycloak, initialized } = useKeycloak();
   const [isXsrfTokenFetched, setIsXsrfTokenFetched] = useState(false);
   const [isUserDataFetched, setIsUserDataFetched] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchXsrfToken = async () => {
@@ -32,7 +38,7 @@ function App() {
           firstName: userData.firstName,
           lastName: userData.lastName,
           token: store.user.xsrfToken,
-          selected_profile: null,
+          selected_profile: store.user.profile?.selected_profile || null,
           hasCaretakerProfile: userProfiles.hasCaretakerProfile,
         };
         store.user.saveProfileToStorage(userProfileData);
@@ -45,48 +51,84 @@ function App() {
     if (initialized) {
       if (keycloak.authenticated) {
         fetchXsrfToken();
-        if (store.user.profile === null) {
-          fetchUserData();
-        } else {
-          setIsUserDataFetched(true);
-        }
+        fetchUserData();
+        setIsUserDataFetched(true);
+      } else {
+        store.reset();
       }
-      setIsLoading(false);
+      store.isStarting = false;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialized, keycloak.authenticated]);
 
   useEffect(() => {
     if (isXsrfTokenFetched && isUserDataFetched) {
-      setIsLoading(false);
+      store.isStarting = false;
     }
   }, [isXsrfTokenFetched, isUserDataFetched]);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
+  if (!store.isStarting) {
+    return (
+      <Layout>
+        <Header />
+        <Content className="page-content">
+          <Routes>
+            {keycloak.authenticated ? (
+              store.user.profile?.selected_profile ? (
+                <>
+                  <Route path="/" element={<LandingPage />} />
+                  <Route path="/caretaker/form" element={<CaretakerForm />} />
+                  <Route
+                    path="/caretaker/search"
+                    element={<CaretakerSearch />}
+                  />
+                  <Route
+                    path="/caretaker/offers"
+                    element={<OfferManagement />}
+                  />
+                  <Route
+                    path="/profile-selection"
+                    element={
+                      <ProfileSelection isUserDataFetched={isUserDataFetched} />
+                    }
+                  />
+                  <Route
+                    path="/profile-caretaker"
+                    element={<CaretakerProfile />}
+                  />
+                  <Route path="/profile-client" element={<ClientProfile />} />
+                  <Route path="*" element={<Navigate to="/" replace />} />
+                </>
+              ) : (
+                <>
+                  <Route
+                    path="/profile-selection"
+                    element={
+                      <ProfileSelection isUserDataFetched={isUserDataFetched} />
+                    }
+                  />
+                  <Route path="/caretaker/form" element={<CaretakerForm />} />
+                  <Route
+                    path="*"
+                    element={<Navigate to="/profile-selection" replace />}
+                  />
+                </>
+              )
+            ) : (
+              <>
+                <Route
+                  path="/profile-caretaker"
+                  element={<CaretakerProfile />}
+                />
+                <Route path="/caretaker/search" element={<CaretakerSearch />} />
+                <Route path="*" element={<LandingPage />} />
+              </>
+            )}
+          </Routes>
+        </Content>
+      </Layout>
+    );
   }
-
-  return (
-    <Routes>
-      {keycloak.authenticated ? (
-        <>
-          <Route path="/home" element={<Home />} />
-          <Route path="/caretaker/form" element={<CaretakerForm />} />
-          <Route path="/caretaker/search" element={<CaretakerSearch />} />
-          <Route
-            path="/profile-selection"
-            element={<ProfileSelection isUserDataFetched={isUserDataFetched} />}
-          />
-          <Route path="*" element={<Navigate to="/home" />} />
-        </>
-      ) : (
-        <>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="*" element={<Navigate to="/login" />} />
-        </>
-      )}
-    </Routes>
-  );
-}
+});
 
 export default App;

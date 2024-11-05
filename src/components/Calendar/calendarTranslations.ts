@@ -1,0 +1,63 @@
+export const calendar_pl = {
+  name: "polish",
+  months: [
+    ["Styczeń", "Sty"],
+    ["Luty", "Lut"],
+    ["Marzec", "Mar"],
+    ["Kwiecień", "Kwi"],
+    ["Maj", "Maj"],
+    ["Czerwiec", "Cze"],
+    ["Lipiec", "Lip"],
+    ["Sierpień", "Sie"],
+    ["Wrzesień", "Wrz"],
+    ["Październik", "Paź"],
+    ["Listopad", "Lis"],
+    ["Grudzień", "Gru"],
+  ],
+  weekDays: [
+    ["Poniedziałek", "Nie"],
+    ["Wtorek", "Pon"],
+    ["Środa", "Wto"],
+    ["Czwartek", "Śro"],
+    ["Piątek", "Czw"],
+    ["Sobota", "Pią"],
+    ["Niedziela", "Sob"],
+  ],
+  digits: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
+  meridiems: [
+    ["Przed południem", "przed południem"],
+    ["Po południu", "po południu"],
+  ],
+};
+
+export const calendar_en = {
+  name: "gregorian_en",
+  months: [
+    ["January", "Jan"],
+    ["February", "Feb"],
+    ["March", "Mar"],
+    ["April", "Apr"],
+    ["May", "May"],
+    ["June", "Jun"],
+    ["July", "Jul"],
+    ["August", "Aug"],
+    ["September", "Sep"],
+    ["October", "Oct"],
+    ["November", "Nov"],
+    ["December", "Dec"],
+  ],
+  weekDays: [
+    ["Saturday", "Sat"],
+    ["Sunday", "Sun"],
+    ["Monday", "Mon"],
+    ["Tuesday", "Tue"],
+    ["Wednesday", "Wed"],
+    ["Thursday", "Thu"],
+    ["Friday", "Fri"],
+  ],
+  digits: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
+  meridiems: [
+    ["AM", "am"],
+    ["PM", "pm"],
+  ],
+};
