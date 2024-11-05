@@ -2,7 +2,7 @@ import { KeyboardEvent, useEffect, useState } from "react";
 import { Form, Input, Button, Select } from "antd";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { CareReservation } from "../types/care.types";
 import DatePicker, { DateObject } from "react-multi-date-picker";
 import store from "../store/RootStore";
@@ -11,12 +11,12 @@ import { api } from "../api/api";
 const CareReservationForm = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { caretakerEmail } = useParams();
   const location = useLocation();
   const [form] = Form.useForm<CareReservation>();
   const [isLoading, setIsLoading] = useState(false);
   const [dateRange, setDateRange] = useState<string[]>([]);
   const animalType: string = location.state?.animalType || "DOG"
-  const caretakerEmail = location.state?.caretakerEmail;
 
   useEffect(() => {
     if (!location.state) {
@@ -36,7 +36,7 @@ const CareReservationForm = () => {
       const formValues = form.getFieldsValue();
       formValues.animalType = animalType;
       formValues.dateRange = dateRange;
-      await api.makeCareReservation(caretakerEmail, formValues);
+      await api.makeCareReservation(caretakerEmail!, formValues);
       toast.success(t("success.addOffer"));
     } catch (error) {
       toast.error(t("error.addOffer"));

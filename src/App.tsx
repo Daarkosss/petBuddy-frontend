@@ -11,7 +11,7 @@ import OfferManagement from "./pages/OfferManagement";
 import LandingPage from "./pages/LandingPage";
 import Header from "./components/Header";
 import { observer } from "mobx-react-lite";
-import CareReservationForm from "./components/CareReservationForm";
+import CareReservationForm from "./pages/CareReservationForm";
 import CaretakerProfile from "./pages/CaretakerProfile";
 import ClientProfile from "./pages/ClientProfile";
 
@@ -88,7 +88,7 @@ const App = observer(() => {
                     element={<OfferManagement />}
                   />
                   <Route
-                    path="/care/reservation" 
+                    path="/care/reservation/:caretakerEmail" 
                     element={<CareReservationForm />}
                   />
                   <Route
@@ -98,7 +98,7 @@ const App = observer(() => {
                     }
                   />
                   <Route
-                    path="/profile-caretaker/:userEmail"
+                    path="/profile-caretaker/:caretakerEmail"
                     element={<CaretakerProfile />}
                   />
                   <Route path="/profile-client" element={<ClientProfile />} />
@@ -123,7 +123,7 @@ const App = observer(() => {
               <>
                 <Route path="/" element={<LandingPage />} />
                 <Route
-                  path="/profile-caretaker/:userEmail"
+                  path="/profile-caretaker/:caretakerEmail"
                   element={<CaretakerProfile />}
                 />
                 <Route path="/caretaker/search" element={<CaretakerSearch />} />

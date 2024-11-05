@@ -153,14 +153,9 @@ const OfferModal: React.FC<OfferModalProps> = ({
                 </Button>
               </Space>
             </div>
-          ) : (
-            <Input.TextArea
-              value={offer.description}
-              autoSize={{ minRows: 2, maxRows: 4 }}
-              disabled
-              style={{ maxWidth: 700 }}
-            />
-          )}
+          ) : 
+            offer.description
+          }
         </div>
         <div className="offer-field">
           <div className="label">

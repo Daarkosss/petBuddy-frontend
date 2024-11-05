@@ -23,7 +23,7 @@ import OfferManagement from "./OfferManagement";
 const CaretakerProfile: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { userEmail } = useParams();
+  const { caretakerEmail } = useParams();
   const [profileData, setProfileData] = useState<CaretakerDetails>();
 
   const [isMyProfile, setIsMyProfile] = useState<boolean | null>(null);
@@ -56,7 +56,7 @@ const CaretakerProfile: React.FC = () => {
   useEffect(() => {
     if (isMyProfile !== null) {
       getCaretakerRatings(
-        isMyProfile ? store.user.profile!.selected_profile! : userEmail!,
+        isMyProfile ? store.user.profile!.selected_profile! : caretakerEmail!,
         page,
         size
       );
@@ -68,7 +68,7 @@ const CaretakerProfile: React.FC = () => {
     store.selectedMenuOption = "profile";
 
     //if user is visiting their profile
-    if (userEmail === store.user.profile?.email) {
+    if (caretakerEmail === store.user.profile?.email) {
       //user is visiting their proifle
       setIsMyProfile(true);
 
@@ -77,13 +77,13 @@ const CaretakerProfile: React.FC = () => {
         getCaretakerDetails(store.user.profile!.email!);
         getCaretakerRatings(store.user.profile!.email!, page, size);
       } else if (store.user.profile!.selected_profile === "CLIENT") {
-        navigate(`/profile-caretaker/${userEmail}`);
+        navigate(`/profile-caretaker/${caretakerEmail}`);
       }
     } else {
       //if userEmail has been provided
-      if (userEmail !== null && userEmail !== undefined) {
-        getCaretakerDetails(userEmail);
-        getCaretakerRatings(userEmail, page, size);
+      if (caretakerEmail !== null && caretakerEmail !== undefined) {
+        getCaretakerDetails(caretakerEmail);
+        getCaretakerRatings(caretakerEmail, page, size);
         setIsMyProfile(false);
       }
     }
@@ -348,7 +348,7 @@ const CaretakerProfile: React.FC = () => {
                         <OfferCard
                           offer={element}
                           handleUpdateOffer={() => {}}
-                          canBeEdited={isMyProfile ?? false}
+                          canBeEdited={false}
                         />
                       </div>
                     ))
