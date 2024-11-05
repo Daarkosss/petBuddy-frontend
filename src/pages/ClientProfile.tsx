@@ -58,9 +58,7 @@ function ClientProfile() {
     if (store.user.profile!.selected_profile === "CLIENT") {
       getClientDetails();
     } else if (store.user.profile!.selected_profile === "CARETAKER") {
-      navigate("/profile-caretaker", {
-        state: { userEmail: store.user.profile?.email },
-      });
+      navigate(`/profile-caretaker/${store.user.profile?.email}`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -128,7 +126,7 @@ function ClientProfile() {
                         onClick={() => {
                           store.user.setSelectedProfile("CARETAKER");
                           store.user.saveProfileToStorage(store.user.profile);
-                          navigate("/profile-caretaker");
+                          navigate(`/profile-caretaker/${store.user.profile?.email}`);
                         }}
                       >
                         {t("profilePage.changeToCaretakerProfile")}
@@ -177,7 +175,7 @@ function ClientProfile() {
                       onClick={() => {
                         store.user.setSelectedProfile("CARETAKER");
                         store.user.saveProfileToStorage(store.user.profile);
-                        navigate("/profile-caretaker");
+                        navigate(`/profile-caretaker/${store.user.profile?.email}`);
                       }}
                     >
                       {t("profilePage.changeToCaretakerProfile")}

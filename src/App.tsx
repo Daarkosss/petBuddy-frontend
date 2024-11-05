@@ -98,7 +98,7 @@ const App = observer(() => {
                     }
                   />
                   <Route
-                    path="/profile-caretaker"
+                    path="/profile-caretaker/:userEmail"
                     element={<CaretakerProfile />}
                   />
                   <Route path="/profile-client" element={<ClientProfile />} />
@@ -123,7 +123,7 @@ const App = observer(() => {
               <>
                 <Route path="/" element={<LandingPage />} />
                 <Route
-                  path="/profile-caretaker"
+                  path="/profile-caretaker/:userEmail"
                   element={<CaretakerProfile />}
                 />
                 <Route path="/caretaker/search" element={<CaretakerSearch />} />

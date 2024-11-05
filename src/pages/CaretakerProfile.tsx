@@ -11,7 +11,7 @@ import {
 import { PictureOutlined, UserOutlined } from "@ant-design/icons";
 import CommentContainer from "../components/CommentContainer";
 import RoundedLine from "../components/RoundedLine";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { api } from "../api/api";
 import { CaretakerDetails, CaretakerRatingsResponse } from "../types";
@@ -22,8 +22,7 @@ import { handleFilePreview, hasFilePhotoType } from "../functions/imageHandle";
 const CaretakerProfile: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const location = useLocation();
-  const { userEmail } = location.state || {};
+  const { userEmail } = useParams();
   const [profileData, setProfileData] = useState<CaretakerDetails>();
 
   const [isMyProfile, setIsMyProfile] = useState<boolean | null>(null);
@@ -56,7 +55,7 @@ const CaretakerProfile: React.FC = () => {
   useEffect(() => {
     if (isMyProfile !== null) {
       getCaretakerRatings(
-        isMyProfile === true ? store.user.profile!.selected_profile : userEmail,
+        isMyProfile ? store.user.profile!.selected_profile! : userEmail!,
         page,
         size
       );
@@ -77,7 +76,7 @@ const CaretakerProfile: React.FC = () => {
         getCaretakerDetails(store.user.profile!.email!);
         getCaretakerRatings(store.user.profile!.email!, page, size);
       } else if (store.user.profile!.selected_profile === "CLIENT") {
-        navigate("/profile-caretaker", { state: { userEmail: userEmail } });
+        navigate(`/profile-caretaker/${userEmail}`);
       }
     } else {
       //if userEmail has been provided

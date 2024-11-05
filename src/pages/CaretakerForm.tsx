@@ -135,9 +135,7 @@ const CaretakerForm = () => {
       store.user.hasCaretakerProfile = true;
       store.user.setSelectedProfile("CARETAKER");
       store.user.saveProfileToStorage(store.user.profile);
-      navigate("/profile-caretaker", {
-        state: { userEmail: store.user.profile?.email },
-      })
+      navigate(`/profile-caretaker/${store.user.profile?.email}`);
       toast.success(t("success.createCaretakerProfile"));
     } catch (error) {
       toast.error(t("error.createCaretakerProfile"));
@@ -158,7 +156,7 @@ const CaretakerForm = () => {
         updateCaretakerData(response);
       }
       toast.success(t("success.editCaretakerForm"));
-      navigate("/profile-caretaker");
+      navigate(`/profile-caretaker/${store.user.profile?.email}`);
     } catch (error) {
       toast.error(t("error.editCaretakerForm"));
     } finally {

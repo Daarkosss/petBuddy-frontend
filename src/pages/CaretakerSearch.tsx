@@ -210,9 +210,7 @@ const CaretakerList = () => {
               className="view-details-button"
               type="primary"
               onClick={() =>
-                navigate("/profile-caretaker", {
-                  state: { userEmail: record.accountData.email },
-                })
+                navigate(`/profile-caretaker/${record.accountData.email}`)
               }
             >
               {t("viewDetails")}
