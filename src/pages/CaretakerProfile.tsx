@@ -92,21 +92,21 @@ const CaretakerProfile: React.FC = () => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleCustomPhotoRequest = async (options: any) => {
-  const { file, onSuccess, onError } = options;
+    const { file, onSuccess, onError } = options;
 
-  try {
-    const response = await api.uploadProfilePicture(file);
-    if (response.profilePicture !== null) {
-      setProfilePicture(response.profilePicture.url);
+    try {
+      const response = await api.uploadProfilePicture(file);
+      if (response.profilePicture !== null) {
+        setProfilePicture(response.profilePicture.url);
+      }
+      onSuccess?.("ok");
+    } catch (e: unknown) {
+      onError?.(e);
+      if (e instanceof Error) {
+        console.log(`ERROR: ${e.message}`);
+      }
     }
-    onSuccess?.("ok");
-  } catch (e: unknown) {
-    onError?.(e);
-    if (e instanceof Error) {
-      console.log(`ERROR: ${e.message}`);
-    }
-  }
-};
+  };
 
   return (
     <div>
@@ -235,7 +235,7 @@ const CaretakerProfile: React.FC = () => {
             <div>
               <div className="profile-offers-smaller-screen">
                 <h1>{t("profilePage.offers")}</h1>
-                {/* divider */}
+
                 {profileData !== null && profileData !== undefined ? (
                   profileData.offers.length > 0 ? (
                     profileData.offers.map((element, index) => (

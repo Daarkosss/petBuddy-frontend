@@ -121,12 +121,13 @@ const App = observer(() => {
               )
             ) : (
               <>
+                <Route path="/" element={<LandingPage />} />
                 <Route
                   path="/profile-caretaker"
                   element={<CaretakerProfile />}
                 />
                 <Route path="/caretaker/search" element={<CaretakerSearch />} />
-                <Route path="*" element={<LandingPage />} />
+                <Route path="*" element={<Navigate to ="/" replace />} />
               </>
             )}
           </Routes>

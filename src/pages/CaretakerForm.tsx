@@ -30,11 +30,13 @@ import {
   handleFilePreview,
   hasFilePhotoType,
 } from "../functions/imageHandle";
+import { useNavigate } from "react-router-dom";
 
 const PHOTOS_LIMIT = 10;
 
 const CaretakerForm = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [currentOfferPhotos, setCurrentOfferPhotos] = useState<
     UploadFileWithBlob[]
   >([]);
@@ -130,10 +132,13 @@ const CaretakerForm = () => {
     setIsLoading(true);
     try {
       await api.addCaretakerProfile(data, newOfferPhotos);
-      toast.success(t("success.createCaretakerProfile"));
       store.user.hasCaretakerProfile = true;
       store.user.setSelectedProfile("CARETAKER");
       store.user.saveProfileToStorage(store.user.profile);
+      navigate("/profile-caretaker", {
+        state: { userEmail: store.user.profile?.email },
+      })
+      toast.success(t("success.createCaretakerProfile"));
     } catch (error) {
       toast.error(t("error.createCaretakerProfile"));
     } finally {
@@ -153,6 +158,7 @@ const CaretakerForm = () => {
         updateCaretakerData(response);
       }
       toast.success(t("success.editCaretakerForm"));
+      navigate("/profile-caretaker");
     } catch (error) {
       toast.error(t("error.editCaretakerForm"));
     } finally {

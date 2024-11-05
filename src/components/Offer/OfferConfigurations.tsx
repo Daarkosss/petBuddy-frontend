@@ -20,6 +20,7 @@ import _ from "lodash";
 import { api } from "../../api/api";
 import store from "../../store/RootStore";
 import { ColumnType } from "antd/es/table";
+import { useNavigate } from "react-router-dom";
 
 type ConfigurationsProps = {
   offerId: number;
@@ -44,6 +45,7 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
   );
   const [form] = Form.useForm();
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const [newConfiguration, setNewConfiguration] =
     useState<OfferConfigurationWithOptionalId>({
@@ -317,7 +319,7 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
         ) : (
           <Button
             type="primary"
-            onClick={record.id ? () => {} : () => {}}
+            onClick={() => navigate("/care/reservation", { state: {} })}
             loading={isLoading}
           >
             {t("sendRequest")}
