@@ -251,6 +251,7 @@ const OfferModal: React.FC<OfferModalProps> = ({
                   handleUpdateOffer={handleUpdateOffer}
                   handleUpdateConfiguration={handleUpdateConfiguration}
                   canBeEdited={canBeEdited}
+                  availabilities={offer.availabilities}
                 />
               ),
             },

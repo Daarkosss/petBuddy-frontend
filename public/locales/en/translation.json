@@ -226,8 +226,11 @@
   "apply": "Apply",
   "oneAvailabilityForAllAnimals": "One availability for all animals",
 
-  "careReservation": {
+  "care": {
     "title": "Care reservation",
-    "askForCare": "Ask for care"
-  }
+    "askForCare": "Ask for care",
+    "startDate": "Care starts",
+    "endDate": "Care ends"
+  },
+  "petDescription": "Pet description"
 }

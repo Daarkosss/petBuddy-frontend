@@ -86,15 +86,15 @@
   },
 
   "profilePage": {
-    "changeImage": "Zmień zdięcie",
+    "changeImage": "Zmień zdjęcie",
     "followCaretaker": "Obserwuj",
     "openChat": "Otwórz chat",
     "userCaretakerProfile": "Profil opiekuna tego użytkownika",
     "userClientProfile": "Profil klienta",
     "editProfile": "Edytuj profil",
     "description": "Opis",
-    "changeToClientProfile": "Przejdź na profil klienta",
-    "changeToCaretakerProfile": "Przejdź na profil opiekuna",
+    "changeToClientProfile": "Przełącz na profil klienta",
+    "changeToCaretakerProfile": "Przełącz na profil opiekuna",
     "offers": "Oferty",
     "noOffersToShow": "Brak ofert do wyświetlenia",
     "addOffer": "Dodaj ofertę",
@@ -231,8 +231,11 @@
   "apply": "Zatwierdź",
   "oneAvailabilityForAllAnimals": "Jedna dostępność dla wszystkich zwierząt",
 
-  "careReservation": {
+  "care": {
     "title": "Rezerwacja opieki",
-    "askForCare": "Poproś o opiekę"
-  }
+    "askForCare": "Poproś o opiekę",
+    "startDate": "Początek opieki",
+    "endDate": "Koniec opieki"
+  },
+  "petDescription": "Opis zwierzęcia"
 }

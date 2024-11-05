@@ -65,7 +65,9 @@ const CaretakerProfile: React.FC = () => {
   }, [page]);
 
   useEffect(() => {
-    store.selectedMenuOption = "profile";
+    if (caretakerEmail === store.user.profile?.email) {
+      store.selectedMenuOption = "profile";
+    }
 
     //if user is visiting their profile
     if (caretakerEmail === store.user.profile?.email) {
@@ -126,23 +128,36 @@ const CaretakerProfile: React.FC = () => {
                 )}
               </div>
               {isMyProfile === true && (
-                <ImgCrop rotationSlider beforeCrop={hasFilePhotoType}>
-                  <Upload
-                    customRequest={handleCustomPhotoRequest}
-                    showUploadList={false}
-                    name="file"
-                    onPreview={handleFilePreview}
-                    accept="image/*"
-                  >
-                    <Button
-                      icon={<PictureOutlined />}
-                      type="primary"
-                      className="profile-action-button"
+                <div className="my-actions">
+                  <ImgCrop rotationSlider beforeCrop={hasFilePhotoType}>
+                    <Upload
+                      customRequest={handleCustomPhotoRequest}
+                      showUploadList={false}
+                      name="file"
+                      onPreview={handleFilePreview}
+                      accept="image/*"
                     >
-                      {t("profilePage.changeImage")}
-                    </Button>
-                  </Upload>
-                </ImgCrop>
+                      <Button
+                        icon={<PictureOutlined />}
+                        type="primary"
+                        className="profile-action-button"
+                      >
+                        {t("profilePage.changeImage")}
+                      </Button>
+                    </Upload>
+                  </ImgCrop>
+                  <Button
+                    type="primary"
+                    className="profile-action-button"
+                    onClick={() => {
+                      store.user.setSelectedProfile("CLIENT");
+                      store.user.saveProfileToStorage(store.user.profile);
+                      navigate("/profile-client");
+                    }}
+                  >
+                    {t("profilePage.changeToClientProfile")}
+                  </Button>
+                </div>
               )}
               <div className="profile-user">
                 <div className="profile-user-nick">
@@ -150,7 +165,7 @@ const CaretakerProfile: React.FC = () => {
                     {profileData.accountData.name}{" "}
                     {profileData.accountData.surname}
                   </h1>
-                  <h3> - {t("profileSelection.caretaker")}</h3>
+                  <h3>{t("profileSelection.caretaker")}</h3>
                 </div>
                 <div className="profile-rating">
                   <span>
@@ -171,7 +186,7 @@ const CaretakerProfile: React.FC = () => {
                   <span>({profileData.numberOfRatings})</span>
                 </div>
                 <div className="profile-actions">
-                  {isMyProfile === false &&
+                  {!isMyProfile &&
                     store.user.profile?.selected_profile === "CLIENT" && (
                       <div className="profile-actions">
                         <Button
@@ -215,22 +230,6 @@ const CaretakerProfile: React.FC = () => {
             <h4>{t("profilePage.description")}</h4>
             {profileData !== null && profileData !== undefined && (
               <div>{profileData.description}</div>
-            )}
-
-            {isMyProfile === true && (
-              <div>
-                <Button
-                  type="primary"
-                  className="profile-action-button"
-                  onClick={() => {
-                    store.user.setSelectedProfile("CLIENT");
-                    store.user.saveProfileToStorage(store.user.profile);
-                    navigate("/profile-client");
-                  }}
-                >
-                  {t("profilePage.changeToClientProfile")}
-                </Button>
-              </div>
             )}
             <div>
               <div className="profile-offers-smaller-screen">

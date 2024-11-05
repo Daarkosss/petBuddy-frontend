@@ -10,6 +10,7 @@ import {
   TableColumnsType,
 } from "antd";
 import {
+  AvailabilityValues,
   OfferConfigurationWithId,
   OfferConfigurationWithOptionalId,
   OfferWithId,
@@ -26,6 +27,7 @@ type ConfigurationsProps = {
   offerId: number;
   animalType: string;
   configurations: OfferConfigurationWithOptionalId[];
+  availabilities: AvailabilityValues;
   handleUpdateOffer: (newOffer: OfferWithId) => void;
   handleUpdateConfiguration: (newOffer: OfferConfigurationWithId) => void;
   canBeEdited: boolean;
@@ -35,14 +37,13 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
   offerId,
   animalType,
   configurations,
+  availabilities,
   handleUpdateOffer,
   handleUpdateConfiguration,
   canBeEdited = true,
 }) => {
   const { t } = useTranslation();
-  const [editingKey, setEditingKey] = useState<number | null | undefined>(
-    undefined
-  );
+  const [editingKey, setEditingKey] = useState<number | null | undefined>(undefined);
   const [form] = Form.useForm();
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -322,12 +323,13 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
           <Button
             type="primary"
             onClick={() => navigate(
-              `/care/reservation${caretakerEmail}`,
+              `/care/reservation/${caretakerEmail}`,
               { 
                 state: { 
                   animalType,
                   dailyPrice: record.dailyPrice,
-                  animalAttributes: record.selectedOptions
+                  animalAttributes: record.selectedOptions,
+                  availabilities: availabilities
                 } 
               }
             )}

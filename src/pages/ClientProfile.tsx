@@ -80,23 +80,25 @@ function ClientProfile() {
                   />
                 )}
               </div>
-              <ImgCrop rotationSlider beforeCrop={hasFilePhotoType}>
-                <Upload
-                  customRequest={handleCustomPhotoRequest}
-                  showUploadList={false}
-                  name="file"
-                  onPreview={handleFilePreview}
-                  accept="image/*"
-                >
-                  <Button
-                    icon={<PictureOutlined />}
-                    type="primary"
-                    className="profile-action-button"
+              <div className="my-actions">
+                <ImgCrop rotationSlider beforeCrop={hasFilePhotoType}>
+                  <Upload
+                    customRequest={handleCustomPhotoRequest}
+                    showUploadList={false}
+                    name="file"
+                    onPreview={handleFilePreview}
+                    accept="image/*"
                   >
-                    {t("profilePage.changeImage")}
-                  </Button>
-                </Upload>
-              </ImgCrop>
+                    <Button
+                      icon={<PictureOutlined />}
+                      type="primary"
+                      className="profile-action-button"
+                    >
+                      {t("profilePage.changeImage")}
+                    </Button>
+                  </Upload>
+                </ImgCrop>
+              </div>
             </div>
 
             <div className="profile-offers-smaller-screen">

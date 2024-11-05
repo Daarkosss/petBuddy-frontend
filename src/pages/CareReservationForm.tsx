@@ -7,6 +7,7 @@ import { CareReservation } from "../types/care.types";
 import DatePicker, { DateObject } from "react-multi-date-picker";
 import store from "../store/RootStore";
 import { api } from "../api/api";
+import { AvailabilityValues } from "../types";
 
 const CareReservationForm = () => {
   const { t } = useTranslation();
@@ -15,8 +16,12 @@ const CareReservationForm = () => {
   const location = useLocation();
   const [form] = Form.useForm<CareReservation>();
   const [isLoading, setIsLoading] = useState(false);
-  const [dateRange, setDateRange] = useState<string[]>([]);
+  const [startDate, setStartDate] = useState<string | null>(null);
+  const [endDate, setEndDate] = useState<string | null>(null);
+  const [endDateOptions, setEndDateOptions] = useState<string[]>([]);
+
   const animalType: string = location.state?.animalType || "DOG"
+  const availabilities: AvailabilityValues = location.state?.availabilities;
 
   useEffect(() => {
     if (!location.state) {
@@ -35,7 +40,7 @@ const CareReservationForm = () => {
     try {
       const formValues = form.getFieldsValue();
       formValues.animalType = animalType;
-      formValues.dateRange = dateRange;
+      formValues.dateRange = [startDate!, endDate!];
       await api.makeCareReservation(caretakerEmail!, formValues);
       toast.success(t("success.addOffer"));
     } catch (error) {
@@ -56,8 +61,35 @@ const CareReservationForm = () => {
     }
   };
 
-  const handleDateChange = (dateRange: DateObject[]) => {
-    setDateRange(dateRange.map((date) => date.format("YYYY-MM-DD")));
+  const handleStartDateChange = (date: DateObject) => {
+    const convertedDate = date.format("YYYY-MM-DD");
+
+    setStartDate(convertedDate);
+    // Znajdź zakres, w którym znajduje się data początkowa
+    const selectedRange = availabilities.find((range) =>
+      isDateInRange(date.format("YYYY-MM-DD"), range)
+    );
+    // Ustaw dostępne daty końcowe na podstawie wybranego zakresu
+    if (selectedRange && selectedRange !== endDateOptions) {
+      setEndDateOptions(selectedRange);
+      setEndDate(null);
+    }
+    if (endDate && new Date(endDate) < new Date(convertedDate)) {
+      setEndDate(convertedDate);
+      console.log(convertedDate);
+    }
+  };
+
+  const handleEndDateChange = (date: DateObject) => {
+    setEndDate(date.format("YYYY-MM-DD"));
+  };
+
+  const isDateInRange = (date: string, range: string[]) => {
+    const start = new Date(range[0]);
+    const end = new Date(range[1]);
+    const currentDate = new Date(date);
+
+    return currentDate >= start && currentDate <= end;
   };
 
   return (
@@ -65,7 +97,7 @@ const CareReservationForm = () => {
       <img src={`/images/${animalType.toLowerCase()}-card.jpg`} alt="Logo"/>
       <div className="form-container">
         <div>
-          <h1>{t("careReservation.title")}</h1>
+          <h1>{t("care.title")}</h1>
           <h2>{t(animalType.toLowerCase())}</h2>
         </div>
         <Form 
@@ -75,25 +107,36 @@ const CareReservationForm = () => {
           labelCol={{ span: 7 }}
         >
           <Form.Item
-            name={"date"}
-            label={t("date")}
+            label={t("care.startDate")}
+            name="startDate"
             rules={[{ required: true, message: t("validation.required") }]}
-            initialValue={location.state?.animalType}
           >
             <DatePicker
               format="YYYY-MM-DD"
-              range
-              value={dateRange}
-              onChange={handleDateChange}
-              minDate={location.state?.minDate || "2024-11-20"}
-              maxDate={location.state?.maxDate || "2024-12-15"}
-              render={(value, openCalendar) => (
-                <Input
-                  value={value}
-                  onFocus={openCalendar}
-                  placeholder={t("placeholder.date")}
-                />
-              )}
+              value={startDate}
+              onChange={handleStartDateChange}
+              mapDays={({ date }) => {
+                const formattedDate = date.format("YYYY-MM-DD");
+                return {
+                  disabled: !availabilities.some(range => isDateInRange(formattedDate, range))
+                };
+              }}
+            />
+          </Form.Item>
+          <Form.Item
+            label={t("care.endDate")}
+            name="endDate"
+            rules={[{ required: true, message: t("validation.required") }]}
+          >
+            <DatePicker
+              key={startDate || endDateOptions[0]}
+              format="YYYY-MM-DD"
+              value={endDate}
+              onChange={handleEndDateChange}
+              currentDate={startDate ? new DateObject(startDate) : undefined}
+              minDate={startDate || endDateOptions[0]}
+              maxDate={endDateOptions[1]}
+              disabled={!startDate}
             />
           </Form.Item>
           <Form.Item
@@ -132,7 +175,7 @@ const CareReservationForm = () => {
           ))}
           <Form.Item
             name="description"
-            label={t("description")}
+            label={t("petDescription")}
             rules={[{ required: true, message: t("validation.required") }]}
           >
             <Input.TextArea
@@ -141,7 +184,7 @@ const CareReservationForm = () => {
             />
           </Form.Item>
           <Button type="primary" className="submit-button centered" htmlType="submit" loading={isLoading}>
-            {t("careReservation.askForCare")}
+            {t("care.askForCare")}
           </Button>
         </Form>
       </div>
