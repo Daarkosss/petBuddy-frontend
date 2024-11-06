@@ -159,7 +159,8 @@
     "addConfiguration": "An error occurred while creating configuration",
     "duplicateConfiguration": "Configuration with these selected options already exists",
     "setAvailabilityForOffers": "An error occurred while setting availability for selected offers",
-    "getCaretakers": "An error occurred while loading caretakers"
+    "getCaretakers": "An error occurred while loading caretakers",
+    "askForCare": "An error occurred while sending request for care"
   },
 
   "success": {
@@ -171,7 +172,8 @@
     "deleteConfiguration": "Configuration has been successfully deleted",
     "editConfiguration": "Configuration has been successfully updated",
     "addConfiguration": "Configuration has been successfully created",
-    "setAvailabilityForOffers": "Availability has been successfully set for selected offers"
+    "setAvailabilityForOffers": "Availability has been successfully set for selected offers",
+    "askForCare": "You have successfully sent a request for care. Wait for a caretaker response"
   },
 
   "dailyPrice": "Daily price",
@@ -229,8 +231,9 @@
   "care": {
     "title": "Care reservation",
     "askForCare": "Ask for care",
-    "startDate": "Care starts",
-    "endDate": "Care ends"
+    "date": "Date of care",
+    "negotiatePrice": "Negotiate price",
+    "goBackToOriginalPrice": "Go back to original price"
   },
   "petDescription": "Pet description"
 }

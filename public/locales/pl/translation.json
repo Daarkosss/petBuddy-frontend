@@ -164,7 +164,8 @@
     "addConfiguration": "Wystąpił błąd podczas tworzenia konfiguracji",
     "duplicateConfiguration": "Konfiguracja z wybranymi parametrami juz istnieje",
     "setAvailabilityForOffers": "Wystąpił bład podczas ustawiania dostępności dla ofert",
-    "getCaretakers": "Wystąpił bład podczas pobrania opiekunów"
+    "getCaretakers": "Wystąpił bład podczas pobrania opiekunów",
+    "askForCare": "Wystąpił bład podczas wysyłania zapytania o opiekę"
   },
 
   "success": {
@@ -176,7 +177,8 @@
     "deleteConfiguration": "Konfiguracja została pomyślnie usunięta",
     "editConfiguration": "Konfiguracja została pomyślnie zaktualizowana",
     "addConfiguration": "Konfiguracja została pomyślnie utworzona",
-    "setAvailabilityForOffers": "Dostępność została pomyślnie ustawiona dla wybranych ofert"
+    "setAvailabilityForOffers": "Dostępność została pomyślnie ustawiona dla wybranych ofert",
+    "askForCare": "Zapytanie o opiekę zostało pomyślnie wysłane. Czekaj na odpowiedź opiekuna."
   },
 
   "dailyPrice": "Cena za dzień",
@@ -234,8 +236,9 @@
   "care": {
     "title": "Rezerwacja opieki",
     "askForCare": "Poproś o opiekę",
-    "startDate": "Początek opieki",
-    "endDate": "Koniec opieki"
+    "date": "Data opieki",
+    "negotiatePrice": "Negocjuj cenę",
+    "goBackToOriginalPrice": "Powroć do początkowej ceny"
   },
   "petDescription": "Opis zwierzęcia"
 }
