@@ -44,6 +44,7 @@ const CareReservationForm = () => {
       formValues.animalType = animalType;
       formValues.dateRange = careDateRange;
       await api.makeCareReservation(caretakerEmail!, formValues);
+      navigate(-1);
       toast.success(t("success.askForCare"));
     } catch (error) {
       toast.error(t("error.askForCare"));

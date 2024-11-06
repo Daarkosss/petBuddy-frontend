@@ -14,6 +14,7 @@ import { observer } from "mobx-react-lite";
 import CareReservationForm from "./pages/CareReservationForm";
 import CaretakerProfile from "./pages/CaretakerProfile";
 import ClientProfile from "./pages/ClientProfile";
+import CaresList from "./pages/Cares";
 
 const { Content } = Layout;
 
@@ -90,6 +91,12 @@ const App = observer(() => {
                   <Route
                     path="/care/reservation/:caretakerEmail" 
                     element={<CareReservationForm />}
+                  />
+                  <Route
+                    path="/cares"
+                    element={
+                      <CaresList />
+                    }
                   />
                   <Route
                     path="/profile-selection"

@@ -20,7 +20,7 @@ import {
   CaretakerRatingsResponse,
   AvailabilityValues
 } from "../types";
-import { CareReservation, CareReservationDTO } from "../types/care.types";
+import { CareReservation, CareReservationDTO, GetCaresDTO } from "../types/care.types";
 import { AnimalConfigurationsDTO } from "../types/animal.types";
 import { UploadFile } from "antd";
 
@@ -508,19 +508,6 @@ class API {
     }
   }
 
-  convertOffersAvailabilities = (offers: OfferDTOWithId[]): OfferWithId[] => {
-    return offers.map((offer) => this.convertOfferAvailabilities(offer));
-  };
-
-  convertOfferAvailabilities = (offer: OfferDTOWithId): OfferWithId => {
-    return {
-      ...offer,
-      availabilities: this.convertAvailabilityRangesToValues(
-        offer.availabilities
-      ),
-    };
-  };
-
   async getAnimalsConfigurations(): Promise<AnimalConfigurationsDTO> {
     return this.fetch<AnimalConfigurationsDTO>("GET", "api/animal/complex");
   }
@@ -545,7 +532,37 @@ class API {
       );
     }
   }
+
+  async getCares(pagingParams: PagingParams): Promise<GetCaresDTO | undefined> {
+    if (store.user.profile?.selected_profile) {
+      const queryParams = new URLSearchParams({
+        page: pagingParams.page.toString(),
+        size: pagingParams.size.toString(),
+      });
   
+      const queryString = queryParams.toString();
+      return this.authorizedFetch<GetCaresDTO>(
+        "GET",
+        `api/care?${queryString}`,
+        undefined,
+        { "Accept-Role": store.user.profile?.selected_profile }
+      );
+    }
+  }
+
+  convertOffersAvailabilities = (offers: OfferDTOWithId[]): OfferWithId[] => {
+    return offers.map((offer) => this.convertOfferAvailabilities(offer));
+  };
+
+  convertOfferAvailabilities = (offer: OfferDTOWithId): OfferWithId => {
+    return {
+      ...offer,
+      availabilities: this.convertAvailabilityRangesToValues(
+        offer.availabilities
+      ),
+    };
+  };
+
   convertAvailabilityRangesToValues = (availabilities: AvailabilityRanges): AvailabilityValues => {
     return availabilities.map((availability) => [
       availability.availableFrom,
