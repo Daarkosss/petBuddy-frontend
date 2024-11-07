@@ -28,6 +28,7 @@
   "loading": "Loading...",
   "logout": "Logout",
   "caretaker": "Caretaker",
+  "client": "Client",
 
   "amenities": "Amenities",
   "amenityTypes": {
@@ -177,6 +178,7 @@
   },
 
   "dailyPrice": "Daily price",
+  "totalPrice": "Total price",
 
   "addOffer": "Add new offer",
   "setAvailabilityForOffers": "Set availability for offers",
@@ -229,11 +231,16 @@
   "oneAvailabilityForAllAnimals": "One availability for all animals",
 
   "care": {
-    "title": "Care reservation",
+    "fromTo": "Care from {{from}} to {{to}}, ({{days}} days)",
+    "reservation": "Care reservation",
     "askForCare": "Ask for care",
     "date": "Date of care",
     "negotiatePrice": "Negotiate price",
-    "goBackToOriginalPrice": "Go back to original price"
+    "goBackToOriginalPrice": "Go back to original price",
+    "noCares": "There are no cares for selected filters",
+    "yourCares": "Your cares"
   },
-  "petDescription": "Pet description"
+
+  "petDescription": "Pet description",
+  "animalAttributes": "Animal attributes"
 }

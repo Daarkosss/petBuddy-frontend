@@ -1,16 +1,12 @@
 import { useState, useEffect } from "react";
-import { Table, Button, Spin } from "antd";
-import {
-  SorterResult,
-  TablePaginationConfig,
-  FilterValue,
-  ColumnsType,
-} from "antd/es/table/interface";
+import { List, Button, Spin, Timeline, Card, Collapse, Descriptions } from "antd";
+import { CareDTO } from "../types/care.types";
 import { api } from "../api/api";
 import { useTranslation } from "react-i18next";
 import store from "../store/RootStore";
 import { toast } from "react-toastify";
-import { CareDTO } from "../types/care.types";
+
+const { Panel } = Collapse;
 
 const CaresList = () => {
   const { t } = useTranslation();
@@ -49,7 +45,7 @@ const CaresList = () => {
   };
 
   useEffect(() => {
-    store.selectedMenuOption = "caretakerSearch";
+    store.selectedMenuOption = "cares";
   }, []);
 
   useEffect(() => {
@@ -57,81 +53,123 @@ const CaresList = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagingParams]);
 
-  const mapSortDirection = (sorter: SorterResult<CareDTO>) => {
-    if (sorter.order) {
-      return sorter.order === "ascend" ? "ASC" : "DESC";
-    } else {
-      return undefined;
-    }
-  };
-
-  const handleTableChange = (
-    pagination: TablePaginationConfig,
-    _filters: Record<string, FilterValue | null>,
-    sorter: SorterResult<CareDTO> | SorterResult<CareDTO>[]
-  ) => {
-    const singleSorter = Array.isArray(sorter) ? sorter[0] : sorter;
-    const isSorted = !!singleSorter.order;
-
+  const handlePageChange = (page: number, pageSize?: number) => {
     setPagingParams({
-      page: (pagination.current || 1) - 1,
-      size: pagination.pageSize || 10,
-      sortBy: isSorted ? (singleSorter.field as string) : undefined,
-      sortDirection: mapSortDirection(singleSorter),
+      ...pagingParams,
+      page: page - 1,
+      size: pageSize || 10,
     });
   };
 
-  const handleSearch = () => {
-    setPagingParams((prevParams) => ({
-      ...prevParams,
-      page: 0, // Reset to first page on search
-    }));
+  const formatTotalPrice = (dailyPrice: number, start: string, end: string) => {
+    const days =
+      (new Date(end).getTime() - new Date(start).getTime()) /
+      (1000 * 60 * 60 * 24) + 1; // + 1 to include the end date
+    return (dailyPrice * days).toFixed(2);
   };
 
-  const columns: ColumnsType<CareDTO> = [
-    {
-      title: t("care.title"),
-      key: "title",
-      dataIndex: "submittedAt",
-    },
-  ];
+  const numberOfDays = (start: string, end: string) => {
+    const days =
+      (new Date(end).getTime() - new Date(start).getTime()) /
+      (1000 * 60 * 60 * 24) + 1; // + 1 to include the end date
+    return days;
+  };
+
+  const renderTimeline = (status: string) => (
+    <Timeline className="timeline">
+      <Timeline.Item color={status === "PENDING" ? "blue" : "gray"}>
+        {t("status.pending")}
+      </Timeline.Item>
+      <Timeline.Item color={status === "ACCEPTED" ? "green" : "gray"}>
+        {t("status.accepted")}
+      </Timeline.Item>
+      <Timeline.Item color={status === "CANCELLED" ? "red" : "gray"}>
+        {t("status.cancelled")}
+      </Timeline.Item>
+      <Timeline.Item color={status === "AWAITING_PAYMENT" ? "orange" : "gray"}>
+        {t("status.awaitingPayment")}
+      </Timeline.Item>
+      <Timeline.Item color={status === "PAID" ? "green" : "gray"}>
+        {t("status.paid")}
+      </Timeline.Item>
+      <Timeline.Item color={status === "OUTDATED" ? "gray" : "gray"}>
+        {t("status.outdated")}
+      </Timeline.Item>
+    </Timeline>
+  );
 
   return (
-    <div>
-      <div className="caretaker-container">
-        <Spin spinning={isLoading} fullscreen />
-        <div className="caretaker-content">
-          <Table
-            columns={columns}
-            locale={{
-              emptyText: t("caretakerSearch.noCaretakers"),
-              triggerDesc: t("caretakerSearch.triggerDesc"),
-              triggerAsc: t("caretakerSearch.triggerAsc"),
-              cancelSort: t("caretakerSearch.cancelSort"),
-            }}
-            dataSource={cares}
-            rowKey={(record) => record.submittedAt}
-            pagination={{
-              current: pagination.current,
-              pageSize: pagination.pageSize,
-              total: pagination.total,
-              showSizeChanger: true,
-              locale: {
-                items_per_page: t("perPage"),
-              },
-            }}
-            scroll={{ x: "max-content" }}
-            onChange={handleTableChange}
-          />
-          <Button
-            type="primary"
-            onClick={handleSearch}
-            className="search-button"
-          >
-            {t("caretakerSearch.search")}
-          </Button>
-        </div>
-      </div>
+    <div className="cares-list-container">
+      <Spin spinning={isLoading} />
+      <h1 className="cares-title">{t("care.yourCares")}</h1>
+      <List
+        className="cares-list"
+        dataSource={cares}
+        itemLayout="vertical"
+        pagination={{
+          current: pagination.current,
+          pageSize: pagination.pageSize,
+          total: pagination.total,
+          onChange: handlePageChange,
+        }}
+        renderItem={(care) => (
+          <List.Item key={care.id}>
+            <Card className="care-card">
+              <div className="general-info">
+                <Descriptions
+                  title={t("care.fromTo", { 
+                    from: care.careStart,
+                    to: care.careEnd, 
+                    days: numberOfDays(care.careStart, care.careEnd) 
+                  })}
+                  column={2}
+                  size="small"
+                >
+                  <Descriptions.Item label={t("animalType")}>
+                    {t(care.animalType.toLowerCase())}
+                  </Descriptions.Item>
+                  <Descriptions.Item label={t("totalPrice")}>
+                    {formatTotalPrice(care.dailyPrice, care.careStart, care.careEnd)} zł
+                  </Descriptions.Item>
+                  <Descriptions.Item label={t("caretaker")}>
+                    {care.caretakerEmail}
+                  </Descriptions.Item>
+                  <Descriptions.Item label={t("client")}>
+                    {care.clientEmail}
+                  </Descriptions.Item>
+                </Descriptions>
+                <img src={`/images/${care.animalType.toLowerCase()}-card.jpg`}></img>
+              </div>
+
+              <Collapse bordered={false} className="care-details-collapse">
+                <Panel header={t("viewDetails")} key="1">
+                  <Descriptions
+                    column={2}
+                    size="small"
+                  >
+                    <Descriptions.Item label={t("dailyPrice")}>
+                      {care.dailyPrice} zł
+                    </Descriptions.Item>
+                    <Descriptions.Item label={t("description")}>
+                      {care.description}
+                    </Descriptions.Item>
+                    <Descriptions.Item label={t("animalAttributes")}>
+                      <div>
+                        {Object.entries(care.selectedOptions).map(([key, value]) => (
+                          <div key={key}>
+                            {t(key.toLowerCase())}: {value.map((option) => t(option.toLowerCase())).join(", ")}
+                          </div>
+                        ))}
+                      </div>
+                    </Descriptions.Item>
+                  </Descriptions>
+                  {renderTimeline(care.caretakerStatus)}
+                </Panel>
+              </Collapse>
+            </Card>
+          </List.Item>
+        )}
+      />
     </div>
   );
 };

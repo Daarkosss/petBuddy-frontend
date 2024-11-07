@@ -264,9 +264,9 @@ const CaretakerList = () => {
             columns={columns}
             locale={{
               emptyText: t("caretakerSearch.noCaretakers"),
-              triggerDesc: t("caretakerSearch.triggerDesc"),
-              triggerAsc: t("caretakerSearch.triggerAsc"),
-              cancelSort: t("caretakerSearch.cancelSort"),
+              triggerDesc: t("triggerDesc"),
+              triggerAsc: t("triggerAsc"),
+              cancelSort: t("cancelSort"),
             }}
             dataSource={caretakers}
             rowKey={(record) => record.accountData.email}

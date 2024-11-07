@@ -28,6 +28,7 @@
   "loading": "Ładowanie...",
   "logout": "Wyloguj",
   "caretaker": "Opiekun",
+  "client": "Klient",
 
   "amenities": "Udogodnienia",
   "amenityTypes": {
@@ -105,16 +106,17 @@
     "noCaretakerProfile": "Nie posiadasz jeszcze profilu opiekuna"
   },
 
+  "triggerDesc": "Naciśnij aby sortowac malejąco",
+  "triggerAsc": "Naciśnij aby sortowac rosnąco",
+  "cancelSort": "Naciśnij aby anulowac sortowanie",
+
   "caretakerSearch": {
     "personalData": "Dane personalne",
     "animalTypes": "Rodzaje zwierząt",
     "animalType": "Typ zwierzęcia",
     "minPrice": "Minimalna cena",
     "maxPrice": "Maksymalna cena",
-    "noCaretakers": "Brak opiekunów dla podanych parametrów",
-    "triggerDesc": "Kliknij aby sortowac malejąco",
-    "triggerAsc": "Kliknij aby sortowac rosnąco",
-    "cancelSort": "Kliknij aby anulowac sortowanie"
+    "noCaretakers": "Brak opiekunów dla podanych parametrów"
   },
 
   "description": "Opis",
@@ -182,6 +184,7 @@
   },
 
   "dailyPrice": "Cena za dzień",
+  "totalPrice": "Cena całkowita",
 
   "addOffer": "Dodaj nową ofertę",
   "setAvailabilityForOffers": "Ustaw dostępność dla ofert",
@@ -234,11 +237,16 @@
   "oneAvailabilityForAllAnimals": "Jedna dostępność dla wszystkich zwierząt",
 
   "care": {
-    "title": "Rezerwacja opieki",
+    "fromTo": "Opieka od {{from}} do {{to}}, ({{days}} dni)",
+    "reservation": "Rezerwacja opieki",
     "askForCare": "Poproś o opiekę",
     "date": "Data opieki",
     "negotiatePrice": "Negocjuj cenę",
-    "goBackToOriginalPrice": "Powroć do początkowej ceny"
+    "goBackToOriginalPrice": "Powroć do początkowej ceny",
+    "noCares": "Brak opiek dla podanych parametrów",
+    "yourCares": "Twoje opieki"
   },
-  "petDescription": "Opis zwierzęcia"
+
+  "petDescription": "Opis zwierzęcia",
+  "animalAttributes": "Cechy zwierzęcia"
 }

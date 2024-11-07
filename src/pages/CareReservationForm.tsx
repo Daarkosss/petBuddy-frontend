@@ -79,7 +79,7 @@ const CareReservationForm = () => {
       <img src={`/images/${animalType.toLowerCase()}-card.jpg`} alt="Logo" />
       <div className="form-container">
         <div>
-          <h1>{t("care.title")}</h1>
+          <h1>{t("care.reservation")}</h1>
           <h2>{t(animalType.toLowerCase())}</h2>
         </div>
         <Form
@@ -123,7 +123,7 @@ const CareReservationForm = () => {
           {Object.keys(animalAttributes || {}).map((attributeKey) => (
             <Form.Item
               key={attributeKey}
-              name={["animalAttributes", attributeKey]}
+              name={["selectedOptions", attributeKey]}
               label={t(attributeKey.toLowerCase())}
               rules={[{ required: true, message: t("validation.required") }]}
             >

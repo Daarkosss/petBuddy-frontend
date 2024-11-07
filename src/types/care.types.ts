@@ -6,7 +6,7 @@ export type CareReservationDTO = {
   description: string,
   dailyPrice: number,
   animalType: string,
-  animalAttributes: AnimalAttributes
+  selectedOptions: AnimalAttributes
 }
 
 export type CareReservation = {
@@ -14,7 +14,7 @@ export type CareReservation = {
   description: string,
   dailyPrice: number,
   animalType: string,
-  animalAttributes: AnimalAttributes
+  selectedOptions: AnimalAttributes
 }
 
 export type AnimalAttributes = {

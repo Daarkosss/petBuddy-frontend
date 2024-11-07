@@ -21,7 +21,7 @@ import {
   AvailabilityValues
 } from "../types";
 import { CareReservation, CareReservationDTO, GetCaresDTO } from "../types/care.types";
-import { AnimalConfigurationsDTO } from "../types/animal.types";
+import { AnimalAttributes, AnimalConfigurationsDTO } from "../types/animal.types";
 import { UploadFile } from "antd";
 
 const backendHost =
@@ -517,7 +517,13 @@ class API {
       const [dateFrom, dateTo] = careReservation.dateRange;
       const body: CareReservationDTO = {
         animalType: careReservation.animalType,
-        animalAttributes: careReservation.animalAttributes,
+        selectedOptions: Object.entries(careReservation.selectedOptions).reduce(
+          (acc, [key, value]) => {
+            acc[key] = Array.isArray(value) ? value : [value];
+            return acc;
+          },
+          {} as AnimalAttributes
+        ),
         description: careReservation.description,
         dailyPrice: careReservation.dailyPrice,
         careStart: dateFrom?.toString() || "",
