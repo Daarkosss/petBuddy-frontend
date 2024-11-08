@@ -19,6 +19,7 @@ const CareReservationForm = () => {
   const [availabilityRange, setAvailabilityRange] = useState<string[] | null>(null);
   const [isNegotiate, setIsNegotiate] = useState(false);
   const [animalAttributes, setAnimalAttributes] = useState<AnimalAttributes>();
+  const [windowInnerWidth, setWindowInnerWidth] = useState(window.innerWidth);
 
   const animalType: string = location.state?.animalType;
   const availabilities: AvailabilityValues = location.state?.availabilities.sort(
@@ -34,23 +35,30 @@ const CareReservationForm = () => {
     form.setFieldsValue({
       dailyPrice: location.state?.dailyPrice,
     });
+
+    const handleResize = () => {
+      setWindowInnerWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleFinish = async () => {
     form.validateFields();
     setIsLoading(true);
     try {
-      const formValues = form.getFieldsValue();
+      const formValues = form.getFieldsValue(true);
       formValues.animalType = animalType;
       formValues.dateRange = careDateRange;
       await api.makeCareReservation(caretakerEmail!, formValues);
       navigate(-1);
       toast.success(t("success.askForCare"));
+      form.resetFields();
     } catch (error) {
       toast.error(t("error.askForCare"));
     } finally {
       setIsLoading(false);
-      form.resetFields();
     }
   };
 
@@ -109,7 +117,7 @@ const CareReservationForm = () => {
           >
             <Input.TextArea
               placeholder={t("placeholder.animalDescription")}
-              autoSize={{ minRows: 2, maxRows: 5 }}
+              autoSize={{ minRows: 2, maxRows: 6 }}
             />
           </Form.Item>
         </>
@@ -136,6 +144,7 @@ const CareReservationForm = () => {
           <Form.Item
             name="dailyPrice"
             label={t("dailyPrice")}
+            style={{ maxWidth: 185 }}
             rules={[
               { required: true, message: t("validation.required") },
               { pattern: /^\d{0,5}(\.\d{0,2})?$/, message: t("validation.price") },
@@ -168,8 +177,7 @@ const CareReservationForm = () => {
       title: t("careReservation.step3Title"),
       description: t("careReservation.step3Description"),
       content: (
-        <Descriptions bordered column={1} size="middle"   className="descriptions-vertical"
-        layout="horizontal">
+        <Descriptions bordered column={1} size="middle" layout={windowInnerWidth < 768 ? "vertical" : "horizontal"}>
           <Descriptions.Item label={t("animalType")}>{t(animalType.toLowerCase())}</Descriptions.Item>
           <Descriptions.Item label={t("care.date")}>
             {careDateRange.join(" ~ ")}
@@ -211,16 +219,26 @@ const CareReservationForm = () => {
     <div className="care-reservation-container">
       <img src={`/images/${animalType.toLowerCase()}-card.jpg`} alt="Logo" />
       <div className="form-container">
-        <Steps current={currentStep} onChange={onStepClick}>
+        <Steps 
+          current={currentStep}
+          onChange={onStepClick} 
+          direction={windowInnerWidth < 768 ? "vertical" : "horizontal"}
+          style={{ marginLeft: windowInnerWidth < 768 ? 20 : 0 }}
+        >
           {steps.map((item) => (
-            <Steps.Step key={item.title} title={item.title} description={item.description} disabled={currentStep < steps.indexOf(item)}/>
+            <Steps.Step
+              key={item.title}
+              title={item.title} 
+              description={item.description} 
+              disabled={currentStep < steps.indexOf(item)}
+            />
           ))}
         </Steps>
         <Form form={form} onFinish={handleFinish} layout="vertical" className="form">
           <div className="steps-content">{steps[currentStep].content}</div>
           <div className="steps-action">
             {currentStep > 0 && (
-              <Button style={{ margin: "0 8px" }} onClick={() => prev()}>
+              <Button onClick={() => prev()}>
                 {t("previous")}
               </Button>
             )}

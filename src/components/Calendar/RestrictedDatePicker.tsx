@@ -62,6 +62,7 @@ const RestrictedDatePicker: React.FC<DatePickerProps> = ({
       locale={i18n.language === "pl" ? calendar_pl : calendar_en}
       currentDate={new DateObject(availabilities[0][0])}
       onChange={handleDateChange}
+      style={{ width: 185 }}
       mapDays={({ date }) => {
         const formattedDate = date.format("YYYY-MM-DD");
         const inAllowedRange = availabilityRange 
@@ -78,6 +79,7 @@ const RestrictedDatePicker: React.FC<DatePickerProps> = ({
           value={value}
           onFocus={openCalendar}
           placeholder={t("placeholder.date")}
+          style={{ width: 185 }}
         />
       )}
     />
