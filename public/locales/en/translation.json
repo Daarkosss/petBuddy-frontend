@@ -241,6 +241,18 @@
     "yourCares": "Your cares"
   },
 
+  "careReservation": {
+    "step1Title": "Pet data",
+    "step1Description": "Fill info about your pet",
+    "step2Title": "Date and price",
+    "step2Description": "Choose date and confirm price",
+    "step3Title": "Summary",
+    "step3Description": "Confirm your reservation"
+  },
+
   "petDescription": "Pet description",
-  "animalAttributes": "Animal attributes"
+  "animalAttributes": "Animal attributes",
+
+  "previous": "Previous",
+  "next": "Next"
 }

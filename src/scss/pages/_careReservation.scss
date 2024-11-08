@@ -2,8 +2,8 @@
 
 .care-reservation-container {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  max-width: 1000px;
+  grid-template-columns: 1fr 1.5fr;
+  max-width: 1200px;
   margin: 5vh auto;
   background-color: v.$white;
   border-radius: 8px;
@@ -11,7 +11,6 @@
 
   @media (max-width: 1024px) {
     width: 90%;
-    max-width: 500px;
     grid-template-columns: 1fr;
   }
 
@@ -20,16 +19,21 @@
     border-radius: 8px 0 0 8px;
 
     @media (max-width: 1024px) {
+      display: none;
       border-radius: 8px 8px 0 0;
     }
   }
 
   .form-container {
-    padding: 20px;
-    display: flex;
-    gap: 20px;
+    padding: 30px;
+    margin-top: 20px;
+    display: grid;
+    grid-template-rows: 1fr 5fr;
     flex-direction: column;
-    justify-content: space-evenly;
+
+    @media (max-width: 1024px) {
+      grid-template-rows: 1fr 2fr;
+    }
 
     h2 {
       text-align: center;
@@ -37,12 +41,20 @@
 
     .form {
       display: flex;
+      padding: 20px;
       flex-direction: column;
+      justify-content: space-between;
       gap: 10px;
     }
 
     .rmdp-container {
       width: 100%;
     }
+  }
+  
+  .steps-action {
+    display: flex;
+    justify-content: end;
+    gap: 10px;
   }
 }

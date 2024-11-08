@@ -1,5 +1,5 @@
 import { KeyboardEvent, useEffect, useState } from "react";
-import { Form, Input, Button, Select } from "antd";
+import { Form, Input, Button, Select, Steps, Descriptions } from "antd";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -14,6 +14,7 @@ const CareReservationForm = () => {
   const location = useLocation();
   const [form] = Form.useForm();
   const [isLoading, setIsLoading] = useState(false);
+  const [currentStep, setCurrentStep] = useState(0);
   const [careDateRange, setCareDateRange] = useState<string[]>([]);
   const [availabilityRange, setAvailabilityRange] = useState<string[] | null>(null);
   const [isNegotiate, setIsNegotiate] = useState(false);
@@ -33,7 +34,6 @@ const CareReservationForm = () => {
     form.setFieldsValue({
       dailyPrice: location.state?.dailyPrice,
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleFinish = async () => {
@@ -57,7 +57,6 @@ const CareReservationForm = () => {
   const handlePriceKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     const value = e.key;
     const regex = /^\d/;
-
     const allowedKeys = ["Backspace", "Delete", ","];
     if (!regex.test(value) && !allowedKeys.includes(e.key)) {
       e.preventDefault();
@@ -74,20 +73,53 @@ const CareReservationForm = () => {
     form.setFieldsValue({ dailyPrice: location.state?.dailyPrice });
   };
 
-  return (
-    <div className="care-reservation-container">
-      <img src={`/images/${animalType.toLowerCase()}-card.jpg`} alt="Logo" />
-      <div className="form-container">
-        <div>
-          <h1>{t("care.reservation")}</h1>
-          <h2>{t(animalType.toLowerCase())}</h2>
-        </div>
-        <Form
-          form={form}
-          onFinish={handleFinish}
-          className="form"
-          labelCol={{ span: 7 }}
-        >
+  const onStepClick = (step: number) => {
+    if (step < currentStep) {
+      setCurrentStep(step);
+    }
+  };
+
+  const steps = [
+    {
+      title: t("careReservation.step1Title"),
+      description: t("careReservation.step1Description"),
+      content: (
+        <>
+          {Object.keys(animalAttributes || {}).map((attributeKey) => (
+            <Form.Item
+              key={attributeKey}
+              name={["selectedOptions", attributeKey]}
+              label={t(attributeKey.toLowerCase())}
+              rules={[{ required: true, message: t("validation.required") }]}
+              style={{ maxWidth: 300 }}
+            >
+              <Select
+                placeholder={t("placeholder.selectFromList")}
+                options={animalAttributes![attributeKey].map((value) => ({
+                  value,
+                  label: t(value.toLowerCase()),
+                }))}
+              />
+            </Form.Item>
+          ))}
+          <Form.Item
+            name="description"
+            label={t("petDescription")}
+            rules={[{ required: true, message: t("validation.required") }]}
+          >
+            <Input.TextArea
+              placeholder={t("placeholder.animalDescription")}
+              autoSize={{ minRows: 2, maxRows: 5 }}
+            />
+          </Form.Item>
+        </>
+      ),
+    },
+    {
+      title: t("careReservation.step2Title"),
+      description: t("careReservation.step2Description"),
+      content: (
+        <>
           <Form.Item
             name="careDateRange"
             label={t("care.date")}
@@ -120,56 +152,89 @@ const CareReservationForm = () => {
               disabled={!isNegotiate}
             />
           </Form.Item>
-          {Object.keys(animalAttributes || {}).map((attributeKey) => (
-            <Form.Item
-              key={attributeKey}
-              name={["selectedOptions", attributeKey]}
-              label={t(attributeKey.toLowerCase())}
-              rules={[{ required: true, message: t("validation.required") }]}
-            >
-              <Select
-                placeholder={t("placeholder.selectFromList")}
-                options={animalAttributes![attributeKey].map((value) => ({
-                  value,
-                  label: t(value.toLowerCase()),
-                }))}
-              />
-            </Form.Item>
-          ))}
-          <Form.Item
-            name="description"
-            label={t("petDescription")}
-            rules={[{ required: true, message: t("validation.required") }]}
-          >
-            <Input.TextArea
-              placeholder={t("placeholder.animalDescription")}
-              autoSize={{ minRows: 2, maxRows: 5 }}
-            />
-          </Form.Item>
-          {isNegotiate ?
-            <Button
-              type="primary"
-              className="add-button"
-              onClick={stopNegotiation}
-            >
+          {isNegotiate ? (
+            <Button type="primary" className="add-button" onClick={stopNegotiation}>
               {t("care.goBackToOriginalPrice")}
-            </Button> :
-            <Button
-              type="primary"
-              className="add-button"
-              onClick={() => setIsNegotiate(true)}
-            >
+            </Button>
+          ) : (
+            <Button type="primary" className="add-button" onClick={() => setIsNegotiate(true)}>
               {t("care.negotiatePrice")}
             </Button>
-          }
-          <Button
-            type="primary"
-            className="submit-button centered"
-            htmlType="submit"
-            loading={isLoading}
-          >
-            {t("care.askForCare")}
-          </Button>
+          )}
+        </>
+      ),
+    },
+    {
+      title: t("careReservation.step3Title"),
+      description: t("careReservation.step3Description"),
+      content: (
+        <Descriptions bordered column={1} size="middle"   className="descriptions-vertical"
+        layout="horizontal">
+          <Descriptions.Item label={t("animalType")}>{t(animalType.toLowerCase())}</Descriptions.Item>
+          <Descriptions.Item label={t("care.date")}>
+            {careDateRange.join(" ~ ")}
+          </Descriptions.Item>
+          <Descriptions.Item label={t("dailyPrice")}>
+            {form.getFieldValue("dailyPrice")} zł za dzień
+          </Descriptions.Item>
+          {Object.keys(animalAttributes || {}).map((key) => (
+            <Descriptions.Item key={key} label={t(key.toLowerCase())}>
+              {form.getFieldValue(["selectedOptions", key])}
+            </Descriptions.Item>
+          ))}
+          <Descriptions.Item label={t("petDescription")}>
+            <Input.TextArea
+              value={form.getFieldValue("description")}
+              autoSize={{ minRows: 2, maxRows: 4 }}
+              disabled
+            />
+          </Descriptions.Item>
+        </Descriptions>
+      ),
+    },
+  ];
+
+  const next = async () => {
+    try {
+      await form.validateFields();
+      setCurrentStep(currentStep + 1);
+    } catch (error) {
+      toast.error(t("error.fillRequiredFields"));
+    }
+  };
+
+  const prev = () => {
+    setCurrentStep(currentStep - 1);
+  };
+
+  return (
+    <div className="care-reservation-container">
+      <img src={`/images/${animalType.toLowerCase()}-card.jpg`} alt="Logo" />
+      <div className="form-container">
+        <Steps current={currentStep} onChange={onStepClick}>
+          {steps.map((item) => (
+            <Steps.Step key={item.title} title={item.title} description={item.description} disabled={currentStep < steps.indexOf(item)}/>
+          ))}
+        </Steps>
+        <Form form={form} onFinish={handleFinish} layout="vertical" className="form">
+          <div className="steps-content">{steps[currentStep].content}</div>
+          <div className="steps-action">
+            {currentStep > 0 && (
+              <Button style={{ margin: "0 8px" }} onClick={() => prev()}>
+                {t("previous")}
+              </Button>
+            )}
+            {currentStep < steps.length - 1 && (
+              <Button type="primary" onClick={() => next()}>
+                {t("next")}
+              </Button>
+            )}
+            {currentStep === steps.length - 1 && (
+              <Button type="primary" htmlType="submit" loading={isLoading}>
+                {t("care.askForCare")}
+              </Button>
+            )}
+          </div>
         </Form>
       </div>
     </div>
