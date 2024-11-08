@@ -238,7 +238,8 @@
     "negotiatePrice": "Negotiate price",
     "goBackToOriginalPrice": "Go back to original price",
     "noCares": "There are no cares for selected filters",
-    "yourCares": "Your cares"
+    "yourCares": "Your cares",
+    "numberOfDays": "Number of care days"
   },
 
   "careReservation": {
@@ -247,12 +248,14 @@
     "step2Title": "Date and price",
     "step2Description": "Choose date and confirm price",
     "step3Title": "Summary",
-    "step3Description": "Confirm your reservation"
+    "step3Description": "Confirm your reservation",
+    "originalPrice": "Original price from offer"
   },
 
   "petDescription": "Pet description",
   "animalAttributes": "Animal attributes",
 
   "previous": "Previous",
-  "next": "Next"
+  "next": "Next",
+  "youWillSave": "You will save"
 }

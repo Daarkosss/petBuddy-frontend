@@ -1,11 +1,12 @@
 import { KeyboardEvent, useEffect, useState } from "react";
-import { Form, Input, Button, Select, Steps, Descriptions } from "antd";
+import { Form, Input, Button, Select, Steps, Descriptions, Statistic, Card, Row, Col } from "antd";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { api } from "../api/api";
 import { AnimalAttributes, AvailabilityValues } from "../types";
 import RestrictedDatePicker from "../components/Calendar/RestrictedDatePicker";
+import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
 
 const CareReservationForm = () => {
   const { t } = useTranslation();
@@ -20,6 +21,7 @@ const CareReservationForm = () => {
   const [isNegotiate, setIsNegotiate] = useState(false);
   const [animalAttributes, setAnimalAttributes] = useState<AnimalAttributes>();
   const [windowInnerWidth, setWindowInnerWidth] = useState(window.innerWidth);
+  const currentPrice = Form.useWatch("dailyPrice", form);
 
   const animalType: string = location.state?.animalType;
   const availabilities: AvailabilityValues = location.state?.availabilities.sort(
@@ -87,6 +89,27 @@ const CareReservationForm = () => {
     }
   };
 
+  const countDays = () => {
+    const [dateFrom, dateTo] = careDateRange;
+    if (!dateFrom) {
+      return 0;
+    } else if (!dateTo) {
+      return 1;
+    }
+    const from = new Date(dateFrom);
+    const to = new Date(dateTo);
+    const diff = to.getTime() - from.getTime();
+    const days = Math.ceil(diff / (1000 * 60 * 60 * 24)) + 1;
+    return days;
+  };
+  const calculateTotalPrice = (price: number) => {
+    return (price * countDays());
+  };
+
+  const calculatePriceDifference = () => {
+    return calculateTotalPrice(location.state?.dailyPrice) - calculateTotalPrice(currentPrice);
+  }
+
   const steps = [
     {
       title: t("careReservation.step1Title"),
@@ -99,7 +122,7 @@ const CareReservationForm = () => {
               name={["selectedOptions", attributeKey]}
               label={t(attributeKey.toLowerCase())}
               rules={[{ required: true, message: t("validation.required") }]}
-              style={{ maxWidth: 300 }}
+              style={{ maxWidth: 200 }}
             >
               <Select
                 placeholder={t("placeholder.selectFromList")}
@@ -117,7 +140,7 @@ const CareReservationForm = () => {
           >
             <Input.TextArea
               placeholder={t("placeholder.animalDescription")}
-              autoSize={{ minRows: 2, maxRows: 6 }}
+              autoSize={{ minRows: 4, maxRows: 5 }}
             />
           </Form.Item>
         </>
@@ -128,48 +151,84 @@ const CareReservationForm = () => {
       description: t("careReservation.step2Description"),
       content: (
         <>
-          <Form.Item
-            name="careDateRange"
-            label={t("care.date")}
-            rules={[{ required: true, message: t("validation.required") }]}
-          >
-            <RestrictedDatePicker
-              dateValue={careDateRange}
-              handleChange={updateCareDateRange}
-              availabilities={availabilities}
-              availabilityRange={availabilityRange}
-              setAvailabilityRange={setAvailabilityRange}
-            />
-          </Form.Item>
-          <Form.Item
-            name="dailyPrice"
-            label={t("dailyPrice")}
-            style={{ maxWidth: 185 }}
-            rules={[
-              { required: true, message: t("validation.required") },
-              { pattern: /^\d{0,5}(\.\d{0,2})?$/, message: t("validation.price") },
-            ]}
-          >
-            <Input
-              className="price-input"
-              type="number"
-              min={0.01}
-              max={99999.99}
-              step={0.01}
-              placeholder={t("placeholder.dailyPrice")}
-              onKeyDown={handlePriceKeyDown}
-              disabled={!isNegotiate}
-            />
-          </Form.Item>
-          {isNegotiate ? (
-            <Button type="primary" className="add-button" onClick={stopNegotiation}>
-              {t("care.goBackToOriginalPrice")}
-            </Button>
-          ) : (
-            <Button type="primary" className="add-button" onClick={() => setIsNegotiate(true)}>
-              {t("care.negotiatePrice")}
-            </Button>
-          )}
+          <Row align="middle">
+            <Col xs={24} sm={12} md={10} lg={10} xl={8}>
+              <Form.Item
+                name="careDateRange"
+                label={t("care.date")}
+                rules={[{ required: true, message: t("validation.required") }]}
+              >
+                <RestrictedDatePicker
+                  dateValue={careDateRange}
+                  handleChange={updateCareDateRange}
+                  availabilities={availabilities}
+                  availabilityRange={availabilityRange}
+                  setAvailabilityRange={setAvailabilityRange}
+                />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={12} md={12} lg={12} xl={12}>
+              <Descriptions>
+                <Descriptions.Item label={t("care.numberOfDays")}>{countDays()}</Descriptions.Item>
+              </Descriptions>
+            </Col>
+          </Row>
+          <Row align="middle">
+            <Col xs={24} sm={12} md={10} lg={10} xl={8}>
+              <Form.Item
+                name="dailyPrice"
+                label={t("dailyPrice")}
+                style={{ maxWidth: 185 }}
+                rules={[
+                  { required: true, message: t("validation.required") },
+                  { pattern: /^\d{0,5}(\.\d{0,2})?$/, message: t("validation.price") },
+                ]}
+              >
+                <Input
+                  className="price-input"
+                  type="number"
+                  min={0.01}
+                  max={99999.99}
+                  step={0.01}
+                  placeholder={t("placeholder.dailyPrice")}
+                  onKeyDown={handlePriceKeyDown}
+                  disabled={!isNegotiate}
+                />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={12} md={8} lg={8} xl={8}>
+              <Descriptions>
+                <Descriptions.Item label={t("totalPrice")}>{calculateTotalPrice(currentPrice)}</Descriptions.Item>
+              </Descriptions>
+            </Col>
+            <Col xs={24} sm={4} md={8} lg={4} xl={4}>
+              {isNegotiate && (
+                <Card style={{ width: "max-content" }} size="small">
+                  <Statistic
+                    title={t("youWillSave")}
+                    value={location.state?.dailyPrice - currentPrice}
+                    precision={2}
+                    decimalSeparator=","
+                    groupSeparator=""
+                    valueStyle={{ color: calculatePriceDifference() < 0 ? "red" : "green" }}
+                    prefix={calculatePriceDifference() < 0 ? <ArrowDownOutlined/> : <ArrowUpOutlined />}
+                    suffix="zł"
+                  />
+                </Card>
+              )}
+            </Col>
+          </Row>
+          <Row>
+            {isNegotiate ? (
+              <Button type="primary" className="add-button" onClick={stopNegotiation}>
+                {t("care.goBackToOriginalPrice")}
+              </Button>
+            ) : (
+              <Button type="primary" className="add-button" onClick={() => setIsNegotiate(true)}>
+                {t("care.negotiatePrice")}
+              </Button>
+            )}
+          </Row>
         </>
       ),
     },
@@ -180,14 +239,16 @@ const CareReservationForm = () => {
         <Descriptions bordered column={1} size="middle" layout={windowInnerWidth < 768 ? "vertical" : "horizontal"}>
           <Descriptions.Item label={t("animalType")}>{t(animalType.toLowerCase())}</Descriptions.Item>
           <Descriptions.Item label={t("care.date")}>
-            {careDateRange.join(" ~ ")}
+            {careDateRange.join(" ~ ")} <b>({countDays().toString()} dni)</b>
           </Descriptions.Item>
-          <Descriptions.Item label={t("dailyPrice")}>
-            {form.getFieldValue("dailyPrice")} zł za dzień
+          <Descriptions.Item label={t("totalPrice")}>
+            {calculateTotalPrice(form.getFieldValue("dailyPrice"))} zł
           </Descriptions.Item>
           {Object.keys(animalAttributes || {}).map((key) => (
             <Descriptions.Item key={key} label={t(key.toLowerCase())}>
-              {form.getFieldValue(["selectedOptions", key])}
+              {form.getFieldValue(["selectedOptions", key]) && 
+                t(form.getFieldValue(["selectedOptions", key]).toLowerCase())
+              }
             </Descriptions.Item>
           ))}
           <Descriptions.Item label={t("petDescription")}>
@@ -203,11 +264,9 @@ const CareReservationForm = () => {
   ];
 
   const next = async () => {
-    try {
-      await form.validateFields();
+    const isFormValid = await form.validateFields();
+    if (isFormValid) {
       setCurrentStep(currentStep + 1);
-    } catch (error) {
-      toast.error(t("error.fillRequiredFields"));
     }
   };
 

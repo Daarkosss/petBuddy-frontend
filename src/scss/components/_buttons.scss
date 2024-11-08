@@ -40,6 +40,7 @@
 .add-button {
   color: v.$white;
   background: v.$orange-medium;
+  width: max-content;
 
   &:hover,
   &:focus {

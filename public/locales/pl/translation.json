@@ -184,7 +184,7 @@
   },
 
   "dailyPrice": "Cena za dzień",
-  "totalPrice": "Cena całkowita",
+  "totalPrice": "Całkowita cena",
 
   "addOffer": "Dodaj nową ofertę",
   "setAvailabilityForOffers": "Ustaw dostępność dla ofert",
@@ -244,7 +244,8 @@
     "negotiatePrice": "Negocjuj cenę",
     "goBackToOriginalPrice": "Powroć do początkowej ceny",
     "noCares": "Brak opiek dla podanych parametrów",
-    "yourCares": "Twoje opieki"
+    "yourCares": "Twoje opieki",
+    "numberOfDays": "Liczba dni opieki"
   },
 
   "careReservation": {
@@ -253,12 +254,14 @@
     "step2Title": "Data i cena",
     "step2Description": "Wybierz datę i potwierdź cenę",
     "step3Title": "Podsumowanie",
-    "step3Description": "Potwierdź rezerwację"
+    "step3Description": "Potwierdź rezerwację",
+    "originalPrice": "Początkowa cena z oferty"
   },
 
   "petDescription": "Opis zwierzęcia",
   "animalAttributes": "Cechy zwierzęcia",
 
   "previous": "Cofnij",
-  "next": "Dalej"
+  "next": "Dalej",
+  "youWillSave": "Zaoszczędzisz"
 }
