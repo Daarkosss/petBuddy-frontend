@@ -21,7 +21,7 @@ export type AnimalAttributes = {
   [key: string]: string[];
 };
 
-export type CareStatus = "PENDING" | "ACCEPTED" | "CANCELLED" | "AWAITING_PAYMENT" | "PAID" | "OUTDATED";
+export type CareStatus = "PENDING" | "ACCEPTED" | "CANCELLED" | "AWAITING_PAYMENT" | "PAID" | "OUTDATED" | "DONE";
 
 export type CareDTO = {
   id: number;

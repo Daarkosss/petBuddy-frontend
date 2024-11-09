@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
-import { List, Button, Spin, Timeline, Card, Collapse, Descriptions } from "antd";
+import { List, Button, Spin, Descriptions } from "antd";
 import { CareDTO } from "../types/care.types";
 import { api } from "../api/api";
 import { useTranslation } from "react-i18next";
 import store from "../store/RootStore";
 import { toast } from "react-toastify";
-
-const { Panel } = Collapse;
+import { useNavigate } from "react-router-dom";
 
 const CaresList = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [cares, setCares] = useState<CareDTO[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [pagingParams, setPagingParams] = useState({
@@ -38,7 +38,7 @@ const CaresList = () => {
         });
       }
     } catch (error) {
-      toast.error(t("error.getCaretakers"));
+      toast.error(t("error.getCares"));
     } finally {
       setIsLoading(false);
     }
@@ -75,29 +75,6 @@ const CaresList = () => {
     return days;
   };
 
-  const renderTimeline = (status: string) => (
-    <Timeline className="timeline">
-      <Timeline.Item color={status === "PENDING" ? "blue" : "gray"}>
-        {t("status.pending")}
-      </Timeline.Item>
-      <Timeline.Item color={status === "ACCEPTED" ? "green" : "gray"}>
-        {t("status.accepted")}
-      </Timeline.Item>
-      <Timeline.Item color={status === "CANCELLED" ? "red" : "gray"}>
-        {t("status.cancelled")}
-      </Timeline.Item>
-      <Timeline.Item color={status === "AWAITING_PAYMENT" ? "orange" : "gray"}>
-        {t("status.awaitingPayment")}
-      </Timeline.Item>
-      <Timeline.Item color={status === "PAID" ? "green" : "gray"}>
-        {t("status.paid")}
-      </Timeline.Item>
-      <Timeline.Item color={status === "OUTDATED" ? "gray" : "gray"}>
-        {t("status.outdated")}
-      </Timeline.Item>
-    </Timeline>
-  );
-
   return (
     <div className="cares-list-container">
       <Spin spinning={isLoading} />
@@ -113,16 +90,30 @@ const CaresList = () => {
           onChange: handlePageChange,
         }}
         renderItem={(care) => (
-          <List.Item key={care.id}>
-            <Card className="care-card">
-              <div className="general-info">
+          <List.Item 
+            key={care.id}
+            actions={[
+              <Button
+                className="view-details-button"
+                type="primary"
+                onClick={() => navigate(`/care/${care.id}`)}
+              >
+                {t("viewDetails")}
+              </Button>
+            ]}
+            extra={
+              <img src={`/images/${care.animalType.toLowerCase()}-card.jpg`}/>
+            }
+          >
+            <List.Item.Meta
+              title={t("care.fromTo", { 
+                from: care.careStart,
+                to: care.careEnd, 
+                days: numberOfDays(care.careStart, care.careEnd) 
+              })}
+              description={
                 <Descriptions
-                  title={t("care.fromTo", { 
-                    from: care.careStart,
-                    to: care.careEnd, 
-                    days: numberOfDays(care.careStart, care.careEnd) 
-                  })}
-                  column={2}
+                  column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }}
                   size="small"
                 >
                   <Descriptions.Item label={t("animalType")}>
@@ -138,35 +129,8 @@ const CaresList = () => {
                     {care.clientEmail}
                   </Descriptions.Item>
                 </Descriptions>
-                <img src={`/images/${care.animalType.toLowerCase()}-card.jpg`}></img>
-              </div>
-
-              <Collapse bordered={false} className="care-details-collapse">
-                <Panel header={t("viewDetails")} key="1">
-                  <Descriptions
-                    column={2}
-                    size="small"
-                  >
-                    <Descriptions.Item label={t("dailyPrice")}>
-                      {care.dailyPrice} zł
-                    </Descriptions.Item>
-                    <Descriptions.Item label={t("description")}>
-                      {care.description}
-                    </Descriptions.Item>
-                    <Descriptions.Item label={t("animalAttributes")}>
-                      <div>
-                        {Object.entries(care.selectedOptions).map(([key, value]) => (
-                          <div key={key}>
-                            {t(key.toLowerCase())}: {value.map((option) => t(option.toLowerCase())).join(", ")}
-                          </div>
-                        ))}
-                      </div>
-                    </Descriptions.Item>
-                  </Descriptions>
-                  {renderTimeline(care.caretakerStatus)}
-                </Panel>
-              </Collapse>
-            </Card>
+              }
+            />
           </List.Item>
         )}
       />

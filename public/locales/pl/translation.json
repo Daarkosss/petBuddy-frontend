@@ -167,7 +167,8 @@
     "duplicateConfiguration": "Konfiguracja z wybranymi parametrami juz istnieje",
     "setAvailabilityForOffers": "Wystąpił bład podczas ustawiania dostępności dla ofert",
     "getCaretakers": "Wystąpił bład podczas pobrania opiekunów",
-    "askForCare": "Wystąpił bład podczas wysyłania zapytania o opiekę"
+    "askForCare": "Wystąpił bład podczas wysyłania zapytania o opiekę",
+    "getCares": "Wystąpił bład podczas pobrania opiek"
   },
 
   "success": {
@@ -245,7 +246,9 @@
     "goBackToOriginalPrice": "Powroć do początkowej ceny",
     "noCares": "Brak opiek dla podanych parametrów",
     "yourCares": "Twoje opieki",
-    "numberOfDays": "Liczba dni opieki"
+    "numberOfDays": "Liczba dni opieki",
+    "accept": "Zaakceptuj opiekę",
+    "reject": "Odrzuć opiekę"
   },
 
   "careReservation": {
@@ -255,7 +258,17 @@
     "step2Description": "Wybierz datę i potwierdź cenę",
     "step3Title": "Podsumowanie",
     "step3Description": "Potwierdź rezerwację",
-    "originalPrice": "Początkowa cena z oferty"
+    "originalPrice": "Początkowa cena z oferty",
+    "confirm": "Potwierdź rezerwację"
+  },
+
+  "careStatus": {
+    "reported": "Zgłoszona przez klienta",
+    "acceptedByCaretaker": "Zaakceptowana przez opiekuna",
+    "pending": "W toku",
+    "waitingForOtherResponse": "Oczekuje na odpowiedź drugiej strony",
+    "waitingForYourResponse": "Oczekuje na twoją akcję",
+    "cancelled": "Opieka została anulowana przez opiekuna"
   },
 
   "petDescription": "Opis zwierzęcia",

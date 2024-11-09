@@ -20,7 +20,7 @@ import {
   CaretakerRatingsResponse,
   AvailabilityValues
 } from "../types";
-import { CareReservation, CareReservationDTO, GetCaresDTO } from "../types/care.types";
+import { CareDTO, CareReservation, CareReservationDTO, GetCaresDTO } from "../types/care.types";
 import { AnimalAttributes, AnimalConfigurationsDTO } from "../types/animal.types";
 import { UploadFile } from "antd";
 
@@ -552,6 +552,37 @@ class API {
         `api/care?${queryString}`,
         undefined,
         { "Accept-Role": store.user.profile?.selected_profile }
+      );
+    }
+  }
+
+  async getCare(careId: number): Promise<CareDTO | undefined> {
+    if (store.user.profile?.selected_profile) {
+      return this.authorizedFetch<CareDTO>(
+        "GET",
+        `api/care/${careId}`,
+      );
+    }
+  }
+
+  async acceptCare(careId: number): Promise<void> {
+    if (store.user.profile?.selected_profile === "CARETAKER") {
+      return this.authorizedFetch<void>(
+        "POST",
+        `api/care/${careId}/accept`,
+        undefined,
+        { "Accept-Role": "CARETAKER" }
+      );
+    }
+  }
+
+  async rejectCare(careId: number): Promise<void> {
+    if (store.user.profile?.selected_profile === "CARETAKER") {
+      return this.authorizedFetch<void>(
+        "POST",
+        `api/care/${careId}/reject`,
+        undefined,
+        { "Accept-Role": "CARETAKER" }
       );
     }
   }

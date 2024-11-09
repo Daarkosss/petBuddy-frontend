@@ -15,6 +15,7 @@ import CareReservationForm from "./pages/CareReservationForm";
 import CaretakerProfile from "./pages/CaretakerProfile";
 import ClientProfile from "./pages/ClientProfile";
 import CaresList from "./pages/Cares";
+import CareDetails from "./pages/CareDetails";
 
 const { Content } = Layout;
 
@@ -96,6 +97,12 @@ const App = observer(() => {
                     path="/cares"
                     element={
                       <CaresList />
+                    }
+                  />
+                  <Route
+                    path="/care/:careId"
+                    element={
+                      <CareDetails />
                     }
                   />
                   <Route

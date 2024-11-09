@@ -161,7 +161,8 @@
     "duplicateConfiguration": "Configuration with these selected options already exists",
     "setAvailabilityForOffers": "An error occurred while setting availability for selected offers",
     "getCaretakers": "An error occurred while loading caretakers",
-    "askForCare": "An error occurred while sending request for care"
+    "askForCare": "An error occurred while sending request for care",
+    "getCares": "An error occurred while loading cares"
   },
 
   "success": {
@@ -239,7 +240,9 @@
     "goBackToOriginalPrice": "Go back to original price",
     "noCares": "There are no cares for selected filters",
     "yourCares": "Your cares",
-    "numberOfDays": "Number of care days"
+    "numberOfDays": "Number of care days",
+    "accept": "Accept care",
+    "reject": "Reject care"
   },
 
   "careReservation": {
@@ -249,7 +252,17 @@
     "step2Description": "Choose date and confirm price",
     "step3Title": "Summary",
     "step3Description": "Confirm your reservation",
-    "originalPrice": "Original price from offer"
+    "originalPrice": "Original price from offer",
+    "confirm": "Confirm reservation"
+  },
+
+  "careStatus": {
+    "reported": "Reported by client",
+    "acceptedByCaretaker": "Accepted by caretaker",
+    "pending": "Pending",
+    "waitingForOtherResponse": "Waiting for other response",
+    "waitingForYourResponse": "Waiting for your response",
+    "cancelled": "Care was cancelled by caretaker"
   },
 
   "petDescription": "Pet description",

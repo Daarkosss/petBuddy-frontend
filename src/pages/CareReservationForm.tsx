@@ -308,7 +308,7 @@ const CareReservationForm = () => {
             )}
             {currentStep === steps.length - 1 && (
               <Button type="primary" htmlType="submit" loading={isLoading}>
-                {t("care.askForCare")}
+                {t("careReservation.confirm")}
               </Button>
             )}
           </div>

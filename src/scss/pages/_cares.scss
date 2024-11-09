@@ -24,32 +24,22 @@
 }
 
 .cares-list {
-  max-width: 900px;
+  background-color: v.$white;
+  max-width: 1000px;
   margin: 0 auto;
-}
-
-.care-card {
-  background-color: #fff;
+  padding: 20px;
   border-radius: 8px;
-  margin-bottom: 16px;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
 
-  .general-info {
-    display: grid;
-    grid-template-columns: 7fr 1fr;
+  @media (max-width: 1024px) {
+    width: 90%;
+  }
 
-    img {
-      width: 100%;
-      border-radius: 10px;
-      margin-right: 8px;
+  img {
+    width: 100px;
+    border-radius: 5%;
+
+    @media (max-width: 576px) {
+      display: none
     }
   }
-}
-
-.care-details-collapse {
-  margin-top: 16px;
-}
-
-.timeline {
-  margin-top: 16px;
 }
