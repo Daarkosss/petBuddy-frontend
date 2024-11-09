@@ -248,7 +248,10 @@
     "yourCares": "Twoje opieki",
     "numberOfDays": "Liczba dni opieki",
     "accept": "Zaakceptuj opiekę",
-    "reject": "Odrzuć opiekę"
+    "reject": "Odrzuć opiekę",
+    "proposeNewPrice": "Zaproponuj nową cenę",
+    "proposedPrice": "Zaproponowana cena",
+    "confirmNewPrice": "Potwierdź nową cenę"
   },
 
   "careReservation": {
@@ -268,7 +271,10 @@
     "pending": "W toku",
     "waitingForOtherResponse": "Oczekuje na odpowiedź drugiej strony",
     "waitingForYourResponse": "Oczekuje na twoją akcję",
-    "cancelled": "Opieka została anulowana przez opiekuna"
+    "cancelled": "Opieka została anulowana przez opiekuna",
+    "waitingToTakePlace": "Oczekuje na odbycie",
+    "isTakingPlace": "Opieka jest w trakcie odbywania",
+    "done": "Opieka zakończona"
   },
 
   "petDescription": "Opis zwierzęcia",

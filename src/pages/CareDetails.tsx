@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Button, Spin, Timeline, Card, Descriptions } from "antd";
+import { Button, Spin, Timeline, Card, Descriptions, Modal, Input, Form } from "antd";
 import { CareDTO } from "../types/care.types";
 import { api } from "../api/api";
 import { useTranslation } from "react-i18next";
@@ -11,6 +11,9 @@ const CareDetails = () => {
   const { t } = useTranslation();
   const { careId } = useParams();
   const [care, setCare] = useState<CareDTO>();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [form] = Form.useForm();
+  const [isLoading, setIsLoading] = useState(false);
 
   const careIdNumber = careId ? parseInt(careId) : undefined;
 
@@ -32,21 +35,49 @@ const CareDetails = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const acceptCareByCaretaker = async () => {
+  const acceptCare= async () => {
+    setIsLoading(true);
     try {
-      await api.acceptCare(careIdNumber!);
-      fetchCareDetails();
+      const data = await api.rejectCare(careIdNumber!);
+      if (data) {
+        setCare(data);
+      }
     } catch (error) {
       toast.error(t("error.acceptCare"));
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const rejectCareByCaretaker = async () => {
+  const rejectCare = async () => {
+    setIsLoading(true);
     try {
-      await api.rejectCare(careIdNumber!);
-      fetchCareDetails();
+      const data = await api.rejectCare(careIdNumber!);
+      if (data) {
+        setCare(data);
+      }
     } catch (error) {
       toast.error(t("error.rejectCare"));
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const proposeNewPrice = async () => {
+    setIsLoading(true);
+    try {
+      form.validateFields();
+      const newPrice = form.getFieldValue("newPrice");
+      const data = await api.updateCarePrice(careIdNumber!, newPrice);
+      if (data) {
+        setCare(data);
+      }
+      setIsModalOpen(false);
+      toast.success(t("success.updatePrice"));
+    } catch (error) {
+      toast.error(t("error.updatePrice"));
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -142,6 +173,19 @@ const CareDetails = () => {
           color: "green",
           children: t("careStatus.done")
         });
+      } 
+      if (careStatusFromYourSide() === "ACCEPTED" && careStatusFromOtherSide() === "ACCEPTED") {
+        if (care!.careStart > new Date().toISOString()) {
+          items.push({
+            color: "blue",
+            children: t("careStatus.waitingToTakePlace")
+          });
+        } else if (care!.careEnd < new Date().toISOString()) {
+          items.push({
+            color: "blue",
+            children: t("careStatus.isTakingPlace")
+          });
+        }
       }
     }
   
@@ -203,11 +247,15 @@ const CareDetails = () => {
           </Descriptions>
           {renderTimeline()}
           {careStatusFromYourSide() === "PENDING" && 
-            <div style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
-              <Button type="primary" onClick={acceptCareByCaretaker}>
+            <div className="actions">
+              <Button type="primary" onClick={acceptCare} loading={isLoading}>
                 {t("care.accept")}
               </Button>
-              <Button type="primary" danger onClick={rejectCareByCaretaker}>
+              {store.user.profile?.selected_profile === "CARETAKER" &&
+                <Button type="primary" className="add-button" onClick={() => setIsModalOpen(true)}>
+                  {t("care.proposeNewPrice")}
+                </Button>}
+              <Button type="primary" danger onClick={rejectCare} loading={isLoading}>
                 {t("care.reject")}
               </Button>
             </div>
@@ -215,6 +263,30 @@ const CareDetails = () => {
         </div>
       </Card>
       <img src={`/images/${care.animalType.toLowerCase()}-card.jpg`}/>
+      <Modal
+        title={t("care.proposeNewPrice")}
+        open={isModalOpen}
+        onCancel={() => setIsModalOpen(false)}
+        footer={null}
+        onOk={proposeNewPrice}
+        okText={t("care.confirmNewPrice")}
+      >
+        <div style={{ display: "flex", flexDirection: "column", gap: "30px" }}>
+          <Form layout="vertical" form={form} onFinish={proposeNewPrice}>
+            <Form.Item
+              label={t("care.proposedPrice")}
+              name="newPrice"
+              rules={[{ required: true, message: t("validation.required") }]}
+              initialValue={care.dailyPrice}
+            >
+              <Input type="number" />
+            </Form.Item>
+            <Button type="primary" htmlType="submit" className="submit-button" loading={isLoading}>
+              {t("care.confirmNewPrice")}
+            </Button>
+          </Form>
+        </div>
+      </Modal>
     </div>
   );
 };

@@ -206,7 +206,7 @@ const CareReservationForm = () => {
                 <Card style={{ width: "max-content" }} size="small">
                   <Statistic
                     title={t("youWillSave")}
-                    value={location.state?.dailyPrice - currentPrice}
+                    value={calculatePriceDifference()}
                     precision={2}
                     decimalSeparator=","
                     groupSeparator=""

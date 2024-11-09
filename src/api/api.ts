@@ -565,23 +565,35 @@ class API {
     }
   }
 
-  async acceptCare(careId: number): Promise<void> {
-    if (store.user.profile?.selected_profile === "CARETAKER") {
-      return this.authorizedFetch<void>(
+  async acceptCare(careId: number): Promise<CareDTO | undefined> {
+    if (store.user.profile?.selected_profile) {
+      return this.authorizedFetch<CareDTO>(
         "POST",
         `api/care/${careId}/accept`,
         undefined,
-        { "Accept-Role": "CARETAKER" }
+        { "Accept-Role": store.user.profile?.selected_profile }
       );
     }
   }
 
-  async rejectCare(careId: number): Promise<void> {
-    if (store.user.profile?.selected_profile === "CARETAKER") {
-      return this.authorizedFetch<void>(
+  async rejectCare(careId: number): Promise<CareDTO | undefined> {
+    if (store.user.profile?.selected_profile) {
+      return this.authorizedFetch<CareDTO>(
         "POST",
         `api/care/${careId}/reject`,
         undefined,
+        { "Accept-Role": store.user.profile?.selected_profile}
+      );
+    }
+  }
+
+  async updateCarePrice(careId: number, dailyPrice: number): Promise<CareDTO | undefined> {
+    console.log(store.user.profile?.selected_profile);
+    if (store.user.profile?.selected_profile === "CARETAKER") {
+      return this.authorizedFetch<CareDTO>(
+        "PATCH",
+        `api/care/${careId}`,
+        {dailyPrice},
         { "Accept-Role": "CARETAKER" }
       );
     }

@@ -42,7 +42,7 @@ const PageHeader = observer(() => {
       label: t("searchCaretakers"),
       onClick: () => navigate("/caretaker/search"),
     },
-    ...authenticatedMenuItems,
+    ...(keycloak.authenticated ? authenticatedMenuItems : []),
     {
       key: "aboutUs",
       label: t("aboutUs"),
