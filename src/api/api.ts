@@ -512,7 +512,7 @@ class API {
     return this.fetch<AnimalConfigurationsDTO>("GET", "api/animal/complex");
   }
   
-  async makeCareReservation(caretakerEmail: string, careReservation: CareReservation): Promise<void> {
+  async makeCareReservation(caretakerEmail: string, careReservation: CareReservation): Promise<CareDTO | undefined> {
     if (store.user.profile?.selected_profile === "CLIENT") {
       const [dateFrom, dateTo] = careReservation.dateRange;
       const body: CareReservationDTO = {
@@ -530,7 +530,7 @@ class API {
         careEnd: dateTo?.toString() || dateFrom?.toString() || ""
       };
 
-      return this.authorizedFetch<void>(
+      return this.authorizedFetch<CareDTO>(
         "POST",
         `api/care/${caretakerEmail}`,
         body,

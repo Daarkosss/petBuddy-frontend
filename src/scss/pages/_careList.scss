@@ -24,11 +24,22 @@
 }
 
 .cares-list {
-  background-color: v.$white;
   max-width: 1000px;
   margin: 0 auto;
-  padding: 20px;
   border-radius: 8px;
+
+  gap: 20px;
+
+  .item {
+    background-color: v.$white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+
+    @media (max-width: 576px) {
+      padding-top: 40px;
+    }
+  }
 
   @media (max-width: 1024px) {
     width: 90%;

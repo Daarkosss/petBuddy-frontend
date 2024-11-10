@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Button, Spin, Timeline, Card, Descriptions, Modal, Input, Form } from "antd";
+import { Button, Spin, Timeline, Card, Descriptions, Modal, Input, Form, Space, Popconfirm } from "antd";
 import { CareDTO } from "../types/care.types";
 import { api } from "../api/api";
 import { useTranslation } from "react-i18next";
@@ -38,10 +38,11 @@ const CareDetails = () => {
   const acceptCare= async () => {
     setIsLoading(true);
     try {
-      const data = await api.rejectCare(careIdNumber!);
+      const data = await api.acceptCare(careIdNumber!);
       if (data) {
         setCare(data);
       }
+      toast.success(t("success.acceptCare"));
     } catch (error) {
       toast.error(t("error.acceptCare"));
     } finally {
@@ -56,6 +57,7 @@ const CareDetails = () => {
       if (data) {
         setCare(data);
       }
+      toast.success(t("success.rejectCare"));
     } catch (error) {
       toast.error(t("error.rejectCare"));
     } finally {
@@ -66,12 +68,13 @@ const CareDetails = () => {
   const proposeNewPrice = async () => {
     setIsLoading(true);
     try {
-      form.validateFields();
+      await form.validateFields();
       const newPrice = form.getFieldValue("newPrice");
       const data = await api.updateCarePrice(careIdNumber!, newPrice);
       if (data) {
         setCare(data);
       }
+      console.log(data);
       setIsModalOpen(false);
       toast.success(t("success.updatePrice"));
     } catch (error) {
@@ -141,7 +144,6 @@ const CareDetails = () => {
         children: t("careStatus.outdated")
       });
     } else {
-      // W zależności od statusu obu stron, dodajemy kolejne kroki.
       if (careStatusFromYourSide() === "PENDING") {
         items.push({
           color: "orange",
@@ -149,23 +151,19 @@ const CareDetails = () => {
         });
       } else if (careStatusFromOtherSide() === "PENDING") {
         items.push({
-          color: "blue",
+          color: "orange",
           children: t("careStatus.waitingForOtherResponse")
-        });
-      }
-  
-      // Sprawdzenie, czy status zaakceptowano z obu stron.
-      if (careStatusFromYourSide() === "ACCEPTED" && careStatusFromOtherSide() === "ACCEPTED") {
-        items.push({
-          color: "green",
-          children: t("careStatus.acceptedByCaretaker")
         });
       }
 
       if (careStatusFromYourSide() === "AWAITING_PAYMENT" || careStatusFromOtherSide() === "AWAITING_PAYMENT") {
         items.push({
           color: "green",
-          children: t("careStatus.acceptedByCaretaker")
+          children: t("careStatus.accepted")
+        });
+        items.push({
+          color: "blue",
+          children: t("careStatus.waitingToTakePlace")
         });
       }
       if (careStatusFromYourSide() === "DONE" || careStatusFromOtherSide() === "DONE") {
@@ -230,7 +228,7 @@ const CareDetails = () => {
               </div>
             </Descriptions.Item>
             <Descriptions.Item label={t("dailyPrice")}>
-              {care.dailyPrice} zł
+              {care.dailyPrice.toFixed(2)} zł
             </Descriptions.Item>
             <Descriptions.Item label={t("totalPrice")}>
               {formatTotalPrice(care.dailyPrice, care.careStart, care.careEnd)} zł
@@ -248,16 +246,32 @@ const CareDetails = () => {
           {renderTimeline()}
           {careStatusFromYourSide() === "PENDING" && 
             <div className="actions">
-              <Button type="primary" onClick={acceptCare} loading={isLoading}>
-                {t("care.accept")}
-              </Button>
+              <Popconfirm
+                title={t("care.accept")}
+                description={t("care.confirmAccept")}
+                onConfirm={acceptCare}
+                okText={t("yes")}
+                cancelText={t("no")}
+              >
+                <Button type="primary" loading={isLoading}>
+                  {t("care.accept")}
+                </Button>
+              </Popconfirm>
               {store.user.profile?.selected_profile === "CARETAKER" &&
                 <Button type="primary" className="add-button" onClick={() => setIsModalOpen(true)}>
                   {t("care.proposeNewPrice")}
                 </Button>}
-              <Button type="primary" danger onClick={rejectCare} loading={isLoading}>
-                {t("care.reject")}
-              </Button>
+              <Popconfirm
+                title={t("care.reject")}
+                description={t("care.confirmReject")}
+                onConfirm={rejectCare}
+                okText={t("yes")}
+                cancelText={t("no")}
+              >
+                <Button type="primary" danger loading={isLoading}>
+                  {t("care.reject")}
+                </Button>
+              </Popconfirm>
             </div>
           }
         </div>
@@ -267,25 +281,22 @@ const CareDetails = () => {
         title={t("care.proposeNewPrice")}
         open={isModalOpen}
         onCancel={() => setIsModalOpen(false)}
-        footer={null}
         onOk={proposeNewPrice}
         okText={t("care.confirmNewPrice")}
+        width={350}
       >
-        <div style={{ display: "flex", flexDirection: "column", gap: "30px" }}>
-          <Form layout="vertical" form={form} onFinish={proposeNewPrice}>
+        <Form layout="vertical" form={form} onFinish={proposeNewPrice}>
+          <Space direction="vertical">
             <Form.Item
-              label={t("care.proposedPrice")}
+              label={t("care.newDailyPrice")}
               name="newPrice"
               rules={[{ required: true, message: t("validation.required") }]}
               initialValue={care.dailyPrice}
             >
               <Input type="number" />
             </Form.Item>
-            <Button type="primary" htmlType="submit" className="submit-button" loading={isLoading}>
-              {t("care.confirmNewPrice")}
-            </Button>
-          </Form>
-        </div>
+          </Space>
+        </Form>
       </Modal>
     </div>
   );

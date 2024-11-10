@@ -168,7 +168,10 @@
     "setAvailabilityForOffers": "Wystąpił bład podczas ustawiania dostępności dla ofert",
     "getCaretakers": "Wystąpił bład podczas pobrania opiekunów",
     "askForCare": "Wystąpił bład podczas wysyłania zapytania o opiekę",
-    "getCares": "Wystąpił bład podczas pobrania opiek"
+    "getCares": "Wystąpił bład podczas pobrania opiek",
+    "updatePrice": "Wystąpił bład podczas aktualizacji ceny",
+    "acceptCare": "Wystąpił bład podczas akceptacji opieki",
+    "rejectCare": "Wystąpił bład podczas odrzucenia opieki"
   },
 
   "success": {
@@ -181,7 +184,10 @@
     "editConfiguration": "Konfiguracja została pomyślnie zaktualizowana",
     "addConfiguration": "Konfiguracja została pomyślnie utworzona",
     "setAvailabilityForOffers": "Dostępność została pomyślnie ustawiona dla wybranych ofert",
-    "askForCare": "Zapytanie o opiekę zostało pomyślnie wysłane. Czekaj na odpowiedź opiekuna."
+    "askForCare": "Zapytanie o opiekę zostało pomyślnie wysłane. Czekaj na odpowiedź opiekuna",
+    "updatePrice": "Nowa cena opieki została pomyślnie zaktualizowana",
+    "acceptCare": "Opieka została pomyślnie zaakceptowana",
+    "rejectCare": "Opieka została pomyślnie odrzucona"
   },
 
   "dailyPrice": "Cena za dzień",
@@ -250,11 +256,15 @@
     "accept": "Zaakceptuj opiekę",
     "reject": "Odrzuć opiekę",
     "proposeNewPrice": "Zaproponuj nową cenę",
-    "proposedPrice": "Zaproponowana cena",
-    "confirmNewPrice": "Potwierdź nową cenę"
+    "newDailyPrice": "Nowa cena za dzień",
+    "confirmNewPrice": "Potwierdź nową cenę",
+    "currentStatus": "Aktualny status",
+    "confirmAccept": "Czy na pewno chcesz zaakceptować opiekę?",
+    "confirmReject": "Czy na pewno chcesz odrzuć opiekę?"
   },
 
   "careReservation": {
+    "title": "Rezerwacja opieki",
     "step1Title": "Dane zwierzęcia",
     "step1Description": "Wprowadź dane zwierzęcia",
     "step2Title": "Data i cena",
@@ -267,14 +277,14 @@
 
   "careStatus": {
     "reported": "Zgłoszona przez klienta",
-    "acceptedByCaretaker": "Zaakceptowana przez opiekuna",
-    "pending": "W toku",
+    "accepted": "Zaakceptowana przez obie strony",
+    "pending": "Oczekuje na odpowiedź",
     "waitingForOtherResponse": "Oczekuje na odpowiedź drugiej strony",
     "waitingForYourResponse": "Oczekuje na twoją akcję",
-    "cancelled": "Opieka została anulowana przez opiekuna",
+    "cancelled": "Anulowana",
     "waitingToTakePlace": "Oczekuje na odbycie",
-    "isTakingPlace": "Opieka jest w trakcie odbywania",
-    "done": "Opieka zakończona"
+    "isTakingPlace": "W trakcie odbywania",
+    "done": "Zakończona"
   },
 
   "petDescription": "Opis zwierzęcia",

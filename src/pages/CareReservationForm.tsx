@@ -53,10 +53,12 @@ const CareReservationForm = () => {
       const formValues = form.getFieldsValue(true);
       formValues.animalType = animalType;
       formValues.dateRange = careDateRange;
-      await api.makeCareReservation(caretakerEmail!, formValues);
-      navigate(-1);
-      toast.success(t("success.askForCare"));
-      form.resetFields();
+      const newCare = await api.makeCareReservation(caretakerEmail!, formValues);
+      if (newCare) {
+        navigate(`/care/${newCare.id}`);
+        toast.success(t("success.askForCare"));
+        form.resetFields();
+      }
     } catch (error) {
       toast.error(t("error.askForCare"));
     } finally {
@@ -140,7 +142,7 @@ const CareReservationForm = () => {
           >
             <Input.TextArea
               placeholder={t("placeholder.animalDescription")}
-              autoSize={{ minRows: 4, maxRows: 5 }}
+              autoSize={{ minRows: 4, maxRows: 4 }}
             />
           </Form.Item>
         </>
@@ -275,44 +277,50 @@ const CareReservationForm = () => {
   };
 
   return (
-    <div className="care-reservation-container">
-      <img src={`/images/${animalType.toLowerCase()}-card.jpg`} alt="Logo" />
-      <div className="form-container">
-        <Steps 
-          current={currentStep}
-          onChange={onStepClick} 
-          direction={windowInnerWidth < 768 ? "vertical" : "horizontal"}
-          style={{ marginLeft: windowInnerWidth < 768 ? 20 : 0 }}
-        >
-          {steps.map((item) => (
-            <Steps.Step
-              key={item.title}
-              title={item.title} 
-              description={item.description} 
-              disabled={currentStep < steps.indexOf(item)}
-            />
-          ))}
-        </Steps>
-        <Form form={form} onFinish={handleFinish} layout="vertical" className="form">
-          <div className="steps-content">{steps[currentStep].content}</div>
-          <div className="steps-action">
-            {currentStep > 0 && (
-              <Button onClick={() => prev()}>
-                {t("previous")}
-              </Button>
-            )}
-            {currentStep < steps.length - 1 && (
-              <Button type="primary" onClick={() => next()}>
-                {t("next")}
-              </Button>
-            )}
-            {currentStep === steps.length - 1 && (
-              <Button type="primary" htmlType="submit" loading={isLoading}>
-                {t("careReservation.confirm")}
-              </Button>
-            )}
-          </div>
-        </Form>
+    <div>
+      <div className="care-reservation-title">
+        <h1>{t("careReservation.title")}</h1>
+        <h2>{t(animalType.toLowerCase())}</h2>
+      </div>
+      <div className="care-reservation-container">
+        <img src={`/images/${animalType.toLowerCase()}-card.jpg`} alt="Logo" />
+        <div className="form-container">
+          <Steps 
+            current={currentStep}
+            onChange={onStepClick} 
+            direction={windowInnerWidth < 768 ? "vertical" : "horizontal"}
+            style={{ marginLeft: windowInnerWidth < 768 ? 20 : 0 }}
+          >
+            {steps.map((item) => (
+              <Steps.Step
+                key={item.title}
+                title={item.title} 
+                description={item.description} 
+                disabled={currentStep < steps.indexOf(item)}
+              />
+            ))}
+          </Steps>
+          <Form form={form} onFinish={handleFinish} layout="vertical" className="form">
+            <div className="steps-content">{steps[currentStep].content}</div>
+            <div className="steps-action">
+              {currentStep > 0 && (
+                <Button onClick={() => prev()}>
+                  {t("previous")}
+                </Button>
+              )}
+              {currentStep < steps.length - 1 && (
+                <Button type="primary" onClick={() => next()}>
+                  {t("next")}
+                </Button>
+              )}
+              {currentStep === steps.length - 1 && (
+                <Button type="primary" htmlType="submit" loading={isLoading}>
+                  {t("careReservation.confirm")}
+                </Button>
+              )}
+            </div>
+          </Form>
+        </div>
       </div>
     </div>
   );

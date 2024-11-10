@@ -2,6 +2,7 @@
 @use "layout/header";
 @use "components/buttons";
 @use "components/modals";
+@use "components/pagination";
 @use "pages/home";
 @use "pages/loginPage";
 @use "pages/caretakerForm";
@@ -10,6 +11,6 @@
 @use "pages/splashScreen";
 @use "pages/landingPage";
 @use "pages/careReservation";
-@use "pages/cares";
+@use "pages/careList";
 @use "pages/careDetails";
 @use "vendors/vendors";
