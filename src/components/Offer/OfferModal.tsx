@@ -233,7 +233,7 @@ const OfferModal: React.FC<OfferModalProps> = ({
               <MultiCalendar
                 dateValue={offer.availabilities}
                 readOnly
-                showRemoveButton={canBeEdited}
+                showRemoveButton={canBeEdited && isEditingAvailability}
               />
             </div>
           )}

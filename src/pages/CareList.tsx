@@ -15,8 +15,8 @@ const CareList = () => {
   const [pagingParams, setPagingParams] = useState({
     page: 0,
     size: 10,
-    sortBy: store.user.profile?.selected_profile === "CARETAKER" ? "caretakerStatus" : "clientStatus",
-    sortDirection: "ASC",
+    sortBy: "submittedAt",
+    sortDirection: "DESC",
   });
 
   const [pagination, setPagination] = useState({
