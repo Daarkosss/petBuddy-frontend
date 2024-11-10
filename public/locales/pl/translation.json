@@ -169,6 +169,7 @@
     "getCaretakers": "Wystąpił bład podczas pobrania opiekunów",
     "askForCare": "Wystąpił bład podczas wysyłania zapytania o opiekę",
     "getCares": "Wystąpił bład podczas pobrania opiek",
+    "getCare": "Wystąpił bład podczas pobrania opieki",
     "updatePrice": "Wystąpił bład podczas aktualizacji ceny",
     "acceptCare": "Wystąpił bład podczas akceptacji opieki",
     "rejectCare": "Wystąpił bład podczas odrzucenia opieki"

@@ -163,6 +163,7 @@
     "getCaretakers": "An error occurred while loading caretakers",
     "askForCare": "An error occurred while sending request for care",
     "getCares": "An error occurred while loading cares",
+    "getCare": "An error occurred while loading care",
     "updatePrice": "An error occurred while updating price",
     "acceptCare": "An error occurred while accepting care"
   },

@@ -1,3 +1,4 @@
+import { AnimalAttributes } from "./animal.types";
 import { PageableDTO, SortDTO } from "./pagination.types";
 
 export type CareReservationDTO = {
@@ -16,10 +17,6 @@ export type CareReservation = {
   animalType: string,
   selectedOptions: AnimalAttributes
 }
-
-export type AnimalAttributes = {
-  [key: string]: string[];
-};
 
 export type CareStatus = "PENDING" | "ACCEPTED" | "CANCELLED" | "AWAITING_PAYMENT" | "PAID" | "OUTDATED" | "DONE";
 

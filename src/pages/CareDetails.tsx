@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react";
 import { Button, Spin, Timeline, Card, Descriptions, Modal, Input, Form, Space, Popconfirm } from "antd";
-import { CareDTO } from "../types/care.types";
 import { api } from "../api/api";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 import store from "../store/RootStore";
+import { Care } from "../models/Care";
 
 const CareDetails = () => {
   const { t } = useTranslation();
   const { careId } = useParams();
-  const [care, setCare] = useState<CareDTO>();
+  const [care, setCare] = useState<Care>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
   const [isLoading, setIsLoading] = useState(false);
@@ -21,10 +21,10 @@ const CareDetails = () => {
     try {
       const data = await api.getCare(careIdNumber!);
       if (data) {
-        setCare(data);
+        setCare(new Care(data));
       }
     } catch (error) {
-      toast.error(t("error.getCaretakers"));
+      toast.error(t("error.getCare"));
     }
   };
 
@@ -40,7 +40,7 @@ const CareDetails = () => {
     try {
       const data = await api.acceptCare(careIdNumber!);
       if (data) {
-        setCare(data);
+        setCare(new Care(data));
       }
       toast.success(t("success.acceptCare"));
     } catch (error) {
@@ -55,7 +55,7 @@ const CareDetails = () => {
     try {
       const data = await api.rejectCare(careIdNumber!);
       if (data) {
-        setCare(data);
+        setCare(new Care(data));
       }
       toast.success(t("success.rejectCare"));
     } catch (error) {
@@ -72,7 +72,7 @@ const CareDetails = () => {
       const newPrice = form.getFieldValue("newPrice");
       const data = await api.updateCarePrice(careIdNumber!, newPrice);
       if (data) {
-        setCare(data);
+        setCare(new Care(data));
       }
       console.log(data);
       setIsModalOpen(false);
@@ -84,117 +84,11 @@ const CareDetails = () => {
     }
   };
 
-  const formatTotalPrice = (dailyPrice: number, start: string, end: string) => {
-    const days =
-      (new Date(end).getTime() - new Date(start).getTime()) /
-      (1000 * 60 * 60 * 24) + 1; // + 1 to include the end date
-    return (dailyPrice * days).toFixed(2);
-  };
-
-  const numberOfDays = (start: string, end: string) => {
-    const days =
-      (new Date(end).getTime() - new Date(start).getTime()) /
-      (1000 * 60 * 60 * 24) + 1; // + 1 to include the end date
-    return days;
-  };
-
-  const careStatusFromYourSide = () => {
-    if (store.user.profile?.selected_profile === "CARETAKER") {
-      return care?.caretakerStatus;
-    } else {
-      return care?.clientStatus;
-    }
-  }
-
-  const careStatusFromOtherSide = () => {
-    if (store.user.profile?.selected_profile === "CARETAKER") {
-      return care?.clientStatus;
-    } else {
-      return care?.caretakerStatus;
-    }
-  }
-
-  const getDateTime = (value: string | undefined) => {
-    if (!value) {
-      return "";
-    }
-    const dateTime = new Date(value);
-    return dateTime.toLocaleString();
-  }
-
-  const getTimelineItems = () => {
-    const items = [];
-  
-    // Zawsze pierwszy item - zgłoszenie opieki.
-    items.push({
-      color: "green",
-      children: t("careStatus.reported"),
-      label: getDateTime(care?.submittedAt)
-    });
-  
-    // Sprawdzenie, czy opieka została anulowana lub jest nieaktualna.
-    if (careStatusFromYourSide() === "CANCELLED" || careStatusFromOtherSide() === "CANCELLED") {
-      items.push({
-        color: "red",
-        children: t("careStatus.cancelled")
-      });
-    } else if (careStatusFromYourSide() === "OUTDATED" || careStatusFromOtherSide() === "OUTDATED") {
-      items.push({
-        color: "gray",
-        children: t("careStatus.outdated")
-      });
-    } else {
-      if (careStatusFromYourSide() === "PENDING") {
-        items.push({
-          color: "orange",
-          children: t("careStatus.waitingForYourResponse")
-        });
-      } else if (careStatusFromOtherSide() === "PENDING") {
-        items.push({
-          color: "orange",
-          children: t("careStatus.waitingForOtherResponse")
-        });
-      }
-
-      if (careStatusFromYourSide() === "AWAITING_PAYMENT" || careStatusFromOtherSide() === "AWAITING_PAYMENT") {
-        items.push({
-          color: "green",
-          children: t("careStatus.accepted")
-        });
-        items.push({
-          color: "blue",
-          children: t("careStatus.waitingToTakePlace")
-        });
-      }
-      if (careStatusFromYourSide() === "DONE" || careStatusFromOtherSide() === "DONE") {
-        items.push({
-          color: "green",
-          children: t("careStatus.done")
-        });
-      } 
-      if (careStatusFromYourSide() === "ACCEPTED" && careStatusFromOtherSide() === "ACCEPTED") {
-        if (care!.careStart > new Date().toISOString()) {
-          items.push({
-            color: "blue",
-            children: t("careStatus.waitingToTakePlace")
-          });
-        } else if (care!.careEnd < new Date().toISOString()) {
-          items.push({
-            color: "blue",
-            children: t("careStatus.isTakingPlace")
-          });
-        }
-      }
-    }
-  
-    return items;
-  };
-
   const renderTimeline = () => (
     <Timeline 
       style={{ marginLeft: "-40px" }}
       mode="left"
-      items={getTimelineItems()}>
+      items={care!.timelineItems}>
     </Timeline>
   );
 
@@ -210,7 +104,7 @@ const CareDetails = () => {
             title={t("care.fromTo", { 
               from: care.careStart,
               to: care.careEnd, 
-              days: numberOfDays(care.careStart, care.careEnd) 
+              days: care.numberOfDays
             })}
             bordered
             column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }}
@@ -231,7 +125,7 @@ const CareDetails = () => {
               {care.dailyPrice.toFixed(2)} zł
             </Descriptions.Item>
             <Descriptions.Item label={t("totalPrice")}>
-              {formatTotalPrice(care.dailyPrice, care.careStart, care.careEnd)} zł
+              {care.totalPrice} zł
             </Descriptions.Item>
             <Descriptions.Item label={t("caretaker")}>
               {care.caretakerEmail}
@@ -244,7 +138,7 @@ const CareDetails = () => {
             </Descriptions.Item>
           </Descriptions>
           {renderTimeline()}
-          {careStatusFromYourSide() === "PENDING" && 
+          {care.currentUserStatus === "PENDING" && 
             <div className="actions">
               <Popconfirm
                 title={t("care.accept")}
