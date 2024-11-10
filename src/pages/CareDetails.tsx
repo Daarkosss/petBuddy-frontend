@@ -122,7 +122,7 @@ const CareDetails = () => {
               </div>
             </Descriptions.Item>
             <Descriptions.Item label={t("dailyPrice")}>
-              {care.dailyPrice.toFixed(2)} zł
+              {care.formattedDailyPrice} zł
             </Descriptions.Item>
             <Descriptions.Item label={t("totalPrice")}>
               {care.totalPrice} zł
@@ -184,7 +184,10 @@ const CareDetails = () => {
             <Form.Item
               label={t("care.newDailyPrice")}
               name="newPrice"
-              rules={[{ required: true, message: t("validation.required") }]}
+              rules={[
+                { required: true, message: t("validation.required") },
+                { pattern: /^\d{0,5}(\.\d{0,2})?$/, message: t("validation.price") },
+              ]}
               initialValue={care.dailyPrice}
             >
               <Input type="number" />

@@ -33,8 +33,12 @@ export class Care {
     this.clientEmail = data.clientEmail;
   }
 
+  get formattedDailyPrice(): string {
+    return this.dailyPrice.toFixed(2).replace(".", ",");
+  }
+
   get totalPrice(): string {
-    return (this.dailyPrice * this.numberOfDays).toFixed(2);
+    return (this.dailyPrice * this.numberOfDays).toFixed(2).replace(".", ",");
   }
 
   get numberOfDays() {
