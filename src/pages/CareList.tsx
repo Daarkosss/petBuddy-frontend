@@ -4,14 +4,14 @@ import { api } from "../api/api";
 import { useTranslation } from "react-i18next";
 import store from "../store/RootStore";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Care } from "../models/Care";
 
 const CareList = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [cares, setCares] = useState<Care[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [pagingParams, setPagingParams] = useState({
     page: 0,
     size: 10,
@@ -60,69 +60,76 @@ const CareList = () => {
 
   return (
     <div className="cares-list-container">
-      <Spin spinning={isLoading} />
+      <Spin spinning={isLoading} fullscreen/>
       <h1 className="cares-title">{t("care.yourCares")}</h1>
-      <List
-        className="cares-list"
-        dataSource={cares}
-        itemLayout="vertical"
-        pagination={{
-          current: pagination.current,
-          pageSize: pagination.pageSize,
-          total: pagination.total,
-          onChange: handlePageChange,
-        }}
-        renderItem={(care) => (
-          <Badge.Ribbon text={care.currentStatusText} color={care.careStatusColor}>
-            <List.Item 
-              key={care.id}
-              className="item"
-              actions={[
-                <Button
-                  className="view-details-button"
-                  type="primary"
-                  onClick={() => navigate(`/care/${care.id}`)}
-                >
-                  {t("viewDetails")}
-                </Button>
-              ]}
-              extra={
-                <img src={`/images/${care.animalType.toLowerCase()}-card.jpg`}/>
-              }
-            >
-              <List.Item.Meta
-                title={t("care.fromTo", { 
-                  from: care.careStart,
-                  to: care.careEnd, 
-                  days: care.numberOfDays
-                })}
-                description={
-                  <Descriptions
-                    column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }}
-                    size="small"
+      {cares.length > 0 ? (
+        <List
+          className="cares-list"
+          dataSource={cares}
+          itemLayout="vertical"
+          locale={{ emptyText: t("care.noCares") }}
+          pagination={{
+            current: pagination.current,
+            pageSize: pagination.pageSize,
+            total: pagination.total,
+            onChange: handlePageChange,
+          }}
+          renderItem={(care) => (
+            <Badge.Ribbon text={care.currentStatusText} color={care.careStatusColor}>
+              <List.Item 
+                key={care.id}
+                className="item"
+                actions={[
+                  <Button
+                    className="view-details-button"
+                    type="primary"
+                    onClick={() => navigate(`/care/${care.id}`)}
                   >
-                    <Descriptions.Item label={t("animalType")}>
-                      {t(care.animalType.toLowerCase())}
-                    </Descriptions.Item>
-                    <Descriptions.Item label={t("totalPrice")}>
-                      {care.totalPrice} zł
-                    </Descriptions.Item>
-                    <Descriptions.Item label={t("caretaker")}>
-                      {care.caretakerEmail}
-                    </Descriptions.Item>
-                    <Descriptions.Item label={t("client")}>
-                      {care.clientEmail}
-                    </Descriptions.Item>
-                    <Descriptions.Item label={t("care.currentStatus")}>
-                      {care.currentStatusText}
-                    </Descriptions.Item>
-                  </Descriptions>
+                    {t("viewDetails")}
+                  </Button>
+                ]}
+                extra={
+                  <img src={`/images/${care.animalType.toLowerCase()}-card.jpg`}/>
                 }
-              />
-            </List.Item>
-          </Badge.Ribbon>
-        )}
-      />
+              >
+                <List.Item.Meta
+                  title={
+                    <div className="pretty-wrapper">
+                      {t("care.fromTo", { from: care.careStart, to: care.careEnd, days: care.numberOfDays })}
+                    </div>
+                  }
+                  description={
+                    <Descriptions
+                      column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }}
+                      size="small"
+                    >
+                      <Descriptions.Item label={t("animalType")}>
+                        {t(care.animalType.toLowerCase())}
+                      </Descriptions.Item>
+                      <Descriptions.Item label={t("totalPrice")}>
+                        {care.totalPrice} zł
+                      </Descriptions.Item>
+                      <Descriptions.Item label={t("caretaker")}>
+                        <Link to={`/profile-caretaker/${care.caretakerEmail}`} style={{ textDecoration: "none"}}>
+                          {care.caretakerEmail}
+                        </Link>                    
+                      </Descriptions.Item>
+                      <Descriptions.Item label={t("client")}>
+                        {care.clientEmail}
+                      </Descriptions.Item>
+                      <Descriptions.Item label={t("care.currentStatus")}>
+                        {care.currentStatusText}
+                      </Descriptions.Item>
+                    </Descriptions>
+                  }
+                />
+              </List.Item>
+            </Badge.Ribbon>
+          )}
+        />
+      ) : (
+        <h2 className="no-cares">{t("care.noCares")}</h2>
+      )}
     </div>
   );
 };

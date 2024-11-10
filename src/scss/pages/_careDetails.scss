@@ -28,6 +28,10 @@
     justify-content: space-evenly;
     gap: 30px;
 
+    .timeline {
+      margin-left: -40px; // Because the timeline is strangely positioned by default
+    }
+
     .actions {
       display: flex;
       justify-content: center;
@@ -44,4 +48,16 @@
     width: 100%;
     border-radius: 0 8px 8px 0;
   }
+}
+
+.price-difference {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.no-cares {
+  text-align: center;
+  color: v.$blue-very-light;
 }

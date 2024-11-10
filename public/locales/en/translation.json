@@ -185,6 +185,7 @@
 
   "dailyPrice": "Daily price",
   "totalPrice": "Total price",
+  "newTotalPrice": "New total price",
 
   "addOffer": "Add new offer",
   "setAvailabilityForOffers": "Set availability for offers",
@@ -243,7 +244,7 @@
     "date": "Date of care",
     "negotiatePrice": "Negotiate price",
     "goBackToOriginalPrice": "Go back to original price",
-    "noCares": "There are no cares for selected filters",
+    "noCares": "There are no cares",
     "yourCares": "Your cares",
     "numberOfDays": "Number of care days",
     "accept": "Accept care",
@@ -285,5 +286,7 @@
 
   "previous": "Previous",
   "next": "Next",
-  "youWillSave": "You will save"
+  "youWillSave": "You will save",
+  "youWillGain": "You will gain",
+  "youWillLose": "You will lose"
 }

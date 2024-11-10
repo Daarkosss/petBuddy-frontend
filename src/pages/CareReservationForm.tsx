@@ -3,10 +3,11 @@ import { Form, Input, Button, Select, Steps, Descriptions, Statistic, Card, Row,
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
 import { api } from "../api/api";
 import { AnimalAttributes, AvailabilityValues } from "../types";
 import RestrictedDatePicker from "../components/Calendar/RestrictedDatePicker";
-import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
+import { calculateNumberOfDays } from "../models/Care";
 
 const CareReservationForm = () => {
   const { t } = useTranslation();
@@ -91,25 +92,26 @@ const CareReservationForm = () => {
     }
   };
 
-  const countDays = () => {
+  const calculateNumberOfDaysOfCare = () => {
     const [dateFrom, dateTo] = careDateRange;
     if (!dateFrom) {
       return 0;
     } else if (!dateTo) {
       return 1;
     }
-    const from = new Date(dateFrom);
-    const to = new Date(dateTo);
-    const diff = to.getTime() - from.getTime();
-    const days = Math.ceil(diff / (1000 * 60 * 60 * 24)) + 1;
-    return days;
+    return calculateNumberOfDays(dateFrom, dateTo);
   };
+
   const calculateTotalPrice = (price: number) => {
-    return (price * countDays());
+    return price * calculateNumberOfDaysOfCare();
   };
 
   const calculatePriceDifference = () => {
-    return calculateTotalPrice(location.state?.dailyPrice) - calculateTotalPrice(currentPrice);
+    return Math.abs(calculateTotalPrice(location.state?.dailyPrice) - calculateTotalPrice(currentPrice));
+  }
+
+  const isNewPriceLower = () => {
+    return calculateTotalPrice(location.state?.dailyPrice) >= calculateTotalPrice(currentPrice);
   }
 
   const steps = [
@@ -171,7 +173,7 @@ const CareReservationForm = () => {
             </Col>
             <Col xs={24} sm={12} md={12} lg={12} xl={12}>
               <Descriptions>
-                <Descriptions.Item label={t("care.numberOfDays")}>{countDays()}</Descriptions.Item>
+                <Descriptions.Item label={t("care.numberOfDays")}>{calculateNumberOfDaysOfCare()}</Descriptions.Item>
               </Descriptions>
             </Col>
           </Row>
@@ -207,13 +209,13 @@ const CareReservationForm = () => {
               {isNegotiate && (
                 <Card style={{ width: "max-content" }} size="small">
                   <Statistic
-                    title={t("youWillSave")}
+                    title={isNewPriceLower() ? t("youWillSave") : t("youWillLose")}
                     value={calculatePriceDifference()}
                     precision={2}
                     decimalSeparator=","
                     groupSeparator=""
-                    valueStyle={{ color: calculatePriceDifference() < 0 ? "red" : "green" }}
-                    prefix={calculatePriceDifference() < 0 ? <ArrowDownOutlined/> : <ArrowUpOutlined />}
+                    valueStyle={{ color: isNewPriceLower() ? "green" : "red" }}
+                    prefix={isNewPriceLower() ? <ArrowUpOutlined/> : <ArrowDownOutlined/>}
                     suffix="zł"
                   />
                 </Card>
@@ -241,7 +243,7 @@ const CareReservationForm = () => {
         <Descriptions bordered column={1} size="middle" layout={windowInnerWidth < 768 ? "vertical" : "horizontal"}>
           <Descriptions.Item label={t("animalType")}>{t(animalType.toLowerCase())}</Descriptions.Item>
           <Descriptions.Item label={t("care.date")}>
-            {careDateRange.join(" ~ ")} <b>({countDays().toString()} dni)</b>
+            {careDateRange.join(" ~ ")} <b>({calculateNumberOfDaysOfCare()} dni)</b>
           </Descriptions.Item>
           <Descriptions.Item label={t("totalPrice")}>
             {calculateTotalPrice(form.getFieldValue("dailyPrice"))} zł

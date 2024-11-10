@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import { Button, Spin, Timeline, Card, Descriptions, Modal, Input, Form, Space, Popconfirm } from "antd";
+import { Button, Spin, Timeline, Card, Descriptions, Modal, Input, Form, Space, Popconfirm, Statistic } from "antd";
 import { api } from "../api/api";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import store from "../store/RootStore";
 import { Care } from "../models/Care";
+import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
 
 const CareDetails = () => {
   const { t } = useTranslation();
@@ -14,6 +15,7 @@ const CareDetails = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
   const [isLoading, setIsLoading] = useState(false);
+  const newPrice = Form.useWatch("newPrice", form);
 
   const careIdNumber = careId ? parseInt(careId) : undefined;
 
@@ -86,11 +88,23 @@ const CareDetails = () => {
 
   const renderTimeline = () => (
     <Timeline 
-      style={{ marginLeft: "-40px" }}
+      className="timeline"
       mode="left"
       items={care!.timelineItems}>
     </Timeline>
   );
+
+  const calculateTotalPrice = (price: number) => {
+    return price * care!.numberOfDays;
+  };
+
+  const calculatePriceDifference = () => {
+    return Math.abs(calculateTotalPrice(newPrice) - calculateTotalPrice(care!.dailyPrice));
+  }
+
+  const isNewPriceHigher = () => {
+    return calculateTotalPrice(newPrice) >= calculateTotalPrice(care!.dailyPrice);
+  }
 
   if (!care) {
     return <Spin />;
@@ -101,11 +115,11 @@ const CareDetails = () => {
       <Card>
         <div className="care-details-card">
           <Descriptions
-            title={t("care.fromTo", { 
-              from: care.careStart,
-              to: care.careEnd, 
-              days: care.numberOfDays
-            })}
+            title={
+              <div className="pretty-wrapper">
+                {t("care.fromTo", { from: care.careStart, to: care.careEnd, days: care.numberOfDays })}
+              </div>
+            }
             bordered
             column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }}
           >
@@ -128,7 +142,9 @@ const CareDetails = () => {
               {care.totalPrice} zł
             </Descriptions.Item>
             <Descriptions.Item label={t("caretaker")}>
-              {care.caretakerEmail}
+              <Link to={`/profile-caretaker/${care.caretakerEmail}`} style={{ textDecoration: "none"}}>
+                {care.caretakerEmail}
+              </Link>
             </Descriptions.Item>
             <Descriptions.Item label={t("client")}>
               {care.clientEmail}
@@ -177,21 +193,49 @@ const CareDetails = () => {
         onCancel={() => setIsModalOpen(false)}
         onOk={proposeNewPrice}
         okText={t("care.confirmNewPrice")}
-        width={350}
+        cancelText={t("cancel")}
+        width={400}
       >
         <Form layout="vertical" form={form} onFinish={proposeNewPrice}>
-          <Space direction="vertical">
+          <Space direction="vertical" size={10}>
             <Form.Item
               label={t("care.newDailyPrice")}
               name="newPrice"
+              style={{ width: 200 }}
               rules={[
                 { required: true, message: t("validation.required") },
-                { pattern: /^\d{0,5}(\.\d{0,2})?$/, message: t("validation.price") },
+                { pattern: /^\d{0,5}(\.\d{0,2})?$/, message: t("validation.price") }
               ]}
               initialValue={care.dailyPrice}
             >
-              <Input type="number" />
+              <Input 
+                type="number"
+                min={0.01}
+                max={99999.99}
+                step={0.01}
+              />
             </Form.Item>
+            {newPrice !== care.dailyPrice &&
+              <div className="price-difference">
+                <Descriptions>
+                  <Descriptions.Item label={t("newTotalPrice")}>
+                    {`${newPrice * care.numberOfDays} zł`}
+                  </Descriptions.Item>
+                </Descriptions>
+                <Card style={{ width: "max-content" }} size="small">
+                  <Statistic
+                    title={isNewPriceHigher() ? t("youWillGain") : t("youWillLose")}
+                    value={calculatePriceDifference()}
+                    precision={2}
+                    decimalSeparator=","
+                    groupSeparator=""
+                    valueStyle={{ color: isNewPriceHigher() ? "green" : "red" }}
+                    prefix={isNewPriceHigher() ? <ArrowUpOutlined/> : <ArrowDownOutlined/>}
+                    suffix="zł"
+                  />
+                </Card>
+              </div>
+            }
           </Space>
         </Form>
       </Modal>

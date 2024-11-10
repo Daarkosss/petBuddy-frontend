@@ -4,6 +4,12 @@ import store from "../store/RootStore";
 import i18next from "i18next";
 import { TimelineItemProps } from "antd";
 
+export const calculateNumberOfDays = (dateFrom: string, dateTo: string) => {
+  const diff = new Date(dateTo).getTime() - new Date(dateFrom).getTime();
+  const days = Math.ceil(diff / (1000 * 60 * 60 * 24)) + 1; // + 1 to include the end date
+  return days;
+}
+
 export class Care {
   id: number;
   submittedAt: string;
@@ -42,9 +48,7 @@ export class Care {
   }
 
   get numberOfDays() {
-    const days =
-      (new Date(this.careEnd).getTime() - new Date(this.careStart).getTime()) /
-      (1000 * 60 * 60 * 24) + 1; // + 1 to include the end date
+    const days = calculateNumberOfDays(this.careStart, this.careEnd);
     return days;
   }
 

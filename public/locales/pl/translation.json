@@ -193,6 +193,7 @@
 
   "dailyPrice": "Cena za dzień",
   "totalPrice": "Całkowita cena",
+  "newTotalPrice": "Nowa całkowita cena",
 
   "addOffer": "Dodaj nową ofertę",
   "setAvailabilityForOffers": "Ustaw dostępność dla ofert",
@@ -251,7 +252,7 @@
     "date": "Data opieki",
     "negotiatePrice": "Negocjuj cenę",
     "goBackToOriginalPrice": "Powroć do początkowej ceny",
-    "noCares": "Brak opiek dla podanych parametrów",
+    "noCares": "Brak opiek",
     "yourCares": "Twoje opieki",
     "numberOfDays": "Liczba dni opieki",
     "accept": "Zaakceptuj opiekę",
@@ -293,5 +294,7 @@
 
   "previous": "Cofnij",
   "next": "Dalej",
-  "youWillSave": "Zaoszczędzisz"
+  "youWillSave": "Zaoszczędzisz",
+  "youWillGain": "Zyskasz",
+  "youWillLose": "Stracisz"
 }
