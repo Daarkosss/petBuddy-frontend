@@ -545,6 +545,13 @@ class API {
         page: pagingParams.page.toString(),
         size: pagingParams.size.toString(),
       });
+
+      if (pagingParams.sortBy) {
+        queryParams.append("sortBy", pagingParams.sortBy);
+      }
+      if (pagingParams.sortDirection) {
+        queryParams.append("sortDirection", pagingParams.sortDirection);
+      }
   
       const queryString = queryParams.toString();
       return this.authorizedFetch<GetCaresDTO>(

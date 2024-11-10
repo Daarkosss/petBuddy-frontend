@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { List, Button, Spin, Descriptions, Badge } from "antd";
-import { CareDTO, CareStatus } from "../types/care.types";
+import { CareDTO } from "../types/care.types";
 import { api } from "../api/api";
 import { useTranslation } from "react-i18next";
 import store from "../store/RootStore";
@@ -15,8 +15,8 @@ const CareList = () => {
   const [pagingParams, setPagingParams] = useState({
     page: 0,
     size: 10,
-    sortBy: undefined as string | undefined,
-    sortDirection: undefined as string | undefined,
+    sortBy: store.user.profile?.selected_profile === "CARETAKER" ? "caretakerStatus" : "clientStatus",
+    sortDirection: "ASC",
   });
 
   const [pagination, setPagination] = useState({
@@ -25,22 +25,12 @@ const CareList = () => {
     total: 0,
   });
 
-  const statusOrder: Record<CareStatus, number> = {
-    PENDING: 0,
-    ACCEPTED: 1,
-    AWAITING_PAYMENT: 2,
-    PAID: 3,
-    DONE: 4,
-    CANCELLED: 6,
-    OUTDATED: 6,
-  };
-
   const fetchCares = async () => {
     setIsLoading(true);
     try {
       const data = await api.getCares(pagingParams);
       if (data) {
-        setCares(data.content.sort(sortCaresByStatus));
+        setCares(data.content);
         setPagination({
           current: data.pageable.pageNumber + 1,
           pageSize: data.pageable.pageSize,
@@ -59,10 +49,6 @@ const CareList = () => {
     store.selectedMenuOption = "cares";
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagingParams]);
-
-  const sortCaresByStatus = (a: CareDTO, b: CareDTO) => {
-    return statusOrder[getCurrentUserStatus(a)] - statusOrder[getCurrentUserStatus(b)];
-  }
 
   const handlePageChange = (page: number, pageSize?: number) => {
     setPagingParams({
