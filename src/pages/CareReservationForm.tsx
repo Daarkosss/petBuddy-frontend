@@ -1,4 +1,4 @@
-import { KeyboardEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Form, Input, Button, Select, Steps, Descriptions, Statistic, Card, Row, Col } from "antd";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
@@ -19,8 +19,8 @@ const CareReservationForm = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [careDateRange, setCareDateRange] = useState<string[]>([]);
   const [availabilityRange, setAvailabilityRange] = useState<string[] | null>(null);
-  const [isNegotiate, setIsNegotiate] = useState(false);
-  const [animalAttributes, setAnimalAttributes] = useState<AnimalAttributes>();
+  const [isNegotiating, setIsNegotiating] = useState(false);
+  const [possibleAttributes, setPossibleAttributes] = useState<AnimalAttributes>({});
   const [windowInnerWidth, setWindowInnerWidth] = useState(window.innerWidth);
   const currentPrice = Form.useWatch("dailyPrice", form);
 
@@ -34,7 +34,7 @@ const CareReservationForm = () => {
       navigate(-1);
     }
 
-    setAnimalAttributes(location.state?.animalAttributes);
+    setPossibleAttributes(location.state?.animalAttributes);
     form.setFieldsValue({
       dailyPrice: location.state?.dailyPrice,
     });
@@ -48,7 +48,6 @@ const CareReservationForm = () => {
   }, []);
 
   const handleFinish = async () => {
-    form.validateFields();
     setIsLoading(true);
     try {
       const formValues = form.getFieldsValue(true);
@@ -67,22 +66,13 @@ const CareReservationForm = () => {
     }
   };
 
-  const handlePriceKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    const value = e.key;
-    const regex = /^\d/;
-    const allowedKeys = ["Backspace", "Delete", ","];
-    if (!regex.test(value) && !allowedKeys.includes(e.key)) {
-      e.preventDefault();
-    }
-  };
-
   const updateCareDateRange = (dateRange: string[]) => {
     setCareDateRange(dateRange);
     form.setFieldValue("careDateRange", dateRange);
   };
 
   const stopNegotiation = () => {
-    setIsNegotiate(false);
+    setIsNegotiating(false);
     form.setFieldsValue({ dailyPrice: location.state?.dailyPrice });
   };
 
@@ -120,7 +110,7 @@ const CareReservationForm = () => {
       description: t("careReservation.step1Description"),
       content: (
         <>
-          {Object.keys(animalAttributes || {}).map((attributeKey) => (
+          {Object.keys(possibleAttributes).map((attributeKey) => (
             <Form.Item
               key={attributeKey}
               name={["selectedOptions", attributeKey]}
@@ -130,7 +120,7 @@ const CareReservationForm = () => {
             >
               <Select
                 placeholder={t("placeholder.selectFromList")}
-                options={animalAttributes![attributeKey].map((value) => ({
+                options={possibleAttributes[attributeKey].map((value) => ({
                   value,
                   label: t(value.toLowerCase()),
                 }))}
@@ -195,8 +185,7 @@ const CareReservationForm = () => {
                   max={99999.99}
                   step={0.01}
                   placeholder={t("placeholder.dailyPrice")}
-                  onKeyDown={handlePriceKeyDown}
-                  disabled={!isNegotiate}
+                  disabled={!isNegotiating}
                 />
               </Form.Item>
             </Col>
@@ -206,14 +195,14 @@ const CareReservationForm = () => {
               </Descriptions>
             </Col>
             <Col xs={24} sm={4} md={8} lg={4} xl={4}>
-              {isNegotiate && (
+              {isNegotiating && (
                 <Card style={{ width: "max-content" }} size="small">
                   <Statistic
                     title={isNewPriceLower() ? t("youWillSave") : t("youWillLose")}
                     value={calculatePriceDifference()}
                     precision={2}
                     decimalSeparator=","
-                    groupSeparator=""
+                    groupSeparator="."
                     valueStyle={{ color: isNewPriceLower() ? "green" : "red" }}
                     prefix={isNewPriceLower() ? <ArrowUpOutlined/> : <ArrowDownOutlined/>}
                     suffix="zł"
@@ -223,12 +212,12 @@ const CareReservationForm = () => {
             </Col>
           </Row>
           <Row>
-            {isNegotiate ? (
+            {isNegotiating ? (
               <Button type="primary" className="add-button" onClick={stopNegotiation}>
                 {t("care.goBackToOriginalPrice")}
               </Button>
             ) : (
-              <Button type="primary" className="add-button" onClick={() => setIsNegotiate(true)}>
+              <Button type="primary" className="add-button" onClick={() => setIsNegotiating(true)}>
                 {t("care.negotiatePrice")}
               </Button>
             )}
@@ -248,7 +237,7 @@ const CareReservationForm = () => {
           <Descriptions.Item label={t("totalPrice")}>
             {calculateTotalPrice(form.getFieldValue("dailyPrice"))} zł
           </Descriptions.Item>
-          {Object.keys(animalAttributes || {}).map((key) => (
+          {Object.keys(possibleAttributes).map((key) => (
             <Descriptions.Item key={key} label={t(key.toLowerCase())}>
               {form.getFieldValue(["selectedOptions", key]) && 
                 t(form.getFieldValue(["selectedOptions", key]).toLowerCase())
@@ -285,7 +274,7 @@ const CareReservationForm = () => {
         <h2>{t(animalType.toLowerCase())}</h2>
       </div>
       <div className="care-reservation-container">
-        <img src={`/images/${animalType.toLowerCase()}-card.jpg`} alt="Logo" />
+        <img src={`/images/${animalType.toLowerCase()}-card.jpg`} alt="animal" />
         <div className="form-container">
           <Steps 
             current={currentStep}

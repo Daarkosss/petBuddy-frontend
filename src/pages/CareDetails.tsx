@@ -76,7 +76,6 @@ const CareDetails = () => {
       if (data) {
         setCare(new Care(data));
       }
-      console.log(data);
       setIsModalOpen(false);
       toast.success(t("success.updatePrice"));
     } catch (error) {

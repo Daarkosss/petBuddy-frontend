@@ -111,17 +111,6 @@ class API {
     }
   }
 
-  async getTestMessage(): Promise<string> {
-    try {
-      console.log("getting test message");
-      const response = await this.authorizedFetch<string>("GET", "api/test");
-      toast.success(JSON.stringify(response));
-      return response;
-    } catch (error: unknown) {
-      return "brak";
-    }
-  }
-
   async getXsrfToken(): Promise<void> {
     try {
       const response = await this.fetch<void>("GET", "api/csrf");
@@ -595,7 +584,6 @@ class API {
   }
 
   async updateCarePrice(careId: number, dailyPrice: number): Promise<CareDTO | undefined> {
-    console.log(store.user.profile?.selected_profile);
     if (store.user.profile?.selected_profile === "CARETAKER") {
       return this.authorizedFetch<CareDTO>(
         "PATCH",
