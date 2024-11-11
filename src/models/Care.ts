@@ -1,4 +1,4 @@
-import { AnimalAttributes } from "../types";
+import { AccountDataDTO, AnimalAttributes } from "../types";
 import { CareDTO, CareStatus } from "../types/care.types";
 import store from "../store/RootStore";
 import i18next from "i18next";
@@ -21,8 +21,8 @@ export class Care {
   dailyPrice: number;
   animalType: string;
   selectedOptions: AnimalAttributes;
-  caretakerEmail: string;
-  clientEmail: string;
+  caretaker: AccountDataDTO;
+  client: AccountDataDTO;
 
   constructor(data: CareDTO) {
     this.id = data.id;
@@ -35,8 +35,8 @@ export class Care {
     this.dailyPrice = data.dailyPrice;
     this.animalType = data.animalType;
     this.selectedOptions = data.selectedOptions;
-    this.caretakerEmail = data.caretakerEmail;
-    this.clientEmail = data.clientEmail;
+    this.caretaker = data.caretaker;
+    this.client = data.client;
   }
 
   get formattedDailyPrice(): string {

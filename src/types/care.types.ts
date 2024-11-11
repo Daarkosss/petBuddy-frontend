@@ -1,5 +1,6 @@
 import { AnimalAttributes } from "./animal.types";
 import { PageableDTO, SortDTO } from "./pagination.types";
+import { AccountDataDTO } from "./user.types";
 
 export type CareReservationDTO = {
   careStart: string,
@@ -31,8 +32,8 @@ export type CareDTO = {
   dailyPrice: number;
   animalType: string;
   selectedOptions: AnimalAttributes;
-  caretakerEmail: string;
-  clientEmail: string;
+  caretaker: AccountDataDTO;
+  client: AccountDataDTO;
 }
 
 export type GetCaresDTO = {

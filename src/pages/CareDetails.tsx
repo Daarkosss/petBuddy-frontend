@@ -3,10 +3,11 @@ import { Button, Spin, Timeline, Card, Descriptions, Modal, Input, Form, Space, 
 import { api } from "../api/api";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import store from "../store/RootStore";
 import { Care } from "../models/Care";
 import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
+import UserInfoPill from "../components/UserInfoPill";
 
 const CareDetails = () => {
   const { t } = useTranslation();
@@ -141,12 +142,10 @@ const CareDetails = () => {
               {care.totalPrice} zł
             </Descriptions.Item>
             <Descriptions.Item label={t("caretaker")}>
-              <Link to={`/profile-caretaker/${care.caretakerEmail}`} style={{ textDecoration: "none"}}>
-                {care.caretakerEmail}
-              </Link>
+              <UserInfoPill user={care.caretaker} isLink={true} />
             </Descriptions.Item>
             <Descriptions.Item label={t("client")}>
-              {care.clientEmail}
+              <UserInfoPill user={care.client} isLink={false} />
             </Descriptions.Item>
             <Descriptions.Item label={t("description")}>
               {care.description}

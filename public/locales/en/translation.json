@@ -258,7 +258,7 @@
   },
 
   "careReservation": {
-    "title": "Care reservation",
+    "title": "Care reservation with",
     "step1Title": "Pet data",
     "step1Description": "Fill info about your pet",
     "step2Title": "Date and price",
@@ -266,7 +266,8 @@
     "step3Title": "Summary",
     "step3Description": "Confirm your reservation",
     "originalPrice": "Original price from offer",
-    "confirm": "Confirm reservation"
+    "confirm": "Confirm reservation",
+    "forAnimal": "For animal {{animalType}}"
   },
 
   "careStatus": {

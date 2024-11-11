@@ -472,7 +472,7 @@ class API {
     formData.append("profilePicture", profilePicture);
 
     return this.authorizedMultipartFetch<AccountDataDTO>(
-      "POST",
+      "PUT",
       "api/user/profile-picture",
       formData
     );

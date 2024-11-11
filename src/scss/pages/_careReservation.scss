@@ -4,6 +4,19 @@
   text-align: center;
   margin-top: 20px;
   color: v.$white;
+
+  .caretaker-info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    @media (max-width: 480px) {
+      flex-direction: column;
+      gap: 0;
+    }
+  }
 }
 
 .care-reservation-container {

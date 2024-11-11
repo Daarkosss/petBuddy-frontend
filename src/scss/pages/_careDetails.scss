@@ -9,11 +9,15 @@
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 
+  @media (max-width: 1200px) {
+    grid-template-columns: 2fr 1.1fr;
+  }
+
   @media (max-width: 1024px) {
     width: 90%;
     grid-template-columns: 1fr;
 
-    img {
+    > img {
       display: none;
     }
   }
@@ -27,6 +31,14 @@
     flex-direction: column;
     justify-content: space-evenly;
     gap: 30px;
+
+    @media (max-width: 1200px) {
+      gap: 10px;
+    }
+
+    @media (max-width: 1024px) {
+      gap: 30px;
+    }
 
     .timeline {
       margin-left: -40px; // Because the timeline is strangely positioned by default

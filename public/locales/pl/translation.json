@@ -266,7 +266,7 @@
   },
 
   "careReservation": {
-    "title": "Rezerwacja opieki",
+    "title": "Rezerwacja opieki u",
     "step1Title": "Dane zwierzęcia",
     "step1Description": "Wprowadź dane zwierzęcia",
     "step2Title": "Data i cena",
@@ -274,7 +274,8 @@
     "step3Title": "Podsumowanie",
     "step3Description": "Potwierdź rezerwację",
     "originalPrice": "Początkowa cena z oferty",
-    "confirm": "Potwierdź rezerwację"
+    "confirm": "Potwierdź rezerwację",
+    "forAnimal": "Dla zwierzęcia {{animalType}}"
   },
 
   "careStatus": {

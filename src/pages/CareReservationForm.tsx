@@ -5,9 +5,10 @@ import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
 import { api } from "../api/api";
-import { AnimalAttributes, AvailabilityValues } from "../types";
+import { AccountDataDTO, AnimalAttributes, AvailabilityValues } from "../types";
 import RestrictedDatePicker from "../components/Calendar/RestrictedDatePicker";
 import { calculateNumberOfDays } from "../models/Care";
+import UserInfoPill from "../components/UserInfoPill";
 
 const CareReservationForm = () => {
   const { t } = useTranslation();
@@ -23,6 +24,7 @@ const CareReservationForm = () => {
   const [possibleAttributes, setPossibleAttributes] = useState<AnimalAttributes>({});
   const [windowInnerWidth, setWindowInnerWidth] = useState(window.innerWidth);
   const currentPrice = Form.useWatch("dailyPrice", form);
+  const [caretakerInfo, setCaretakerInfo] = useState<AccountDataDTO>();
 
   const animalType: string = location.state?.animalType;
   const availabilities: AvailabilityValues = location.state?.availabilities.sort(
@@ -38,6 +40,10 @@ const CareReservationForm = () => {
     form.setFieldsValue({
       dailyPrice: location.state?.dailyPrice,
     });
+
+    api.getCaretakerDetails(caretakerEmail!).then((caretakerInfo) =>
+      setCaretakerInfo(caretakerInfo.accountData)
+    );
 
     const handleResize = () => {
       setWindowInnerWidth(window.innerWidth);
@@ -270,8 +276,15 @@ const CareReservationForm = () => {
   return (
     <div>
       <div className="care-reservation-title">
-        <h1>{t("careReservation.title")}</h1>
-        <h2>{t(animalType.toLowerCase())}</h2>
+        <div className="caretaker-info">
+          <h2>{t("careReservation.title")}</h2>
+          <h2>
+            {caretakerInfo && <UserInfoPill user={caretakerInfo!} isLink={true} showAvatar={false} />}
+          </h2>
+        </div>
+        <h3>
+          {t("careReservation.forAnimal", { animalType: t(animalType.toLowerCase())})}
+        </h3>
       </div>
       <div className="care-reservation-container">
         <img src={`/images/${animalType.toLowerCase()}-card.jpg`} alt="animal" />

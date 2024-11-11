@@ -4,8 +4,9 @@ import { api } from "../api/api";
 import { useTranslation } from "react-i18next";
 import store from "../store/RootStore";
 import { toast } from "react-toastify";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Care } from "../models/Care";
+import UserInfoPill from "../components/UserInfoPill";
 
 const CareList = () => {
   const { t } = useTranslation();
@@ -89,7 +90,7 @@ const CareList = () => {
                   </Button>
                 ]}
                 extra={
-                  <img src={`/images/${care.animalType.toLowerCase()}-card.jpg`}/>
+                  <img className="animal-image" src={`/images/${care.animalType.toLowerCase()}-card.jpg`}/>
                 }
               >
                 <List.Item.Meta
@@ -100,6 +101,7 @@ const CareList = () => {
                   }
                   description={
                     <Descriptions
+                      bordered
                       column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }}
                       size="small"
                     >
@@ -110,12 +112,10 @@ const CareList = () => {
                         {care.totalPrice} zł
                       </Descriptions.Item>
                       <Descriptions.Item label={t("caretaker")}>
-                        <Link to={`/profile-caretaker/${care.caretakerEmail}`} style={{ textDecoration: "none"}}>
-                          {care.caretakerEmail}
-                        </Link>                    
+                        <UserInfoPill user={care.caretaker} isLink={true} />          
                       </Descriptions.Item>
                       <Descriptions.Item label={t("client")}>
-                        {care.clientEmail}
+                        <UserInfoPill user={care.client} isLink={false} />
                       </Descriptions.Item>
                       <Descriptions.Item label={t("care.currentStatus")}>
                         {care.currentStatusText}
