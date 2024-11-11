@@ -29,6 +29,7 @@ const CaretakerList = () => {
 
   const [caretakers, setCaretakers] = useState<CaretakerBasics[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [mapCenter, setMapCenter] = useState<[number, number]>();
 
   const [pagingParams, setPagingParams] = useState({
     page: 0,
@@ -98,12 +99,25 @@ const CaretakerList = () => {
     }
   };
 
+  const fetchCenterCoordinates = async () => {
+    const response = await fetch(
+      `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+        `Poland, ${filters.cityLike}, ${filters.voivodeship}`
+      )}`
+    );
+    const data = await response.json();
+    if (data.length > 0) {
+      setMapCenter([parseFloat(data[0].lat), parseFloat(data[0].lon)]);
+    }
+  };
+
   useEffect(() => {
     store.selectedMenuOption = "caretakerSearch";
   }, []);
 
   useEffect(() => {
     fetchCaretakers();
+    fetchCenterCoordinates();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagingParams]);
 
@@ -285,7 +299,7 @@ const CaretakerList = () => {
         </div>
       </div>
       {caretakers.length > 0 &&
-        <MapWithCaretakers caretakers={caretakers} />
+        <MapWithCaretakers caretakers={caretakers} center={mapCenter} />
       }
       <FloatButton shape="square"onClick={handleSearch} type="primary" description={t("search")} />
     </div>
