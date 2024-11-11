@@ -7,8 +7,15 @@ import {
   OfferWithId,
 } from "./offer.types";
 
+export type Rating = {
+  rating: number;
+  comment: string;
+};
+
 export type CaretakerRatingDTO = {
-  clientEmail: string;
+  client: {
+    accountData: AccountDataDTO;
+  };
   caretakerEmail: string;
   rating: number;
   comment: string;

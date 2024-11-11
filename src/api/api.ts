@@ -18,6 +18,8 @@ import {
   OfferWithId,
   AccountDataDTO,
   CaretakerRatingsResponse,
+  Rating,
+  CaretakerRatingDTO,
 } from "../types";
 import { AnimalConfigurationsDTO } from "../types/animal.types";
 import { UploadFile } from "antd";
@@ -459,6 +461,22 @@ class API {
           response.availabilities
         ),
       };
+    }
+  }
+
+  async rateCaretaker(
+    careId: number,
+    rating: number,
+    comment: string
+  ): Promise<Rating | undefined> {
+    if (store.user.profile?.selected_profile) {
+      const response = await this.authorizedFetch<CaretakerRatingDTO>(
+        "POST",
+        `api/rating/${careId}`,
+        { rating: rating, comment: comment },
+        { "Accept-Role": store.user.profile?.selected_profile }
+      );
+      return response;
     }
   }
 
