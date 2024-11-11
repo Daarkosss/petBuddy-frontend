@@ -1,0 +1,56 @@
+@use "../helpers/variables" as v;
+
+.cares-container {
+  margin: 3vh auto;
+  gap: 3vh;
+
+  h1 {
+    color: v.$white;
+  }
+}
+.cares-list-container {
+  margin: 3vh auto;
+  gap: 3vh;
+
+  h1 {
+    color: v.$white;
+  }
+}
+
+.cares-title {
+  text-align: center;
+  margin-bottom: 24px;
+  color: #333;
+}
+
+.cares-list {
+  max-width: 1000px;
+  margin: 0 auto;
+  border-radius: 8px;
+
+  gap: 20px;
+
+  .item {
+    background-color: v.$white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+
+    @media (max-width: 576px) {
+      padding-top: 40px;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    width: 90%;
+  }
+
+  .animal-image {
+    width: 100px;
+    border-radius: 5%;
+
+    @media (max-width: 576px) {
+      display: none
+    }
+  }
+}

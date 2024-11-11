@@ -2,6 +2,8 @@
 @use "layout/header";
 @use "components/buttons";
 @use "components/modals";
+@use "components/pagination";
+@use "components/userInfoPill";
 @use "components/mapWithCaretakers";
 @use "pages/home";
 @use "pages/loginPage";
@@ -10,4 +12,7 @@
 @use "pages/offerManagement";
 @use "pages/splashScreen";
 @use "pages/landingPage";
+@use "pages/careReservation";
+@use "pages/careList";
+@use "pages/careDetails";
 @use "vendors/vendors";

@@ -1,0 +1,20 @@
+@use "../helpers/variables" as v;
+
+.ant-pagination {
+  .ant-pagination-item {
+    a {
+      &:hover {
+        color: v.$white !important;
+      }
+    }
+  
+    &-active {
+      background-color: v.$orange-medium;
+      border-color: v.$orange-medium;
+    }
+  }
+
+  .ant-pagination-item-link {
+    color: v.$white !important;
+  }
+}

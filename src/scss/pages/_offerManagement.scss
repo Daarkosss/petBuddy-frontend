@@ -4,10 +4,10 @@
 .offer-management-page {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  align-items: center;
+  gap: 25px;
 
   .offer-management-header {
-    margin-top: 20px;
     display: flex;
     flex-direction: column;
     gap: 10px;

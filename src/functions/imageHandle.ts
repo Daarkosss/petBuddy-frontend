@@ -9,7 +9,6 @@ export const hasFilePhotoType = (file: UploadFile) => {
     "image/png",
     "image/jpg",
   ];
-  console.log(file);
   if (!file.type || !allowedFormats.includes(file.type)) {
     return false;
   }
