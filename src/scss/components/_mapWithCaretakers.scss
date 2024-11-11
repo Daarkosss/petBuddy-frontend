@@ -1,0 +1,12 @@
+@use "../helpers/variables" as v;
+
+.custom-leaflet-avatar {
+
+  
+  width: 40px;
+  height: 40px;
+  border-radius: 50%; // Okrągły kształt
+  background-size: cover;
+  background-position: center;
+  border: 2px solid v.$blue-medium;
+}

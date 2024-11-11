@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Table, Button, Spin, Rate } from "antd";
+import { Table, Button, Spin, Rate, FloatButton } from "antd";
 import {
   SorterResult,
   TablePaginationConfig,
@@ -19,6 +19,7 @@ import CaretakerFilters from "../components/CaretakerFilters";
 import store from "../store/RootStore";
 import { UserOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
+import MapWithCaretakers from "../components/MapWithCaretakers";
 
 const CaretakerList = () => {
   const { t } = useTranslation();
@@ -286,6 +287,10 @@ const CaretakerList = () => {
           />
         </div>
       </div>
+      {caretakers.length > 0 &&
+        <MapWithCaretakers caretakers={caretakers} />
+      }
+      <FloatButton shape="square"onClick={handleSearch} type="primary" description={t("search")} />
     </div>
   );
 };
