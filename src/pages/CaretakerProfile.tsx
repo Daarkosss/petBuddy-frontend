@@ -79,7 +79,7 @@ const CaretakerProfile: React.FC = () => {
         getCaretakerDetails(store.user.profile!.email!);
         getCaretakerRatings(store.user.profile!.email!, page, size);
       } else if (store.user.profile!.selected_profile === "CLIENT") {
-        navigate(`/profile-caretaker/${caretakerEmail}`);
+        navigate("/profile-client");
       }
     } else {
       //if userEmail has been provided
