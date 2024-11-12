@@ -28,6 +28,18 @@
     padding-inline: 10px;
     height: 100%;
     gap: 20px;
+
+    @media (max-width: 780px) {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  .no-offers-message {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }
 
@@ -44,7 +56,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  
+
   .label {
     font-weight: bold;
     display: flex;
@@ -84,6 +96,6 @@
   width: 400px !important;
 
   @media (max-width: 500px) {
-    width: 320px !important;;
+    width: 320px !important;
   }
 }
