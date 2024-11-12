@@ -40,10 +40,7 @@ const PageHeader = observer(() => {
           {
             key: "profile",
             label: t("profile"),
-            onClick: () =>
-              navigate("/profile-client", {
-                state: { userEmail: store.user.profile?.email },
-              }),
+            onClick: () => navigate("/profile-client"),
           },
         ];
 
