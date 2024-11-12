@@ -261,7 +261,7 @@ class API {
     sortBy: string[] | null
   ): Promise<CaretakerRatingsResponse> {
     try {
-      let endpoint = `api/rating/${email}`;
+      let endpoint = `api/rating/${email}?`;
       if (page !== null) {
         endpoint = endpoint.concat(`page=${page}`);
       }
