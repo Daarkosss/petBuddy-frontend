@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Table, Button, Spin, Rate, FloatButton } from "antd";
+import { Table, Button, Spin, Rate, Tabs } from "antd";
 import {
   SorterResult,
   TablePaginationConfig,
@@ -20,6 +20,7 @@ import store from "../store/RootStore";
 import { UserOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
 import MapWithCaretakers from "../components/MapWithCaretakers";
+import TabPane from "antd/es/tabs/TabPane";
 
 const CaretakerList = () => {
   const { t } = useTranslation();
@@ -260,35 +261,39 @@ const CaretakerList = () => {
           onAnimalTypesChange={handleAnimalTypesChange}
           onSearch={handleSearch}
         />
-        <div className="caretaker-content">
-          <Table
-            columns={columns}
-            locale={{
-              emptyText: t("caretakerSearch.noCaretakers"),
-              triggerDesc: t("triggerDesc"),
-              triggerAsc: t("triggerAsc"),
-              cancelSort: t("cancelSort"),
-            }}
-            dataSource={caretakers}
-            rowKey={(record) => record.accountData.email}
-            pagination={{
-              current: pagination.current,
-              pageSize: pagination.pageSize,
-              total: pagination.total,
-              showSizeChanger: true,
-              locale: {
-                items_per_page: t("perPage"),
-              },
-            }}
-            scroll={{ x: "max-content" }}
-            onChange={handleTableChange}
-          />
-        </div>
+        <Tabs style={{width: "100%"}} type="card" centered>
+          <TabPane tab={t("caretakerSearch.list")} key="1">
+            <div className="caretaker-content">
+              <Table
+                columns={columns}
+                locale={{
+                  emptyText: t("caretakerSearch.noCaretakers"),
+                  triggerDesc: t("triggerDesc"),
+                  triggerAsc: t("triggerAsc"),
+                  cancelSort: t("cancelSort"),
+                }}
+                dataSource={caretakers}
+                rowKey={(record) => record.accountData.email}
+                pagination={{
+                  current: pagination.current,
+                  pageSize: pagination.pageSize,
+                  total: pagination.total,
+                  showSizeChanger: true,
+                  locale: {
+                    items_per_page: t("perPage"),
+                  },
+                }}
+                scroll={{ x: "max-content" }}
+                onChange={handleTableChange}
+              />
+            </div>
+          </TabPane>
+          <TabPane tab={t("caretakerSearch.map")} key="2">
+            <MapWithCaretakers caretakers={caretakers} center={mapCenter} />
+          </TabPane>
+        </Tabs>
       </div>
-      {caretakers.length > 0 &&
-        <MapWithCaretakers caretakers={caretakers} center={mapCenter} />
-      }
-      <FloatButton shape="square" onClick={handleSearch} type="primary" description={t("search")} />
+      {/* <FloatButton shape="square" onClick={handleSearch} type="primary" description={t("search")} /> */}
     </div>
   );
 };

@@ -116,7 +116,9 @@
     "animalType": "Typ zwierzęcia",
     "minPrice": "Minimalna cena",
     "maxPrice": "Maksymalna cena",
-    "noCaretakers": "Brak opiekunów dla podanych parametrów"
+    "noCaretakers": "Brak opiekunów dla podanych parametrów",
+    "list": "Lista opiekunów",
+    "map": "Mapa opiekunów"
   },
 
   "description": "Opis",

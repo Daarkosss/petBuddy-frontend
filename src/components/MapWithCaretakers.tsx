@@ -35,7 +35,7 @@ const MapCenterUpdater = ({ center }: { center: [number, number] | undefined }) 
     if (latitude === 52.0 && longitude === 20.0) { // It is the center, so smaller zoom
       map.flyTo(center, 6)
     } else {
-      map.flyTo(center, 12);
+      map.flyTo(center, 10);
     }
   }, [center, map]);
 
@@ -69,7 +69,7 @@ const MapWithCaretakers: React.FC<MapWithCaretakersProps> = ({
     });
   
   return (
-    <MapContainer center={center} zoom={6} style={{ height: "500px", width: "100%" }}>
+    <MapContainer center={center} zoom={6} style={{ height: "700px", width: "100%" }}>
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
