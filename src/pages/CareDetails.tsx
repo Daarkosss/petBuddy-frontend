@@ -38,12 +38,16 @@ const CareDetails = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const acceptCare= async () => {
+  const acceptCare = async () => {
     setIsLoading(true);
     try {
       const data = await api.acceptCare(careIdNumber!);
       if (data) {
-        setCare(new Care(data));
+        setCare(new Care({
+          ...data,
+          caretaker: care!.caretaker,
+          client: care!.client
+        }));
       }
       toast.success(t("success.acceptCare"));
     } catch (error) {
@@ -58,7 +62,11 @@ const CareDetails = () => {
     try {
       const data = await api.rejectCare(careIdNumber!);
       if (data) {
-        setCare(new Care(data));
+        setCare(new Care({
+          ...data,
+          caretaker: care!.caretaker,
+          client: care!.client
+        }));
       }
       toast.success(t("success.rejectCare"));
     } catch (error) {
@@ -75,7 +83,11 @@ const CareDetails = () => {
       const newPrice = form.getFieldValue("newPrice");
       const data = await api.updateCarePrice(careIdNumber!, newPrice);
       if (data) {
-        setCare(new Care(data));
+        setCare(new Care({
+          ...data,
+          caretaker: care!.caretaker,
+          client: care!.client
+        }));
       }
       setIsModalOpen(false);
       toast.success(t("success.updatePrice"));
