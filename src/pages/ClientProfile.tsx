@@ -1,12 +1,7 @@
 import { useEffect, useState } from "react";
 import store from "../store/RootStore";
 import "../scss/pages/_profile.scss";
-import {
-  Avatar,
-  Button,
-  Card,
-  Upload,
-} from "antd";
+import { Avatar, Button, Card, Upload } from "antd";
 import RoundedLine from "../components/RoundedLine";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -15,7 +10,6 @@ import { UserProfiles } from "../types";
 import { PictureOutlined, UserOutlined } from "@ant-design/icons";
 import ImgCrop from "antd-img-crop";
 import { handleFilePreview, hasFilePhotoType } from "../functions/imageHandle";
-
 
 function ClientProfile() {
   const { t } = useTranslation();
@@ -127,8 +121,11 @@ function ClientProfile() {
                         className="profile-action-button"
                         onClick={() => {
                           store.user.setSelectedProfile("CARETAKER");
+                          const email = store.user.profile?.email;
                           store.user.saveProfileToStorage(store.user.profile);
-                          navigate("/profile-caretaker");
+                          navigate("/profile-caretaker", {
+                            state: { userEmail: email },
+                          });
                         }}
                       >
                         {t("profilePage.changeToCaretakerProfile")}
@@ -177,7 +174,9 @@ function ClientProfile() {
                       onClick={() => {
                         store.user.setSelectedProfile("CARETAKER");
                         store.user.saveProfileToStorage(store.user.profile);
-                        navigate("/profile-caretaker");
+                        navigate("/profile-caretaker", {
+                          state: { userEmail: store.user.profile?.email },
+                        });
                       }}
                     >
                       {t("profilePage.changeToCaretakerProfile")}

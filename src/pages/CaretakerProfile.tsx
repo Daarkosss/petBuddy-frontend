@@ -1,13 +1,7 @@
 import React, { useEffect, useState } from "react";
 import store from "../store/RootStore";
 import "../scss/pages/_profile.scss";
-import {
-  Button,
-  Card,
-  Rate,
-  Upload,
-  Avatar,
-} from "antd";
+import { Button, Card, Rate, Upload, Avatar } from "antd";
 import { PictureOutlined, UserOutlined } from "@ant-design/icons";
 import CommentContainer from "../components/CommentContainer";
 import RoundedLine from "../components/RoundedLine";
@@ -25,6 +19,7 @@ const CaretakerProfile: React.FC = () => {
   const location = useLocation();
   const { userEmail } = location.state || {};
   const [profileData, setProfileData] = useState<CaretakerDetails>();
+  const [isRating, setIsRating] = useState<boolean>(false);
 
   const [isMyProfile, setIsMyProfile] = useState<boolean | null>(null);
 
@@ -33,6 +28,14 @@ const CaretakerProfile: React.FC = () => {
   const [ratings, setRatings] = useState<CaretakerRatingsResponse>();
 
   const [profilePicture, setProfilePicture] = useState<string | null>(null);
+
+  // const rateCaretaker = (myRating: number, myComment: string) => {
+  //   api.rateCaretaker(myRating, myComment).then((data) => {
+  //     if(data!=null && data!=undefined){
+  //     ratings?.content.push(data!);}
+  //   })
+  //   ratings?.content.push()
+  // }
 
   const getCaretakerDetails = (email: string) => {
     api.getCaretakerDetails(email).then((data) => {
@@ -66,7 +69,6 @@ const CaretakerProfile: React.FC = () => {
 
   useEffect(() => {
     store.selectedMenuOption = "profile";
-
     //if user is visiting their profile
     if (userEmail === store.user.profile?.email) {
       //user is visiting their proifle
@@ -77,7 +79,7 @@ const CaretakerProfile: React.FC = () => {
         getCaretakerDetails(store.user.profile!.email!);
         getCaretakerRatings(store.user.profile!.email!, page, size);
       } else if (store.user.profile!.selected_profile === "CLIENT") {
-        navigate("/profile-caretaker", { state: { userEmail: userEmail } });
+        navigate("/profile-client");
       }
     } else {
       //if userEmail has been provided
@@ -92,21 +94,21 @@ const CaretakerProfile: React.FC = () => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleCustomPhotoRequest = async (options: any) => {
-  const { file, onSuccess, onError } = options;
+    const { file, onSuccess, onError } = options;
 
-  try {
-    const response = await api.uploadProfilePicture(file);
-    if (response.profilePicture !== null) {
-      setProfilePicture(response.profilePicture.url);
+    try {
+      const response = await api.uploadProfilePicture(file);
+      if (response.profilePicture !== null) {
+        setProfilePicture(response.profilePicture.url);
+      }
+      onSuccess?.("ok");
+    } catch (e: unknown) {
+      onError?.(e);
+      if (e instanceof Error) {
+        console.log(`ERROR: ${e.message}`);
+      }
     }
-    onSuccess?.("ok");
-  } catch (e: unknown) {
-    onError?.(e);
-    if (e instanceof Error) {
-      console.log(`ERROR: ${e.message}`);
-    }
-  }
-};
+  };
 
   return (
     <div>
@@ -270,21 +272,36 @@ const CaretakerProfile: React.FC = () => {
               <h1>{t("profilePage.ratings")}</h1>
               {/* divider */}
               {isMyProfile === false &&
+                isRating === false &&
                 store.user.profile?.selected_profile !== "CARETAKER" && (
                   <div className="profile-add-a-comment">
-                    <Button type="primary" className="add-button">
+                    <Button
+                      type="primary"
+                      className="add-button"
+                      onClick={() => setIsRating(true)}
+                    >
                       {t("profilePage.rate")}
                     </Button>
                   </div>
                 )}
 
               <div className="profile-comments-container">
+                {isRating === true && (
+                  <div>
+                    <CommentContainer
+                      clientEmail={store.user.profile?.email ?? ""}
+                      rating={0}
+                      comment={""}
+                      isRating={true}
+                    />
+                  </div>
+                )}
                 {ratings !== null && ratings !== undefined ? (
                   ratings.content.length > 0 ? (
                     ratings!.content.map((element, index) => (
                       <div key={index}>
                         <CommentContainer
-                          clientEmail={element.clientEmail}
+                          clientEmail={element.client.accountData.email}
                           rating={element.rating}
                           comment={element.comment}
                         />
