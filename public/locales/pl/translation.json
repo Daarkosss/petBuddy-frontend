@@ -98,6 +98,9 @@
     "addOffer": "Dodaj ofertę",
     "ratings": "Oceny",
     "rate": "Oceń",
+    "submit": "Prześlij ocenę",
+    "setRating": "Ustaw ocenę",
+    "writeAComment": "Napisz komentarz",
     "noRatingsToShow": "Brak ocen do wyświetlenia",
     "page": "strona",
     "noCaretakerProfile": "Nie posiadasz jeszcze profilu opiekuna"
@@ -134,7 +137,7 @@
   "landingPage": {
     "title": "Witamy w Pet Buddy, miejscu gdzie możesz znaleźć opiekuna dla swojego pupila lub samemu zacząć opiekować się zwierzętami innych osób",
     "subtitle": "Użyj poniższego paska wyszukiwania, aby znaleźć opiekuna lub zaloguj się, aby uzyskać więcej opcji.",
-    "searchTitle": "Znajdz najlepszego opiekuna dla swojego pupila"
+    "searchTitle": "Znajdź najlepszego opiekuna dla swojego pupila"
   },
 
   "home": "Strona główna",

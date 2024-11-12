@@ -93,6 +93,9 @@
     "addOffer": "Add offer",
     "ratings": "Ratings",
     "rate": "Rate",
+    "submit": "Submit",
+    "setRating": "Set rating",
+    "writeAComment": "Write a comment",
     "noRatingsToShow": "There are no ratings to show",
     "page": "page",
     "noCaretakerProfile": "Currently you do not have caretaker profile"
