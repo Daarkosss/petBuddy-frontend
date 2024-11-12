@@ -56,7 +56,8 @@ const CommentContainer: React.FC<Rating> = ({
           <p>{comment}</p>
         ) : (
           <Input.TextArea
-            autoSize
+            autoSize={{ minRows: 2, maxRows: 5 }}
+            maxLength={500}
             onChange={(e) => setMyComment(e.target.value)}
           />
         )}
