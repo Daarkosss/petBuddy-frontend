@@ -90,9 +90,16 @@
     .profile-picture {
       width: 150px;
       height: 150px;
+      border-radius: 50%;
       margin-right: 20px;
       background-color: v.$grey-light;
       color: v.$white;
+
+      img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+      }
     }
 
 
