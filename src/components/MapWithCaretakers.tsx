@@ -1,10 +1,12 @@
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import MarkerClusterGroup from "react-leaflet-markercluster";
+import ReactDOMServer from "react-dom/server";
 import { CaretakerBasics } from "../models/Caretaker";
-import { useEffect, useState } from "react";
 import UserInfoPill from "./UserInfoPill";
 import { Photo } from "../types";
+import { useEffect } from "react";
 
 interface MapWithCaretakersProps {
   caretakers: CaretakerBasics[];
@@ -22,75 +24,83 @@ type Location = {
   lon: number;
 };
 
-const MapWithCaretakers: React.FC<MapWithCaretakersProps> = ({ 
-  caretakers, 
-  center=[51.1, 17.0]
-}) => {
-  const [locations, setLocations] = useState<Location[]>([]);
-
-  const customIcon = (photoUrl: string | undefined) => {
-    return L.divIcon({
-      html: `<div 
-        class="custom-leaflet-avatar"
-        style="background-image: url('${photoUrl || "/default-avatar.png"}')"
-      />`,
-      iconSize: [40, 40],
-      className: "",
-    });
-  };
+const MapCenterUpdater = ({ center }: { center: [number, number] | undefined }) => {
+  const map = useMap();
 
   useEffect(() => {
-    const fetchCaretakerCoordinates = async () => {
-      const results = await Promise.all(
-        caretakers.filter(caretaker => caretaker.accountData.profilePicture).map(async (caretaker: CaretakerBasics) => {
-          const response = await fetch(
-            `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-              `${caretaker.address.street}, ${caretaker.address.city}, ${caretaker.address.voivodeship}`
-            )}`
-          );
-          const data = await response.json();
-          if (data.length > 0) {
-            return {
-              id: caretaker.accountData.email,
-              name: caretaker.accountData.name,
-              surname: caretaker.accountData.surname,
-              photo: caretaker.accountData.profilePicture,
-              street: caretaker.address.street,
-              city: caretaker.address.city,
-              lat: parseFloat(data[0].lat),
-              lon: parseFloat(data[0].lon),
-            };
-          }
-          return null;
-        })
-      );
-      console.log(results);
-      setLocations(results.filter((loc) => loc !== null));
-    };
+    if (!center) {
+      return;
+    }
+    const [latitude, longitude] = center;
+    if (latitude === 52.0 && longitude === 20.0) { // It is the center, so smaller zoom
+      map.flyTo(center, 6)
+    } else {
+      map.flyTo(center, 12);
+    }
+  }, [center, map]);
 
-    fetchCaretakerCoordinates();
-  }, [caretakers]);
+  return null;
+};
 
+const MapWithCaretakers: React.FC<MapWithCaretakersProps> = ({
+  caretakers,
+  center,
+}) => {
+  const locations: Location[] = caretakers.map((caretaker) => ({
+    id: caretaker.accountData.email,
+    name: caretaker.accountData.name,
+    surname: caretaker.accountData.surname,
+    photo: caretaker.accountData.profilePicture,
+    street: caretaker.address.street,
+    city: caretaker.address.city,
+    lat: caretaker.address.latitude,
+    lon: caretaker.address.longitude,
+  }));
+
+  const customIcon = (photoUrl?: string) =>
+    L.divIcon({
+      html: ReactDOMServer.renderToString(
+        <img
+          src={photoUrl || "/default-avatar.png"}
+        />
+      ),
+      iconSize: [40, 40],
+      className: "leaflet-avatar-icon",
+    });
+  
   return (
-    <MapContainer 
-      center={center}
-      zoom={12} 
-      style={{ height: "500px", width: "100%" 
-    }}>
+    <MapContainer center={center} zoom={6} style={{ height: "500px", width: "100%" }}>
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
       />
-      {locations.map((loc) => (
-        <Marker key={loc.id} position={[loc.lat, loc.lon]} icon={customIcon(loc.photo?.url)}>
-          <Popup>
-            <UserInfoPill 
-              user={{ name: loc.name, surname: loc.surname, email: loc.id, profilePicture: loc.photo }}
-              isLink={true}
-            />
-          </Popup>
-        </Marker>
-      ))}
+      <MapCenterUpdater center={center} />
+      <MarkerClusterGroup
+        showCoverageOnHover={false}
+        spiderfyOnMaxZoom={true}
+        zoomToBoundsOnClick={true}
+        maxClusterRadius={50}
+      >
+        {locations.map((loc) => (
+          <Marker
+            key={loc.id}
+            position={[loc.lat, loc.lon]}
+            icon={customIcon(loc.photo?.url)}
+          >
+            <Popup>
+              <UserInfoPill
+                user={{
+                  name: loc.name,
+                  surname: loc.surname,
+                  email: loc.id,
+                  profilePicture: loc.photo,
+                }}
+                isLink={true}
+              />
+            </Popup>
+          </Marker>
+        ))}
+      </MarkerClusterGroup>
     </MapContainer>
   );
 };

@@ -24,7 +24,6 @@ import MapWithCaretakers from "../components/MapWithCaretakers";
 const CaretakerList = () => {
   const { t } = useTranslation();
   const location = useLocation();
-
   const navigate = useNavigate();
 
   const [caretakers, setCaretakers] = useState<CaretakerBasics[]>([]);
@@ -85,29 +84,18 @@ const CaretakerList = () => {
       await assignFiltersToAnimals();
       const data = await api.getCaretakers(pagingParams, filters);
       setCaretakers(
-        data.content.map((caretaker) => new CaretakerBasics(caretaker))
+        data.caretakers.content.map((caretaker) => new CaretakerBasics(caretaker))
       );
       setPagination({
-        current: data.pageable.pageNumber + 1,
-        pageSize: data.pageable.pageSize,
-        total: data.totalElements,
+        current: data.caretakers.pageable.pageNumber + 1,
+        pageSize: data.caretakers.pageable.pageSize,
+        total: data.caretakers.totalElements,
       });
+      setMapCenter([data.cityLatitude, data.cityLongitude])
     } catch (error) {
       toast.error(t("error.getCaretakers"));
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const fetchCenterCoordinates = async () => {
-    const response = await fetch(
-      `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-        `Poland, ${filters.cityLike}, ${filters.voivodeship}`
-      )}`
-    );
-    const data = await response.json();
-    if (data.length > 0) {
-      setMapCenter([parseFloat(data[0].lat), parseFloat(data[0].lon)]);
     }
   };
 
@@ -117,7 +105,6 @@ const CaretakerList = () => {
 
   useEffect(() => {
     fetchCaretakers();
-    fetchCenterCoordinates();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagingParams]);
 
@@ -301,7 +288,7 @@ const CaretakerList = () => {
       {caretakers.length > 0 &&
         <MapWithCaretakers caretakers={caretakers} center={mapCenter} />
       }
-      <FloatButton shape="square"onClick={handleSearch} type="primary" description={t("search")} />
+      <FloatButton shape="square" onClick={handleSearch} type="primary" description={t("search")} />
     </div>
   );
 };
