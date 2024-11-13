@@ -172,7 +172,8 @@
     "getCare": "Wystąpił bład podczas pobrania opieki",
     "updatePrice": "Wystąpił bład podczas aktualizacji ceny",
     "acceptCare": "Wystąpił bład podczas akceptacji opieki",
-    "rejectCare": "Wystąpił bład podczas odrzucenia opieki"
+    "rejectCare": "Wystąpił bład podczas odrzucenia opieki",
+    "changeProfilePicture": "Wystąpił błąd podczas zmieniania zdjęcia profilowego"
   },
 
   "success": {
@@ -188,7 +189,8 @@
     "askForCare": "Zapytanie o opiekę zostało pomyślnie wysłane. Czekaj na odpowiedź opiekuna",
     "updatePrice": "Nowa cena opieki została pomyślnie zaktualizowana",
     "acceptCare": "Opieka została pomyślnie zaakceptowana",
-    "rejectCare": "Opieka została pomyślnie odrzucona"
+    "rejectCare": "Opieka została pomyślnie odrzucona",
+    "changeProfilePicture": "Zdjęcie zostało pomyślnie zmienione"
   },
 
   "dailyPrice": "Cena za dzień",

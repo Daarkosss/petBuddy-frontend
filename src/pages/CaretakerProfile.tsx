@@ -17,6 +17,7 @@ import OfferCard from "../components/Offer/OfferCard";
 import ImgCrop from "antd-img-crop";
 import { handleFilePreview, hasFilePhotoType } from "../functions/imageHandle";
 import OfferManagement from "./OfferManagement";
+import { toast } from "react-toastify";
 
 const CaretakerProfile: React.FC = () => {
   const { t } = useTranslation();
@@ -114,11 +115,13 @@ const CaretakerProfile: React.FC = () => {
         setProfilePicture(response.profilePicture.url);
       }
       onSuccess?.("ok");
+      toast.success(t("success.changeProfilePicture"));
     } catch (e: unknown) {
       onError?.(e);
       if (e instanceof Error) {
         console.log(`ERROR: ${e.message}`);
       }
+      toast.error(t("error.changeProfilePicture"));
     }
   };
 

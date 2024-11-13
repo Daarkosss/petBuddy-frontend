@@ -165,7 +165,8 @@
     "getCares": "An error occurred while loading cares",
     "getCare": "An error occurred while loading care",
     "updatePrice": "An error occurred while updating price",
-    "acceptCare": "An error occurred while accepting care"
+    "acceptCare": "An error occurred while accepting care",
+    "changeProfilePicture": "An error occured while changing profile picture"
   },
 
   "success": {
@@ -180,7 +181,8 @@
     "setAvailabilityForOffers": "Availability has been successfully set for selected offers",
     "askForCare": "You have successfully sent a request for care. Wait for a caretaker response",
     "updatePrice": "Care price has been successfully updated",
-    "acceptCare": "Care has been successfully accepted"
+    "acceptCare": "Care has been successfully accepted",
+    "changeProfilePicture": "You have successfully changed your profile picture"
   },
 
   "dailyPrice": "Daily price",
