@@ -250,50 +250,47 @@ const CaretakerList = () => {
   ];
 
   return (
-    <div>
-      <div className="caretaker-container">
-        <Spin spinning={isLoading} fullscreen />
-        <CaretakerFilters
-          filters={filters}
-          animalFilters={animalFilters}
-          onFiltersChange={setFilters}
-          onAnimalFiltersChange={updateAnimalFilters}
-          onAnimalTypesChange={handleAnimalTypesChange}
-          onSearch={handleSearch}
-        />
-        <Tabs style={{width: "100%"}} centered>
-          <TabPane tab={t("caretakerSearch.list")} key="1">
-            <div className="caretaker-content">
-              <Table
-                columns={columns}
-                locale={{
-                  emptyText: t("caretakerSearch.noCaretakers"),
-                  triggerDesc: t("triggerDesc"),
-                  triggerAsc: t("triggerAsc"),
-                  cancelSort: t("cancelSort"),
-                }}
-                dataSource={caretakers}
-                rowKey={(record) => record.accountData.email}
-                pagination={{
-                  current: pagination.current,
-                  pageSize: pagination.pageSize,
-                  total: pagination.total,
-                  showSizeChanger: true,
-                  locale: {
-                    items_per_page: t("perPage"),
-                  },
-                }}
-                scroll={{ x: "max-content" }}
-                onChange={handleTableChange}
-              />
-            </div>
-          </TabPane>
-          <TabPane tab={t("caretakerSearch.map")} key="2">
-            <MapWithCaretakers caretakers={caretakers} center={mapCenter} />
-          </TabPane>
-        </Tabs>
-      </div>
-      {/* <FloatButton shape="square" onClick={handleSearch} type="primary" description={t("search")} /> */}
+    <div className="caretaker-container">
+      <Spin spinning={isLoading} fullscreen />
+      <CaretakerFilters
+        filters={filters}
+        animalFilters={animalFilters}
+        onFiltersChange={setFilters}
+        onAnimalFiltersChange={updateAnimalFilters}
+        onAnimalTypesChange={handleAnimalTypesChange}
+        onSearch={handleSearch}
+      />
+      <Tabs style={{width: "100%"}} centered size="small">
+        <TabPane tab={t("caretakerSearch.list")} key="list">
+          <div className="caretaker-content">
+            <Table
+              columns={columns}
+              locale={{
+                emptyText: t("caretakerSearch.noCaretakers"),
+                triggerDesc: t("triggerDesc"),
+                triggerAsc: t("triggerAsc"),
+                cancelSort: t("cancelSort"),
+              }}
+              dataSource={caretakers}
+              rowKey={(record) => record.accountData.email}
+              pagination={{
+                current: pagination.current,
+                pageSize: pagination.pageSize,
+                total: pagination.total,
+                showSizeChanger: true,
+                locale: {
+                  items_per_page: t("perPage"),
+                },
+              }}
+              scroll={{ x: "max-content" }}
+              onChange={handleTableChange}
+            />
+          </div>
+        </TabPane>
+        <TabPane tab={t("caretakerSearch.map")} key="map">
+          <MapWithCaretakers caretakers={caretakers} center={mapCenter} />
+        </TabPane>
+      </Tabs>
     </div>
   );
 };

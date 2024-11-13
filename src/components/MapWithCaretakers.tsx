@@ -32,8 +32,8 @@ const MapCenterUpdater = ({ center }: { center: [number, number] | undefined }) 
       return;
     }
     const [latitude, longitude] = center;
-    if (latitude === 52.0 && longitude === 20.0) { // It is the center, so smaller zoom
-      map.flyTo(center, 6)
+    if (latitude === 52.0 && longitude === 20.0) { 
+      map.flyTo(center, 6) // If it is the country center, decrase the zoom
     } else {
       map.flyTo(center, 10);
     }
@@ -69,18 +69,13 @@ const MapWithCaretakers: React.FC<MapWithCaretakersProps> = ({
     });
   
   return (
-    <MapContainer center={center} zoom={6} style={{ height: "700px", width: "100%" }}>
+    <MapContainer center={center} zoom={6} className="map-container">
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
       />
       <MapCenterUpdater center={center} />
-      <MarkerClusterGroup
-        showCoverageOnHover={false}
-        spiderfyOnMaxZoom={true}
-        zoomToBoundsOnClick={true}
-        maxClusterRadius={50}
-      >
+      <MarkerClusterGroup>
         {locations.map((loc) => (
           <Marker
             key={loc.id}
