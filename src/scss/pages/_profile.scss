@@ -106,8 +106,9 @@
 
     .profile-offers-smaller-screen {
       // display: none;
-
-      h1,
+      .profile-offers-label {
+        color: white;
+      }
       h3 {
         color: v.$white;
         text-align: center;

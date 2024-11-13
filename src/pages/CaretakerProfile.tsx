@@ -259,7 +259,10 @@ const CaretakerProfile: React.FC = () => {
                     />
                   ) : (
                     <>
-                      <h1>{t("profilePage.offers")}</h1>
+                      <h1 className="profile-offers-label">
+                        {t("profilePage.offers")}
+                      </h1>
+
                       {offers !== null &&
                       offers !== undefined &&
                       offers.length > 0 ? (
