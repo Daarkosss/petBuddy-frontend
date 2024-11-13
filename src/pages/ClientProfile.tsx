@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import store from "../store/RootStore";
 import "../scss/pages/_profile.scss";
-import { Avatar, Button, Card, Upload } from "antd";
+import { Avatar, Button, Card, Flex, Upload } from "antd";
 import RoundedLine from "../components/RoundedLine";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -10,6 +10,8 @@ import { UserProfiles } from "../types";
 import { PictureOutlined, UserOutlined } from "@ant-design/icons";
 import ImgCrop from "antd-img-crop";
 import { handleFilePreview, hasFilePhotoType } from "../functions/imageHandle";
+import { CgEnter } from "react-icons/cg";
+import { toast } from "react-toastify";
 
 function ClientProfile() {
   const { t } = useTranslation();
@@ -36,11 +38,13 @@ function ClientProfile() {
         setProfilePicture(response.profilePicture.url);
       }
       onSuccess?.("ok");
+      toast.success(t("success.changeProfilePicture"));
     } catch (e: unknown) {
       onError?.(e);
       if (e instanceof Error) {
         console.log(`ERROR: ${e.message}`);
       }
+      toast.error(t("error.changeProfilePicture"));
     }
   };
 
@@ -64,9 +68,14 @@ function ClientProfile() {
         <div className="profile-container">
           <div
             className="profile-left-data"
-            style={{ backgroundColor: "#003459" }}
+            style={{
+              backgroundColor: "#003459",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
           >
-            <Card>
+            <Card style={{ maxWidth: "500px" }}>
               <div className="profile-left-upper-container">
                 <div className="profile-picture-container">
                   {profilePicture !== null ? (
@@ -111,15 +120,17 @@ function ClientProfile() {
                           {profileData.accountData.name}{" "}
                           {profileData.accountData.surname}
                         </h1>
-                        <h4
-                          style={{ maxWidth: "240px", wordWrap: "break-word" }}
+                        <p
+                          style={{
+                            textAlign: "center",
+                          }}
                         >
                           {profileData.accountData.email}
-                        </h4>
+                        </p>
                       </div>
                     </div>
                     <div>
-                      <h2>{t("profilePage.userClientProfile")}</h2>
+                      <h5>{t("profilePage.userClientProfile")}</h5>
                       <RoundedLine
                         width={"100%"}
                         height={"2px"}
