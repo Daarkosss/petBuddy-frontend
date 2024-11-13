@@ -261,7 +261,7 @@ const CaretakerList = () => {
           onAnimalTypesChange={handleAnimalTypesChange}
           onSearch={handleSearch}
         />
-        <Tabs style={{width: "100%"}} type="card" centered>
+        <Tabs style={{width: "100%"}} centered>
           <TabPane tab={t("caretakerSearch.list")} key="1">
             <div className="caretaker-content">
               <Table
