@@ -3,7 +3,7 @@ import { Button, Spin, Timeline, Card, Descriptions, Modal, Form, Space, Popconf
 import { api } from "../api/api";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import store from "../store/RootStore";
 import { Care } from "../models/Care";
 import UserInfoPill from "../components/UserInfoPill";
@@ -13,6 +13,7 @@ import { formatPrice } from "../models/Care";
 
 const CareDetails = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { careId } = useParams();
   const [care, setCare] = useState<Care>();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -29,6 +30,7 @@ const CareDetails = () => {
         setCare(new Care(data));
       }
     } catch (error) {
+      navigate("/cares");
       toast.error(t("error.getCare"));
     }
   };
@@ -121,7 +123,7 @@ const CareDetails = () => {
   }
 
   if (!care) {
-    return <Spin />;
+    return <Spin fullscreen />;
   }
 
   return (

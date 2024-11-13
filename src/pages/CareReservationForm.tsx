@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Form, Input, Button, Select, Steps, Descriptions, Row, Col } from "antd";
+import { Form, Input, Button, Select, Steps, Descriptions, Row, Col, Spin } from "antd";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -17,6 +17,7 @@ const CareReservationForm = () => {
   const { caretakerEmail } = useParams();
   const location = useLocation();
   const [form] = Form.useForm();
+  const [isStarting, setIsStarting] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [careDateRange, setCareDateRange] = useState<string[]>([]);
@@ -33,27 +34,40 @@ const CareReservationForm = () => {
   );
 
   useEffect(() => {
-    if (!location.state) {
-      navigate(-1);
-    }
-
-    setPossibleAttributes(location.state?.animalAttributes);
-    form.setFieldsValue({
-      dailyPrice: location.state?.dailyPrice,
-    });
-
-    api.getCaretakerDetails(caretakerEmail!).then((caretakerInfo) =>
-      setCaretakerInfo(caretakerInfo.accountData)
-    );
-
+    const fetchCaretakerDetails = async () => {
+      try {
+        const caretakerInfo = await api.getCaretakerDetails(caretakerEmail!);
+        setCaretakerInfo(caretakerInfo.accountData);
+  
+        if (!location.state) {
+          navigate(`/profile-caretaker/${caretakerEmail}`);
+          return;
+        }
+  
+        setPossibleAttributes(location.state.animalAttributes);
+        form.setFieldsValue({
+          dailyPrice: location.state.dailyPrice,
+        });
+      } catch (error) {
+        navigate("/caretaker/search");
+      } finally {
+        setIsStarting(false);
+      }
+    };
+    fetchCaretakerDetails();
+  
     const handleResize = () => {
       setWindowInnerWidth(window.innerWidth);
     };
     window.addEventListener("resize", handleResize);
-
+  
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+  
   const handleFinish = async () => {
     setIsLoading(true);
     try {
@@ -109,6 +123,21 @@ const CareReservationForm = () => {
 
   const isNewPriceLower = () => {
     return calculateTotalPrice(location.state?.dailyPrice) >= calculateTotalPrice(currentPrice);
+  }
+
+  const next = async () => {
+    const isFormValid = await form.validateFields();
+    if (isFormValid) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  const prev = () => {
+    setCurrentStep(currentStep - 1);
+  };
+
+  if (isStarting) {
+    return <Spin fullscreen />
   }
 
   const steps = [
@@ -240,17 +269,6 @@ const CareReservationForm = () => {
       ),
     },
   ];
-
-  const next = async () => {
-    const isFormValid = await form.validateFields();
-    if (isFormValid) {
-      setCurrentStep(currentStep + 1);
-    }
-  };
-
-  const prev = () => {
-    setCurrentStep(currentStep - 1);
-  };
 
   return (
     <div>
