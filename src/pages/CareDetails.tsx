@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
-import { Button, Spin, Timeline, Card, Descriptions, Modal, Input, Form, Space, Popconfirm, Statistic } from "antd";
+import { Button, Spin, Timeline, Card, Descriptions, Modal, Form, Space, Popconfirm } from "antd";
 import { api } from "../api/api";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 import store from "../store/RootStore";
 import { Care } from "../models/Care";
-import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
 import UserInfoPill from "../components/UserInfoPill";
+import StatisticCard from "../components/StatisticCard";
+import NumericFormItem from "../components/NumericFormItem";
+import { formatPrice } from "../models/Care";
 
 const CareDetails = () => {
   const { t } = useTranslation();
@@ -148,10 +150,10 @@ const CareDetails = () => {
               </div>
             </Descriptions.Item>
             <Descriptions.Item label={t("dailyPrice")}>
-              {care.formattedDailyPrice} zł
+              {care.formattedDailyPrice}
             </Descriptions.Item>
             <Descriptions.Item label={t("totalPrice")}>
-              {care.totalPrice} zł
+              {care.totalPrice}
             </Descriptions.Item>
             <Descriptions.Item label={t("caretaker")}>
               <UserInfoPill user={care.caretaker} isLink={true} />
@@ -208,42 +210,24 @@ const CareDetails = () => {
       >
         <Form layout="vertical" form={form} onFinish={proposeNewPrice}>
           <Space direction="vertical" size={10}>
-            <Form.Item
-              label={t("care.newDailyPrice")}
+            <NumericFormItem
               name="newPrice"
-              style={{ width: 200 }}
-              rules={[
-                { required: true, message: t("validation.required") },
-                { pattern: /^\d{0,5}(\.\d{0,2})?$/, message: t("validation.price") }
-              ]}
+              label={t("care.newDailyPrice")} 
               initialValue={care.dailyPrice}
-            >
-              <Input 
-                type="number"
-                min={0.01}
-                max={99999.99}
-                step={0.01}
-              />
-            </Form.Item>
+            />
             {newPrice !== care.dailyPrice &&
               <div className="price-difference">
                 <Descriptions>
                   <Descriptions.Item label={t("newTotalPrice")}>
-                    {`${newPrice * care.numberOfDays} zł`}
+                    {formatPrice(newPrice * care.numberOfDays)}
                   </Descriptions.Item>
                 </Descriptions>
-                <Card style={{ width: "max-content" }} size="small">
-                  <Statistic
-                    title={isNewPriceHigher() ? t("youWillGain") : t("youWillLose")}
-                    value={calculatePriceDifference()}
-                    precision={2}
-                    decimalSeparator=","
-                    groupSeparator=""
-                    valueStyle={{ color: isNewPriceHigher() ? "green" : "red" }}
-                    prefix={isNewPriceHigher() ? <ArrowUpOutlined/> : <ArrowDownOutlined/>}
-                    suffix="zł"
-                  />
-                </Card>
+                <StatisticCard
+                  titlePositive={t("youWillGain")}
+                  titleNegative={t("youWillLose")}
+                  value={calculatePriceDifference()}
+                  isPositive={isNewPriceHigher()}
+                />
               </div>
             }
           </Space>

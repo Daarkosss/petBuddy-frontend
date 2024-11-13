@@ -88,6 +88,11 @@ const OfferManagement: React.FC = () => {
             {t("setAvailabilityForOffers")}
           </Button>
         </Space>
+        {offers.length === 0 && (
+          <h3 className="no-offers-message">
+            {t("profilePage.noOffersToShow")}
+          </h3>
+        )}
       </div>
       <div className="offers-container">
         {offers.map((offer) => (
@@ -100,11 +105,6 @@ const OfferManagement: React.FC = () => {
           </Col>
         ))}
       </div>
-      {offers.length === 0 && (
-        <h3 className="no-offers-message">
-          {t("profilePage.noOffersToShow")}
-        </h3>
-      )}
       <Modal
         title={t("addOffer")}
         open={isOfferModalOpen}

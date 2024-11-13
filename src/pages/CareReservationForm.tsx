@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
-import { Form, Input, Button, Select, Steps, Descriptions, Statistic, Card, Row, Col } from "antd";
+import { Form, Input, Button, Select, Steps, Descriptions, Row, Col } from "antd";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
 import { api } from "../api/api";
 import { AccountDataDTO, AnimalAttributes, AvailabilityValues } from "../types";
 import RestrictedDatePicker from "../components/Calendar/RestrictedDatePicker";
-import { calculateNumberOfDays } from "../models/Care";
+import { calculateNumberOfDays, formatPrice } from "../models/Care";
 import UserInfoPill from "../components/UserInfoPill";
+import StatisticCard from "../components/StatisticCard";
+import NumericFormItem from "../components/NumericFormItem";
 
 const CareReservationForm = () => {
   const { t } = useTranslation();
@@ -175,45 +176,23 @@ const CareReservationForm = () => {
           </Row>
           <Row align="middle">
             <Col xs={24} sm={12} md={10} lg={10} xl={8}>
-              <Form.Item
-                name="dailyPrice"
-                label={t("dailyPrice")}
-                style={{ maxWidth: 185 }}
-                rules={[
-                  { required: true, message: t("validation.required") },
-                  { pattern: /^\d{0,5}(\.\d{0,2})?$/, message: t("validation.price") },
-                ]}
-              >
-                <Input
-                  className="price-input"
-                  type="number"
-                  min={0.01}
-                  max={99999.99}
-                  step={0.01}
-                  placeholder={t("placeholder.dailyPrice")}
-                  disabled={!isNegotiating}
-                />
-              </Form.Item>
+              <NumericFormItem name="dailyPrice" label={t("dailyPrice")} disabled={!isNegotiating} />
             </Col>
             <Col xs={24} sm={12} md={8} lg={8} xl={8}>
               <Descriptions>
-                <Descriptions.Item label={t("totalPrice")}>{calculateTotalPrice(currentPrice)}</Descriptions.Item>
+                <Descriptions.Item label={t("totalPrice")}>
+                  {formatPrice(calculateTotalPrice(currentPrice))}
+                </Descriptions.Item>
               </Descriptions>
             </Col>
             <Col xs={24} sm={4} md={8} lg={4} xl={4}>
               {isNegotiating && (
-                <Card style={{ width: "max-content" }} size="small">
-                  <Statistic
-                    title={isNewPriceLower() ? t("youWillSave") : t("youWillLose")}
-                    value={calculatePriceDifference()}
-                    precision={2}
-                    decimalSeparator=","
-                    groupSeparator="."
-                    valueStyle={{ color: isNewPriceLower() ? "green" : "red" }}
-                    prefix={isNewPriceLower() ? <ArrowUpOutlined/> : <ArrowDownOutlined/>}
-                    suffix="zł"
-                  />
-                </Card>
+                <StatisticCard
+                  titlePositive={t("youWillSave")}
+                  titleNegative={t("youWillLose")}
+                  value={calculatePriceDifference()}
+                  isPositive={isNewPriceLower()}
+                />
               )}
             </Col>
           </Row>
@@ -241,7 +220,7 @@ const CareReservationForm = () => {
             {careDateRange.join(" ~ ")} <b>({calculateNumberOfDaysOfCare()} dni)</b>
           </Descriptions.Item>
           <Descriptions.Item label={t("totalPrice")}>
-            {calculateTotalPrice(form.getFieldValue("dailyPrice"))} zł
+            {formatPrice(calculateTotalPrice(form.getFieldValue("dailyPrice")))}
           </Descriptions.Item>
           {Object.keys(possibleAttributes).map((key) => (
             <Descriptions.Item key={key} label={t(key.toLowerCase())}>
