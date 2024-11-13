@@ -7,7 +7,6 @@ import CaretakerForm from "./pages/CaretakerForm";
 import store from "./store/RootStore";
 import CaretakerSearch from "./pages/CaretakerSearch";
 import ProfileSelection from "./pages/ProfileSelection";
-import OfferManagement from "./pages/OfferManagement";
 import LandingPage from "./pages/LandingPage";
 import Header from "./components/Header";
 import { observer } from "mobx-react-lite";
@@ -86,25 +85,11 @@ const App = observer(() => {
                     element={<CaretakerSearch />}
                   />
                   <Route
-                    path="/caretaker/offers"
-                    element={<OfferManagement />}
-                  />
-                  <Route
-                    path="/care/reservation/:caretakerEmail" 
+                    path="/care/reservation/:caretakerEmail"
                     element={<CareReservationForm />}
                   />
-                  <Route
-                    path="/cares"
-                    element={
-                      <CareList />
-                    }
-                  />
-                  <Route
-                    path="/care/:careId"
-                    element={
-                      <CareDetails />
-                    }
-                  />
+                  <Route path="/cares" element={<CareList />} />
+                  <Route path="/care/:careId" element={<CareDetails />} />
                   <Route
                     path="/profile-selection"
                     element={
@@ -141,7 +126,7 @@ const App = observer(() => {
                   element={<CaretakerProfile />}
                 />
                 <Route path="/caretaker/search" element={<CaretakerSearch />} />
-                <Route path="*" element={<Navigate to ="/" replace />} />
+                <Route path="*" element={<Navigate to="/" replace />} />
               </>
             )}
           </Routes>
