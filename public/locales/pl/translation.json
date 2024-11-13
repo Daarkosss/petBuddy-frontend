@@ -28,6 +28,7 @@
   "loading": "Ładowanie...",
   "logout": "Wyloguj",
   "caretaker": "Opiekun",
+  "client": "Klient",
 
   "amenities": "Udogodnienia",
   "amenityTypes": {
@@ -56,9 +57,11 @@
     "apartmentNumber": "np. 7",
     "phoneNumber": "np. 000000000",
     "description": "np. Zajmuję się opieką nad zwierzętami już od 2 lat. Moi klienci zawsze są zadowoleni...",
-    "sex": "np. Samiec",
     "animalType": "np. Pies",
-    "date": "Naciśnij, aby wybrać datę"
+    "date": "Naciśnij, aby wybrać datę",
+    "dailyPrice": "np. 52",
+    "selectFromList": "Wybierz z listy",
+    "animalDescription": "np. Moj pupil musi jeść specjalną karmę..."
   },
 
   "personalData": {
@@ -84,15 +87,15 @@
   },
 
   "profilePage": {
-    "changeImage": "Zmień zdięcie",
+    "changeImage": "Zmień zdjęcie",
     "followCaretaker": "Obserwuj",
     "openChat": "Otwórz chat",
     "userCaretakerProfile": "Profil opiekuna tego użytkownika",
     "userClientProfile": "Profil klienta",
     "editProfile": "Edytuj profil",
     "description": "Opis",
-    "changeToClientProfile": "Przejdź na profil klienta",
-    "changeToCaretakerProfile": "Przejdź na profil opiekuna",
+    "changeToClientProfile": "Przełącz na profil klienta",
+    "changeToCaretakerProfile": "Przełącz na profil opiekuna",
     "offers": "Oferty",
     "noOffersToShow": "Brak ofert do wyświetlenia",
     "addOffer": "Dodaj ofertę",
@@ -106,16 +109,17 @@
     "noCaretakerProfile": "Nie posiadasz jeszcze profilu opiekuna"
   },
 
+  "triggerDesc": "Naciśnij aby sortowac malejąco",
+  "triggerAsc": "Naciśnij aby sortowac rosnąco",
+  "cancelSort": "Naciśnij aby anulowac sortowanie",
+
   "caretakerSearch": {
     "personalData": "Dane personalne",
     "animalTypes": "Rodzaje zwierząt",
     "animalType": "Typ zwierzęcia",
     "minPrice": "Minimalna cena",
     "maxPrice": "Maksymalna cena",
-    "noCaretakers": "Brak opiekunów dla podanych parametrów",
-    "triggerDesc": "Kliknij aby sortowac malejąco",
-    "triggerAsc": "Kliknij aby sortowac rosnąco",
-    "cancelSort": "Kliknij aby anulowac sortowanie"
+    "noCaretakers": "Brak opiekunów dla podanych parametrów"
   },
 
   "description": "Opis",
@@ -131,7 +135,8 @@
   "validation": {
     "required": "Wymagane",
     "zipCodeFormat": "Nieprawidłowy format (00-000)",
-    "phoneNumberFormat": "Nieprawidłowy format (minimum 9 cyfr)"
+    "phoneNumberFormat": "Nieprawidłowy format (minimum 9 cyfr)",
+    "price": "Nieprawidłowy format (0,00)"
   },
 
   "landingPage": {
@@ -164,7 +169,14 @@
     "addConfiguration": "Wystąpił błąd podczas tworzenia konfiguracji",
     "duplicateConfiguration": "Konfiguracja z wybranymi parametrami juz istnieje",
     "setAvailabilityForOffers": "Wystąpił bład podczas ustawiania dostępności dla ofert",
-    "getCaretakers": "Wystąpił bład podczas pobrania opiekunów"
+    "getCaretakers": "Wystąpił bład podczas pobrania opiekunów",
+    "askForCare": "Wystąpił bład podczas wysyłania zapytania o opiekę",
+    "getCares": "Wystąpił bład podczas pobrania opiek",
+    "getCare": "Wystąpił bład podczas pobrania opieki",
+    "updatePrice": "Wystąpił bład podczas aktualizacji ceny",
+    "acceptCare": "Wystąpił bład podczas akceptacji opieki",
+    "rejectCare": "Wystąpił bład podczas odrzucenia opieki",
+    "changeProfilePicture": "Wystąpił błąd podczas zmieniania zdjęcia profilowego"
   },
 
   "success": {
@@ -176,10 +188,17 @@
     "deleteConfiguration": "Konfiguracja została pomyślnie usunięta",
     "editConfiguration": "Konfiguracja została pomyślnie zaktualizowana",
     "addConfiguration": "Konfiguracja została pomyślnie utworzona",
-    "setAvailabilityForOffers": "Dostępność została pomyślnie ustawiona dla wybranych ofert"
+    "setAvailabilityForOffers": "Dostępność została pomyślnie ustawiona dla wybranych ofert",
+    "askForCare": "Zapytanie o opiekę zostało pomyślnie wysłane. Czekaj na odpowiedź opiekuna",
+    "updatePrice": "Nowa cena opieki została pomyślnie zaktualizowana",
+    "acceptCare": "Opieka została pomyślnie zaakceptowana",
+    "rejectCare": "Opieka została pomyślnie odrzucona",
+    "changeProfilePicture": "Zdjęcie zostało pomyślnie zmienione"
   },
 
   "dailyPrice": "Cena za dzień",
+  "totalPrice": "Całkowita cena",
+  "newTotalPrice": "Nowa całkowita cena",
 
   "addOffer": "Dodaj nową ofertę",
   "setAvailabilityForOffers": "Ustaw dostępność dla ofert",
@@ -188,7 +207,7 @@
   "editConfiguration": "Edytuj konfigurację",
   "animalType": "Rodzaj zwierzęcia",
   "animalTypes": "Rodzaje zwierząt",
-  "manage": "Zarządzaj",
+  "actions": "Akcje",
   "requestCare": "Poproś o opiekę",
   "availability": "Dostępność",
   "editDescription": "Edytuj opis",
@@ -229,5 +248,59 @@
 
   "imageCropperTitle": "Dostosuj zdjęcie",
   "apply": "Zatwierdź",
-  "oneAvailabilityForAllAnimals": "Jedna dostępność dla wszystkich zwierząt"
+  "oneAvailabilityForAllAnimals": "Jedna dostępność dla wszystkich zwierząt",
+
+  "care": {
+    "fromTo": "Opieka od {{from}} do {{to}}, ({{days}} dni)",
+    "reservation": "Rezerwacja opieki",
+    "askForCare": "Poproś o opiekę",
+    "date": "Data opieki",
+    "negotiatePrice": "Negocjuj cenę",
+    "goBackToOriginalPrice": "Powroć do początkowej ceny",
+    "noCares": "Brak opiek",
+    "yourCares": "Twoje opieki",
+    "numberOfDays": "Liczba dni opieki",
+    "accept": "Zaakceptuj opiekę",
+    "reject": "Odrzuć opiekę",
+    "proposeNewPrice": "Zaproponuj nową cenę",
+    "newDailyPrice": "Nowa cena za dzień",
+    "confirmNewPrice": "Potwierdź nową cenę",
+    "currentStatus": "Aktualny status",
+    "confirmAccept": "Czy na pewno chcesz zaakceptować opiekę?",
+    "confirmReject": "Czy na pewno chcesz odrzuć opiekę?"
+  },
+
+  "careReservation": {
+    "title": "Rezerwacja opieki u",
+    "step1Title": "Dane zwierzęcia",
+    "step1Description": "Wprowadź dane zwierzęcia",
+    "step2Title": "Data i cena",
+    "step2Description": "Wybierz datę i potwierdź cenę",
+    "step3Title": "Podsumowanie",
+    "step3Description": "Potwierdź rezerwację",
+    "originalPrice": "Początkowa cena z oferty",
+    "confirm": "Potwierdź rezerwację",
+    "forAnimal": "Dla zwierzęcia {{animalType}}"
+  },
+
+  "careStatus": {
+    "reported": "Zgłoszona przez klienta",
+    "accepted": "Zaakceptowana przez obie strony",
+    "pending": "Oczekuje na odpowiedź",
+    "waitingForOtherResponse": "Oczekuje na odpowiedź drugiej strony",
+    "waitingForYourResponse": "Oczekuje na twoją akcję",
+    "cancelled": "Anulowana",
+    "waitingToTakePlace": "Oczekuje na odbycie",
+    "isTakingPlace": "W trakcie odbywania",
+    "done": "Zakończona"
+  },
+
+  "petDescription": "Opis zwierzęcia",
+  "animalAttributes": "Cechy zwierzęcia",
+
+  "previous": "Cofnij",
+  "next": "Dalej",
+  "youWillSave": "Zaoszczędzisz",
+  "youWillGain": "Zyskasz",
+  "youWillLose": "Stracisz"
 }

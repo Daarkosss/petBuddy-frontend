@@ -81,7 +81,6 @@ const CaretakerList = () => {
     setIsLoading(true);
     try {
       await assignFiltersToAnimals();
-      console.log(filters);
       const data = await api.getCaretakers(pagingParams, filters);
       setCaretakers(
         data.content.map((caretaker) => new CaretakerBasics(caretaker))
@@ -210,9 +209,7 @@ const CaretakerList = () => {
               className="view-details-button"
               type="primary"
               onClick={() =>
-                navigate("/profile-caretaker", {
-                  state: { userEmail: record.accountData.email },
-                })
+                navigate(`/profile-caretaker/${record.accountData.email}`)
               }
             >
               {t("viewDetails")}
@@ -266,9 +263,9 @@ const CaretakerList = () => {
             columns={columns}
             locale={{
               emptyText: t("caretakerSearch.noCaretakers"),
-              triggerDesc: t("caretakerSearch.triggerDesc"),
-              triggerAsc: t("caretakerSearch.triggerAsc"),
-              cancelSort: t("caretakerSearch.cancelSort"),
+              triggerDesc: t("triggerDesc"),
+              triggerAsc: t("triggerAsc"),
+              cancelSort: t("cancelSort"),
             }}
             dataSource={caretakers}
             rowKey={(record) => record.accountData.email}

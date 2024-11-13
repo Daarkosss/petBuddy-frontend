@@ -119,17 +119,4 @@
   .caretaker-rating-value {
     margin-left: 8px;
   }
-
-  .ant-pagination-item {
-    a {
-      &:hover {
-        color: v.$white !important;
-      }
-    }
-
-    &-active {
-      background-color: v.$orange-medium;
-      border-color: v.$orange-medium;
-    }
-  }
 }

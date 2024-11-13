@@ -18,10 +18,12 @@ import {
   OfferWithId,
   AccountDataDTO,
   CaretakerRatingsResponse,
+  AvailabilityValues
   Rating,
   CaretakerRatingDTO,
 } from "../types";
-import { AnimalConfigurationsDTO } from "../types/animal.types";
+import { CareDTO, CareReservation, CareReservationDTO, GetCaresDTO } from "../types/care.types";
+import { AnimalAttributes, AnimalConfigurationsDTO } from "../types/animal.types";
 import { UploadFile } from "antd";
 
 const backendHost =
@@ -108,17 +110,6 @@ class API {
       throw new Error(data.message || "Wrong server response!");
     } else {
       return data;
-    }
-  }
-
-  async getTestMessage(): Promise<string> {
-    try {
-      console.log("getting test message");
-      const response = await this.authorizedFetch<string>("GET", "api/test");
-      toast.success(JSON.stringify(response));
-      return response;
-    } catch (error: unknown) {
-      return "brak";
     }
   }
 
@@ -524,6 +515,103 @@ class API {
     }
   }
 
+  async getAnimalsConfigurations(): Promise<AnimalConfigurationsDTO> {
+    return this.fetch<AnimalConfigurationsDTO>("GET", "api/animal/complex");
+  }
+  
+  async makeCareReservation(caretakerEmail: string, careReservation: CareReservation): Promise<CareDTO | undefined> {
+    if (store.user.profile?.selected_profile === "CLIENT") {
+      const [dateFrom, dateTo] = careReservation.dateRange;
+      const body: CareReservationDTO = {
+        animalType: careReservation.animalType,
+        selectedOptions: Object.entries(careReservation.selectedOptions).reduce(
+          (acc, [key, value]) => {
+            acc[key] = Array.isArray(value) ? value : [value];
+            return acc;
+          },
+          {} as AnimalAttributes
+        ),
+        description: careReservation.description,
+        dailyPrice: careReservation.dailyPrice,
+        careStart: dateFrom?.toString() || "",
+        careEnd: dateTo?.toString() || dateFrom?.toString() || ""
+      };
+
+      return this.authorizedFetch<CareDTO>(
+        "POST",
+        `api/care/${caretakerEmail}`,
+        body,
+        { "Accept-Role": "CLIENT"}
+      );
+    }
+  }
+
+  async getCares(pagingParams: PagingParams): Promise<GetCaresDTO | undefined> {
+    if (store.user.profile?.selected_profile) {
+      const queryParams = new URLSearchParams({
+        page: pagingParams.page.toString(),
+        size: pagingParams.size.toString(),
+      });
+
+      if (pagingParams.sortBy) {
+        queryParams.append("sortBy", pagingParams.sortBy);
+      }
+      if (pagingParams.sortDirection) {
+        queryParams.append("sortDirection", pagingParams.sortDirection);
+      }
+  
+      const queryString = queryParams.toString();
+      return this.authorizedFetch<GetCaresDTO>(
+        "GET",
+        `api/care?${queryString}`,
+        undefined,
+        { "Accept-Role": store.user.profile?.selected_profile }
+      );
+    }
+  }
+
+  async getCare(careId: number): Promise<CareDTO | undefined> {
+    if (store.user.profile?.selected_profile) {
+      return this.authorizedFetch<CareDTO>(
+        "GET",
+        `api/care/${careId}`,
+      );
+    }
+  }
+
+  async acceptCare(careId: number): Promise<CareDTO | undefined> {
+    if (store.user.profile?.selected_profile) {
+      return this.authorizedFetch<CareDTO>(
+        "POST",
+        `api/care/${careId}/accept`,
+        undefined,
+        { "Accept-Role": store.user.profile?.selected_profile }
+      );
+    }
+  }
+
+  async rejectCare(careId: number): Promise<CareDTO | undefined> {
+    if (store.user.profile?.selected_profile) {
+      return this.authorizedFetch<CareDTO>(
+        "POST",
+        `api/care/${careId}/reject`,
+        undefined,
+        { "Accept-Role": store.user.profile?.selected_profile}
+      );
+    }
+  }
+
+  async updateCarePrice(careId: number, dailyPrice: number): Promise<CareDTO | undefined> {
+    if (store.user.profile?.selected_profile === "CARETAKER") {
+      return this.authorizedFetch<CareDTO>(
+        "PATCH",
+        `api/care/${careId}`,
+        {dailyPrice},
+        { "Accept-Role": "CARETAKER" }
+      );
+    }
+  }
+
   convertOffersAvailabilities = (offers: OfferDTOWithId[]): OfferWithId[] => {
     return offers.map((offer) => this.convertOfferAvailabilities(offer));
   };
@@ -537,22 +625,14 @@ class API {
     };
   };
 
-  async getAnimalsConfigurations(): Promise<AnimalConfigurationsDTO> {
-    return this.fetch<AnimalConfigurationsDTO>("GET", "api/animal/complex");
-  }
-
-  convertAvailabilityRangesToValues = (
-    availabilities: AvailabilityRanges
-  ): string[][] => {
+  convertAvailabilityRangesToValues = (availabilities: AvailabilityRanges): AvailabilityValues => {
     return availabilities.map((availability) => [
       availability.availableFrom,
       availability.availableTo || availability.availableFrom,
     ]);
-  };
-
-  convertValuesToAvailabilityRanges = (
-    values: string[][]
-  ): AvailabilityRanges => {
+  }
+  
+  convertValuesToAvailabilityRanges = (values: AvailabilityValues): AvailabilityRanges => {
     return values.map(([from, to]) => ({
       availableFrom: from?.toString() || "",
       availableTo: to?.toString() || from?.toString() || "",

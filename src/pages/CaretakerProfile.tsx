@@ -5,20 +5,26 @@ import { Button, Card, Rate, Upload, Avatar } from "antd";
 import { PictureOutlined, UserOutlined } from "@ant-design/icons";
 import CommentContainer from "../components/CommentContainer";
 import RoundedLine from "../components/RoundedLine";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { api } from "../api/api";
-import { CaretakerDetails, CaretakerRatingsResponse } from "../types";
+import {
+  CaretakerDetails,
+  CaretakerRatingsResponse,
+  OfferWithId,
+} from "../types";
 import OfferCard from "../components/Offer/OfferCard";
 import ImgCrop from "antd-img-crop";
 import { handleFilePreview, hasFilePhotoType } from "../functions/imageHandle";
+import OfferManagement from "./OfferManagement";
+import { toast } from "react-toastify";
 
 const CaretakerProfile: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const location = useLocation();
-  const { userEmail } = location.state || {};
+  const { caretakerEmail } = useParams();
   const [profileData, setProfileData] = useState<CaretakerDetails>();
+  const [offers, setOffers] = useState<OfferWithId[]>([]);
   const [isRating, setIsRating] = useState<boolean>(false);
 
   const [isMyProfile, setIsMyProfile] = useState<boolean | null>(null);
@@ -26,6 +32,10 @@ const CaretakerProfile: React.FC = () => {
   const [page, setPage] = useState<number>(0);
   const size = 10;
   const [ratings, setRatings] = useState<CaretakerRatingsResponse>();
+
+  const [isSmallScreen, setIsSmallScreen] = useState(
+    window.matchMedia("(max-width: 780px)").matches
+  );
 
   const [profilePicture, setProfilePicture] = useState<string | null>(null);
 
@@ -40,6 +50,7 @@ const CaretakerProfile: React.FC = () => {
   const getCaretakerDetails = (email: string) => {
     api.getCaretakerDetails(email).then((data) => {
       setProfileData(data);
+      setOffers(data.offers);
       if (data.accountData.profilePicture !== null) {
         setProfilePicture(data.accountData.profilePicture.url);
       }
@@ -59,7 +70,7 @@ const CaretakerProfile: React.FC = () => {
   useEffect(() => {
     if (isMyProfile !== null) {
       getCaretakerRatings(
-        isMyProfile === true ? store.user.profile!.selected_profile : userEmail,
+        isMyProfile ? store.user.profile!.selected_profile! : caretakerEmail!,
         page,
         size
       );
@@ -68,9 +79,12 @@ const CaretakerProfile: React.FC = () => {
   }, [page]);
 
   useEffect(() => {
-    store.selectedMenuOption = "profile";
+    if (caretakerEmail === store.user.profile?.email) {
+      store.selectedMenuOption = "profile";
+    }
+
     //if user is visiting their profile
-    if (userEmail === store.user.profile?.email) {
+    if (caretakerEmail === store.user.profile?.email) {
       //user is visiting their proifle
       setIsMyProfile(true);
 
@@ -83,12 +97,20 @@ const CaretakerProfile: React.FC = () => {
       }
     } else {
       //if userEmail has been provided
-      if (userEmail !== null && userEmail !== undefined) {
-        getCaretakerDetails(userEmail);
-        getCaretakerRatings(userEmail, page, size);
+      if (caretakerEmail !== null && caretakerEmail !== undefined) {
+        getCaretakerDetails(caretakerEmail);
+        getCaretakerRatings(caretakerEmail, page, size);
         setIsMyProfile(false);
       }
     }
+
+    const mediaQuery = window.matchMedia("(max-width: 780px)");
+    const handleChange = (e: MediaQueryListEvent) =>
+      setIsSmallScreen(e.matches);
+    mediaQuery.addEventListener("change", handleChange);
+
+    return () => mediaQuery.removeEventListener("change", handleChange);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -102,17 +124,19 @@ const CaretakerProfile: React.FC = () => {
         setProfilePicture(response.profilePicture.url);
       }
       onSuccess?.("ok");
+      toast.success(t("success.changeProfilePicture"));
     } catch (e: unknown) {
       onError?.(e);
       if (e instanceof Error) {
         console.log(`ERROR: ${e.message}`);
       }
+      toast.error(t("error.changeProfilePicture"));
     }
   };
 
   return (
     <div>
-      {profileData !== null && profileData !== undefined ? (
+      {profileData !== null && profileData !== undefined && (
         <div className="profile-container">
           <div className="profile-left-data">
             <div className="profile-left-upper-container">
@@ -128,23 +152,38 @@ const CaretakerProfile: React.FC = () => {
                 )}
               </div>
               {isMyProfile === true && (
-                <ImgCrop rotationSlider beforeCrop={hasFilePhotoType}>
-                  <Upload
-                    customRequest={handleCustomPhotoRequest}
-                    showUploadList={false}
-                    name="file"
-                    onPreview={handleFilePreview}
-                    accept="image/*"
-                  >
+                <div className="my-actions">
+                  <ImgCrop rotationSlider beforeCrop={hasFilePhotoType}>
+                    <Upload
+                      customRequest={handleCustomPhotoRequest}
+                      showUploadList={false}
+                      name="file"
+                      onPreview={handleFilePreview}
+                      accept="image/*"
+                    >
+                      <Button
+                        icon={<PictureOutlined />}
+                        type="primary"
+                        className="profile-action-button"
+                      >
+                        {t("profilePage.changeImage")}
+                      </Button>
+                    </Upload>
+                  </ImgCrop>
+                  <div>
                     <Button
-                      icon={<PictureOutlined />}
                       type="primary"
                       className="profile-action-button"
+                      onClick={() => {
+                        store.user.setSelectedProfile("CLIENT");
+                        store.user.saveProfileToStorage(store.user.profile);
+                        navigate("/profile-client");
+                      }}
                     >
-                      {t("profilePage.changeImage")}
+                      {t("profilePage.changeToClientProfile")}
                     </Button>
-                  </Upload>
-                </ImgCrop>
+                  </div>
+                </div>
               )}
               <div className="profile-user">
                 <div className="profile-user-nick">
@@ -152,7 +191,7 @@ const CaretakerProfile: React.FC = () => {
                     {profileData.accountData.name}{" "}
                     {profileData.accountData.surname}
                   </h1>
-                  <h3> - {t("profileSelection.caretaker")}</h3>
+                  <h3>{t("profileSelection.caretaker")}</h3>
                 </div>
                 <div className="profile-rating">
                   <span>
@@ -173,7 +212,7 @@ const CaretakerProfile: React.FC = () => {
                   <span>({profileData.numberOfRatings})</span>
                 </div>
                 <div className="profile-actions">
-                  {isMyProfile === false &&
+                  {!isMyProfile &&
                     store.user.profile?.selected_profile === "CLIENT" && (
                       <div className="profile-actions">
                         <Button
@@ -218,59 +257,56 @@ const CaretakerProfile: React.FC = () => {
             {profileData !== null && profileData !== undefined && (
               <div>{profileData.description}</div>
             )}
-
-            {isMyProfile === true && (
-              <div>
-                <Button
-                  type="primary"
-                  className="profile-action-button"
-                  onClick={() => {
-                    store.user.setSelectedProfile("CLIENT");
-                    store.user.saveProfileToStorage(store.user.profile);
-                    navigate("/profile-client");
-                  }}
-                >
-                  {t("profilePage.changeToClientProfile")}
-                </Button>
-              </div>
-            )}
             <div>
-              <div className="profile-offers-smaller-screen">
-                <h1>{t("profilePage.offers")}</h1>
-                {/* divider */}
-                {profileData !== null && profileData !== undefined ? (
-                  profileData.offers.length > 0 ? (
-                    profileData.offers.map((element, index) => (
-                      <div
-                        key={index}
-                        className="profile-offer-card-smaller-screen"
-                      >
-                        <OfferCard
-                          offer={element}
-                          handleUpdateOffer={() => {}}
-                          canBeEdited={isMyProfile ?? false}
-                        />
-                      </div>
-                    ))
+              {isSmallScreen && (
+                <div className="profile-offers-smaller-screen">
+                  {isMyProfile ? (
+                    <OfferManagement
+                      providedOffers={offers ?? []}
+                      onOffersChange={(offers: OfferWithId[]) => {
+                        console.log("setting offers");
+                        console.log(JSON.stringify(offers));
+                        setOffers(offers);
+                      }}
+                    />
                   ) : (
-                    <div className="profile-no-offers">
-                      <Card>
-                        <div>{t("profilePage.noOffersToShow")}</div>
-                        {isMyProfile === true && (
-                          <div className="profile-no-offers-add-offer-button">
-                            <Button type="primary" className="add-button">
-                              + {t("profilePage.addOffer")}
-                            </Button>
-                          </div>
-                        )}
-                      </Card>
-                    </div>
-                  )
-                ) : null}
-              </div>
+                    <>
+                      <h1 className="profile-offers-label">
+                        {t("profilePage.offers")}
+                      </h1>
 
+                      {offers !== null &&
+                      offers !== undefined &&
+                      offers.length > 0 ? (
+                        offers.map((element, index) => (
+                          <div
+                            key={index}
+                            className="profile-offer-card-smaller-screen"
+                          >
+                            <OfferCard
+                              offer={element}
+                              handleUpdateOffer={() => {}}
+                              canBeEdited={false}
+                            />
+                          </div>
+                        ))
+                      ) : (
+                        <div className="profile-no-offers">
+                          <Card>
+                            <div>{t("profilePage.noOffersToShow")}</div>
+                            <div className="profile-no-offers-add-offer-button">
+                              <Button type="primary" className="add-button">
+                                + {t("profilePage.addOffer")}
+                              </Button>
+                            </div>
+                          </Card>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+              )}
               <h1>{t("profilePage.ratings")}</h1>
-              {/* divider */}
               {isMyProfile === false &&
                 isRating === false &&
                 store.user.profile?.selected_profile !== "CARETAKER" && (
@@ -284,7 +320,6 @@ const CaretakerProfile: React.FC = () => {
                     </Button>
                   </div>
                 )}
-
               <div className="profile-comments-container">
                 {isRating === true && (
                   <div>
@@ -296,8 +331,9 @@ const CaretakerProfile: React.FC = () => {
                     />
                   </div>
                 )}
-                {ratings !== null && ratings !== undefined ? (
-                  ratings.content.length > 0 ? (
+                {ratings !== null &&
+                  ratings !== undefined &&
+                  (ratings.content.length > 0 ? (
                     ratings!.content.map((element, index) => (
                       <div key={index}>
                         <CommentContainer
@@ -309,8 +345,7 @@ const CaretakerProfile: React.FC = () => {
                     ))
                   ) : (
                     <div>{t("profilePage.noRatingsToShow")}</div>
-                  )
-                ) : null}
+                  ))}
               </div>
               {ratings !== null &&
                 ratings !== undefined &&
@@ -356,41 +391,46 @@ const CaretakerProfile: React.FC = () => {
             </div>
           </div>
 
-          <div className="profile-right">
-            <h1>{t("profilePage.offers")}</h1>
-            <div className="profile-right-offers">
-              {/* divider */}
-              {profileData !== null ? (
-                profileData.offers.length > 0 ? (
-                  profileData.offers.map((element, index) => (
-                    <div key={index}>
-                      <OfferCard
-                        offer={element}
-                        handleUpdateOffer={() => {}}
-                        canBeEdited={isMyProfile ?? false}
-                      />
-                    </div>
-                  ))
-                ) : (
-                  <div className="profile-no-offers">
-                    <Card>
-                      <div>{t("profilePage.noOffersToShow")}</div>
-                      {isMyProfile === true && (
-                        <div className="profile-no-offers-add-offer-button">
-                          <Button type="primary" className="add-button">
-                            + {t("profilePage.addOffer")}
-                          </Button>
+          {!isSmallScreen && (
+            <div className="profile-right">
+              {isMyProfile ? (
+                <OfferManagement
+                  providedOffers={offers ?? []}
+                  onOffersChange={(offers: OfferWithId[]) => {
+                    console.log("setting offers");
+                    console.log(JSON.stringify(offers));
+                    setOffers(offers);
+                  }}
+                />
+              ) : (
+                <>
+                  <h1>{t("profilePage.offers")}</h1>
+                  <div className="profile-right-offers">
+                    {offers !== null &&
+                    offers !== undefined &&
+                    offers.length > 0 ? (
+                      offers.map((element, index) => (
+                        <div key={index}>
+                          <OfferCard
+                            offer={element}
+                            handleUpdateOffer={() => {}}
+                            canBeEdited={false}
+                          />
                         </div>
-                      )}
-                    </Card>
+                      ))
+                    ) : (
+                      <div className="profile-no-offers">
+                        <Card>
+                          <div>{t("profilePage.noOffersToShow")}</div>
+                        </Card>
+                      </div>
+                    )}
                   </div>
-                )
-              ) : null}
+                </>
+              )}
             </div>
-          </div>
+          )}
         </div>
-      ) : (
-        <div>Loading ...</div>
       )}
     </div>
   );

@@ -28,6 +28,7 @@
   "loading": "Loading...",
   "logout": "Logout",
   "caretaker": "Caretaker",
+  "client": "Client",
 
   "amenities": "Amenities",
   "amenityTypes": {
@@ -56,9 +57,11 @@
     "apartmentNumber": "e.g. 7",
     "phoneNumber": "e.g. 000000000",
     "description": "e.g. I have been taking care of animals for 2 years. My clients are always happy...",
-    "sex": "e.g. Male",
     "animalType": "e.g. Dog",
-    "date": "Press to select date"
+    "date": "Press to select date",
+    "dailyPrice": "e.g. 52",
+    "selectFromList": "Select from the list",
+    "animalDescription": "e.g. My pet has to eat special feed..."
   },
 
   "personalData": {
@@ -126,7 +129,8 @@
   "validation": {
     "required": "Required",
     "zipCodeFormat": "Invalid format (00-000)",
-    "phoneNumberFormat": "Invalid format (at least 9 digits)"
+    "phoneNumberFormat": "Invalid format (at least 9 digits)",
+    "price": "Invalid format (0,00)"
   },
 
   "landingPage": {
@@ -159,7 +163,13 @@
     "addConfiguration": "An error occurred while creating configuration",
     "duplicateConfiguration": "Configuration with these selected options already exists",
     "setAvailabilityForOffers": "An error occurred while setting availability for selected offers",
-    "getCaretakers": "An error occurred while loading caretakers"
+    "getCaretakers": "An error occurred while loading caretakers",
+    "askForCare": "An error occurred while sending request for care",
+    "getCares": "An error occurred while loading cares",
+    "getCare": "An error occurred while loading care",
+    "updatePrice": "An error occurred while updating price",
+    "acceptCare": "An error occurred while accepting care",
+    "changeProfilePicture": "An error occured while changing profile picture"
   },
 
   "success": {
@@ -171,10 +181,16 @@
     "deleteConfiguration": "Configuration has been successfully deleted",
     "editConfiguration": "Configuration has been successfully updated",
     "addConfiguration": "Configuration has been successfully created",
-    "setAvailabilityForOffers": "Availability has been successfully set for selected offers"
+    "setAvailabilityForOffers": "Availability has been successfully set for selected offers",
+    "askForCare": "You have successfully sent a request for care. Wait for a caretaker response",
+    "updatePrice": "Care price has been successfully updated",
+    "acceptCare": "Care has been successfully accepted",
+    "changeProfilePicture": "You have successfully changed your profile picture"
   },
 
   "dailyPrice": "Daily price",
+  "totalPrice": "Total price",
+  "newTotalPrice": "New total price",
 
   "addOffer": "Add new offer",
   "setAvailabilityForOffers": "Set availability for offers",
@@ -183,7 +199,7 @@
   "editConfiguration": "Edit configuration",
   "animalType": "Animal type",
   "animalTypes": "Animal types",
-  "manage": "Manage",
+  "actions": "Actions",
   "requestCare": "Request care",
   "availability": "Availability",
   "editDescription": "Edit description",
@@ -224,5 +240,59 @@
 
   "imageCropperTitle": "Adjust image",
   "apply": "Apply",
-  "oneAvailabilityForAllAnimals": "One availability for all animals"
+  "oneAvailabilityForAllAnimals": "One availability for all animals",
+
+  "care": {
+    "fromTo": "Care from {{from}} to {{to}}, ({{days}} days)",
+    "reservation": "Care reservation",
+    "askForCare": "Ask for care",
+    "date": "Date of care",
+    "negotiatePrice": "Negotiate price",
+    "goBackToOriginalPrice": "Go back to original price",
+    "noCares": "There are no cares",
+    "yourCares": "Your cares",
+    "numberOfDays": "Number of care days",
+    "accept": "Accept care",
+    "reject": "Reject care",
+    "proposeNewPrice": "Propose new price",
+    "newDailyPrice": "New daily price",
+    "confirmNewPrice": "Confirm new price",
+    "currentStatus": "Current status",
+    "confirmAccept": "Are you sure you want to accept care?",
+    "confirmReject": "Are you sure you want to reject care?"
+  },
+
+  "careReservation": {
+    "title": "Care reservation with",
+    "step1Title": "Pet data",
+    "step1Description": "Fill info about your pet",
+    "step2Title": "Date and price",
+    "step2Description": "Choose date and confirm price",
+    "step3Title": "Summary",
+    "step3Description": "Confirm your reservation",
+    "originalPrice": "Original price from offer",
+    "confirm": "Confirm reservation",
+    "forAnimal": "For animal {{animalType}}"
+  },
+
+  "careStatus": {
+    "reported": "Reported by client",
+    "accepted": "Accepted by caretaker",
+    "pending": "Waiting for response",
+    "waitingForOtherResponse": "Waiting for other response",
+    "waitingForYourResponse": "Waiting for your response",
+    "cancelled": "Cancelled",
+    "waitingToTakePlace": "Waiting to take place",
+    "isTakingPlace": "Is taking place",
+    "done": "Done"
+  },
+
+  "petDescription": "Pet description",
+  "animalAttributes": "Animal attributes",
+
+  "previous": "Previous",
+  "next": "Next",
+  "youWillSave": "You will save",
+  "youWillGain": "You will gain",
+  "youWillLose": "You will lose"
 }

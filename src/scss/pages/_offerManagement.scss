@@ -4,13 +4,13 @@
 .offer-management-page {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 15px;
+  height: 100%;
 
   .offer-management-header {
-    margin-top: 20px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 5px;
     align-items: center;
     color: v.$white;
 
@@ -19,6 +19,28 @@
         flex-direction: column;
       }
     }
+  }
+
+  .offers-container {
+    overflow-x: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    padding-inline: 10px;
+    height: 100%;
+    gap: 20px;
+
+    @media (max-width: 780px) {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  .no-offers-message {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }
 
@@ -35,7 +57,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  
+
   .label {
     font-weight: bold;
     display: flex;
@@ -75,6 +97,6 @@
   width: 400px !important;
 
   @media (max-width: 500px) {
-    width: 320px !important;;
+    width: 320px !important;
   }
 }

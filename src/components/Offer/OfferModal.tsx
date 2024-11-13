@@ -153,14 +153,9 @@ const OfferModal: React.FC<OfferModalProps> = ({
                 </Button>
               </Space>
             </div>
-          ) : (
-            <Input.TextArea
-              value={offer.description}
-              autoSize={{ minRows: 2, maxRows: 4 }}
-              disabled
-              style={{ maxWidth: 700 }}
-            />
-          )}
+          ) : 
+            offer.description
+          }
         </div>
         <div className="offer-field">
           <div className="label">
@@ -238,7 +233,7 @@ const OfferModal: React.FC<OfferModalProps> = ({
               <MultiCalendar
                 dateValue={offer.availabilities}
                 readOnly
-                showRemoveButton={canBeEdited}
+                showRemoveButton={canBeEdited && isEditingAvailability}
               />
             </div>
           )}
@@ -256,6 +251,7 @@ const OfferModal: React.FC<OfferModalProps> = ({
                   handleUpdateOffer={handleUpdateOffer}
                   handleUpdateConfiguration={handleUpdateConfiguration}
                   canBeEdited={canBeEdited}
+                  availabilities={offer.availabilities}
                 />
               ),
             },

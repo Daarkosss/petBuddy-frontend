@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Row, Col, Button, Modal, Space } from "antd";
+import { Col, Button, Modal, Space } from "antd";
 import { OfferWithId } from "../types";
 import OfferCard from "../components/Offer/OfferCard";
 import { api } from "../api/api";
@@ -9,16 +9,26 @@ import AddOfferForm from "../components/Offer/AddOfferForm";
 import { useTranslation } from "react-i18next";
 import SetAvailabilityModal from "../components/Offer/SetAvailabilityModal";
 
-const OfferManagement: React.FC = () => {
+interface OfferManagementProps {
+  onOffersChange?: Function;
+  providedOffers: OfferWithId[];
+}
+
+const OfferManagement: React.FC<OfferManagementProps> = ({
+  onOffersChange,
+  providedOffers,
+}) => {
   const { t } = useTranslation();
-  const [offers, setOffers] = useState<OfferWithId[]>([]);
+  const [offers, setOffers] = useState<OfferWithId[]>(providedOffers);
   const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
   const [isAvailabilityModalOpen, setIsAvailabilityModalOpen] = useState(false);
 
   useEffect(() => {
-    loadOffers();
+    if (onOffersChange !== null && onOffersChange !== undefined) {
+      onOffersChange(offers);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [offers]);
 
   const loadOffers = async () => {
     try {
@@ -89,7 +99,7 @@ const OfferManagement: React.FC = () => {
           </Button>
         </Space>
       </div>
-      <Row justify="center" style={{ gap: "50px" }}>
+      <div className="offers-container">
         {offers.map((offer) => (
           <Col key={offer.id}>
             <OfferCard
@@ -99,7 +109,10 @@ const OfferManagement: React.FC = () => {
             />
           </Col>
         ))}
-      </Row>
+      </div>
+      {offers.length === 0 && (
+        <h3 className="no-offers-message">{t("profilePage.noOffersToShow")}</h3>
+      )}
       <Modal
         title={t("addOffer")}
         open={isOfferModalOpen}
