@@ -1,4 +1,4 @@
-import React, { ChangeEvent, KeyboardEvent, useState } from "react";
+import React, { useState } from "react";
 import {
   Button,
   Table,
@@ -23,6 +23,7 @@ import { api } from "../../api/api";
 import store from "../../store/RootStore";
 import { ColumnType } from "antd/es/table";
 import { useNavigate, useParams } from "react-router-dom";
+import NumericFormItem from "../NumericFormItem";
 
 type ConfigurationsProps = {
   offerId: number;
@@ -166,25 +167,6 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
     setEditingKey(undefined);
   };
 
-  const handlePriceKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    const value = e.key;
-    const regex = /^\d/;
-
-    const allowedKeys = ["Backspace", "Delete", ","];
-    if (!regex.test(value) && !allowedKeys.includes(e.key)) {
-      e.preventDefault();
-    }
-  };
-
-  const handlePriceChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const regex = /^\d{0,5}(\.\d{0,2})?$/;
-    const value = e.target.value;
-
-    if (!regex.test(value)) {
-      form.setFieldsValue({ dailyPrice: value.slice(0, -1) });
-    }
-  };
-
   const selectedOptionsColumns: ColumnType<OfferConfigurationWithOptionalId>[] =
     store.animal.getAnimalAttributeKeys(animalType).map((attributeKey) => ({
       title: t(attributeKey.toLowerCase()),
@@ -251,17 +233,7 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
       render: (_: number, record: OfferConfigurationWithOptionalId) => {
         const editable = isEditing(record);
         return editable ? (
-          <Form.Item
-            name="dailyPrice"
-            rules={[{ required: true, message: t("validation.required") }]}
-          >
-            <Input
-              type="number"
-              min={0}
-              onKeyDown={handlePriceKeyDown}
-              onChange={handlePriceChange}
-            />
-          </Form.Item>
+          <NumericFormItem name="dailyPrice" label={t("dailyPrice")} />
         ) : (
           record.dailyPrice
         );

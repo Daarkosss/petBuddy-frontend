@@ -605,7 +605,6 @@ class API {
         "api/notifications",
         undefined,
         { 
-          "Accept-Timezone": Intl.DateTimeFormat().resolvedOptions().timeZone,
           "Accept-Role": store.user.profile?.selected_profile 
         }
       );

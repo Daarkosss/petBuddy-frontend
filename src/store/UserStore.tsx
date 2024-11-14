@@ -1,6 +1,7 @@
 import { makeAutoObservable } from "mobx";
 import keycloak from "../Keycloack";
 import { getCookie, removeCookie } from "typescript-cookie";
+import { api } from "../api/api";
 
 export type Profile = "CLIENT" | "CARETAKER" | null;
 
@@ -52,6 +53,7 @@ class UserStore {
   setSelectedProfile(selected_profile?: Profile) {
     if (this.profile && selected_profile) {
       this.profile.selected_profile = selected_profile;
+      api.connectNotificationWebSocket();
     }
   }
 

@@ -127,7 +127,7 @@
     "required": "Required",
     "zipCodeFormat": "Invalid format (00-000)",
     "phoneNumberFormat": "Invalid format (at least 9 digits)",
-    "price": "Invalid format (0,00)"
+    "price": "Max. 2 decimal places, minimum 0,01 zł"
   },
 
   "landingPage": {
@@ -291,5 +291,14 @@
   "youWillGain": "You will gain",
   "youWillLose": "You will lose",
 
-  "noAvailability": "Caretaker did not set the availability"
+  "noAvailability": "Caretaker did not set the availability",
+
+  "message": {
+    "care": {
+      "reservation": "New reservation has been made for one of your cares",
+      "update": "Price has beeen updated in one of your cares",
+      "accepted": "Your care has been accepted",
+      "rejected": "Your care has been rejected"
+    }
+  }
 }

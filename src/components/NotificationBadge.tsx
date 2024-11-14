@@ -1,16 +1,12 @@
-import { Badge, Popover, List, Button } from "antd";
+import { Badge, Popover, List } from "antd";
 import { BellOutlined } from "@ant-design/icons";
 import { observer } from "mobx-react-lite";
 import { useTranslation } from "react-i18next";
 import store from "../store/RootStore";
+import { Link } from "react-router-dom";
 
 const NotificationBadge = observer(() => {
   const { t } = useTranslation();
-
-  const handleNotificationClick = (notificationId: number) => {
-    console.log("Navigating to notification:", notificationId);
-    // store.notification.markAsRead(notificationId);
-  };
 
   const content = (
     <div style={{ maxHeight: "300px", overflowY: "auto", width: "300px" }}>
@@ -19,16 +15,18 @@ const NotificationBadge = observer(() => {
           dataSource={store.notification.unread}
           renderItem={(notification) => (
             <List.Item>
-              <div style={{ width: "100%" }}>
-                <Button
-                  type="link"
-                  onClick={() => handleNotificationClick(notification.notificationId)}
-                  style={{ padding: 0, textAlign: "left", width: "100%" }}
+              <div style={{ marginLeft: "10px", width: "100%" }}>
+                <Link
+                  to={`/care/${notification.objectId}`}
+                  style={{ textDecoration: "none"}}
                 >
                   {t(notification.messageKey)}
-                </Button>
-                <div style={{ fontSize: "12px", color: "gray" }}>
-                  {new Date(notification.createdAt).toLocaleString()}
+                </Link>
+                <div style={{ fontSize: "11px", color: "gray" }}>
+                  {new Date(notification.createdAt).toLocaleString(
+                    [], 
+                    {year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit"}
+                  )}
                 </div>
               </div>
             </List.Item>
@@ -47,7 +45,6 @@ const NotificationBadge = observer(() => {
       content={content}
       title={t("Notifications")}
       trigger="click"
-      placement="bottomRight"
     >
       <Badge count={store.notification.unread.length} overflowCount={10} className="notification-badge">
         <BellOutlined style={{ fontSize: "24px", cursor: "pointer" }} />

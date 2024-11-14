@@ -133,7 +133,7 @@
     "required": "Wymagane",
     "zipCodeFormat": "Nieprawidłowy format (00-000)",
     "phoneNumberFormat": "Nieprawidłowy format (minimum 9 cyfr)",
-    "price": "Nieprawidłowy format (0,00)"
+    "price": "Maks. 2 miejsca po przecinku, minimum 0,01 zł"
   },
 
   "landingPage": {
@@ -299,5 +299,14 @@
   "youWillGain": "Zyskasz",
   "youWillLose": "Stracisz",
 
-  "noAvailability": "Opiekun nie ustawił dostępności"
+  "noAvailability": "Opiekun nie ustawił dostępności",
+
+  "message": {
+    "care": {
+      "reservation": "Dokonano rezerwacji opieki na jedną z Twoich ofert",
+      "update_reservation": "Cena została zaktualizowana w jednej z twoich opiek",
+      "accepted_reservation": "Twoja opieka została zaakceptowana",
+      "rejected_reservation": "Twoja opieka została odrzucona"
+    }
+  }
 }

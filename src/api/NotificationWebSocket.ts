@@ -1,5 +1,6 @@
 import { Client, Stomp } from "@stomp/stompjs";
 import sockjs from "sockjs-client";
+import i18next from "i18next";
 import store from "../store/RootStore";
 import { PATH_PREFIX } from "./api";
 import { toast } from "react-toastify";
@@ -32,8 +33,7 @@ class NotificationWebSocket {
       (message) => {
         const newNotification: Notification = JSON.parse(message.body);
         store.notification.addNotification(newNotification);
-        console.log(newNotification);
-        toast.info("New notification has appeared");
+        toast.info(i18next.t("newNotification"));
       }
     );
   };
