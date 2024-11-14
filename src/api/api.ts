@@ -24,7 +24,7 @@ import {
 import { CareDTO, CareReservation, CareReservationDTO, GetCaresDTO } from "../types/care.types";
 import { AnimalAttributes, AnimalConfigurationsDTO } from "../types/animal.types";
 import { UploadFile } from "antd";
-import { NotificationDTO } from "../types/notification.types";
+import { Notification, NotificationDTO } from "../types/notification.types";
 
 const backendHost =
   import.meta.env.VITE_BACKEND_HOST || window.location.hostname;
@@ -604,9 +604,29 @@ class API {
         "GET",
         "api/notifications",
         undefined,
-        { 
-          "Accept-Role": store.user.profile?.selected_profile 
-        }
+        { "Accept-Role": store.user.profile?.selected_profile }
+      );
+    }
+  }
+
+  async markNotificationAsRead(notificationId: number): Promise<Notification | undefined> {
+    if (store.user.profile?.selected_profile) {
+      return this.authorizedFetch<Notification>(
+        "PATCH",
+        `api/notifications/${notificationId}`,
+        undefined,
+        { "Accept-Role": store.user.profile?.selected_profile }
+      );
+    }
+  }
+
+  async markAllNotificationsAsRead(): Promise<void> {
+    if (store.user.profile?.selected_profile) {
+      this.authorizedFetch<void>(
+        "POST",
+        "api/notifications/all-read",
+        undefined,
+        { "Accept-Role": store.user.profile?.selected_profile }
       );
     }
   }

@@ -21,56 +21,52 @@ const { Content } = Layout;
 
 const App = observer(() => {
   const { keycloak, initialized } = useKeycloak();
-  const [isXsrfTokenFetched, setIsXsrfTokenFetched] = useState(false);
   const [isUserDataFetched, setIsUserDataFetched] = useState(false);
 
   useEffect(() => {
-    const fetchXsrfToken = async () => {
-      if (keycloak.authenticated && !store.user.xsrfToken) {
-        await api.getXsrfToken();
-      }
-      setIsXsrfTokenFetched(true);
-    };
-
-    const fetchUserData = async () => {
+    const initializeApp = async () => {
       try {
-        const userData = await keycloak.loadUserProfile();
-        const userProfiles = await api.getUserProfiles();
-        const userProfileData = {
-          email: userData.email,
-          firstName: userData.firstName,
-          lastName: userData.lastName,
-          token: store.user.xsrfToken,
-          selected_profile: store.user.profile?.selected_profile || null,
-          hasCaretakerProfile: userProfiles.hasCaretakerProfile,
-        };
-        store.user.saveProfileToStorage(userProfileData);
-        setIsUserDataFetched(true);
-      } catch (error) {
-        console.error(`Failed to load user profile: ${error}`);
+        if (keycloak.authenticated && !store.user.xsrfToken) {
+          await api.getXsrfToken();
+        }
+  
+        if (keycloak.authenticated) {
+          try {
+            const userData = await keycloak.loadUserProfile();
+            const userProfiles = await api.getUserProfiles();
+            const userProfileData = {
+              email: userData.email,
+              firstName: userData.firstName,
+              lastName: userData.lastName,
+              token: store.user.xsrfToken,
+              selected_profile: store.user.profile?.selected_profile || null,
+              hasCaretakerProfile: userProfiles.hasCaretakerProfile,
+            };
+            store.user.saveProfileToStorage(userProfileData);
+            setIsUserDataFetched(true);
+          } catch (error) {
+            console.error(`Failed to load user profile: ${error}`);
+          }
+  
+          try {
+            await store.notification.fetchNotifications();
+            await api.connectNotificationWebSocket();
+          } catch (error) {
+            console.error(`Failed to setup notifications: ${error}`);
+          }
+        } else {
+          store.user.reset();
+        }
+      } finally {
+        store.isStarting = false;
       }
     };
-
+  
     if (initialized) {
-      if (keycloak.authenticated) {
-        fetchXsrfToken();
-        fetchUserData();
-        setIsUserDataFetched(true);
-        store.notification.fetchNotifications();
-        api.connectNotificationWebSocket();
-      } else {
-        store.user.reset();
-      }
-      store.isStarting = false;
+      initializeApp();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialized, keycloak.authenticated]);
-
-  useEffect(() => {
-    if (isXsrfTokenFetched && isUserDataFetched) {
-      store.isStarting = false;
-    }
-  }, [isXsrfTokenFetched, isUserDataFetched]);
 
   if (!store.isStarting) {
     return (

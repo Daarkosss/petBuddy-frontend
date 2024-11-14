@@ -301,12 +301,14 @@
 
   "noAvailability": "Opiekun nie ustawił dostępności",
 
-  "message": {
-    "care": {
-      "reservation": "Dokonano rezerwacji opieki na jedną z Twoich ofert",
-      "update_reservation": "Cena została zaktualizowana w jednej z twoich opiek",
-      "accepted_reservation": "Twoja opieka została zaakceptowana",
-      "rejected_reservation": "Twoja opieka została odrzucona"
-    }
+  "notification": {
+    "title": "Powiadomienia",
+    "markAllAsRead": "Oznacz jako przeczytane",
+    "noNotifications": "Brak powiadomień",
+    "care_reservation": "Dokonano rezerwacji opieki na jedną z Twoich ofert",
+    "care_update": "Cena została zaktualizowana w jednej z twoich opiek",
+    "care_accepted": "Twoja opieka została zaakceptowana",
+    "care_rejected": "Twoja opieka została odrzucona",
+    "newNotification": "Masz nowe powiadomienie"
   }
 }

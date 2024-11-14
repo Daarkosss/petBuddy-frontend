@@ -23,24 +23,30 @@ const CareDetails = () => {
 
   const careIdNumber = careId ? parseInt(careId) : undefined;
 
-  const fetchCareDetails = async () => {
-    try {
-      const data = await api.getCare(careIdNumber!);
-      if (data) {
-        setCare(new Care(data));
-      }
-    } catch (error) {
-      navigate("/cares");
-      toast.error(t("error.getCare"));
+  const setNotificationsAsRead = async () => {
+    if (careIdNumber) {
+      store.notification.markCareNotificationsAsRead(careIdNumber);
     }
-  };
+  }
 
   useEffect(() => {
+    const fetchCareDetails = async () => {
+      try {
+        const data = await api.getCare(careIdNumber!);
+        if (data) {
+          setCare(new Care(data));
+        }
+      } catch (error) {
+        navigate("/cares");
+        toast.error(t("error.getCare"));
+      }
+    };
     fetchCareDetails();
+    setNotificationsAsRead();
 
     store.selectedMenuOption = "cares";
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [careId]);
 
   const acceptCare = async () => {
     setIsLoading(true);
