@@ -8,7 +8,7 @@ import { MenuOutlined } from "@ant-design/icons";
 import store from "../store/RootStore";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
-import NotificationDropdown from "./NotificationDropdown";
+import NotificationDropdown from "./NotificationBadge";
 
 const PageHeader = observer(() => {
   const { t } = useTranslation();

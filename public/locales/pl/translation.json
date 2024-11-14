@@ -297,5 +297,7 @@
   "next": "Dalej",
   "youWillSave": "Zaoszczędzisz",
   "youWillGain": "Zyskasz",
-  "youWillLose": "Stracisz"
+  "youWillLose": "Stracisz",
+
+  "noAvailability": "Opiekun nie ustawił dostępności"
 }

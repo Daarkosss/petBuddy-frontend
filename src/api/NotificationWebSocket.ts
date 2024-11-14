@@ -32,6 +32,7 @@ class NotificationWebSocket {
       (message) => {
         const newNotification: Notification = JSON.parse(message.body);
         store.notification.addNotification(newNotification);
+        console.log(newNotification);
         toast.info("New notification has appeared");
       }
     );

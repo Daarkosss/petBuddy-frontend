@@ -289,5 +289,7 @@
   "next": "Next",
   "youWillSave": "You will save",
   "youWillGain": "You will gain",
-  "youWillLose": "You will lose"
+  "youWillLose": "You will lose",
+
+  "noAvailability": "Caretaker did not set the availability"
 }

@@ -8,6 +8,7 @@ import {
   Popconfirm,
   Form,
   TableColumnsType,
+  Tooltip,
 } from "antd";
 import {
   AvailabilityValues,
@@ -320,23 +321,26 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
             </Space>
           )
         ) : (
-          <Button
-            type="primary"
-            onClick={() => navigate(
-              `/care/reservation/${caretakerEmail}`,
-              { 
-                state: { 
-                  animalType,
-                  dailyPrice: record.dailyPrice,
-                  animalAttributes: record.selectedOptions,
-                  availabilities: availabilities
-                } 
-              }
-            )}
-            loading={isLoading}
-          >
-            {t("sendRequest")}
-          </Button>
+          <Tooltip title={availabilities.length === 0 && t("noAvailability")}>
+            <Button
+              type="primary"
+              onClick={() => navigate(
+                `/care/reservation/${caretakerEmail}`,
+                { 
+                  state: { 
+                    animalType,
+                    dailyPrice: record.dailyPrice,
+                    animalAttributes: record.selectedOptions,
+                    availabilities: availabilities
+                  } 
+                }
+              )}
+              loading={isLoading}
+              disabled={availabilities.length === 0}
+            >
+              {t("sendRequest")}
+            </Button>
+          </Tooltip>
         );
       },
     },
