@@ -3,6 +3,7 @@ import sockjs from "sockjs-client";
 import store from "../store/RootStore";
 import { PATH_PREFIX } from "./api";
 import { toast } from "react-toastify";
+import { Notification } from "../types/notification.types";
 
 class NotificationWebSocket {
   private wsClient: Client | null = null;
@@ -29,8 +30,8 @@ class NotificationWebSocket {
     this.wsClient.subscribe(
       "/user/topic/notification",
       (message) => {
-        const parsedMessage = JSON.parse(message.body);
-        console.log(parsedMessage);
+        const newNotification: Notification = JSON.parse(message.body);
+        store.notification.addNotification(newNotification);
         toast.info("New notification has appeared");
       }
     );

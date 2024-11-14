@@ -3,7 +3,7 @@ import { api } from "../api/api";
 import { Notification } from "../types/notification.types";
 
 class NotificationStore {
-  notifications: Notification[] = [];
+  unread: Notification[] = [];
 
   constructor() {
     makeAutoObservable(this);
@@ -12,13 +12,17 @@ class NotificationStore {
   fetchNotifications() {
     api.getNotifications().then((notifications) => {
       if (notifications) {
-        this.notifications = notifications.content;
+        this.unread = notifications.content;
       }
     })
   }
 
+  addNotification(notification: Notification) {
+    this.unread.push(notification);
+  }
+
   reset() {
-    this.notifications = [];
+    this.unread = [];
   }
 }
 

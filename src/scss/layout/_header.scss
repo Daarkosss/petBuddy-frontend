@@ -28,6 +28,16 @@
         color: v.$blue-light;
       }
     }
+
+    .notification-dropdown {
+      width: 23px;
+      height: 23px;
+      color: v.$blue-dark;
+
+      &:hover {
+        color: v.$blue-light;
+      }
+    }
   }
 
   .menu-desktop {

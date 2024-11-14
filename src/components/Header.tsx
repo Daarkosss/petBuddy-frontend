@@ -8,6 +8,7 @@ import { MenuOutlined } from "@ant-design/icons";
 import store from "../store/RootStore";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
+import NotificationDropdown from "./NotificationDropdown";
 
 const PageHeader = observer(() => {
   const { t } = useTranslation();
@@ -95,6 +96,7 @@ const PageHeader = observer(() => {
       </div>
 
       <div className="right-corner">
+        {keycloak.authenticated && <NotificationDropdown />}
         <LanguageSwitcher />
         {keycloak.authenticated ? (
           <Button
