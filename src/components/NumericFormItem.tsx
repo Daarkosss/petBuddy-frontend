@@ -18,11 +18,6 @@ const NumericFormItem: React.FC<NumberInputProps> = ({name, label, initialValue,
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;    
-    const regex = /^\d/;
-    const allowedKeys = ["Backspace", "Delete", "," ,"."];
-    if (!regex.test(value) && !allowedKeys.includes(e.target.value)) {
-      e.preventDefault();
-    }
 
     if (value && +value > maxNumber) {
       e.target.value = maxNumber.toString();
