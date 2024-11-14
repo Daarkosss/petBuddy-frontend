@@ -56,6 +56,8 @@ const App = observer(() => {
         fetchXsrfToken();
         fetchUserData();
         setIsUserDataFetched(true);
+        store.notification.fetchNotifications();
+        api.connectNotificationWebSocket();
       } else {
         store.user.reset();
       }

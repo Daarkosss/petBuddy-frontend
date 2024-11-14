@@ -15,6 +15,7 @@
     "@mdi/js": "^7.4.47",
     "@mdi/react": "^1.6.1",
     "@react-keycloak/web": "^3.4.0",
+    "@stomp/stompjs": "^7.0.0",
     "antd": "^5.20.1",
     "antd-img-crop": "^4.23.0",
     "bootstrap": "^5.3.3",
@@ -36,6 +37,8 @@
     "react-router-dom": "^6.24.1",
     "react-toastify": "^10.0.5",
     "sass": "^1.77.7",
+    "sockjs": "^0.3.24",
+    "sockjs-client": "^1.6.1",
     "typescript-cookie": "^1.0.6"
   },
   "devDependencies": {
@@ -43,6 +46,7 @@
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@types/react-dropzone": "^5.1.0",
+    "@types/sockjs-client": "^1.5.4",
     "@typescript-eslint/eslint-plugin": "^7.13.1",
     "@typescript-eslint/parser": "^7.13.1",
     "@vitejs/plugin-react": "^4.3.1",

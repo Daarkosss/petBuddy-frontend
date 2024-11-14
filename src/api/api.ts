@@ -1,5 +1,6 @@
 import { toast } from "react-toastify";
 import store from "../store/RootStore";
+import NotificationWebSocket from "./NotificationWebSocket";
 import {
   CaretakerBasicsResponse,
   CaretakerSearchFilters,
@@ -23,6 +24,7 @@ import {
 import { CareDTO, CareReservation, CareReservationDTO, GetCaresDTO } from "../types/care.types";
 import { AnimalAttributes, AnimalConfigurationsDTO } from "../types/animal.types";
 import { UploadFile } from "antd";
+import { NotificationDTO } from "../types/notification.types";
 
 const backendHost =
   import.meta.env.VITE_BACKEND_HOST || window.location.hostname;
@@ -32,6 +34,8 @@ export const PATH_PREFIX = `http://${backendHost}:${backendPort}/`;
 type Method = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
 class API {
+  notificationWebSocket = new NotificationWebSocket();
+
   constructor() {
     this.getAnimalsConfigurations().then((animalConfigurations) => {
       store.animal.allAnimalConfigurations = animalConfigurations;
@@ -592,6 +596,24 @@ class API {
         { "Accept-Role": "CARETAKER" }
       );
     }
+  }
+
+  async getNotifications(): Promise<NotificationDTO | undefined> {
+    if (store.user.profile?.selected_profile) {
+      return this.authorizedFetch<NotificationDTO>(
+        "GET",
+        "api/notifications",
+        undefined,
+        { 
+          "Accept-Timezone": Intl.DateTimeFormat().resolvedOptions().timeZone,
+          "Accept-Role": store.user.profile?.selected_profile 
+        }
+      );
+    }
+  }
+
+  async connectNotificationWebSocket(): Promise<void> {
+    this.notificationWebSocket.initWebsocketConnection();
   }
 
   convertOffersAvailabilities = (offers: OfferDTOWithId[]): OfferWithId[] => {
