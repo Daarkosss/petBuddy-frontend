@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 interface NumberInputProps {
   name: string;
-  label: string | number | (string | number)[];
+  label?: string | number | (string | number)[];
   initialValue?: number;
   disabled?: boolean;
   placeholder?: string;

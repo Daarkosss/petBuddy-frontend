@@ -233,7 +233,7 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
       render: (_: number, record: OfferConfigurationWithOptionalId) => {
         const editable = isEditing(record);
         return editable ? (
-          <NumericFormItem name="dailyPrice" label={t("dailyPrice")} />
+          <NumericFormItem name="dailyPrice" />
         ) : (
           record.dailyPrice
         );

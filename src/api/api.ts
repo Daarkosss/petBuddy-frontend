@@ -600,9 +600,14 @@ class API {
 
   async getNotifications(): Promise<NotificationDTO | undefined> {
     if (store.user.profile?.selected_profile) {
+      const queryParams = new URLSearchParams({
+        sortBy: "createdAt",
+        sortDirection: "DESC",
+      });
+
       return this.authorizedFetch<NotificationDTO>(
         "GET",
-        "api/notifications",
+        `api/notifications?${queryParams}`,
         undefined,
         { "Accept-Role": store.user.profile?.selected_profile }
       );

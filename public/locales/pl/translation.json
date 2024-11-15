@@ -186,7 +186,7 @@
     "addConfiguration": "Konfiguracja została pomyślnie utworzona",
     "setAvailabilityForOffers": "Dostępność została pomyślnie ustawiona dla wybranych ofert",
     "askForCare": "Zapytanie o opiekę zostało pomyślnie wysłane. Czekaj na odpowiedź opiekuna",
-    "updatePrice": "Nowa cena opieki została pomyślnie zaktualizowana",
+    "updatePrice": "Cena opieki została pomyślnie zaktualizowana",
     "acceptCare": "Opieka została pomyślnie zaakceptowana",
     "rejectCare": "Opieka została pomyślnie odrzucona"
   },

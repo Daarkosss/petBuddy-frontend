@@ -4,9 +4,15 @@ import { Notification } from "../types/notification.types";
 
 class NotificationStore {
   unread: Notification[] = [];
+  openCareId: number | null = null;
 
   constructor() {
     makeAutoObservable(this);
+  }
+
+  async setup() {
+    await this.fetchNotifications();
+    api.connectNotificationWebSocket();
   }
 
   async fetchNotifications() {
@@ -14,7 +20,6 @@ class NotificationStore {
       const notifications = await api.getNotifications();
       if (notifications) {
         this.unread = notifications.content;
-        console.log(this.unread);
       }
     } catch(error) {
       console.error("Error while fetching notifications");
@@ -24,13 +29,16 @@ class NotificationStore {
   }
 
   addNotification(notification: Notification) {
-    this.unread.push(notification);
+    if (notification.objectType === "CARE" && notification.objectId === this.openCareId) {
+      location.reload();
+    } else {
+      this.unread.unshift(notification);
+    }
   }
 
   async markAllAsRead() {
     try {
-      console.log("XD")
-      api.markAllNotificationsAsRead();
+      await api.markAllNotificationsAsRead();
       this.reset()
     } catch(error) {
       console.error("Error")
@@ -39,8 +47,6 @@ class NotificationStore {
 
   async markCareNotificationsAsRead(careId: number) {
     const careNotificationIds = this.getCareNotifications(careId);
-    console.log(careNotificationIds);
-  
     try {
       const deletedNotifications = await Promise.all(
         careNotificationIds.map(async (notifId) => {
@@ -52,23 +58,17 @@ class NotificationStore {
           }
         })
       );
-  
-      deletedNotifications
-        .filter((notif) => notif !== null)
-        .forEach((deletedNotif) => {
-          if (deletedNotif) {
-            this.removeNotification(deletedNotif.notificationId);
-          }
-        });
+
+      this.removeNotifications(deletedNotifications.map((notif) => notif!.notificationId));
     } catch (error) {
-      throw new Error("Something went wrong while marking notifications as read.");
+      throw new Error("Something went wrong while marking notifications as read");
     } finally {
       console.log(this.unread.length);
     }
   }
 
-  removeNotification(notificationId: number) {
-    this.unread = this.unread.filter((notif) => notif.notificationId !== notificationId);
+  removeNotifications(notificationIds: number[]) {
+    this.unread = this.unread.filter((notif) => !notificationIds.includes(notif.notificationId));
   }
   
   getCareNotifications(careId: number) {

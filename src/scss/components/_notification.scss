@@ -1,0 +1,28 @@
+@use "../helpers/variables" as v;
+
+.notification-title {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.notification-content {
+  max-height: 300px;
+  overflow-y: auto;
+  width: 300px;
+
+  .list-item {
+    margin-left: 10px;
+    width: 100%;
+
+    .date-time {
+      font-size: 11px;
+      color: v.$grey-dark;
+    }
+  }
+
+  .no-notifications {
+    text-align: center;
+    color: v.$grey-dark;
+  }
+}

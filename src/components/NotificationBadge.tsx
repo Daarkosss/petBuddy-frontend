@@ -17,7 +17,7 @@ const NotificationBadge = observer(() => {
   };
 
   const title = (
-    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "20px"}}>
+    <div className="notification-title">
       <div>{t("notification.title")}</div>
       <Button
         type="link"
@@ -31,21 +31,21 @@ const NotificationBadge = observer(() => {
   )
 
   const content = (
-    <div style={{ maxHeight: "300px", overflowY: "auto", width: "300px" }}>
+    <div className="notification-content">
       {store.notification.unread.length > 0 ? (
         <>
           <List
             dataSource={store.notification.unread}
             renderItem={(notification) => (
               <List.Item>
-                <div style={{ marginLeft: "10px", width: "100%" }}>
+                <div className="list-item">
                   <Link
                     to={`/care/${notification.objectId}`}
                     style={{ textDecoration: "none" }}
                   >
                     {t(`notification.${notification.messageKey}`)}
                   </Link>
-                  <div style={{ fontSize: "11px", color: "gray" }}>
+                  <div className="date-time">
                     {new Date(notification.createdAt).toLocaleString(
                       [],
                       {
@@ -63,7 +63,7 @@ const NotificationBadge = observer(() => {
           />
         </>
       ) : (
-        <div style={{ textAlign: "center", color: "gray" }}>
+        <div className="no-notifications">
           {t("notification.noNotifications")}
         </div>
       )}
@@ -71,14 +71,13 @@ const NotificationBadge = observer(() => {
   );
 
   return (
-    <Popover
-      content={content} title={title} trigger="click">
+    <Popover content={content} title={title} trigger="click">
       <Badge
         count={store.notification.unread.length}
         overflowCount={10}
         className="notification-badge"
       >
-        <BellOutlined style={{ fontSize: "24px", cursor: "pointer" }} />
+        <BellOutlined style={{ fontSize: "24px" }} />
       </Badge>
     </Popover>
   );

@@ -26,11 +26,11 @@ const App = observer(() => {
   useEffect(() => {
     const initializeApp = async () => {
       try {
-        if (keycloak.authenticated && !store.user.xsrfToken) {
-          await api.getXsrfToken();
-        }
-  
         if (keycloak.authenticated) {
+          if (!store.user.xsrfToken) {
+            await api.getXsrfToken()
+          }
+
           try {
             const userData = await keycloak.loadUserProfile();
             const userProfiles = await api.getUserProfiles();
@@ -49,8 +49,7 @@ const App = observer(() => {
           }
   
           try {
-            await store.notification.fetchNotifications();
-            await api.connectNotificationWebSocket();
+            await store.notification.setup();
           } catch (error) {
             console.error(`Failed to setup notifications: ${error}`);
           }

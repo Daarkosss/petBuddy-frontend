@@ -10,6 +10,8 @@ class NotificationWebSocket {
   private wsClient: Client | null = null;
 
   initWebsocketConnection = () => {
+    this.disconnectWebSocket();
+
     const socket = new sockjs(
       `${PATH_PREFIX}ws?token=${store.user.jwtToken}`
     );
@@ -27,7 +29,6 @@ class NotificationWebSocket {
       return;
     }
 
-    console.log("subscribing to a session");
     this.wsClient.subscribe(
       "/user/topic/notification",
       (message) => {
@@ -36,6 +37,12 @@ class NotificationWebSocket {
         toast.info(i18next.t("notification.newNotification"));
       }
     );
+  };
+
+  disconnectWebSocket = () => {
+    if (this.wsClient) {
+      this.wsClient.deactivate();
+    }
   };
 }
 
