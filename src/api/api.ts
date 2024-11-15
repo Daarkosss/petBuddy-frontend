@@ -601,6 +601,8 @@ class API {
   async getNotifications(): Promise<NotificationDTO | undefined> {
     if (store.user.profile?.selected_profile) {
       const queryParams = new URLSearchParams({
+        page: "0",
+        size: "1000000", // To fetch all notifications
         sortBy: "createdAt",
         sortDirection: "DESC",
       });

@@ -24,7 +24,7 @@ class NotificationWebSocket {
   };
 
   subscribeToSession = () => {
-    if (!this.wsClient) {
+    if (!this.wsClient || !store.user.profile?.selected_profile) {
       return;
     }
 
@@ -32,9 +32,11 @@ class NotificationWebSocket {
       "/user/topic/notification",
       (message) => {
         const newNotification: Notification = JSON.parse(message.body);
-        store.notification.addNotification(newNotification);
-        toast.info(i18next.t("notification.newNotification"));
-      }
+        if (newNotification.receiverProfile === store.user.profile?.selected_profile) {
+          store.notification.addNotification(newNotification);
+          toast.info(i18next.t("notification.newNotification"));
+        } 
+      },
     );
   };
 

@@ -53,7 +53,7 @@ class UserStore {
   setSelectedProfile(selected_profile?: Profile) {
     if (this.profile && selected_profile) {
       this.profile.selected_profile = selected_profile;
-      store.notification.setup();
+      store.notification.fetchNotifications();
     }
   }
 
