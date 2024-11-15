@@ -18,7 +18,6 @@ class NotificationWebSocket {
     const client = Stomp.over(() => socket);
     const onConnect = () => {
       this.wsClient = client;
-      console.log("WS client connected");
       this.subscribeToSession();
     };
     client.connect({}, onConnect);
