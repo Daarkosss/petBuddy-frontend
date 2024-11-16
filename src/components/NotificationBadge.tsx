@@ -48,13 +48,7 @@ const NotificationBadge = observer(() => {
                   <div className="date-time">
                     {new Date(notification.createdAt).toLocaleString(
                       [],
-                      {
-                        year: "numeric",
-                        month: "numeric",
-                        day: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      }
+                      { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }
                     )}
                   </div>
                 </div>
