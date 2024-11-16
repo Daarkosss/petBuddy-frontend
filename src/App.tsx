@@ -11,8 +11,11 @@ import OfferManagement from "./pages/OfferManagement";
 import LandingPage from "./pages/LandingPage";
 import Header from "./components/Header";
 import { observer } from "mobx-react-lite";
+import CareReservationForm from "./pages/CareReservationForm";
 import CaretakerProfile from "./pages/CaretakerProfile";
 import ClientProfile from "./pages/ClientProfile";
+import CareList from "./pages/CareList";
+import CareDetails from "./pages/CareDetails";
 
 const { Content } = Layout;
 
@@ -54,7 +57,7 @@ const App = observer(() => {
         fetchUserData();
         setIsUserDataFetched(true);
       } else {
-        store.reset();
+        store.user.reset();
       }
       store.isStarting = false;
     }
@@ -87,13 +90,29 @@ const App = observer(() => {
                     element={<OfferManagement />}
                   />
                   <Route
+                    path="/care/reservation/:caretakerEmail" 
+                    element={<CareReservationForm />}
+                  />
+                  <Route
+                    path="/cares"
+                    element={
+                      <CareList />
+                    }
+                  />
+                  <Route
+                    path="/care/:careId"
+                    element={
+                      <CareDetails />
+                    }
+                  />
+                  <Route
                     path="/profile-selection"
                     element={
                       <ProfileSelection isUserDataFetched={isUserDataFetched} />
                     }
                   />
                   <Route
-                    path="/profile-caretaker"
+                    path="/profile-caretaker/:caretakerEmail"
                     element={<CaretakerProfile />}
                   />
                   <Route path="/profile-client" element={<ClientProfile />} />
@@ -116,12 +135,13 @@ const App = observer(() => {
               )
             ) : (
               <>
+                <Route path="/" element={<LandingPage />} />
                 <Route
-                  path="/profile-caretaker"
+                  path="/profile-caretaker/:caretakerEmail"
                   element={<CaretakerProfile />}
                 />
                 <Route path="/caretaker/search" element={<CaretakerSearch />} />
-                <Route path="*" element={<LandingPage />} />
+                <Route path="*" element={<Navigate to ="/" replace />} />
               </>
             )}
           </Routes>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Row, Col, Button, Modal, Space } from "antd";
+import { Col, Button, Modal, Space } from "antd";
 import { OfferWithId } from "../types";
 import OfferCard from "../components/Offer/OfferCard";
 import { api } from "../api/api";
@@ -88,8 +88,13 @@ const OfferManagement: React.FC = () => {
             {t("setAvailabilityForOffers")}
           </Button>
         </Space>
+        {offers.length === 0 && (
+          <h3 className="no-offers-message">
+            {t("profilePage.noOffersToShow")}
+          </h3>
+        )}
       </div>
-      <Row justify="center" style={{ gap: "50px" }}>
+      <div className="offers-container">
         {offers.map((offer) => (
           <Col key={offer.id}>
             <OfferCard
@@ -99,7 +104,7 @@ const OfferManagement: React.FC = () => {
             />
           </Col>
         ))}
-      </Row>
+      </div>
       <Modal
         title={t("addOffer")}
         open={isOfferModalOpen}

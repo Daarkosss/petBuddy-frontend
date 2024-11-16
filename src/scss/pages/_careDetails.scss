@@ -1,0 +1,75 @@
+@use "../helpers/variables" as v;
+
+.care-details-container {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  max-width: 1300px;
+  margin: 10vh auto;
+  background-color: v.$white;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+  @media (max-width: 1200px) {
+    grid-template-columns: 2fr 1.1fr;
+  }
+
+  @media (max-width: 1024px) {
+    width: 90%;
+    grid-template-columns: 1fr;
+
+    > img {
+      display: none;
+    }
+  }
+
+  @media (max-width: 480px) {
+    width: 100%;
+  }
+
+  .care-details-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    gap: 30px;
+
+    @media (max-width: 1200px) {
+      gap: 10px;
+    }
+
+    @media (max-width: 1024px) {
+      gap: 30px;
+    }
+
+    .timeline {
+      margin-left: -40px; // Because the timeline is strangely positioned by default
+    }
+
+    .actions {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+
+      @media (max-width: 580px) {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  }
+
+  img {
+    width: 100%;
+    border-radius: 0 8px 8px 0;
+  }
+}
+
+.price-difference {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.no-cares {
+  text-align: center;
+  color: v.$blue-very-light;
+}
