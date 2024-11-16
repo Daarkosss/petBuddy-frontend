@@ -109,7 +109,7 @@ const CareList = () => {
                         {t(care.animalType.toLowerCase())}
                       </Descriptions.Item>
                       <Descriptions.Item label={t("totalPrice")}>
-                        {care.totalPrice} zł
+                        {care.totalPrice}
                       </Descriptions.Item>
                       <Descriptions.Item label={t("caretaker")}>
                         <UserInfoPill user={care.caretaker} isLink={true} />          

@@ -65,24 +65,20 @@ const CaretakerProfile: React.FC = () => {
   }, [page]);
 
   useEffect(() => {
+    // If user is visiting their profile
     if (caretakerEmail === store.user.profile?.email) {
       store.selectedMenuOption = "profile";
-    }
-
-    //if user is visiting their profile
-    if (caretakerEmail === store.user.profile?.email) {
-      //user is visiting their proifle
       setIsMyProfile(true);
 
-      //which profile page should be showed
+      // Which profile page should be showed
       if (store.user.profile!.selected_profile === "CARETAKER") {
         getCaretakerDetails(store.user.profile!.email!);
         getCaretakerRatings(store.user.profile!.email!, page, size);
       } else if (store.user.profile!.selected_profile === "CLIENT") {
-        navigate(`/profile-caretaker/${caretakerEmail}`);
+        navigate("/profile-client");
       }
     } else {
-      //if userEmail has been provided
+      // If userEmail has been provided
       if (caretakerEmail !== null && caretakerEmail !== undefined) {
         getCaretakerDetails(caretakerEmail);
         getCaretakerRatings(caretakerEmail, page, size);

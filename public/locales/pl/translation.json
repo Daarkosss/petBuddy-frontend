@@ -167,14 +167,14 @@
     "editConfiguration": "Wystąpił błąd podczas edycji konfiguracji",
     "addConfiguration": "Wystąpił błąd podczas tworzenia konfiguracji",
     "duplicateConfiguration": "Konfiguracja z wybranymi parametrami juz istnieje",
-    "setAvailabilityForOffers": "Wystąpił bład podczas ustawiania dostępności dla ofert",
-    "getCaretakers": "Wystąpił bład podczas pobrania opiekunów",
-    "askForCare": "Wystąpił bład podczas wysyłania zapytania o opiekę",
-    "getCares": "Wystąpił bład podczas pobrania opiek",
-    "getCare": "Wystąpił bład podczas pobrania opieki",
-    "updatePrice": "Wystąpił bład podczas aktualizacji ceny",
-    "acceptCare": "Wystąpił bład podczas akceptacji opieki",
-    "rejectCare": "Wystąpił bład podczas odrzucenia opieki"
+    "setAvailabilityForOffers": "Wystąpił błąd podczas ustawiania dostępności dla ofert",
+    "getCaretakers": "Wystąpił błąd podczas pobierania opiekunów",
+    "askForCare": "Wystąpił błąd podczas wysyłania zapytania o opiekę",
+    "getCares": "Wystąpił błąd podczas pobierania opiek",
+    "getCare": "Wystąpił błąd podczas pobierania opieki",
+    "updatePrice": "Wystąpił błąd podczas aktualizacji ceny",
+    "acceptCare": "Wystąpił błąd podczas akceptacji opieki",
+    "rejectCare": "Wystąpił błąd podczas odrzucenia opieki"
   },
 
   "success": {
@@ -264,7 +264,7 @@
     "confirmNewPrice": "Potwierdź nową cenę",
     "currentStatus": "Aktualny status",
     "confirmAccept": "Czy na pewno chcesz zaakceptować opiekę?",
-    "confirmReject": "Czy na pewno chcesz odrzuć opiekę?"
+    "confirmReject": "Czy na pewno chcesz odrzucić opiekę?"
   },
 
   "careReservation": {

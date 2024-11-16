@@ -10,6 +10,10 @@ export const calculateNumberOfDays = (dateFrom: string, dateTo: string) => {
   return days;
 }
 
+export const formatPrice = (price: number) => {
+  return `${(price).toFixed(2).replace(".", ",")} zł`;
+}
+
 export class Care {
   id: number;
   submittedAt: string;
@@ -40,11 +44,11 @@ export class Care {
   }
 
   get formattedDailyPrice(): string {
-    return this.dailyPrice.toFixed(2).replace(".", ",");
+    return formatPrice(this.dailyPrice);
   }
 
   get totalPrice(): string {
-    return (this.dailyPrice * this.numberOfDays).toFixed(2).replace(".", ",");
+    return formatPrice(this.numberOfDays * this.dailyPrice);
   }
 
   get numberOfDays() {
