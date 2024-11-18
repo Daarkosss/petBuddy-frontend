@@ -32,7 +32,7 @@ class NotificationStore {
     try {
       const numberOfUnreadChats = await api.getNumberOfUnreadChats();
       if (numberOfUnreadChats !== undefined) {
-        this.unreadChats = 10;
+        this.unreadChats = numberOfUnreadChats;
       }
     } catch(error) {
       console.error("Error while fetching number of unread chats");
