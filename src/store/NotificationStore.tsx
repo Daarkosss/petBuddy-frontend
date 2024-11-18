@@ -4,6 +4,7 @@ import { Notification } from "../types/notification.types";
 
 class NotificationStore {
   unread: Notification[] = [];
+  unreadChats: number = 0;
   openCareId: number | null = null;
 
   constructor() {
@@ -12,6 +13,7 @@ class NotificationStore {
 
   async setup() {
     await this.fetchNotifications();
+    await this.fetchNumberOfUnreadChats();
     api.connectNotificationWebSocket();
   }
 
@@ -23,8 +25,17 @@ class NotificationStore {
       }
     } catch(error) {
       console.error("Error while fetching notifications");
-    } finally {
-      console.log(this.unread);
+    }
+  }
+
+  async fetchNumberOfUnreadChats() {
+    try {
+      const numberOfUnreadChats = await api.getNumberOfUnreadChats();
+      if (numberOfUnreadChats !== undefined) {
+        this.unreadChats = 10;
+      }
+    } catch(error) {
+      console.error("Error while fetching number of unread chats");
     }
   }
 

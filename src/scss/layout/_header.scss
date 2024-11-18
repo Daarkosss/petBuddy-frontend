@@ -73,6 +73,11 @@
   }
 
   @media (max-width: 480px) {
+    padding: 0 10px;
+
+    .right-corner {
+      gap: 15px;
+    }
 
     .auth-button {
       font-size: 11px;

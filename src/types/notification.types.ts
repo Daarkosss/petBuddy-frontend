@@ -25,3 +25,9 @@ export type NotificationDTO = {
   numberOfElements: number;
   empty: boolean;
 }
+
+export type NumberOfUnreadChats = {
+  createdAt: string;
+  unseenChatsAsClient: number;
+  unseenChatsAsCaretaker: number;
+}

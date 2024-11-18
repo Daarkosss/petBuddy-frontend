@@ -54,6 +54,7 @@ class UserStore {
     if (this.profile && selected_profile) {
       this.profile.selected_profile = selected_profile;
       store.notification.fetchNotifications();
+      store.notification.fetchNumberOfUnreadChats();
     }
   }
 

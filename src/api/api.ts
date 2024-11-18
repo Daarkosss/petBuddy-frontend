@@ -24,7 +24,7 @@ import {
 import { CareDTO, CareReservation, CareReservationDTO, GetCaresDTO } from "../types/care.types";
 import { AnimalAttributes, AnimalConfigurationsDTO } from "../types/animal.types";
 import { UploadFile } from "antd";
-import { Notification, NotificationDTO } from "../types/notification.types";
+import { Notification, NotificationDTO, NumberOfUnreadChats } from "../types/notification.types";
 
 const backendHost =
   import.meta.env.VITE_BACKEND_HOST || window.location.hostname;
@@ -640,6 +640,20 @@ class API {
 
   async connectNotificationWebSocket(): Promise<void> {
     this.notificationWebSocket.initWebsocketConnection();
+  }
+
+  async getNumberOfUnreadChats(): Promise<number | undefined> {
+    if (store.user.profile?.selected_profile) {
+      const data = await this.authorizedFetch<NumberOfUnreadChats>(
+        "GET",
+        "api/chat/unread/count",
+      );
+      if (store.user.profile.selected_profile === "CLIENT") {
+        return data.unseenChatsAsClient;
+      } else {
+        return data.unseenChatsAsCaretaker;
+      }
+    }
   }
 
   convertOffersAvailabilities = (offers: OfferDTOWithId[]): OfferWithId[] => {
