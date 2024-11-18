@@ -262,7 +262,9 @@
     "confirmNewPrice": "Potwierdź nową cenę",
     "currentStatus": "Aktualny status",
     "confirmAccept": "Czy na pewno chcesz zaakceptować opiekę?",
-    "confirmReject": "Czy na pewno chcesz odrzucić opiekę?"
+    "confirmReject": "Czy na pewno chcesz odrzucić opiekę?",
+    "beginOfCare": "Potwierdź rozpoczęcie opieki",
+    "confirmBeginOfCare": "Czy na pewno chcesz potwierdzić rozpoczęcie opieki?"
   },
 
   "careReservation": {
@@ -286,8 +288,10 @@
     "waitingForYourResponse": "Oczekuje na twoją akcję",
     "cancelled": "Anulowana",
     "waitingToTakePlace": "Oczekuje na odbycie",
+    "waitingForCaretakerToConfirm": "Oczekuje na potwierdzenie rozpoczęcia opieki przez opiekuna",
     "isTakingPlace": "W trakcie odbywania",
-    "done": "Zakończona"
+    "done": "Zakończona",
+    "outdated": "Przeterminowana, opiekun nie potwierdził rozpoczęcia opieki na czas"
   },
 
   "petDescription": "Opis zwierzęcia",

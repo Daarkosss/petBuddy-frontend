@@ -598,6 +598,17 @@ class API {
     }
   }
 
+  async confirmBeginOfCare(careId: number): Promise<CareDTO | undefined> {
+    if (store.user.profile?.selected_profile === "CARETAKER") {
+      return this.authorizedFetch<CareDTO>(
+        "POST",
+        `api/care/${careId}/complete`, // Endpoint suffix will be adjusted when backend is ready
+        undefined,
+        { "Accept-Role": store.user.profile?.selected_profile }
+      );
+    }
+  }
+
   async getNotifications(): Promise<NotificationDTO | undefined> {
     if (store.user.profile?.selected_profile) {
       const queryParams = new URLSearchParams({
@@ -611,7 +622,10 @@ class API {
         "GET",
         `api/notifications?${queryParams}`,
         undefined,
-        { "Accept-Role": store.user.profile?.selected_profile }
+        { 
+          "Accept-Role": store.user.profile?.selected_profile,
+          "Accept-Timezone": Intl.DateTimeFormat().resolvedOptions().timeZone
+        }
       );
     }
   }
@@ -622,7 +636,10 @@ class API {
         "PATCH",
         `api/notifications/${notificationId}`,
         undefined,
-        { "Accept-Role": store.user.profile?.selected_profile }
+        { 
+          "Accept-Role": store.user.profile?.selected_profile,
+          "Accept-Timezone": Intl.DateTimeFormat().resolvedOptions().timeZone
+        }
       );
     }
   }
@@ -633,7 +650,10 @@ class API {
         "POST",
         "api/notifications/all-read",
         undefined,
-        { "Accept-Role": store.user.profile?.selected_profile }
+        { 
+          "Accept-Role": store.user.profile?.selected_profile,
+          "Accept-Timezone": Intl.DateTimeFormat().resolvedOptions().timeZone
+        }
       );
     }
   }

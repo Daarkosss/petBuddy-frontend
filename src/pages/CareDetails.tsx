@@ -10,6 +10,7 @@ import UserInfoPill from "../components/UserInfoPill";
 import StatisticCard from "../components/StatisticCard";
 import NumericFormItem from "../components/NumericFormItem";
 import { formatPrice } from "../models/Care";
+import CountdownToEndOfDay from "../components/StatisticCountdown";
 
 const CareDetails = () => {
   const { t } = useTranslation();
@@ -59,11 +60,7 @@ const CareDetails = () => {
     try {
       const data = await api.acceptCare(careIdNumber!);
       if (data) {
-        setCare(new Care({
-          ...data,
-          caretaker: care!.caretaker,
-          client: care!.client
-        }));
+        setCare(new Care(data));
       }
       toast.success(t("success.acceptCare"));
     } catch (error) {
@@ -78,11 +75,7 @@ const CareDetails = () => {
     try {
       const data = await api.rejectCare(careIdNumber!);
       if (data) {
-        setCare(new Care({
-          ...data,
-          caretaker: care!.caretaker,
-          client: care!.client
-        }));
+        setCare(new Care(data));
       }
       toast.success(t("success.rejectCare"));
     } catch (error) {
@@ -99,11 +92,7 @@ const CareDetails = () => {
       const newPrice = form.getFieldValue("newPrice");
       const data = await api.updateCarePrice(careIdNumber!, newPrice);
       if (data) {
-        setCare(new Care({
-          ...data,
-          caretaker: care!.caretaker,
-          client: care!.client
-        }));
+        setCare(new Care(data));
       }
       setIsModalOpen(false);
       toast.success(t("success.updatePrice"));
@@ -113,6 +102,20 @@ const CareDetails = () => {
       setIsLoading(false);
     }
   };
+
+  const confirmBeginOfCare = async () => {
+    setIsLoading(true);
+    try {
+      const data = await api.confirmBeginOfCare(careIdNumber!);
+      if (data) {
+        setCare(new Care(data));
+      }
+    } catch (error) {
+      toast.error(t("error.beginCare"));
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   const renderTimeline = () => (
     <Timeline 
@@ -210,6 +213,22 @@ const CareDetails = () => {
               >
                 <Button type="primary" danger loading={isLoading}>
                   {t("care.reject")}
+                </Button>
+              </Popconfirm>
+            </div>
+          }
+          {care.isAbleToConfirmBeginOfCare
+            && <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "30px"}}>
+              <CountdownToEndOfDay />
+              <Popconfirm
+                title={t("care.beginOfCare")}
+                description={t("care.confirmBeginOfCare")}
+                onConfirm={confirmBeginOfCare}
+                okText={t("yes")}
+                cancelText={t("no")}
+              >
+                <Button type="primary" loading={isLoading}>
+                  {t("care.beginOfCare")}
                 </Button>
               </Popconfirm>
             </div>

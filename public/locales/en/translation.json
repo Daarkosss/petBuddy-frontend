@@ -254,7 +254,9 @@
     "confirmNewPrice": "Confirm new price",
     "currentStatus": "Current status",
     "confirmAccept": "Are you sure you want to accept care?",
-    "confirmReject": "Are you sure you want to reject care?"
+    "confirmReject": "Are you sure you want to reject care?",
+    "beginOfCare": "Confirm begin of care",
+    "confirmBeginOfCare": "Are you sure you want to confirm begin of care?"
   },
 
   "careReservation": {
@@ -278,8 +280,10 @@
     "waitingForYourResponse": "Waiting for your response",
     "cancelled": "Cancelled",
     "waitingToTakePlace": "Waiting to take place",
+    "waitingForCaretakerToConfirm": "Waiting for caretaker to confirm the start of the care",
     "isTakingPlace": "Is taking place",
-    "done": "Done"
+    "done": "Done",
+    "outdated": "Outdated, caretaker did not confirm the start of the care in time"
   },
 
   "petDescription": "Pet description",

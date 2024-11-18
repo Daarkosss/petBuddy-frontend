@@ -14,6 +14,10 @@ export const formatPrice = (price: number) => {
   return `${(price).toFixed(2).replace(".", ",")} zł`;
 }
 
+export const getTodayDate = () => {
+  return new Date().toISOString().split("T")[0];
+}
+
 export class Care {
   id: number;
   submittedAt: string;
@@ -56,6 +60,12 @@ export class Care {
     return days;
   }
 
+  get isAbleToConfirmBeginOfCare() {
+    return store.user.profile?.selected_profile === "CARETAKER" 
+      && this.currentUserStatus === "READY_TO_PROCEED" 
+      && this.careStart === getTodayDate()
+  }
+
   get currentUserStatus() {
     if (store.user.profile?.selected_profile === "CARETAKER") {
       return this.caretakerStatus;
@@ -82,7 +92,7 @@ export class Care {
         } else {
           return i18next.t("careStatus.accepted");
         }
-      case "AWAITING_PAYMENT":
+      case "READY_TO_PROCEED":
         return i18next.t("careStatus.waitingToTakePlace");
       case "DONE":
         return i18next.t("careStatus.done");
@@ -103,7 +113,7 @@ export class Care {
         } else {
           return "green";
         }
-      case "AWAITING_PAYMENT":
+      case "READY_TO_PROCEED":
         return "blue";
       case "DONE":
         return "gray";
@@ -135,13 +145,7 @@ export class Care {
         color: "red",
         children: i18next.t("careStatus.cancelled")
       });
-    }
-    
-    if (this.currentUserStatus === "OUTDATED") {
-      items.push({
-        color: "gray",
-        children: i18next.t("careStatus.outdated")
-      });
+      return items;
     }
 
     // Check if care is pending, so need someone's action
@@ -150,44 +154,59 @@ export class Care {
         color: "orange",
         children: i18next.t("careStatus.waitingForYourResponse")
       });
+      return items;
     } else if (this.otherUserStatus === "PENDING") {
       items.push({
         color: "orange",
         children: i18next.t("careStatus.waitingForOtherResponse")
       });
+      return items;
     }
 
-    // Temporary status (will be removed), check if care has awaiting payment
-    if (this.currentUserStatus === "AWAITING_PAYMENT") {
+    items.push({
+      color: "green",
+      children: i18next.t("careStatus.accepted")
+    });
+
+    // Check if care is ready to proceed
+    if (this.currentUserStatus === "READY_TO_PROCEED") {
+      if (this.careStart === getTodayDate()) {
+        items.push({
+          color: "orange",
+          children: i18next.t("careStatus.waitingForCaretakerToConfirm")
+        });
+      } else {
+        items.push({
+          color: "blue",
+          children: i18next.t("careStatus.waitingToTakePlace")
+        });
+      }
+      return items;
+    }
+
+    if (this.currentUserStatus === "OUTDATED") {
       items.push({
-        color: "green",
-        children: i18next.t("careStatus.accepted")
+        color: "gray",
+        children: i18next.t("careStatus.outdated")
       });
-      items.push({
-        color: "blue",
-        children: i18next.t("careStatus.waitingToTakePlace")
-      });
+      return items;
     }
 
     // Check if care is done
-    if (this.currentUserStatus === "DONE") {
-      items.push({
-        color: "green",
-        children: i18next.t("careStatus.done")
-      });
-    } 
-
-    // If both accepted, check if care is taking place
-    if (this.currentUserStatus === "ACCEPTED" && this.otherUserStatus === "ACCEPTED") {
-      if (this.careStart > new Date().toISOString()) {
-        items.push({
-          color: "blue",
-          children:i18next.t("careStatus.waitingToTakePlace")
-        });
-      } else if (this.careEnd < new Date().toISOString()) {
+    if (this.currentUserStatus === "COMPLETED") {
+      if (this.careEnd > getTodayDate()) { // If care is taking place
         items.push({
           color: "blue",
           children: i18next.t("careStatus.isTakingPlace")
+        });
+      } else { // If care is done
+        items.push({
+          color: "green",
+          children: i18next.t("careStatus.isTakingPlace")
+        });
+        items.push({
+          color: "green",
+          children: i18next.t("careStatus.done")
         });
       }
     }
