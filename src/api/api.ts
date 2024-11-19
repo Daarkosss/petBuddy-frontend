@@ -602,7 +602,7 @@ class API {
     if (store.user.profile?.selected_profile === "CARETAKER") {
       return this.authorizedFetch<CareDTO>(
         "POST",
-        `api/care/${careId}/complete`, // Endpoint suffix will be adjusted when backend is ready
+        `api/care/${careId}/confirm`,
         undefined,
         { "Accept-Role": store.user.profile?.selected_profile }
       );

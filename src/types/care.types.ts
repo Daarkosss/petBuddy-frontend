@@ -19,7 +19,15 @@ export type CareReservation = {
   selectedOptions: AnimalAttributes
 }
 
-export type CareStatus = "PENDING" | "ACCEPTED" | "CANCELLED" | "READY_TO_PROCEED" | "COMPLETED" | "OUTDATED" | "DONE";
+export type CareStatus = "PENDING" | "ACCEPTED" | "CANCELLED" | "READY_TO_PROCEED" | "CONFIRMED" | "OUTDATED" | "DONE";
+
+export type CareHistoricalStatus = {
+  createdAt: string;
+  caretakerStatus: CareStatus;
+  clientStatus: CareStatus;
+}
+
+export type StatusesHistory = CareHistoricalStatus[]
 
 export type CareDTO = {
   id: number;
@@ -34,6 +42,7 @@ export type CareDTO = {
   selectedOptions: AnimalAttributes;
   caretaker: AccountDataDTO;
   client: AccountDataDTO;
+  statusesHistory: StatusesHistory
 }
 
 export type GetCaresDTO = {

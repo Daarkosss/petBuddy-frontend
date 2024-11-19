@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Button, Spin, Timeline, Card, Descriptions, Modal, Form, Space, Popconfirm } from "antd";
+import { Button, Spin, Timeline, Card, Descriptions, Modal, Form, Space, Popconfirm, Alert } from "antd";
 import { api } from "../api/api";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
@@ -10,7 +10,7 @@ import UserInfoPill from "../components/UserInfoPill";
 import StatisticCard from "../components/StatisticCard";
 import NumericFormItem from "../components/NumericFormItem";
 import { formatPrice } from "../models/Care";
-import CountdownToEndOfDay from "../components/StatisticCountdown";
+import StatisticCountdown from "../components/StatisticCountdown";
 
 const CareDetails = () => {
   const { t } = useTranslation();
@@ -217,9 +217,9 @@ const CareDetails = () => {
               </Popconfirm>
             </div>
           }
-          {care.isAbleToConfirmBeginOfCare
-            && <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "30px"}}>
-              <CountdownToEndOfDay />
+          {care.isAbleToConfirmBeginOfCare && 
+            <div className="actions-with-countdown">
+              <StatisticCountdown />
               <Popconfirm
                 title={t("care.beginOfCare")}
                 description={t("care.confirmBeginOfCare")}
@@ -232,6 +232,17 @@ const CareDetails = () => {
                 </Button>
               </Popconfirm>
             </div>
+          }
+          {care.currentUserStatus === "READY_TO_PROCEED" && care.isStartTomorrow &&
+            <Alert
+              message={t("care.careStartsTomorrow")}
+              description={store.user.profile?.selected_profile === "CARETAKER" 
+                ? t("care.rememberToConfirmBeginOfCare")
+                : t("care.caretakerShouldConfirmBeginOfCare")
+              }
+              type="info"
+              showIcon
+            />
           }
         </div>
       </Card>

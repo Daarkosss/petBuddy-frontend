@@ -1,22 +1,26 @@
 import { Statistic } from "antd";
+import { useTranslation } from "react-i18next";
 
 const { Countdown } = Statistic;
 
-const CountdownToEndOfDay = () => {
-  // Oblicz czas do końca dzisiejszego dnia
+const StatisticCountdown = () => {
+  const { t } = useTranslation();
+
+  // Calculate the time remaining until the end of the day
   const now = new Date();
   const endOfDay = new Date();
-  endOfDay.setHours(23, 59, 59, 999); // Ustaw koniec dnia na 23:59:59.999
+  endOfDay.setHours(23, 59, 59, 999); // Set the time to the end of the day
 
-  const timeRemaining = endOfDay.getTime() - now.getTime(); // Różnica w milisekundach
+  const timeRemaining = endOfDay.getTime() - now.getTime(); // Calculate the time remaining
 
   return (
     <Countdown
-      title="Pozostały czas"
-      value={Date.now() + timeRemaining} // Ustaw wartość końcową
-      format="HH:mm:ss" // Formatowanie w godzinach, minutach i sekundach
+      title={t("care.timeRemaining")}
+      value={Date.now() + timeRemaining}
+      valueStyle={{ fontSize: "18px" }}
+      format="HH:mm:ss"
     />
   );
 };
 
-export default CountdownToEndOfDay;
+export default StatisticCountdown;

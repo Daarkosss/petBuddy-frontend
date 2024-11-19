@@ -256,7 +256,11 @@
     "confirmAccept": "Are you sure you want to accept care?",
     "confirmReject": "Are you sure you want to reject care?",
     "beginOfCare": "Confirm begin of care",
-    "confirmBeginOfCare": "Are you sure you want to confirm begin of care?"
+    "confirmBeginOfCare": "Are you sure you want to confirm begin of care?",
+    "timeRemaining": "Time remaining",
+    "careStartsTomorrow": "Care starts tomorrow.",
+    "rememberToConfirmBeginOfCare": "Don't forget to confirm begin of care. You can to it only tomorrow.",
+    "caretakerShouldConfirmBeginOfCare": "Caretaker should confirm begin of care tomorrow."
   },
 
   "careReservation": {
@@ -273,8 +277,8 @@
   },
 
   "careStatus": {
-    "reported": "Reported by client",
-    "accepted": "Accepted by caretaker",
+    "reported": "Client reported care",
+    "acceptedByCaretaker": "Accepted by caretaker",
     "pending": "Waiting for response",
     "waitingForOtherResponse": "Waiting for other response",
     "waitingForYourResponse": "Waiting for your response",
@@ -283,7 +287,11 @@
     "waitingForCaretakerToConfirm": "Waiting for caretaker to confirm the start of the care",
     "isTakingPlace": "Is taking place",
     "done": "Done",
-    "outdated": "Outdated, caretaker did not confirm the start of the care in time"
+    "outdated": "Outdated, caretaker did not confirm the start of the care in time",
+    "caretakerProposedNewPrice": "Caretaker proposed new price",
+    "clientAcceptedNewPrice": "Client accepted the price",
+    "waitingForCaretakerResponse": "Waiting for caretaker response",
+    "waitingForClientResponse": "Waiting for client response"
   },
 
   "petDescription": "Pet description",

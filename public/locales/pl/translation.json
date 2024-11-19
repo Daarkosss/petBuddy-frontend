@@ -264,7 +264,11 @@
     "confirmAccept": "Czy na pewno chcesz zaakceptować opiekę?",
     "confirmReject": "Czy na pewno chcesz odrzucić opiekę?",
     "beginOfCare": "Potwierdź rozpoczęcie opieki",
-    "confirmBeginOfCare": "Czy na pewno chcesz potwierdzić rozpoczęcie opieki?"
+    "confirmBeginOfCare": "Czy na pewno chcesz potwierdzić rozpoczęcie opieki?",
+    "timeRemaining": "Pozostały czas",
+    "careStartsTomorrow": "Opieka rozpoczyna się już jutro.",
+    "rememberToConfirmBeginOfCare": "Nie zapomnij potwierdzić rozpoczęcia opieki. Możesz to zrobić tylko jutro.",
+    "caretakerShouldConfirmBeginOfCare": "Opiekun powinien jutro potwierdzić rozpoczęcie opieki."
   },
 
   "careReservation": {
@@ -281,8 +285,8 @@
   },
 
   "careStatus": {
-    "reported": "Zgłoszona przez klienta",
-    "accepted": "Zaakceptowana przez obie strony",
+    "reported": "Klient zgłosił rezerwację",
+    "acceptedByCaretaker": "Zaakceptowana przez opiekuna",
     "pending": "Oczekuje na odpowiedź",
     "waitingForOtherResponse": "Oczekuje na odpowiedź drugiej strony",
     "waitingForYourResponse": "Oczekuje na twoją akcję",
@@ -291,7 +295,11 @@
     "waitingForCaretakerToConfirm": "Oczekuje na potwierdzenie rozpoczęcia opieki przez opiekuna",
     "isTakingPlace": "W trakcie odbywania",
     "done": "Zakończona",
-    "outdated": "Przeterminowana, opiekun nie potwierdził rozpoczęcia opieki na czas"
+    "outdated": "Przeterminowana, opiekun nie potwierdził rozpoczęcia opieki na czas",
+    "caretakerProposedNewPrice": "Opiekun zaproponował nową cenę",
+    "clientAcceptedNewPrice": "Klient zaakceptował cenę",
+    "waitingForCaretakerResponse": "Oczekuje na odpowiedź opiekuna",
+    "waitingForClientResponse": "Oczekuje na odpowiedź klienta"
   },
 
   "petDescription": "Opis zwierzęcia",

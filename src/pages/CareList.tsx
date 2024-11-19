@@ -76,7 +76,7 @@ const CareList = () => {
             onChange: handlePageChange,
           }}
           renderItem={(care) => (
-            <Badge.Ribbon text={care.currentStatusText} color={care.careStatusColor}>
+            <Badge.Ribbon text={care.currentStatusText} color={care.currentStatusColor}>
               <List.Item 
                 key={care.id}
                 className="item"
