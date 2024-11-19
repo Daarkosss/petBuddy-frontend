@@ -30,7 +30,6 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
 }) => {
   const [wsClient, setWsClient] = useState<Client | null>(null);
   const [message, setMessage] = useState<string>("");
-  const [sessionId, setSessionId] = useState<string | undefined>();
   const [inputMessage, setInputMessage] = useState<string>("");
   const [doesChatRoomExist, setDoesChatRoomExist] = useState<boolean | null>(
     null
@@ -49,12 +48,6 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
   }, []);
 
   useEffect(() => {
-    if (wsClient != null) {
-      subscribeToSession();
-    }
-  }, [wsClient]);
-
-  useEffect(() => {
     if (
       wsClient != null &&
       store.user.profile != null &&
@@ -66,10 +59,10 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
 
   useEffect(() => {
     console.log(`chatId: ${chatId}`);
-    if (sessionId != null && chatId != null) {
+    if (chatId != null) {
       subscribeToChatRoom();
     }
-  }, [sessionId, chatId]);
+  }, [chatId]);
 
   useEffect(() => {
     if (doesChatRoomExist == true && chatId != null) {
@@ -144,24 +137,10 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
     client.connect({}, onConnect);
   };
 
-  const subscribeToSession = () => {
-    if (wsClient === null) {
-      return;
-    }
-    console.log("subscribing to a session");
-    wsClient.subscribe(
-      `/topic/session/${store.user.profile?.email}`,
-      (message) => {
-        const parsedMessage = JSON.parse(message.body);
-        console.log("SESSION ID", parsedMessage.sessionId);
-        setSessionId(parsedMessage.sessionId);
-      }
-    );
-  };
 
   const subscribeToChatRoom = () => {
     // console.log(`subscribe to chat room parameters: ${sessionId}, ${wsClient}`);
-    if (sessionId === undefined || wsClient === null) {
+    if (wsClient === null) {
       console.log("not subscribing to chat room");
       return;
     }
@@ -174,7 +153,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
       "Accept-Timezone": "Europe/Warsaw",
     };
     wsClient.subscribe(
-      `/topic/messages/${chatId}/${sessionId}`,
+      `/user/topic/messages/${chatId}`,
       (message) => {
         console.log(JSON.parse(message.body));
         const data: WebsocketResponse = JSON.parse(message.body);
@@ -199,7 +178,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
         store.user.profile!.selected_profile?.toUpperCase() as string,
       "Accept-Timezone": "Asia/Tokyo",
     };
-    if (wsClient && message && sessionId) {
+    if (wsClient && message) {
       const chatMessage = { content: message };
       console.log(`Sending... ${chatId}, ${chatMessage}`);
       wsClient.publish({
