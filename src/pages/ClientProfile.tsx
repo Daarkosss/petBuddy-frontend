@@ -58,9 +58,7 @@ function ClientProfile() {
     if (store.user.profile!.selected_profile === "CLIENT") {
       getClientDetails();
     } else if (store.user.profile!.selected_profile === "CARETAKER") {
-      navigate("/profile-caretaker", {
-        state: { userEmail: store.user.profile?.email },
-      });
+      navigate(`/profile-caretaker/${store.user.profile?.email}`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -82,23 +80,25 @@ function ClientProfile() {
                   />
                 )}
               </div>
-              <ImgCrop rotationSlider beforeCrop={hasFilePhotoType}>
-                <Upload
-                  customRequest={handleCustomPhotoRequest}
-                  showUploadList={false}
-                  name="file"
-                  onPreview={handleFilePreview}
-                  accept="image/*"
-                >
-                  <Button
-                    icon={<PictureOutlined />}
-                    type="primary"
-                    className="profile-action-button"
+              <div className="my-actions">
+                <ImgCrop rotationSlider beforeCrop={hasFilePhotoType}>
+                  <Upload
+                    customRequest={handleCustomPhotoRequest}
+                    showUploadList={false}
+                    name="file"
+                    onPreview={handleFilePreview}
+                    accept="image/*"
                   >
-                    {t("profilePage.changeImage")}
-                  </Button>
-                </Upload>
-              </ImgCrop>
+                    <Button
+                      icon={<PictureOutlined />}
+                      type="primary"
+                      className="profile-action-button"
+                    >
+                      {t("profilePage.changeImage")}
+                    </Button>
+                  </Upload>
+                </ImgCrop>
+              </div>
             </div>
 
             <div className="profile-offers-smaller-screen">
@@ -128,7 +128,7 @@ function ClientProfile() {
                         onClick={() => {
                           store.user.setSelectedProfile("CARETAKER");
                           store.user.saveProfileToStorage(store.user.profile);
-                          navigate("/profile-caretaker");
+                          navigate(`/profile-caretaker/${store.user.profile?.email}`);
                         }}
                       >
                         {t("profilePage.changeToCaretakerProfile")}
@@ -177,7 +177,7 @@ function ClientProfile() {
                       onClick={() => {
                         store.user.setSelectedProfile("CARETAKER");
                         store.user.saveProfileToStorage(store.user.profile);
-                        navigate("/profile-caretaker");
+                        navigate(`/profile-caretaker/${store.user.profile?.email}`);
                       }}
                     >
                       {t("profilePage.changeToCaretakerProfile")}

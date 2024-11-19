@@ -10,6 +10,7 @@ import {
   TableColumnsType,
 } from "antd";
 import {
+  AvailabilityValues,
   OfferConfigurationWithId,
   OfferConfigurationWithOptionalId,
   OfferWithId,
@@ -20,11 +21,13 @@ import _ from "lodash";
 import { api } from "../../api/api";
 import store from "../../store/RootStore";
 import { ColumnType } from "antd/es/table";
+import { useNavigate, useParams } from "react-router-dom";
 
 type ConfigurationsProps = {
   offerId: number;
   animalType: string;
   configurations: OfferConfigurationWithOptionalId[];
+  availabilities: AvailabilityValues;
   handleUpdateOffer: (newOffer: OfferWithId) => void;
   handleUpdateConfiguration: (newOffer: OfferConfigurationWithId) => void;
   canBeEdited: boolean;
@@ -34,16 +37,17 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
   offerId,
   animalType,
   configurations,
+  availabilities,
   handleUpdateOffer,
   handleUpdateConfiguration,
   canBeEdited = true,
 }) => {
   const { t } = useTranslation();
-  const [editingKey, setEditingKey] = useState<number | null | undefined>(
-    undefined
-  );
+  const [editingKey, setEditingKey] = useState<number | null | undefined>(undefined);
   const [form] = Form.useForm();
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+  const { caretakerEmail } = useParams();
 
   const [newConfiguration, setNewConfiguration] =
     useState<OfferConfigurationWithOptionalId>({
@@ -264,10 +268,11 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
     },
     ...selectedOptionsColumns,
     {
-      title: t("manage"),
+      title: t("actions"),
       onCell: () => ({
         style: { minWidth: 150, maxWidth: 200 },
       }),
+      hidden: !canBeEdited && store.user.profile?.selected_profile !== "CLIENT",
       render: (record: OfferConfigurationWithOptionalId) => {
         const editable = isEditing(record);
         return canBeEdited ? (
@@ -317,7 +322,17 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
         ) : (
           <Button
             type="primary"
-            onClick={record.id ? () => {} : () => {}}
+            onClick={() => navigate(
+              `/care/reservation/${caretakerEmail}`,
+              { 
+                state: { 
+                  animalType,
+                  dailyPrice: record.dailyPrice,
+                  animalAttributes: record.selectedOptions,
+                  availabilities: availabilities
+                } 
+              }
+            )}
             loading={isLoading}
           >
             {t("sendRequest")}

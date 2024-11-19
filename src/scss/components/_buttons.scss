@@ -8,6 +8,11 @@
   &:focus {
     background: v.$blue-light !important;
   }
+
+  &.centered {
+    width: 100%;
+    grid-column: span 1;
+  }
 }
 
 .search-button {
@@ -35,6 +40,7 @@
 .add-button {
   color: v.$white;
   background: v.$orange-medium;
+  width: max-content;
 
   &:hover,
   &:focus {

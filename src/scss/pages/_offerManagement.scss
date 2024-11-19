@@ -4,13 +4,12 @@
 .offer-management-page {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 15px;
 
   .offer-management-header {
-    margin-top: 20px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 5px;
     align-items: center;
     color: v.$white;
 
@@ -19,6 +18,16 @@
         flex-direction: column;
       }
     }
+  }
+
+  .offers-container {
+    overflow-x: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    padding-inline: 10px;
+    height: 100%;
+    gap: 20px;
   }
 }
 
