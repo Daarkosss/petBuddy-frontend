@@ -1,44 +1,27 @@
+import { BorderOutlined } from "@ant-design/icons";
 import React from "react";
 import "../scss/components/_chatTopBar.scss";
-import { Avatar } from "antd";
-import { CloseOutlined, MinusOutlined, UserOutlined } from "@ant-design/icons";
 
-interface ChatTopBarProps {
-  profilePicture: string | null;
+interface MinimizedChatProps {
   name: string;
   surname: string;
   profile: string;
-  onClose: Function;
-  onMinimize: Function;
 }
 
-const ChatTopBar: React.FC<ChatTopBarProps> = ({
-  profilePicture,
+const ChatMinimized: React.FC<MinimizedChatProps> = ({
   name,
   surname,
   profile,
-  onClose,
-  onMinimize,
 }) => {
   return (
     <div className="chat-top-bar-container">
       <div className="options-top-big-container">
         <div className="options-top-small-container">
-          <MinusOutlined onClick={() => onMinimize()} />
-          <CloseOutlined onClick={() => onClose()} />
+          <BorderOutlined />
         </div>
       </div>
       <div className="comment-container-top">
         <div className="comment-container-user-rating">
-          {profilePicture !== null ? (
-            <img src={profilePicture} className="profile-image" />
-          ) : (
-            <Avatar
-              size={50}
-              className="profile-image"
-              icon={<UserOutlined />}
-            />
-          )}
           <div className="comment-container-user-nick-container">
             <h5 className="comment-container-user-nick">
               {name} {surname}
@@ -51,4 +34,4 @@ const ChatTopBar: React.FC<ChatTopBarProps> = ({
   );
 };
 
-export default ChatTopBar;
+export default ChatMinimized;

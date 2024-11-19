@@ -2,6 +2,26 @@
 
 .chat-top-bar-container {
   background-color: v.$blue-dark;
+  color: v.$white;
+  display: flex;
+  flex-direction: column;
+
+  .options-top-big-container {
+    border-radius: 15px 15px 0px 0px;
+    background-color: v.$blue-very-dark;
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    width: 100%;
+    .options-top-small-container {
+      margin: 10px;
+      width: 40px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      color: v.$blue-medium;
+    }
+  }
 
   .comment-container-top {
     display: flex;
@@ -17,6 +37,13 @@
       justify-content: space-around;
       align-items: center;
       gap: 10px;
+
+      .profile-image {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%; /* przycinanie do kształtu koła */
+        object-fit: cover;
+      }
 
       .comment-container-user-nick-container {
         display: flex;

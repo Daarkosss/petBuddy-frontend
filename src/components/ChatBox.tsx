@@ -9,12 +9,25 @@ import store from "../store/RootStore";
 import { api } from "../api/api";
 import { ChatMessage, ChatRoom, WebsocketResponse } from "../types/chat.types";
 import { json } from "react-router-dom";
+import ChatMinimized from "./ChatMinimized";
 
 interface ChatBoxProperties {
   recipientEmail: string;
+  profilePicture: string | null;
+  onClose: Function;
+  name: string;
+  surname: string;
+  profile: string;
 }
 
-const ChatBox: React.FC<ChatBoxProperties> = ({ recipientEmail }) => {
+const ChatBox: React.FC<ChatBoxProperties> = ({
+  recipientEmail,
+  profilePicture,
+  onClose,
+  name,
+  surname,
+  profile,
+}) => {
   const [wsClient, setWsClient] = useState<Client | null>(null);
   const [message, setMessage] = useState<string>("");
   const [sessionId, setSessionId] = useState<string | undefined>();
@@ -26,6 +39,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({ recipientEmail }) => {
   const [chatId, setChatId] = useState<number | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
 
+  const [minimized, setMinimized] = useState<boolean>(false);
   //TODO: is it ok to create it in ChatBox?
   useEffect(() => {
     initWebsocketConnection();
@@ -268,17 +282,32 @@ const ChatBox: React.FC<ChatBoxProperties> = ({ recipientEmail }) => {
     // console.log(`new messages: ${JSON.stringify(messages)}`);
   };
 
-  return (
-    <div className="chat-box-main-container">
-      {doesChatRoomExist != null && (
-        <div className="chat-box-inner-container">
-          <ChatTopBar />
-          <ChatMessages messages={messages} />
-          <ChatBottom onSend={onSend} />
-        </div>
-      )}
+  return minimized === false ? (
+    <div className="chat-box-main-container-wrap">
+      <div className="chat-box-main-container">
+        {doesChatRoomExist != null && (
+          <div className="chat-box-inner-container">
+            <ChatTopBar
+              onClose={() => onClose()}
+              profilePicture={profilePicture}
+              name={name}
+              surname={surname}
+              profile={profile}
+              onMinimize={() => setMinimized(true)}
+            />
+            <ChatMessages messages={messages} />
+            <ChatBottom onSend={onSend} />
+          </div>
+        )}
+      </div>
     </div>
-  );
+  ) : (
+    <div className="chat-box-main-container-wrap">
+      <div className="chat-box-main-container">
+        <ChatMinimized name={name} surname={surname} profile={profile} />
+      </div>
+    </div>
+  ); //add on click and maximize then, also add
 };
 
 export default ChatBox;

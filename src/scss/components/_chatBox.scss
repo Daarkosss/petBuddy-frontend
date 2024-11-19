@@ -1,10 +1,23 @@
-.chat-box-main-container {
-  .chat-box-inner-container {
-    height: 300px;
-    width: 250px;
-    background-color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+@use "../helpers/variables" as v;
+
+.chat-box-main-container-wrap {
+  padding: 3px;
+  position: fixed;
+  bottom: 0px;
+  right: 20px;
+  z-index: 1200;
+  background: linear-gradient(to bottom, v.$blue-dark, v.$blue-very-dark);
+  border-radius: 15px 15px 0px 0px;
+  overflow: hidden;
+  .chat-box-main-container {
+    .chat-box-inner-container {
+      border-radius: 15px 15px 0px 0px;
+      height: 400px;
+      width: 250px;
+      background-color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
   }
 }
