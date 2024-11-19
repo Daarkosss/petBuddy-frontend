@@ -93,7 +93,17 @@ export class Care {
           return i18next.t("careStatus.accepted");
         }
       case "READY_TO_PROCEED":
-        return i18next.t("careStatus.waitingToTakePlace");
+        if (this.careStart === getTodayDate()) {
+          return i18next.t("careStatus.waitingForCaretakerToConfirm")
+        } else {
+          return i18next.t("careStatus.waitingToTakePlace");
+        }
+      case "COMPLETED":
+        if (this.careEnd > getTodayDate()) {
+          return i18next.t("careStatus.isTakingPlace");
+        } else {
+          return i18next.t("careStatus.done");
+        }
       case "DONE":
         return i18next.t("careStatus.done");
       case "CANCELLED":
@@ -115,8 +125,8 @@ export class Care {
         }
       case "READY_TO_PROCEED":
         return "blue";
-      case "DONE":
-        return "gray";
+      case "COMPLETED":
+        return "green";
       case "CANCELLED":
         return "red";
       case "OUTDATED":
