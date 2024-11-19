@@ -134,6 +134,85 @@ class API {
     }
   }
 
+  async getChatRoomWithGivenUser(
+    participantEmail: string,
+    acceptTimezone: string | null
+  ): Promise<ChatRoom> {
+    try {
+      const headers: HeadersInit = {
+        "Accept-Role": store.user.profile!.selected_profile!.toUpperCase(),
+      };
+      if (acceptTimezone !== null) {
+        headers["Accept-Timezone"] = acceptTimezone;
+      }
+      const response = await this.authorizedFetch<ChatRoom>(
+        "GET",
+        `api/chat/${participantEmail}`,
+        null,
+        headers
+      );
+      return response;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new Error(`Failed to find chat: ${error.message}`);
+      }
+      throw new Error(
+        "An unknown error occurred while fetching caretaker profile"
+      );
+    }
+  }
+
+  async initializeChatRoom(
+    messageReceiverEmail: string,
+    content: string,
+    acceptTimezone: string | null
+  ): Promise<void> {
+    const headers: HeadersInit = {
+      "Accept-Role": store.user.profile!.selected_profile!.toUpperCase(),
+    };
+    if (acceptTimezone !== null) {
+      headers["Accept-Timezone"] = acceptTimezone;
+    }
+    return this.authorizedFetch<void>(
+      "POST",
+      `api/chat/${messageReceiverEmail}`,
+      {
+        content: content,
+      },
+      headers
+    );
+  }
+
+  async getMessagesFromSpecifiedChatRoom(
+    chatId: number,
+    page: string | null,
+    size: string | null,
+    acceptTimezone: string | null
+  ): Promise<ChatMessagesResponse> {
+    try {
+      const headers: HeadersInit = {
+        "Accept-Role": store.user.profile!.selected_profile!.toUpperCase(),
+      };
+      if (acceptTimezone !== null) {
+        headers["Accept-Timezone"] = acceptTimezone;
+      }
+      const response = await this.authorizedFetch<ChatMessagesResponse>(
+        "GET",
+        `api/chat/${chatId}/messages?page=${page}&size=${size}`,
+        null,
+        headers
+      );
+      return response;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new Error(`Failed to find chat: ${error.message}`);
+      }
+      throw new Error(
+        "An unknown error occurred while fetching caretaker profile"
+      );
+    }
+  }
+
   async getCaretakers(
     pagingParams: PagingParams,
     filters: CaretakerSearchFilters
