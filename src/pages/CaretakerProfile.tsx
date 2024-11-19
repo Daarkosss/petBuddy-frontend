@@ -1,13 +1,7 @@
 import React, { useEffect, useState } from "react";
 import store from "../store/RootStore";
 import "../scss/pages/_profile.scss";
-import {
-  Button,
-  Card,
-  Rate,
-  Upload,
-  Avatar,
-} from "antd";
+import { Button, Card, Rate, Upload, Avatar } from "antd";
 import { PictureOutlined, UserOutlined } from "@ant-design/icons";
 import CommentContainer from "../components/CommentContainer";
 import RoundedLine from "../components/RoundedLine";
@@ -18,6 +12,7 @@ import { CaretakerDetails, CaretakerRatingsResponse } from "../types";
 import OfferCard from "../components/Offer/OfferCard";
 import ImgCrop from "antd-img-crop";
 import { handleFilePreview, hasFilePhotoType } from "../functions/imageHandle";
+import ChatBox from "../components/ChatBox";
 
 const CaretakerProfile: React.FC = () => {
   const { t } = useTranslation();
@@ -33,6 +28,8 @@ const CaretakerProfile: React.FC = () => {
   const [ratings, setRatings] = useState<CaretakerRatingsResponse>();
 
   const [profilePicture, setProfilePicture] = useState<string | null>(null);
+
+  const [shouldStartChat, setShouldStartChat] = useState<boolean>(false);
 
   const getCaretakerDetails = (email: string) => {
     api.getCaretakerDetails(email).then((data) => {
@@ -92,21 +89,21 @@ const CaretakerProfile: React.FC = () => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleCustomPhotoRequest = async (options: any) => {
-  const { file, onSuccess, onError } = options;
+    const { file, onSuccess, onError } = options;
 
-  try {
-    const response = await api.uploadProfilePicture(file);
-    if (response.profilePicture !== null) {
-      setProfilePicture(response.profilePicture.url);
+    try {
+      const response = await api.uploadProfilePicture(file);
+      if (response.profilePicture !== null) {
+        setProfilePicture(response.profilePicture.url);
+      }
+      onSuccess?.("ok");
+    } catch (e: unknown) {
+      onError?.(e);
+      if (e instanceof Error) {
+        console.log(`ERROR: ${e.message}`);
+      }
     }
-    onSuccess?.("ok");
-  } catch (e: unknown) {
-    onError?.(e);
-    if (e instanceof Error) {
-      console.log(`ERROR: ${e.message}`);
-    }
-  }
-};
+  };
 
   return (
     <div>
@@ -183,9 +180,26 @@ const CaretakerProfile: React.FC = () => {
                         <Button
                           type="primary"
                           className="profile-action-button"
+                          onClick={() => {
+                            setShouldStartChat(true);
+                          }}
                         >
                           {t("profilePage.openChat")}
                         </Button>
+                        {shouldStartChat && (
+                          <ChatBox
+                            recipientEmail={profileData.accountData.email}
+                            profilePicture={profilePicture}
+                            onClose={() => setShouldStartChat(false)}
+                            name={profileData.accountData.name}
+                            surname={profileData.accountData.surname}
+                            profile={
+                              store.user.profile.selected_profile === "CLIENT"
+                                ? "Caretaker"
+                                : "Client"
+                            }
+                          />
+                        )}
                       </div>
                     )}
                 </div>
@@ -270,7 +284,7 @@ const CaretakerProfile: React.FC = () => {
               <h1>{t("profilePage.ratings")}</h1>
               {/* divider */}
               {isMyProfile === false &&
-                store.user.profile?.selected_profile !== "CARETAKER" && (
+                store.user.profile?.selected_profile === "CLIENT" && (
                   <div className="profile-add-a-comment">
                     <Button type="primary" className="add-button">
                       {t("profilePage.rate")}
