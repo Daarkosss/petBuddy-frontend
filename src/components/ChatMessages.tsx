@@ -10,13 +10,15 @@ interface ChatBoxContent {
 }
 
 const ChatMessages: React.FC<ChatBoxContent> = ({ messages }) => {
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-  const scrollToBottom = () => {
+  const scrollDownThroughChat = () => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
-  useEffect(scrollToBottom, [messages]);
+
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => scrollDownThroughChat(), [messages]);
 
   return (
     <div className="chat-messages-container">
