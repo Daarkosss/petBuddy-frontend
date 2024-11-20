@@ -315,6 +315,7 @@
     "care_update": "Price has beeen updated in one of your cares",
     "care_accepted": "Your care has been accepted",
     "care_rejected": "Your care has been rejected",
+    "confirmation_needed": "Your care is waiting for confirmation of begin",
     "newNotification": "You have a new notification"
   }
 }

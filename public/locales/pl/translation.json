@@ -323,6 +323,7 @@
     "care_update": "Cena została zaktualizowana w jednej z twoich opiek",
     "care_accepted": "Twoja opieka została zaakceptowana",
     "care_rejected": "Twoja opieka została odrzucona",
+    "confirmation_needed": "Twoja opieka oczekuje na potwierdzenie rozpoczęcia",
     "newNotification": "Masz nowe powiadomienie"
   }
 }

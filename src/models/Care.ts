@@ -91,16 +91,11 @@ export class Care {
   }
 
   get currentStatusColor() {
-    switch(this.currentUserStatus) {
-      case "PENDING":
+    switch(`${this.clientStatus}-${this.caretakerStatus}`) {
+      case "PENDING-ACCEPTED":
+      case "ACCEPTED-PENDING":
         return "orange";
-      case "ACCEPTED":
-        if (this.otherUserStatus === "PENDING") {
-          return "orange";
-        } else {
-          return "green";
-        }
-      case "READY_TO_PROCEED": 
+      case "READY_TO_PROCEED-READY_TO_PROCEED": 
         if (this.careStart === getTodayDate()) { // Day of care begin, the caretaker should confirm care
           return "orange";
         } else if (this.careStart > getTodayDate()) { // Waiting for care to begin
@@ -108,15 +103,15 @@ export class Care {
         } else { // Care is outdated, caretaker didn't confirm it in time
           return "gray";
         }
-      case "CONFIRMED":
+      case "CONFIRMED-CONFIRMED":
         if (this.careEnd > getTodayDate()) { // Care is taking place
           return "blue";
         } else { // Care is done
           return "green";
         }
-      case "CANCELLED":
+      case "CANCELLED-CANCELLED":
         return "red";
-      case "OUTDATED":
+      case "OUTDATED-OUTDATED":
         return "gray";
     }
   }
@@ -148,7 +143,11 @@ export class Care {
     }
   }
 
-  getStatusText(clientStatus: CareStatus, caretakerStatus: CareStatus, previous: CareHistoricalStatus | null) {
+  getHistoricalStatusText(
+    clientStatus: CareStatus,
+    caretakerStatus: CareStatus,
+    previous: CareHistoricalStatus | null
+  ) {
     switch(`${clientStatus}-${caretakerStatus}`) {
       case "ACCEPTED-PENDING":
         return i18next.t("careStatus.reported");
@@ -169,7 +168,7 @@ export class Care {
     }
   }
   
-  getStatusColor(status: CareStatus) {
+  getHistoricalStatusColor(status: CareStatus) {
     switch(status) {
       case "PENDING":
       case "ACCEPTED":
@@ -203,9 +202,12 @@ export class Care {
   get timelineItems() {
     const items: TimelineItemProps[] = this.statusesHistory.map((status, index) => {
       return {
-        color: this.getStatusColor(status.clientStatus),
+        color: this.getHistoricalStatusColor(store.user.profile?.selected_profile === "CLIENT"
+           ? status.clientStatus
+           : status.caretakerStatus
+        ),
         label: this.getFormattedDateTime(status.createdAt),
-        children: this.getStatusText(
+        children: this.getHistoricalStatusText(
           status.clientStatus,
           status.caretakerStatus,
           this.statusesHistory[index - 1] || null
