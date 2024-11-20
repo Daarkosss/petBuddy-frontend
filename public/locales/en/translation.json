@@ -110,7 +110,9 @@
     "noCaretakers": "There are no caretakers for selected filters",
     "triggerDesc": "Click to sort descending",
     "triggerAsc": "Click to sort ascending",
-    "cancelSort": "Click to cancel sorting"
+    "cancelSort": "Click to cancel sorting",
+    "list": "Caretaker list",
+    "map": "Caretaker map"
   },
 
   "description": "Description",

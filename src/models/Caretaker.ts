@@ -10,6 +10,8 @@ export class CaretakerBasics {
     street: string;
     streetNumber: string;
     apartmentNumber: string;
+    latitude: number;
+    longitude: number;
   };
   animals: string[];
   numberOfRatings: number;
