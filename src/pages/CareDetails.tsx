@@ -110,8 +110,9 @@ const CareDetails = () => {
       if (data) {
         setCare(new Care(data));
       }
+      toast.success(t("success.confirmBeginOfCare"));
     } catch (error) {
-      toast.error(t("error.beginCare"));
+      toast.error(t("error.confirmBeginOfCare"));
     } finally {
       setIsLoading(false);
     }
