@@ -90,39 +90,7 @@ export class Care {
     }
   }
 
-  get currentStatusText() {
-    switch(this.currentUserStatus) {
-      case "PENDING":
-        return i18next.t("careStatus.waitingForYourResponse");
-      case "ACCEPTED":
-        if (this.otherUserStatus === "PENDING") {
-          return i18next.t("careStatus.waitingForOtherResponse");
-        } else {
-          return i18next.t("careStatus.accepted");
-        }
-      case "READY_TO_PROCEED":
-        if (this.careStart === getTodayDate()) {
-          return i18next.t("careStatus.waitingForCaretakerToConfirm")
-        } else {
-          return i18next.t("careStatus.waitingToTakePlace");
-        }
-      case "CONFIRMED":
-        if (this.careEnd > getTodayDate()) {
-          return i18next.t("careStatus.isTakingPlace");
-        } else {
-          return i18next.t("careStatus.done");
-        }
-      case "DONE":
-        return i18next.t("careStatus.done");
-      case "CANCELLED":
-        return i18next.t("careStatus.cancelled");
-      case "OUTDATED":
-        return i18next.t("careStatus.outdated");
-    }
-  }
-
   get currentStatusColor() {
-    console.log(this.currentUserStatus);
     switch(this.currentUserStatus) {
       case "PENDING":
         return "orange";
@@ -133,15 +101,17 @@ export class Care {
           return "green";
         }
       case "READY_TO_PROCEED": 
-        if (this.careStart === getTodayDate()) { // It is the moment for caretaker to confirm care
+        if (this.careStart === getTodayDate()) { // Day of care begin, the caretaker should confirm care
           return "orange";
-        } else {
+        } else if (this.careStart > getTodayDate()) { // Waiting for care to begin
           return "blue";
+        } else { // Care is outdated, caretaker didn't confirm it in time
+          return "gray";
         }
       case "CONFIRMED":
         if (this.careEnd > getTodayDate()) { // Care is taking place
           return "blue";
-        } else {
+        } else { // Care is done
           return "green";
         }
       case "CANCELLED":
@@ -151,17 +121,19 @@ export class Care {
     }
   }
 
-  getStatusText(clientStatus: CareStatus, caretakerStatus: CareStatus, previous: CareHistoricalStatus | null) {
-    switch(`${clientStatus}-${caretakerStatus}`) {
+  get currentStatusText() {
+    switch(`${this.clientStatus}-${this.caretakerStatus}`) {
       case "ACCEPTED-PENDING":
-        return i18next.t("careStatus.reported");
+        return i18next.t("careStatus.waitingForCaretakerResponse");
       case "PENDING-ACCEPTED":
-        return i18next.t("careStatus.caretakerProposedNewPrice");
+        return i18next.t("careStatus.waitingForClientResponse");
       case "READY_TO_PROCEED-READY_TO_PROCEED":
-        if (previous?.clientStatus === "PENDING" && previous?.caretakerStatus === "ACCEPTED") {
-          return i18next.t("careStatus.clientAcceptedNewPrice");
+        if (this.careStart === getTodayDate()) {
+          return i18next.t("careStatus.waitingForCaretakerToConfirm")
+        } else if (this.careStart > getTodayDate()) {
+          return i18next.t("careStatus.waitingToTakePlace");
         } else {
-          return i18next.t("careStatus.acceptedByCaretaker");
+          return i18next.t("careStatus.outdated")
         }
       case "CONFIRMED-CONFIRMED":
         if (this.careEnd > getTodayDate()) {
@@ -176,97 +148,28 @@ export class Care {
     }
   }
 
-  get formattedSubmittedAt(){
-    const dateTime = new Date(this.submittedAt);
-    return dateTime.toLocaleString();
+  getStatusText(clientStatus: CareStatus, caretakerStatus: CareStatus, previous: CareHistoricalStatus | null) {
+    switch(`${clientStatus}-${caretakerStatus}`) {
+      case "ACCEPTED-PENDING":
+        return i18next.t("careStatus.reported");
+      case "PENDING-ACCEPTED":
+        return i18next.t("careStatus.newPriceProposedByCaretaker");
+      case "READY_TO_PROCEED-READY_TO_PROCEED":
+        if (previous?.clientStatus === "PENDING" && previous?.caretakerStatus === "ACCEPTED") {
+          return i18next.t("careStatus.newPriceAcceptedByClient");
+        } else {
+          return i18next.t("careStatus.acceptedByCaretaker");
+        }
+      case "CONFIRMED-CONFIRMED":
+        return i18next.t("careStatus.startConfirmedByCaretaker");
+      case "CANCELLED-CANCELLED":
+        return i18next.t("careStatus.cancelled");
+      case "OUTDATED-OUTDATED":
+        return i18next.t("careStatus.outdated");
+    }
   }
-
-  get timelineItemsOld() {
-    const items: TimelineItemProps[] = [];
-
-    // Always first item - care was reported
-    items.push({
-      color: "green",
-      children: i18next.t("careStatus.reported"),
-      label: this.formattedSubmittedAt
-    });
   
-    // Check if care is cancelled or outdated
-    if (this.currentUserStatus === "CANCELLED") {
-      items.push({
-        color: "red",
-        children: i18next.t("careStatus.cancelled")
-      });
-      return items;
-    }
-
-    // Check if care is pending, so need someone's action
-    if (this.currentUserStatus === "PENDING") {
-      items.push({
-        color: "orange",
-        children: i18next.t("careStatus.waitingForYourResponse")
-      });
-      return items;
-    } else if (this.otherUserStatus === "PENDING") {
-      items.push({
-        color: "orange",
-        children: i18next.t("careStatus.waitingForOtherResponse")
-      });
-      return items;
-    }
-
-    items.push({
-      color: "green",
-      children: i18next.t("careStatus.accepted")
-    });
-
-    // Check if care is ready to proceed
-    if (this.currentUserStatus === "READY_TO_PROCEED") {
-      if (this.careStart === getTodayDate()) {
-        items.push({
-          color: "orange",
-          children: i18next.t("careStatus.waitingForCaretakerToConfirm")
-        });
-      } else {
-        items.push({
-          color: "blue",
-          children: i18next.t("careStatus.waitingToTakePlace")
-        });
-      }
-      return items;
-    }
-
-    if (this.currentUserStatus === "OUTDATED") {
-      items.push({
-        color: "gray",
-        children: i18next.t("careStatus.outdated")
-      });
-      return items;
-    }
-
-    // Check if care is done
-    if (this.currentUserStatus === "CONFIRMED") {
-      if (this.careEnd > getTodayDate()) { // If care is taking place
-        items.push({
-          color: "blue",
-          children: i18next.t("careStatus.isTakingPlace")
-        });
-      } else { // If care is done
-        items.push({
-          color: "green",
-          children: i18next.t("careStatus.isTakingPlace")
-        });
-        items.push({
-          color: "green",
-          children: i18next.t("careStatus.done")
-        });
-      }
-    }
-  
-    return items;
-  }
-
-  getHistoricalStatusColor(status: CareStatus) {
+  getStatusColor(status: CareStatus) {
     switch(status) {
       case "PENDING":
       case "ACCEPTED":
@@ -280,6 +183,11 @@ export class Care {
     }
   }
 
+  get formattedSubmittedAt(){
+    const dateTime = new Date(this.submittedAt);
+    return dateTime.toLocaleString();
+  }
+
   getFormattedDateTime(value: string) {
     const dateTime = new Date(value);
     return dateTime.toLocaleString(
@@ -288,37 +196,14 @@ export class Care {
     );
   }
 
-  get currentStatus() {
-    const lastStatus = this.statusesHistory[this.statusesHistory.length - 1];
-
-    switch(`${lastStatus.clientStatus}-${lastStatus.caretakerStatus}`) {
-      case "ACCEPTED-PENDING":
-        return i18next.t("careStatus.waitingForCaretakerResponse");
-      case "PENDING-ACCEPTED":
-        return i18next.t("careStatus.waitingForClientResponse");
-      case "READY_TO_PROCEED-READY_TO_PROCEED":
-        if (this.careStart === getTodayDate()) {
-          return i18next.t("careStatus.waitingForCaretakerToConfirm")
-        } else {
-          return i18next.t("careStatus.waitingToTakePlace");
-        }
-      case "CONFIRMED-CONFIRMED":
-        if (this.careEnd > getTodayDate()) {
-          return i18next.t("careStatus.isTakingPlace");
-        } else {
-          return i18next.t("careStatus.done");
-        }
-      case "CANCELLED-CANCELLED":
-        return i18next.t("careStatus.cancelled");
-      case "OUTDATED-OUTDATED":
-        return i18next.t("careStatus.outdated");
-    }
+  get isRejected() {
+    return this.currentUserStatus === "CANCELLED" || this.currentUserStatus === "OUTDATED";
   }
 
   get timelineItems() {
     const items: TimelineItemProps[] = this.statusesHistory.map((status, index) => {
       return {
-        color: this.getHistoricalStatusColor(status.clientStatus),
+        color: this.getStatusColor(status.clientStatus),
         label: this.getFormattedDateTime(status.createdAt),
         children: this.getStatusText(
           status.clientStatus,
@@ -328,14 +213,12 @@ export class Care {
       }
     })
 
-    if (this.currentUserStatus !== "CANCELLED" && this.currentUserStatus !== "OUTDATED" 
-      && this.currentUserStatus !== "CONFIRMED") {
+    if (!this.isRejected) {
       items.push({
         color: this.currentStatusColor,
-        children: this.currentStatus
+        children: this.currentStatusText
       });
     }
-
 
     return items;
   }

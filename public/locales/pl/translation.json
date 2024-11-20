@@ -121,7 +121,7 @@
 
   "description": "Opis",
   "upload": "Prześlij",
-  "offerPhotos": "Zdjęcia oferty",
+  "caretakerPhotos": "Zdjęcia opiekuna",
   "currentPhotos": "Aktualne zdjęcia",
   "newPhotos": "Nowe zdjęcia",
   "photosLimitMessage": "Limit zdjęć",
@@ -268,7 +268,8 @@
     "timeRemaining": "Pozostały czas",
     "careStartsTomorrow": "Opieka rozpoczyna się już jutro.",
     "rememberToConfirmBeginOfCare": "Nie zapomnij potwierdzić rozpoczęcia opieki. Możesz to zrobić tylko jutro.",
-    "caretakerShouldConfirmBeginOfCare": "Opiekun powinien jutro potwierdzić rozpoczęcie opieki."
+    "caretakerShouldConfirmBeginOfCare": "Opiekun powinien jutro potwierdzić rozpoczęcie opieki.",
+    "ifCaretakerDoesntConfirm": "Jezeli nie potwierdzisz rozpoczęcia opieki, zostanie ona anulowana."
   },
 
   "careReservation": {
@@ -290,16 +291,17 @@
     "pending": "Oczekuje na odpowiedź",
     "waitingForOtherResponse": "Oczekuje na odpowiedź drugiej strony",
     "waitingForYourResponse": "Oczekuje na twoją akcję",
-    "cancelled": "Anulowana",
+    "cancelled": "Opieka anulowana",
     "waitingToTakePlace": "Oczekuje na odbycie",
     "waitingForCaretakerToConfirm": "Oczekuje na potwierdzenie rozpoczęcia opieki przez opiekuna",
     "isTakingPlace": "W trakcie odbywania",
     "done": "Zakończona",
     "outdated": "Przeterminowana, opiekun nie potwierdził rozpoczęcia opieki na czas",
-    "caretakerProposedNewPrice": "Opiekun zaproponował nową cenę",
-    "clientAcceptedNewPrice": "Klient zaakceptował cenę",
+    "newPriceProposedByCaretaker": "Opiekun zaproponował nową cenę",
+    "newPriceAcceptedByClient": "Klient zaakceptował cenę",
     "waitingForCaretakerResponse": "Oczekuje na odpowiedź opiekuna",
-    "waitingForClientResponse": "Oczekuje na odpowiedź klienta"
+    "waitingForClientResponse": "Oczekuje na odpowiedź klienta",
+    "startConfirmedByCaretaker" : "Opiekun potwierdził rozpoczęcie opieki"
   },
 
   "petDescription": "Opis zwierzęcia",

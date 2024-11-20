@@ -218,20 +218,23 @@ const CareDetails = () => {
             </div>
           }
           {care.isAbleToConfirmBeginOfCare && 
-            <div className="actions-with-countdown">
-              <StatisticCountdown />
-              <Popconfirm
-                title={t("care.beginOfCare")}
-                description={t("care.confirmBeginOfCare")}
-                onConfirm={confirmBeginOfCare}
-                okText={t("yes")}
-                cancelText={t("no")}
-              >
-                <Button type="primary" loading={isLoading}>
-                  {t("care.beginOfCare")}
-                </Button>
-              </Popconfirm>
-            </div>
+            <>
+              <div className="actions-with-countdown">
+                <StatisticCountdown />
+                <Popconfirm
+                  title={t("care.beginOfCare")}
+                  description={t("care.confirmBeginOfCare")}
+                  onConfirm={confirmBeginOfCare}
+                  okText={t("yes")}
+                  cancelText={t("no")}
+                >
+                  <Button type="primary" loading={isLoading}>
+                    {t("care.beginOfCare")}
+                  </Button>
+                </Popconfirm>
+              </div>
+              <Alert message={t("care.ifCaretakerDoesntConfirm")} type="warning" showIcon />
+            </>
           }
           {care.currentUserStatus === "READY_TO_PROCEED" && care.isStartTomorrow &&
             <Alert

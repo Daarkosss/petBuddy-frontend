@@ -115,7 +115,7 @@
 
   "description": "Description",
   "upload": "Upload",
-  "offerPhotos": "Offer photos",
+  "caretakerPhotos": "Caretaker photos",
   "currentPhotos": "Current photos",
   "newPhotos": "New photos",
   "photosLimitMessage": "Photos limit",
@@ -260,7 +260,8 @@
     "timeRemaining": "Time remaining",
     "careStartsTomorrow": "Care starts tomorrow.",
     "rememberToConfirmBeginOfCare": "Don't forget to confirm begin of care. You can to it only tomorrow.",
-    "caretakerShouldConfirmBeginOfCare": "Caretaker should confirm begin of care tomorrow."
+    "caretakerShouldConfirmBeginOfCare": "Caretaker should confirm begin of care tomorrow.",
+    "ifCaretakerDoesntConfirm": "If you don't confirm begin of care, care will be cancelled."
   },
 
   "careReservation": {
@@ -282,16 +283,17 @@
     "pending": "Waiting for response",
     "waitingForOtherResponse": "Waiting for other response",
     "waitingForYourResponse": "Waiting for your response",
-    "cancelled": "Cancelled",
+    "cancelled": "Care cancelled",
     "waitingToTakePlace": "Waiting to take place",
     "waitingForCaretakerToConfirm": "Waiting for caretaker to confirm the start of the care",
     "isTakingPlace": "Is taking place",
     "done": "Done",
     "outdated": "Outdated, caretaker did not confirm the start of the care in time",
-    "caretakerProposedNewPrice": "Caretaker proposed new price",
-    "clientAcceptedNewPrice": "Client accepted the price",
+    "newPriceProposedByCaretaker": "Caretaker proposed new price",
+    "newPriceAcceptedByClient": "Client accepted the price",
     "waitingForCaretakerResponse": "Waiting for caretaker response",
-    "waitingForClientResponse": "Waiting for client response"
+    "waitingForClientResponse": "Waiting for client response",
+    "startConfirmedByCaretaker" : "Caretaker confirmed care begin"
   },
 
   "petDescription": "Pet description",
