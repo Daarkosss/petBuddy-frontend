@@ -1,0 +1,39 @@
+@use "../helpers/variables" as v;
+
+.map-container {
+  width: 100%;
+  height: 80vh;
+}
+
+.leaflet-avatar-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid v.$white;
+
+  img {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+.marker-cluster {
+  background-color: v.$blue-dark;
+  color: v.$white;
+  border: 2px solid v.$white;;
+  border-radius: 50%;
+  font-weight: bold;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.marker-cluster div {
+  display: inline-block;
+}
