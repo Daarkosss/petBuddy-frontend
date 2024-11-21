@@ -83,12 +83,14 @@ const CaretakerList = () => {
       await assignFiltersToAnimals();
       const data = await api.getCaretakers(pagingParams, filters);
       setCaretakers(
-        data.content.map((caretaker) => new CaretakerBasics(caretaker))
+        data.caretakers.content.map(
+          (caretaker) => new CaretakerBasics(caretaker)
+        )
       );
       setPagination({
-        current: data.pageable.pageNumber + 1,
-        pageSize: data.pageable.pageSize,
-        total: data.totalElements,
+        current: data.caretakers.pageable.pageNumber + 1,
+        pageSize: data.caretakers.pageable.pageSize,
+        total: data.caretakers.totalElements,
       });
     } catch (error) {
       toast.error(t("error.getCaretakers"));
@@ -193,10 +195,11 @@ const CaretakerList = () => {
       render: (_: unknown, record: CaretakerBasics) => (
         <div className="caretaker-list-item">
           <div className="profile-picture">
-            {record.accountData.profilePicture 
-              ? <img src={record.accountData.profilePicture.url} alt="avatar" />
-              : <UserOutlined style={{ fontSize: "150px" }} />
-            }
+            {record.accountData.profilePicture ? (
+              <img src={record.accountData.profilePicture.url} alt="avatar" />
+            ) : (
+              <UserOutlined style={{ fontSize: "150px" }} />
+            )}
           </div>
           <div>
             <h4>
