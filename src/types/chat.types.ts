@@ -37,4 +37,6 @@ export type ChatMessagesResponse = {
 export type WebsocketResponse = {
   type: string;
   content: ChatMessage;
+  chatId?: number;
+  joiningUserEmail?: string;
 };
