@@ -82,17 +82,21 @@ export type VoivodeshipDTO =
   | "ZACHODNIOPOMORSKIE";
 
 export type CaretakerBasicsResponse = {
-  content: CaretakerBasicsDTO[];
-  pageable: PageableDTO;
-  totalElements: number;
-  totalPages: number;
-  size: number;
-  number: number;
-  sort: SortDTO[];
-  first: boolean;
-  last: boolean;
-  numberOfElements: number;
-  empty: boolean;
+  caretakers: {
+    totalElements: number;
+    totalPages: number;
+    size: number;
+    content: CaretakerBasicsDTO[];
+    number: number;
+    sort: SortDTO[];
+    pageable: PageableDTO;
+    first: boolean;
+    last: boolean;
+    numberOfElements: number;
+    empty: boolean;
+    cityLatitude: number;
+    cityLongitude: number;
+  };
 };
 
 export type CaretakerSearchFilters = {
