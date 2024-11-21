@@ -1,11 +1,104 @@
+@use "../helpers/variables" as v;
+
 .message-author {
+  // width: 100%;
   display: flex;
-  flex-direction: row;
-  justify-content: end;
+  flex-direction: column;
+  justify-content: start;
+  margin-bottom: 10px;
+  width: 100%;
+
+  .message-send-time {
+    text-align: end;
+    margin-right: 30px;
+    font-size: 12px;
+  }
+
+  .message-cloud-avatar {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    width: 100%;
+    padding-right: 5px;
+
+    .message-content-name {
+      display: flex;
+      flex-direction: column;
+      align-items: end;
+      width: 100%;
+
+      .message-content {
+        margin-right: 5px;
+        padding: 10px;
+        max-width: 60%;
+        color: v.$white;
+        background-color: v.$blue-light;
+        border-radius: 15px 15px 10px 25px;
+        overflow-wrap: break-word;
+      }
+
+      .message-sender {
+        font-size: 12px;
+
+        overflow-wrap: break-word;
+        margin-left: 5px;
+        margin-right: 5px;
+        max-width: 50%;
+      }
+    }
+
+    .message-avatar-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+  }
 }
 
 .message-recipient {
   display: flex;
-  flex-direction: row;
-  justify-content: start;
+  flex-direction: column;
+  align-items: start;
+  margin-bottom: 10px;
+
+  .message-cloud-avatar {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    width: 100%;
+    padding-right: 5px;
+
+    .message-content-name {
+      display: flex;
+      flex-direction: column;
+      align-items: start;
+      width: 100%;
+
+      .message-content {
+        margin-left: 5px;
+        padding: 10px;
+        max-width: 60%;
+        color: v.$white;
+        background-color: v.$blue-dark;
+        border-radius: 15px 15px 25px 10px;
+
+        overflow-wrap: break-word;
+      }
+
+      .message-sender {
+        font-size: 12px;
+
+        overflow-wrap: break-word;
+        margin-left: 5px;
+        margin-right: 5px;
+        max-width: 50%;
+      }
+    }
+
+    .message-avatar-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+  }
 }
