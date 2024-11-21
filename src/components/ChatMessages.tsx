@@ -7,9 +7,17 @@ import { ChatMessage } from "../types/chat.types";
 
 interface ChatBoxContent {
   messages: ChatMessage[];
+  recipientName: string;
+  recipientSurname: string;
+  lastSeenMessageId?: number;
 }
 
-const ChatMessages: React.FC<ChatBoxContent> = ({ messages }) => {
+const ChatMessages: React.FC<ChatBoxContent> = ({
+  messages,
+  recipientName,
+  recipientSurname,
+  lastSeenMessageId,
+}) => {
   const scrollDownThroughChat = () => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
@@ -24,7 +32,18 @@ const ChatMessages: React.FC<ChatBoxContent> = ({ messages }) => {
     <div className="chat-messages-container">
       {messages.map((message, i) => (
         <div key={i}>
-          <Message message={message.content} name={message.senderEmail} />
+          <Message
+            message={message.content}
+            recipientName={recipientName}
+            recipientSurname={recipientSurname}
+            senderEmail={message.senderEmail}
+            timeSent={message.createdAt}
+            showAvatar={
+              lastSeenMessageId !== undefined
+                ? message.id === lastSeenMessageId
+                : false
+            }
+          />
         </div>
       ))}
       <div ref={messagesEndRef} />

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ChatTopBar from "./ChatTopBar";
 import ChatMessages from "./ChatMessages";
 import ChatBottom from "./ChatBottom";
@@ -29,16 +29,17 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
   profile,
 }) => {
   const [wsClient, setWsClient] = useState<Client | null>(null);
-  const [message, setMessage] = useState<string>("");
-  const [inputMessage, setInputMessage] = useState<string>("");
   const [doesChatRoomExist, setDoesChatRoomExist] = useState<boolean | null>(
     null
   );
   const [chatRoomData, setChatRoomData] = useState<ChatRoom | null>(null);
   const [chatId, setChatId] = useState<number | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const messagesRef = useRef(messages);
+  const [lastSeenMessage, setLastSeenMessage] = useState<number | undefined>();
 
   const [minimized, setMinimized] = useState<boolean>(false);
+
   //TODO: is it ok to create it in ChatBox?
   useEffect(() => {
     initWebsocketConnection();
@@ -47,30 +48,28 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
     };
   }, []);
 
+  const initWebsocketConnection = () => {
+    const socket = new sockjs(
+      `http://localhost:8081/ws?token=${store.user.jwtToken}`
+    );
+    const client = Stomp.over(() => socket);
+    const onConnect = (frame: IFrame) => {
+      setWsClient(client);
+      console.log("WS client connected");
+    };
+    client.connect({}, onConnect);
+  };
+
   useEffect(() => {
     if (
-      wsClient != null &&
-      store.user.profile != null &&
-      store.user.profile?.selected_profile != null
+      wsClient !== null &&
+      store.user.profile !== null &&
+      store.user.profile?.selected_profile !== null
     ) {
       checkIfChatRoomExists();
     }
   }, [wsClient, store.user.profile?.selected_profile]);
 
-  useEffect(() => {
-    console.log(`chatId: ${chatId}`);
-    if (chatId != null) {
-      subscribeToChatRoom();
-    }
-  }, [chatId]);
-
-  useEffect(() => {
-    if (doesChatRoomExist == true && chatId != null) {
-      getMessages();
-    }
-  }, [doesChatRoomExist, chatId]);
-
-  //TODO: implement this
   const checkIfChatRoomExists = async () => {
     console.log("checking if chat room exists");
     try {
@@ -95,6 +94,78 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
     }
   };
 
+  useEffect(() => {
+    if (doesChatRoomExist == true && chatId != null) {
+      getMessages();
+    }
+
+    return () => {
+      disconnectWebSocket();
+    };
+  }, [doesChatRoomExist, chatId]);
+
+  useEffect(() => {
+    console.log(`messages have changed to: ${JSON.stringify(messages)}`);
+    messagesRef.current = messages;
+  }, [messages]);
+
+  useEffect(() => {
+    console.log(`chatId: ${chatId}`);
+    if (chatId != null) {
+      subscribeToChatRoom();
+    }
+  }, [chatId]);
+
+  const subscribeToChatRoom = () => {
+    if (wsClient === null) {
+      console.log("not subscribing to chat room");
+      return;
+    }
+    console.log("subscribing to chat room");
+    const headers = {
+      "Accept-Role":
+        store.user.profile?.selected_profile?.toUpperCase() as string,
+      "Accept-Timezone": "Europe/Warsaw", //TODO: change for correct timezone
+    };
+
+    wsClient.subscribe(
+      `/user/topic/messages/${chatId}`,
+      (message) => {
+        console.log(JSON.parse(message.body));
+        const data: WebsocketResponse = JSON.parse(message.body);
+        if (data.type === "SEND") {
+          if (
+            (data.content.senderEmail === store.user.profile?.email &&
+              data.content.seenByRecipient === true) ||
+            data.content.senderEmail !== store.user.profile?.email
+          ) {
+            if (data.content.seenByRecipient === true) {
+              setLastSeenMessage(data.content.id);
+            }
+          }
+          setMessages((prevMessages) => [...prevMessages, data.content]);
+        } else {
+          if (data.type === "JOIN") {
+            if (data.joiningUserEmail !== store.user.profile?.email) {
+              setLastSeenMessageToLastMessage();
+            }
+          }
+        }
+      },
+      headers
+    );
+  };
+
+  const setLastSeenMessageToLastMessage = () => {
+    console.log("set to last");
+    if (messagesRef.current.length > 0) {
+      console.log("yes it is setting");
+      setLastSeenMessage(
+        messagesRef.current[messagesRef.current.length - 1].id
+      );
+    }
+  };
+
   const getMessages = async () => {
     console.log("getting messages");
     const messagesResponse = await api.getMessagesFromSpecifiedChatRoom(
@@ -105,6 +176,11 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
     );
     console.log(`Messages: ${messagesResponse.content}`);
     setMessages([...messagesResponse.content].reverse());
+    setLastSeenMessage(
+      messagesResponse.content.find(
+        (message) => message.seenByRecipient === true
+      )?.id
+    );
   };
 
   //TODO: timezone
@@ -125,58 +201,13 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
     ]);
   };
 
-  const initWebsocketConnection = () => {
-    const socket = new sockjs(
-      `http://localhost:8081/ws?token=${store.user.jwtToken}`
-    );
-    const client = Stomp.over(() => socket);
-    const onConnect = (frame: IFrame) => {
-      setWsClient(client);
-      console.log("WS client connected");
-    };
-    client.connect({}, onConnect);
-  };
-
-
-  const subscribeToChatRoom = () => {
-    // console.log(`subscribe to chat room parameters: ${sessionId}, ${wsClient}`);
-    if (wsClient === null) {
-      console.log("not subscribing to chat room");
-      return;
-    }
-    console.log("subscribing to chat room");
-    // Accept-Role - required header
-    // Accept-Timezone - optional header (caches initial timezone in the backend)
-    const headers = {
-      "Accept-Role":
-        store.user.profile!.selected_profile?.toUpperCase() as string,
-      "Accept-Timezone": "Europe/Warsaw",
-    };
-    wsClient.subscribe(
-      `/user/topic/messages/${chatId}`,
-      (message) => {
-        console.log(JSON.parse(message.body));
-        const data: WebsocketResponse = JSON.parse(message.body);
-        if (data.type === "SEND" || data.type === "SEND") {
-          // setMessages([...messages, data.content]);
-          setMessages((prevMessages) => [...prevMessages, data.content]);
-        } else {
-          if (data.type === "JOIN") {
-            console.log("Join message", data.content);
-          }
-        }
-      },
-      headers
-    );
-  };
-
   const sendMessageToChatRoom = (message: string) => {
     // Accept-Role - required header
     // Accept-Timezone - optional header (overrides cached timezone in the backend)
     const headers = {
       "Accept-Role":
         store.user.profile!.selected_profile?.toUpperCase() as string,
-      "Accept-Timezone": "Asia/Tokyo",
+      "Accept-Timezone": "Asia/Tokyo", //TODO: popraw
     };
     if (wsClient && message) {
       const chatMessage = { content: message };
@@ -197,36 +228,6 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
     }
   };
 
-  const getCookieNative = (name: string) => {
-    const cookies = document.cookie.split("; ");
-    for (const cookie of cookies) {
-      const [key, value] = cookie.split("=");
-      if (key === name) {
-        return decodeURIComponent(value);
-      }
-    }
-    return null;
-  };
-
-  // const mockupMessages = [
-  //   {
-  //     id: 1,
-  //     chatId: 1,
-  //     senderEmail: "kuba.staniszewski.ks@gmail.com",
-  //     content: "Hello",
-  //     createdAt: "2024-10-12T11:44:26.078Z",
-  //     seenByRecipient: true,
-  //   },
-  //   {
-  //     id: 2,
-  //     chatId: 1,
-  //     senderEmail: "test@gmail.com",
-  //     content: "Hello there!",
-  //     createdAt: "2024-10-12T11:45:26.078Z",
-  //     seenByRecipient: true,
-  //   },
-  // ];
-
   const onSend = (input: string) => {
     console.log(`sending while does chat room exist: ${doesChatRoomExist}`);
     if (doesChatRoomExist == false) {
@@ -243,22 +244,6 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
     } else if (doesChatRoomExist == true) {
       sendMessageToChatRoom(input);
     }
-    // console.log(`previous messages: ${JSON.stringify(messages)}`);
-    // setMessages((prevMessages) => [
-    //   ...prevMessages,
-    //   {
-    //     id:
-    //       prevMessages.length > 0
-    //         ? prevMessages[prevMessages.length - 1].id + 1
-    //         : 1,
-    //     chatId: chatId!,
-    //     senderEmail: store.user.profile!.email!,
-    //     content: input,
-    //     createdAt: new Date().toISOString(),
-    //     seenByRecipient: false,
-    //   },
-    // ]);
-    // console.log(`new messages: ${JSON.stringify(messages)}`);
   };
 
   return minimized === false ? (
@@ -274,7 +259,12 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
               profile={profile}
               onMinimize={() => setMinimized(true)}
             />
-            <ChatMessages messages={messages} />
+            <ChatMessages
+              messages={messages}
+              recipientName={name}
+              recipientSurname={surname}
+              lastSeenMessageId={lastSeenMessage}
+            />
             <ChatBottom onSend={onSend} />
           </div>
         )}
