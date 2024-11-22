@@ -1,12 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Table, Button, Rate, Tabs } from "antd";
-import {
-  SorterResult,
-  TablePaginationConfig,
-  FilterValue,
-  ColumnsType,
-} from "antd/es/table/interface";
+import { TablePaginationConfig, ColumnsType } from "antd/es/table/interface";
 import { api } from "../api/api";
 import { useTranslation } from "react-i18next";
 import { CaretakerBasics } from "../models/Caretaker";
@@ -108,27 +103,12 @@ const CaretakerList = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagingParams]);
 
-  const mapSortDirection = (sorter: SorterResult<CaretakerBasics>) => {
-    if (sorter.order) {
-      return sorter.order === "ascend" ? "ASC" : "DESC";
-    } else {
-      return undefined;
-    }
-  };
-
-  const handleTableChange = (
-    pagination: TablePaginationConfig,
-    _filters: Record<string, FilterValue | null>,
-    sorter: SorterResult<CaretakerBasics> | SorterResult<CaretakerBasics>[]
-  ) => {
-    const singleSorter = Array.isArray(sorter) ? sorter[0] : sorter;
-    const isSorted = !!singleSorter.order;
+  const handleTableChange = (pagination: TablePaginationConfig) => {
 
     setPagingParams({
+      ...pagingParams,
       page: (pagination.current || 1) - 1,
-      size: pagination.pageSize || 10,
-      sortBy: isSorted ? ("ratingScore") : undefined,
-      sortDirection: mapSortDirection(singleSorter),
+      size: pagination.pageSize || 10
     });
   };
 
