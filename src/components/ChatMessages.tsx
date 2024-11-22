@@ -10,6 +10,7 @@ interface ChatBoxContent {
   recipientName: string;
   recipientSurname: string;
   lastSeenMessageId?: number;
+  profilePicture: string | null;
 }
 
 const ChatMessages: React.FC<ChatBoxContent> = ({
@@ -17,6 +18,7 @@ const ChatMessages: React.FC<ChatBoxContent> = ({
   recipientName,
   recipientSurname,
   lastSeenMessageId,
+  profilePicture,
 }) => {
   const scrollDownThroughChat = () => {
     if (messagesEndRef.current) {
@@ -43,6 +45,7 @@ const ChatMessages: React.FC<ChatBoxContent> = ({
                 ? message.id === lastSeenMessageId
                 : false
             }
+            profilePicture={profilePicture}
           />
         </div>
       ))}

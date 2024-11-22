@@ -264,6 +264,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
               recipientName={name}
               recipientSurname={surname}
               lastSeenMessageId={lastSeenMessage}
+              profilePicture={profilePicture}
             />
             <ChatBottom onSend={onSend} />
           </div>

@@ -10,6 +10,7 @@ interface MessageContent {
   senderEmail: string;
   timeSent: string;
   showAvatar: boolean;
+  profilePicture: string | null;
 }
 
 const Message: React.FC<MessageContent> = ({
@@ -19,6 +20,7 @@ const Message: React.FC<MessageContent> = ({
   senderEmail,
   timeSent,
   showAvatar,
+  profilePicture,
 }) => {
   const [showDate, setShowDate] = useState<boolean>(false);
   return (
@@ -41,6 +43,7 @@ const Message: React.FC<MessageContent> = ({
         </div>
         <div className="message-avatar-container">
           <Avatar
+            src={profilePicture}
             size={15}
             style={{
               visibility: showAvatar === true ? "visible" : "hidden",
