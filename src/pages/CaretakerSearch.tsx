@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Table, Button, Spin, Rate, Tabs } from "antd";
+import { Table, Button, Rate, Tabs } from "antd";
 import {
   SorterResult,
   TablePaginationConfig,
@@ -17,7 +17,6 @@ import {
 } from "../types";
 import CaretakerFilters from "../components/CaretakerFilters";
 import store from "../store/RootStore";
-import { UserOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
 import MapWithCaretakers from "../components/MapWithCaretakers";
 import TabPane from "antd/es/tabs/TabPane";
@@ -34,8 +33,8 @@ const CaretakerList = () => {
   const [pagingParams, setPagingParams] = useState({
     page: 0,
     size: 10,
-    sortBy: undefined as string | undefined,
-    sortDirection: undefined as string | undefined,
+    sortBy: "ratingScore" as string | undefined,
+    sortDirection: "DESC" as string | undefined,
   });
 
   const [pagination, setPagination] = useState({
@@ -128,7 +127,7 @@ const CaretakerList = () => {
     setPagingParams({
       page: (pagination.current || 1) - 1,
       size: pagination.pageSize || 10,
-      sortBy: isSorted ? (singleSorter.field as string) : undefined,
+      sortBy: isSorted ? ("ratingScore") : undefined,
       sortDirection: mapSortDirection(singleSorter),
     });
   };
@@ -138,6 +137,14 @@ const CaretakerList = () => {
       ...prevParams,
       page: 0, // Reset to first page on search
     }));
+  };
+
+  const handleSortChange = (sortBy: string, sortDirection: string) => {
+    setPagingParams({
+      ...pagingParams,
+      sortBy: sortBy,
+      sortDirection: sortDirection,
+    });
   };
 
   const updateAnimalFilters = (
@@ -196,10 +203,7 @@ const CaretakerList = () => {
       render: (_: unknown, record: CaretakerBasics) => (
         <div className="caretaker-list-item">
           <div className="profile-picture">
-            {record.accountData.profilePicture 
-              ? <img src={record.accountData.profilePicture.url} alt="avatar" />
-              : <UserOutlined style={{ fontSize: "150px" }} />
-            }
+            <img src={record.accountData.profilePicture?.url || "/default-avatar.png"} alt="avatar" />
           </div>
           <div>
             <h4>
@@ -225,7 +229,6 @@ const CaretakerList = () => {
       title: t("rating"),
       dataIndex: "avgRating",
       key: "avgRating",
-      sorter: true,
       render: (rating: number | null, record: CaretakerBasics) => (
         <div className="caretaker-rating">
           {rating ? (
@@ -251,25 +254,23 @@ const CaretakerList = () => {
 
   return (
     <div className="caretaker-container">
-      <Spin spinning={isLoading} fullscreen />
       <CaretakerFilters
         filters={filters}
         animalFilters={animalFilters}
         onFiltersChange={setFilters}
         onAnimalFiltersChange={updateAnimalFilters}
         onAnimalTypesChange={handleAnimalTypesChange}
+        onSortChange={handleSortChange}
         onSearch={handleSearch}
       />
       <Tabs style={{width: "100%"}} centered size="small">
         <TabPane tab={t("caretakerSearch.list")} key="list">
           <div className="caretaker-content">
             <Table
+              loading={isLoading}
               columns={columns}
               locale={{
                 emptyText: t("caretakerSearch.noCaretakers"),
-                triggerDesc: t("triggerDesc"),
-                triggerAsc: t("triggerAsc"),
-                cancelSort: t("cancelSort"),
               }}
               dataSource={caretakers}
               rowKey={(record) => record.accountData.email}

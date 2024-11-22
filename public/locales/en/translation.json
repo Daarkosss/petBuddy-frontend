@@ -101,6 +101,15 @@
     "noCaretakerProfile": "Currently you do not have caretaker profile"
   },
 
+  "sort": {
+    "title": "Sort",
+    "default": "By default",
+    "avgRatingDesc": "By average rating descending",
+    "avgRatingAsc": "By average rating ascending",
+    "numberOfRatingsDesc": "By number of ratings descending",
+    "numberOfRatingsAsc": "By number of ratings ascending"
+  },
+
   "caretakerSearch": {
     "personalData": "Personal data",
     "animalTypes": "Animal types",
@@ -108,9 +117,6 @@
     "minPrice": "Min price",
     "maxPrice": "Max price",
     "noCaretakers": "There are no caretakers for selected filters",
-    "triggerDesc": "Click to sort descending",
-    "triggerAsc": "Click to sort ascending",
-    "cancelSort": "Click to cancel sorting",
     "list": "Caretaker list",
     "map": "Caretaker map"
   },
