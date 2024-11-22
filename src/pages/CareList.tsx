@@ -76,7 +76,7 @@ const CareList = () => {
             onChange: handlePageChange,
           }}
           renderItem={(care) => (
-            <Badge.Ribbon text={care.currentStatusText} color={care.currentStatusColor}>
+            <Badge.Ribbon text={care.getCurrentStatusText(true)} color={care.currentStatusColor}>
               <List.Item 
                 key={care.id}
                 className="item"
@@ -118,7 +118,7 @@ const CareList = () => {
                         <UserInfoPill user={care.client} isLink={false} />
                       </Descriptions.Item>
                       <Descriptions.Item label={t("care.currentStatus")}>
-                        {care.currentStatusText}
+                        {care.getCurrentStatusText()}
                       </Descriptions.Item>
                     </Descriptions>
                   }

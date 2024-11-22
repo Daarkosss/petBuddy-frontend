@@ -294,6 +294,7 @@
     "isTakingPlace": "Is taking place",
     "done": "Done",
     "outdated": "Outdated, caretaker did not confirm the start of the care in time",
+    "outdatedShortened": "Outdated",
     "newPriceProposedByCaretaker": "Caretaker proposed new price",
     "newPriceAcceptedByClient": "Client accepted the price",
     "waitingForCaretakerResponse": "Waiting for caretaker response",

@@ -116,7 +116,7 @@ export class Care {
     }
   }
 
-  get currentStatusText() {
+  getCurrentStatusText(shortened=false) {
     switch(`${this.clientStatus}-${this.caretakerStatus}`) {
       case "ACCEPTED-PENDING":
         return i18next.t("careStatus.waitingForCaretakerResponse");
@@ -128,7 +128,7 @@ export class Care {
         } else if (this.careStart > getTodayDate()) {
           return i18next.t("careStatus.waitingToTakePlace");
         } else {
-          return i18next.t("careStatus.outdated")
+          return shortened ? i18next.t("careStatus.outdatedShortened") : i18next.t("careStatus.outdated")
         }
       case "CONFIRMED-CONFIRMED":
         if (this.careEnd > getTodayDate()) {
@@ -139,7 +139,7 @@ export class Care {
       case "CANCELLED-CANCELLED":
         return i18next.t("careStatus.cancelled");
       case "OUTDATED-OUTDATED":
-        return i18next.t("careStatus.outdated");
+        return shortened ? i18next.t("careStatus.outdatedShortened") : i18next.t("careStatus.outdated")
     }
   }
 
@@ -218,7 +218,7 @@ export class Care {
     if (!this.isRejected) {
       items.push({
         color: this.currentStatusColor,
-        children: this.currentStatusText
+        children: this.getCurrentStatusText()
       });
     }
 
