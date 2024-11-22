@@ -23,24 +23,36 @@ const CareDetails = () => {
 
   const careIdNumber = careId ? parseInt(careId) : undefined;
 
-  const fetchCareDetails = async () => {
-    try {
-      const data = await api.getCare(careIdNumber!);
-      if (data) {
-        setCare(new Care(data));
-      }
-    } catch (error) {
-      navigate("/cares");
-      toast.error(t("error.getCare"));
+  const setNotificationsAsRead = async () => {
+    if (careIdNumber) {
+      store.notification.markCareNotificationsAsRead(careIdNumber);
     }
-  };
+  }
 
   useEffect(() => {
+    const fetchCareDetails = async () => {
+      try {
+        const data = await api.getCare(careIdNumber!);
+        if (data) {
+          setCare(new Care(data));
+          store.notification.openCareId = careIdNumber!;
+        }
+      } catch (error) {
+        navigate("/cares");
+        toast.error(t("error.getCare"));
+      }
+    };
     fetchCareDetails();
+    setNotificationsAsRead();
 
     store.selectedMenuOption = "cares";
+
+    return () => {
+      store.notification.openCareId = null;
+    };
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [careId]);
 
   const acceptCare = async () => {
     setIsLoading(true);
@@ -120,6 +132,10 @@ const CareDetails = () => {
 
   const isNewPriceHigher = () => {
     return calculateTotalPrice(newPrice) >= calculateTotalPrice(care!.dailyPrice);
+  }
+
+  const isSamePrice = () => {
+    return parseFloat(newPrice || "0") === care?.dailyPrice;
   }
 
   if (!care) {
@@ -207,6 +223,7 @@ const CareDetails = () => {
         onCancel={() => setIsModalOpen(false)}
         onOk={proposeNewPrice}
         okText={t("care.confirmNewPrice")}
+        okButtonProps={{ loading: isLoading, disabled: isSamePrice() }}
         cancelText={t("cancel")}
         width={400}
       >
@@ -217,7 +234,7 @@ const CareDetails = () => {
               label={t("care.newDailyPrice")} 
               initialValue={care.dailyPrice}
             />
-            {newPrice !== care.dailyPrice &&
+            {!isSamePrice() &&
               <div className="price-difference">
                 <Descriptions>
                   <Descriptions.Item label={t("newTotalPrice")}>

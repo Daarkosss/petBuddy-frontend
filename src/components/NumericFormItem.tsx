@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 interface NumberInputProps {
   name: string;
-  label: string | number | (string | number)[];
+  label?: string | number | (string | number)[];
   initialValue?: number;
   disabled?: boolean;
   placeholder?: string;
@@ -41,7 +41,7 @@ const NumericFormItem: React.FC<NumberInputProps> = ({name, label, initialValue,
       style={{ width: 185 }}
       rules={[
         { required: true, message: t("validation.required") },
-        { pattern: /^\d{0,5}(\.\d{0,2})?$/, message: t("validation.price") }
+        { pattern: /^(?!0$)(0(\.\d{1,2})?|[1-9]\d{0,4}(\.\d{1,2})?)$/, message: t("validation.price") }
       ]}
       initialValue={initialValue}
     >

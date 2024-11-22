@@ -1,5 +1,6 @@
 import { toast } from "react-toastify";
 import store from "../store/RootStore";
+import NotificationWebSocket from "./NotificationWebSocket";
 import {
   CaretakerBasicsResponse,
   CaretakerSearchFilters,
@@ -23,6 +24,7 @@ import {
 import { CareDTO, CareReservation, CareReservationDTO, GetCaresDTO } from "../types/care.types";
 import { AnimalAttributes, AnimalConfigurationsDTO } from "../types/animal.types";
 import { UploadFile } from "antd";
+import { Notification, NotificationDTO, NumberOfUnreadChats } from "../types/notification.types";
 
 const backendHost =
   import.meta.env.VITE_BACKEND_HOST || window.location.hostname;
@@ -32,6 +34,8 @@ export const PATH_PREFIX = `http://${backendHost}:${backendPort}/`;
 type Method = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
 class API {
+  notificationWebSocket = new NotificationWebSocket();
+
   constructor() {
     this.getAnimalsConfigurations().then((animalConfigurations) => {
       store.animal.allAnimalConfigurations = animalConfigurations;
@@ -591,6 +595,64 @@ class API {
         {dailyPrice},
         { "Accept-Role": "CARETAKER" }
       );
+    }
+  }
+
+  async getNotifications(): Promise<NotificationDTO | undefined> {
+    if (store.user.profile?.selected_profile) {
+      const queryParams = new URLSearchParams({
+        page: "0",
+        size: "1000000", // To fetch all notifications
+        sortBy: "createdAt",
+        sortDirection: "DESC",
+      });
+
+      return this.authorizedFetch<NotificationDTO>(
+        "GET",
+        `api/notifications?${queryParams}`,
+        undefined,
+        { "Accept-Role": store.user.profile?.selected_profile }
+      );
+    }
+  }
+
+  async markNotificationAsRead(notificationId: number): Promise<Notification | undefined> {
+    if (store.user.profile?.selected_profile) {
+      return this.authorizedFetch<Notification>(
+        "PATCH",
+        `api/notifications/${notificationId}`,
+        undefined,
+        { "Accept-Role": store.user.profile?.selected_profile }
+      );
+    }
+  }
+
+  async markAllNotificationsAsRead(): Promise<void> {
+    if (store.user.profile?.selected_profile) {
+      this.authorizedFetch<void>(
+        "POST",
+        "api/notifications/all-read",
+        undefined,
+        { "Accept-Role": store.user.profile?.selected_profile }
+      );
+    }
+  }
+
+  async connectNotificationWebSocket(): Promise<void> {
+    this.notificationWebSocket.initWebsocketConnection();
+  }
+
+  async getNumberOfUnreadChats(): Promise<number | undefined> {
+    if (store.user.profile?.selected_profile) {
+      const data = await this.authorizedFetch<NumberOfUnreadChats>(
+        "GET",
+        "api/chat/unread/count",
+      );
+      if (store.user.profile.selected_profile === "CLIENT") {
+        return data.unseenChatsAsClient;
+      } else {
+        return data.unseenChatsAsCaretaker;
+      }
     }
   }
 

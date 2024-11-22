@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Form, Input, Button, Select, Steps, Descriptions, Row, Col, Spin } from "antd";
+import { Form, Input, Button, Select, Steps, Descriptions, Row, Col, Spin, Tooltip } from "antd";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -231,9 +231,16 @@ const CareReservationForm = () => {
                 {t("care.goBackToOriginalPrice")}
               </Button>
             ) : (
-              <Button type="primary" className="add-button" onClick={() => setIsNegotiating(true)}>
-                {t("care.negotiatePrice")}
-              </Button>
+              <Tooltip title={careDateRange.length === 0 && t("careReservation.chooseDateFirst")}>
+                <Button 
+                  type="primary"
+                  className={careDateRange.length > 0 ? "add-button" : ""}
+                  onClick={() => setIsNegotiating(true)}
+                  disabled={careDateRange.length === 0}
+                >
+                  {t("care.negotiatePrice")}
+                </Button>
+              </Tooltip>
             )}
           </Row>
         </>

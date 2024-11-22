@@ -129,7 +129,7 @@
     "required": "Required",
     "zipCodeFormat": "Invalid format (00-000)",
     "phoneNumberFormat": "Invalid format (at least 9 digits)",
-    "price": "Invalid format (0,00)"
+    "price": "Max. 2 decimal places, minimum 0,01 zł"
   },
 
   "landingPage": {
@@ -269,7 +269,8 @@
     "step3Description": "Confirm your reservation",
     "originalPrice": "Original price from offer",
     "confirm": "Confirm reservation",
-    "forAnimal": "For animal {{animalType}}"
+    "forAnimal": "For animal {{animalType}}",
+    "chooseDateFirst": "Choose date first"
   },
 
   "careStatus": {
@@ -291,5 +292,18 @@
   "next": "Next",
   "youWillSave": "You will save",
   "youWillGain": "You will gain",
-  "youWillLose": "You will lose"
+  "youWillLose": "You will lose",
+
+  "noAvailability": "Caretaker did not set the availability",
+
+  "notification": {
+    "title": "Notifications",
+    "markAllAsRead": "Mark all as read",
+    "noNotifications": "No notifications",
+    "care_reservation": "New reservation has been made for one of your cares",
+    "care_update": "Price has beeen updated in one of your cares",
+    "care_accepted": "Your care has been accepted",
+    "care_rejected": "Your care has been rejected",
+    "newNotification": "You have a new notification"
+  }
 }
