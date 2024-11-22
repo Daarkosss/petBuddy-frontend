@@ -19,7 +19,7 @@ export type CareReservation = {
   selectedOptions: AnimalAttributes
 }
 
-export type CareStatus = "PENDING" | "ACCEPTED" | "CANCELLED" | "READY_TO_PROCEED" | "CONFIRMED" | "OUTDATED" | "DONE";
+export type CareStatus = "PENDING" | "ACCEPTED" | "CANCELLED" | "READY_TO_PROCEED" | "CONFIRMED" | "OUTDATED";
 
 export type CareHistoricalStatus = {
   createdAt: string;
