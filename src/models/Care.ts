@@ -104,7 +104,7 @@ export class Care {
           return "gray";
         }
       case "CONFIRMED-CONFIRMED":
-        if (this.careEnd > getTodayDate()) { // Care is taking place
+        if (this.careEnd >= getTodayDate()) { // Care is taking place
           return "blue";
         } else { // Care is done
           return "green";
@@ -131,7 +131,7 @@ export class Care {
           return shortened ? i18next.t("careStatus.outdatedShortened") : i18next.t("careStatus.outdated")
         }
       case "CONFIRMED-CONFIRMED":
-        if (this.careEnd > getTodayDate()) {
+        if (this.careEnd >= getTodayDate()) {
           return i18next.t("careStatus.isTakingPlace");
         } else {
           return i18next.t("careStatus.done");
