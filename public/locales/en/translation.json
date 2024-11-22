@@ -278,7 +278,8 @@
     "step3Description": "Confirm your reservation",
     "originalPrice": "Original price from offer",
     "confirm": "Confirm reservation",
-    "forAnimal": "For animal {{animalType}}"
+    "forAnimal": "For animal {{animalType}}",
+    "chooseDateFirst": "Choose date first"
   },
 
   "careStatus": {

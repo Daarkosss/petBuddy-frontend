@@ -286,7 +286,8 @@
     "step3Description": "Potwierdź rezerwację",
     "originalPrice": "Początkowa cena z oferty",
     "confirm": "Potwierdź rezerwację",
-    "forAnimal": "Dla zwierzęcia {{animalType}}"
+    "forAnimal": "Dla zwierzęcia {{animalType}}",
+    "chooseDateFirst": "Najpierw wybierz datę"
   },
 
   "careStatus": {
@@ -294,7 +295,7 @@
     "acceptedByCaretaker": "Zaakceptowana przez opiekuna",
     "pending": "Oczekuje na odpowiedź",
     "waitingForOtherResponse": "Oczekuje na odpowiedź drugiej strony",
-    "waitingForYourResponse": "Oczekuje na twoją akcję",
+    "waitingForYourResponse": "Oczekuje na Twoją akcję",
     "cancelled": "Opieka anulowana",
     "waitingToTakePlace": "Oczekuje na odbycie",
     "waitingForCaretakerToConfirm": "Oczekuje na potwierdzenie rozpoczęcia opieki przez opiekuna",
@@ -324,7 +325,7 @@
     "markAllAsRead": "Oznacz jako przeczytane",
     "noNotifications": "Brak powiadomień",
     "care_reservation": "Dokonano rezerwacji opieki na jedną z Twoich ofert",
-    "care_update": "Cena została zaktualizowana w jednej z twoich opiek",
+    "care_update": "Cena została zaktualizowana w jednej z Twoich opiek",
     "care_accepted": "Twoja opieka została zaakceptowana",
     "care_rejected": "Twoja opieka została odrzucona",
     "confirmation_needed": "Twoja opieka oczekuje na potwierdzenie rozpoczęcia",
