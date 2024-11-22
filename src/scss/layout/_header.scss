@@ -28,6 +28,17 @@
         color: v.$blue-light;
       }
     }
+
+    .notification-badge {
+      cursor: pointer;
+      width: 23px;
+      height: 23px;
+      color: v.$blue-dark;
+
+      &:hover {
+        color: v.$blue-light;
+      }
+    }
   }
 
   .menu-desktop {
@@ -56,16 +67,17 @@
       margin-left: 40px;
     }
 
-    .right-corner {
-      gap: 10px;
-    }
-
     .auth-button {
       font-size: 14px;
     }
   }
 
   @media (max-width: 480px) {
+    padding: 0 10px;
+
+    .right-corner {
+      gap: 15px;
+    }
 
     .auth-button {
       font-size: 11px;

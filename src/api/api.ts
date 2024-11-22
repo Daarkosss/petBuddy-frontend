@@ -1,5 +1,6 @@
 import { toast } from "react-toastify";
 import store from "../store/RootStore";
+import NotificationWebSocket from "./NotificationWebSocket";
 import {
   CaretakerBasicsResponse,
   CaretakerSearchFilters,
@@ -18,11 +19,24 @@ import {
   OfferWithId,
   AccountDataDTO,
   CaretakerRatingsResponse,
-  AvailabilityValues
+  AvailabilityValues,
 } from "../types";
-import { CareDTO, CareReservation, CareReservationDTO, GetCaresDTO } from "../types/care.types";
-import { AnimalAttributes, AnimalConfigurationsDTO } from "../types/animal.types";
+import {
+  CareDTO,
+  CareReservation,
+  CareReservationDTO,
+  GetCaresDTO,
+} from "../types/care.types";
+import {
+  AnimalAttributes,
+  AnimalConfigurationsDTO,
+} from "../types/animal.types";
 import { UploadFile } from "antd";
+import {
+  Notification,
+  NotificationDTO,
+  NumberOfUnreadChats,
+} from "../types/notification.types";
 import { ChatMessagesResponse, ChatRoom } from "../types/chat.types";
 
 const backendHost =
@@ -33,6 +47,8 @@ export const PATH_PREFIX = `http://${backendHost}:${backendPort}/`;
 type Method = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
 class API {
+  notificationWebSocket = new NotificationWebSocket();
+
   constructor() {
     this.getAnimalsConfigurations().then((animalConfigurations) => {
       store.animal.allAnimalConfigurations = animalConfigurations;
@@ -584,8 +600,11 @@ class API {
   async getAnimalsConfigurations(): Promise<AnimalConfigurationsDTO> {
     return this.fetch<AnimalConfigurationsDTO>("GET", "api/animal/complex");
   }
-  
-  async makeCareReservation(caretakerEmail: string, careReservation: CareReservation): Promise<CareDTO | undefined> {
+
+  async makeCareReservation(
+    caretakerEmail: string,
+    careReservation: CareReservation
+  ): Promise<CareDTO | undefined> {
     if (store.user.profile?.selected_profile === "CLIENT") {
       const [dateFrom, dateTo] = careReservation.dateRange;
       const body: CareReservationDTO = {
@@ -600,14 +619,14 @@ class API {
         description: careReservation.description,
         dailyPrice: careReservation.dailyPrice,
         careStart: dateFrom?.toString() || "",
-        careEnd: dateTo?.toString() || dateFrom?.toString() || ""
+        careEnd: dateTo?.toString() || dateFrom?.toString() || "",
       };
 
       return this.authorizedFetch<CareDTO>(
         "POST",
         `api/care/${caretakerEmail}`,
         body,
-        { "Accept-Role": "CLIENT"}
+        { "Accept-Role": "CLIENT" }
       );
     }
   }
@@ -625,7 +644,7 @@ class API {
       if (pagingParams.sortDirection) {
         queryParams.append("sortDirection", pagingParams.sortDirection);
       }
-  
+
       const queryString = queryParams.toString();
       return this.authorizedFetch<GetCaresDTO>(
         "GET",
@@ -638,10 +657,7 @@ class API {
 
   async getCare(careId: number): Promise<CareDTO | undefined> {
     if (store.user.profile?.selected_profile) {
-      return this.authorizedFetch<CareDTO>(
-        "GET",
-        `api/care/${careId}`,
-      );
+      return this.authorizedFetch<CareDTO>("GET", `api/care/${careId}`);
     }
   }
 
@@ -662,19 +678,82 @@ class API {
         "POST",
         `api/care/${careId}/reject`,
         undefined,
-        { "Accept-Role": store.user.profile?.selected_profile}
+        { "Accept-Role": store.user.profile?.selected_profile }
       );
     }
   }
 
-  async updateCarePrice(careId: number, dailyPrice: number): Promise<CareDTO | undefined> {
+  async updateCarePrice(
+    careId: number,
+    dailyPrice: number
+  ): Promise<CareDTO | undefined> {
     if (store.user.profile?.selected_profile === "CARETAKER") {
       return this.authorizedFetch<CareDTO>(
         "PATCH",
         `api/care/${careId}`,
-        {dailyPrice},
+        { dailyPrice },
         { "Accept-Role": "CARETAKER" }
       );
+    }
+  }
+
+  async getNotifications(): Promise<NotificationDTO | undefined> {
+    if (store.user.profile?.selected_profile) {
+      const queryParams = new URLSearchParams({
+        page: "0",
+        size: "1000000", // To fetch all notifications
+        sortBy: "createdAt",
+        sortDirection: "DESC",
+      });
+
+      return this.authorizedFetch<NotificationDTO>(
+        "GET",
+        `api/notifications?${queryParams}`,
+        undefined,
+        { "Accept-Role": store.user.profile?.selected_profile }
+      );
+    }
+  }
+
+  async markNotificationAsRead(
+    notificationId: number
+  ): Promise<Notification | undefined> {
+    if (store.user.profile?.selected_profile) {
+      return this.authorizedFetch<Notification>(
+        "PATCH",
+        `api/notifications/${notificationId}`,
+        undefined,
+        { "Accept-Role": store.user.profile?.selected_profile }
+      );
+    }
+  }
+
+  async markAllNotificationsAsRead(): Promise<void> {
+    if (store.user.profile?.selected_profile) {
+      this.authorizedFetch<void>(
+        "POST",
+        "api/notifications/all-read",
+        undefined,
+        { "Accept-Role": store.user.profile?.selected_profile }
+      );
+    }
+  }
+
+  async connectNotificationWebSocket(): Promise<void> {
+    this.notificationWebSocket.initWebsocketConnection();
+  }
+
+  async getNumberOfUnreadChats(): Promise<number | undefined> {
+    if (store.user.profile?.selected_profile) {
+      const data = await this.authorizedFetch<NumberOfUnreadChats>(
+        "GET",
+        "api/chat/unread/count"
+      );
+      if (store.user.profile.selected_profile === "CLIENT") {
+        return data.unseenChatsAsClient;
+      } else {
+        return data.unseenChatsAsCaretaker;
+      }
     }
   }
 
@@ -691,14 +770,18 @@ class API {
     };
   };
 
-  convertAvailabilityRangesToValues = (availabilities: AvailabilityRanges): AvailabilityValues => {
+  convertAvailabilityRangesToValues = (
+    availabilities: AvailabilityRanges
+  ): AvailabilityValues => {
     return availabilities.map((availability) => [
       availability.availableFrom,
       availability.availableTo || availability.availableFrom,
     ]);
-  }
-  
-  convertValuesToAvailabilityRanges = (values: AvailabilityValues): AvailabilityRanges => {
+  };
+
+  convertValuesToAvailabilityRanges = (
+    values: AvailabilityValues
+  ): AvailabilityRanges => {
     return values.map(([from, to]) => ({
       availableFrom: from?.toString() || "",
       availableTo: to?.toString() || from?.toString() || "",

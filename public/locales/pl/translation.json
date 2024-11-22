@@ -135,7 +135,7 @@
     "required": "Wymagane",
     "zipCodeFormat": "Nieprawidłowy format (00-000)",
     "phoneNumberFormat": "Nieprawidłowy format (minimum 9 cyfr)",
-    "price": "Nieprawidłowy format (0,00)"
+    "price": "Maks. 2 miejsca po przecinku, minimum 0,01 zł"
   },
 
   "landingPage": {
@@ -188,7 +188,7 @@
     "addConfiguration": "Konfiguracja została pomyślnie utworzona",
     "setAvailabilityForOffers": "Dostępność została pomyślnie ustawiona dla wybranych ofert",
     "askForCare": "Zapytanie o opiekę zostało pomyślnie wysłane. Czekaj na odpowiedź opiekuna",
-    "updatePrice": "Nowa cena opieki została pomyślnie zaktualizowana",
+    "updatePrice": "Cena opieki została pomyślnie zaktualizowana",
     "acceptCare": "Opieka została pomyślnie zaakceptowana",
     "rejectCare": "Opieka została pomyślnie odrzucona"
   },
@@ -277,7 +277,8 @@
     "step3Description": "Potwierdź rezerwację",
     "originalPrice": "Początkowa cena z oferty",
     "confirm": "Potwierdź rezerwację",
-    "forAnimal": "Dla zwierzęcia {{animalType}}"
+    "forAnimal": "Dla zwierzęcia {{animalType}}",
+    "chooseDateFirst": "Najpierw wybierz datę"
   },
 
   "careStatus": {
@@ -299,5 +300,18 @@
   "next": "Dalej",
   "youWillSave": "Zaoszczędzisz",
   "youWillGain": "Zyskasz",
-  "youWillLose": "Stracisz"
+  "youWillLose": "Stracisz",
+
+  "noAvailability": "Opiekun nie ustawił dostępności",
+
+  "notification": {
+    "title": "Powiadomienia",
+    "markAllAsRead": "Oznacz jako przeczytane",
+    "noNotifications": "Brak powiadomień",
+    "care_reservation": "Dokonano rezerwacji opieki na jedną z Twoich ofert",
+    "care_update": "Cena została zaktualizowana w jednej z twoich opiek",
+    "care_accepted": "Twoja opieka została zaakceptowana",
+    "care_rejected": "Twoja opieka została odrzucona",
+    "newNotification": "Masz nowe powiadomienie"
+  }
 }
