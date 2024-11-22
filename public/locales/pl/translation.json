@@ -286,7 +286,7 @@
     "accepted": "Zaakceptowana przez obie strony",
     "pending": "Oczekuje na odpowiedź",
     "waitingForOtherResponse": "Oczekuje na odpowiedź drugiej strony",
-    "waitingForYourResponse": "Oczekuje na twoją akcję",
+    "waitingForYourResponse": "Oczekuje na Twoją akcję",
     "cancelled": "Anulowana",
     "waitingToTakePlace": "Oczekuje na odbycie",
     "isTakingPlace": "W trakcie odbywania",
@@ -309,7 +309,7 @@
     "markAllAsRead": "Oznacz jako przeczytane",
     "noNotifications": "Brak powiadomień",
     "care_reservation": "Dokonano rezerwacji opieki na jedną z Twoich ofert",
-    "care_update": "Cena została zaktualizowana w jednej z twoich opiek",
+    "care_update": "Cena została zaktualizowana w jednej z Twoich opiek",
     "care_accepted": "Twoja opieka została zaakceptowana",
     "care_rejected": "Twoja opieka została odrzucona",
     "newNotification": "Masz nowe powiadomienie"
