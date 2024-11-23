@@ -46,9 +46,9 @@ const PageHeader = observer(() => {
     },
     ...(keycloak.authenticated ? authenticatedMenuItems : []),
     {
-      key: "aboutUs",
-      label: t("aboutUs"),
-      onClick: () => {}
+      key: "termsAndConditions",
+      label: t("termsAndConditions"),
+      onClick: () => navigate("/terms-and-conditions"),
     },
   ];
 
