@@ -1,7 +1,7 @@
 import { Badge } from "antd";
 import { MessageOutlined } from "@ant-design/icons";
 import { observer } from "mobx-react-lite";
-import store from "../store/RootStore";
+import store from "../../store/RootStore";
 
 const ChatBadge = observer(() => {
   return (

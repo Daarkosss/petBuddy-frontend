@@ -9,7 +9,7 @@ import CaretakerSearch from "./pages/CaretakerSearch";
 import ProfileSelection from "./pages/ProfileSelection";
 import OfferManagement from "./pages/OfferManagement";
 import LandingPage from "./pages/LandingPage";
-import Header from "./components/Header";
+import Header from "./components/Header/Header";
 import { observer } from "mobx-react-lite";
 import CareReservationForm from "./pages/CareReservationForm";
 import CaretakerProfile from "./pages/CaretakerProfile";

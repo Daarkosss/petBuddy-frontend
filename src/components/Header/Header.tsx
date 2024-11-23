@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Menu, Button, Drawer } from "antd";
 import { Header } from "antd/es/layout/layout";
 import { MenuOutlined } from "@ant-design/icons";
-import store from "../store/RootStore";
+import store from "../../store/RootStore";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import NotificationBadge from "./NotificationBadge";
