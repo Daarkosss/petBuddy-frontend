@@ -1,7 +1,13 @@
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import store from "../store/RootStore";
 
 const TermsAndConditions = () => {
   const { i18n } = useTranslation();
+
+  useEffect(() => {
+    store.selectedMenuOption = "termsAndConditions";
+  }, []);
 
   if (i18n.language === "pl") {
     return (
@@ -1078,7 +1084,7 @@ const TermsAndConditions = () => {
               of the User, viruses, Trojan horses, and other spyware that may or
               have been infected with the User's Device. Users should take
               measures to protect themselves from these threats. should follow
-              the
+              the{" "}
               <a rel="external" href="https://nety.pl/en/cybersecurity/">
                 principles of safe internet usage
               </a>
