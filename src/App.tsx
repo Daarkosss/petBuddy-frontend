@@ -114,6 +114,7 @@ const App = observer(() => {
                     element={<CaretakerProfile />}
                   />
                   <Route path="/profile-client" element={<ClientProfile />} />
+                  <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
                   <Route path="*" element={<Navigate to="/" replace />} />
                 </>
               ) : (
