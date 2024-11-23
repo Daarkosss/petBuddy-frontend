@@ -313,5 +313,7 @@
     "care_accepted": "Twoja opieka została zaakceptowana",
     "care_rejected": "Twoja opieka została odrzucona",
     "newNotification": "Masz nowe powiadomienie"
-  }
+  },
+
+  "termsAndConditions": "Polityka Prywatności"
 }

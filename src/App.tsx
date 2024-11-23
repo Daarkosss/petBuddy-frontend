@@ -16,6 +16,7 @@ import CaretakerProfile from "./pages/CaretakerProfile";
 import ClientProfile from "./pages/ClientProfile";
 import CareList from "./pages/CareList";
 import CareDetails from "./pages/CareDetails";
+import TermsAndConditions from "./pages/TermsAndConditions";
 
 const { Content } = Layout;
 
@@ -138,6 +139,7 @@ const App = observer(() => {
                   element={<CaretakerProfile />}
                 />
                 <Route path="/caretaker/search" element={<CaretakerSearch />} />
+                <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
                 <Route path="*" element={<Navigate to ="/" replace />} />
               </>
             )}
