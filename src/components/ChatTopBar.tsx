@@ -1,7 +1,12 @@
 import React from "react";
 import "../scss/components/_chatTopBar.scss";
 import { Avatar } from "antd";
-import { CloseOutlined, MinusOutlined, UserOutlined } from "@ant-design/icons";
+import {
+  CloseOutlined,
+  MenuOutlined,
+  MinusOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 
 interface ChatTopBarProps {
   profilePicture: string | null;
@@ -23,7 +28,10 @@ const ChatTopBar: React.FC<ChatTopBarProps> = ({
   return (
     <div className="chat-top-bar-container">
       <div className="options-top-big-container">
-        <div className="options-top-small-container">
+        <div className="options-top-small-container-left">
+          <MenuOutlined />
+        </div>
+        <div className="options-top-small-container-right">
           <MinusOutlined onClick={() => onMinimize()} />
           <CloseOutlined onClick={() => onClose()} />
         </div>
