@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import store from "../store/RootStore";
 import "../scss/components/_message.scss";
 import { Avatar } from "antd";
+import { UserOutlined } from "@ant-design/icons";
 
 interface MessageContent {
   message: string;
@@ -43,8 +44,10 @@ const Message: React.FC<MessageContent> = ({
         </div>
         <div className="message-avatar-container">
           <Avatar
+            className="message-avatar"
             src={profilePicture}
-            size={15}
+            icon={profilePicture ? null : <UserOutlined />}
+            size={16}
             style={{
               visibility: showAvatar === true ? "visible" : "hidden",
             }}

@@ -34,7 +34,7 @@
         max-width: 60%;
         color: v.$white;
         background-color: v.$blue-light;
-        border-radius: 15px 15px 10px 25px;
+        border-radius: 15px 15px 10px 20px;
         overflow-wrap: break-word;
       }
 
@@ -60,11 +60,12 @@
   margin-top: 5px;
   display: flex;
   flex-direction: column;
-  align-items: start;
+  justify-content: start;
   margin-bottom: 5px;
+  width: 100%;
 
   .message-send-time {
-    text-align: end;
+    text-align: start;
     margin-left: 5px;
     font-size: 12px;
   }
@@ -88,7 +89,7 @@
         max-width: 60%;
         color: v.$white;
         background-color: v.$blue-dark;
-        border-radius: 15px 15px 25px 10px;
+        border-radius: 15px 15px 20px 10px;
 
         overflow-wrap: break-word;
       }
