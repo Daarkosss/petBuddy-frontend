@@ -37,7 +37,12 @@ import {
   NotificationDTO,
   NumberOfUnreadChats,
 } from "../types/notification.types";
-import { ChatMessagesResponse, ChatRoom } from "../types/chat.types";
+import {
+  ChatMessage,
+  ChatMessagesResponse,
+  ChatRoom,
+  ChatsResponse,
+} from "../types/chat.types";
 
 const backendHost =
   import.meta.env.VITE_BACKEND_HOST || window.location.hostname;
@@ -173,14 +178,14 @@ class API {
     messageReceiverEmail: string,
     content: string,
     acceptTimezone: string | null
-  ): Promise<void> {
+  ): Promise<ChatMessage> {
     const headers: HeadersInit = {
       "Accept-Role": store.user.profile!.selected_profile!.toUpperCase(),
     };
     if (acceptTimezone !== null) {
       headers["Accept-Timezone"] = acceptTimezone;
     }
-    return this.authorizedFetch<void>(
+    return this.authorizedFetch<ChatMessage>(
       "POST",
       `api/chat/${messageReceiverEmail}`,
       {
@@ -754,6 +759,32 @@ class API {
       } else {
         return data.unseenChatsAsCaretaker;
       }
+    }
+  }
+
+  async getUserChats(
+    pagingParams: PagingParams,
+    acceptTimezone: string | null
+  ): Promise<ChatsResponse | undefined> {
+    if (store.user.profile?.selected_profile) {
+      const queryParams = new URLSearchParams({
+        page: pagingParams.page.toString(),
+        size: pagingParams.size.toString(),
+      });
+      const headers: HeadersInit = {
+        "Accept-Role": store.user.profile!.selected_profile,
+      };
+
+      if (acceptTimezone !== null) {
+        headers["Accept-Timzeone"] = acceptTimezone;
+      }
+
+      return await this.authorizedFetch<ChatsResponse>(
+        "GET",
+        `api/chat?${queryParams}`,
+        undefined,
+        headers
+      );
     }
   }
 
