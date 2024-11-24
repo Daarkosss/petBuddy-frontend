@@ -1,0 +1,36 @@
+@use "../helpers/variables" as v;
+
+.chat-badge-title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 15px;
+  .chat-badge-not-read {
+    width: 10px;
+    height: 10px;
+    background-color: black;
+    border-radius: 50%;
+  }
+}
+
+.chat-badge-extra {
+  display: flex;
+  flex-direction: column;
+  @media (max-width: 350px) {
+    flex-direction: row;
+    gap: 10px;
+    width: 100%;
+    align-items: start;
+  }
+}
+
+.chat-badge-chat-list {
+  margin-top: 10px;
+  button.ant-pagination-item-link {
+    background-color: v.$blue-medium !important;
+
+    &:hover {
+      background-color: v.$blue-light !important;
+    }
+  }
+}

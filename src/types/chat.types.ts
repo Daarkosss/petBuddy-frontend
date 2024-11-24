@@ -40,3 +40,28 @@ export type WebsocketResponse = {
   chatId?: number;
   joiningUserEmail?: string;
 };
+
+export type ChatsResponse = {
+  totalElements: number;
+  totalPages: number;
+  size: number;
+  content: Chat[];
+  number: number;
+  sort: SortDTO;
+  first: boolean;
+  last: boolean;
+  numberOfElements: number;
+  pageable: PageableDTO;
+  empty: boolean;
+};
+
+export type Chat = {
+  id: number;
+  chatterEmail: string;
+  chatterName: string;
+  chatterSurname: string;
+  lastMessageCreatedAt: string;
+  lastMessage: string;
+  lastMessageSendBy: string;
+  seenByPrincipal: boolean;
+};
