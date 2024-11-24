@@ -33,7 +33,7 @@ const ChatMessages: React.FC<ChatBoxContent> = ({
   return (
     <div className="chat-messages-container">
       {messages.map((message, i) => (
-        <div key={i}>
+        <div key={i} className="chat-messages-inner-container">
           <Message
             message={message.content}
             recipientName={recipientName}
