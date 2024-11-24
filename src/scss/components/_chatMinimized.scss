@@ -1,0 +1,88 @@
+@use "../helpers/variables" as v;
+
+.chat-minimized-box-main-container-wrap {
+  padding: 3px;
+  position: fixed;
+  bottom: 0px;
+  right: 20px;
+  z-index: 1200;
+  background: linear-gradient(to bottom, v.$blue-dark, v.$blue-very-dark);
+  border-radius: 15px 15px 0px 0px;
+  overflow: hidden;
+  .chat-minimized-box-main-container {
+    .chat-minimized-box-inner-container {
+      border-radius: 15px 15px 0px 0px;
+      width: 250px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+      .chat-top-bar-container {
+        background-color: v.$blue-dark;
+        color: v.$white;
+        display: flex;
+        flex-direction: column;
+
+        .options-top-big-container {
+          border-radius: 15px 15px 0px 0px;
+          background-color: v.$blue-very-dark;
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          width: 100%;
+
+          .options-top-small-container-left {
+            margin: 10px;
+            width: 40px;
+            color: v.$blue-medium;
+          }
+
+          .options-top-small-container-right {
+            margin: 10px;
+            width: 40px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            color: v.$blue-medium;
+          }
+        }
+
+        .comment-container-top {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: start;
+          gap: 10px;
+          color: white;
+
+          .comment-container-user-rating {
+            margin-left: 10px;
+            height: 100%;
+
+            .profile-image {
+              width: 50px;
+              height: 50px;
+              border-radius: 50%;
+              object-fit: cover;
+            }
+
+            .comment-container-user-nick-container {
+              margin-top: 10px;
+              display: flex;
+              height: 100%;
+              flex-direction: row;
+              justify-content: start;
+              align-items: center;
+              word-wrap: break-word;
+              gap: 10px;
+
+              .comment-container-user-nick {
+                font-weight: bold;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
