@@ -16,19 +16,58 @@ import CaretakerProfile from "./pages/CaretakerProfile";
 import ClientProfile from "./pages/ClientProfile";
 import CareList from "./pages/CareList";
 import CareDetails from "./pages/CareDetails";
+import ChatBox from "./components/ChatBox";
+import ChatMinimized from "./components/ChatMinimized";
 
 const { Content } = Layout;
+
+interface OpenChatAttributes {
+  shouldOpenMaximizedChat: boolean;
+  shouldOpenMinimizedChat: boolean;
+  recipientEmail: string | undefined;
+  profilePicture: string | undefined;
+  name: string | undefined;
+  surname: string | undefined;
+  profile: string | undefined;
+}
 
 const App = observer(() => {
   const { keycloak, initialized } = useKeycloak();
   const [isUserDataFetched, setIsUserDataFetched] = useState(false);
+  const [openChat, setOpenChat] = useState<OpenChatAttributes>({
+    shouldOpenMaximizedChat: false,
+    shouldOpenMinimizedChat: false,
+    recipientEmail: undefined,
+    profilePicture: undefined,
+    name: undefined,
+    surname: undefined,
+    profile: undefined,
+  });
+
+  const handleOpenChat = (
+    recipientEmail: string,
+    profilePicture: string | undefined,
+    name: string,
+    surname: string,
+    profile: string
+  ) => {
+    setOpenChat({
+      shouldOpenMaximizedChat: true,
+      shouldOpenMinimizedChat: false,
+      recipientEmail: recipientEmail,
+      profilePicture: profilePicture,
+      name: name,
+      surname: surname,
+      profile: profile,
+    });
+  };
 
   useEffect(() => {
     const initializeApp = async () => {
       try {
         if (keycloak.authenticated) {
           if (!store.user.xsrfToken) {
-            await api.getXsrfToken()
+            await api.getXsrfToken();
           }
 
           try {
@@ -47,7 +86,7 @@ const App = observer(() => {
           } catch (error) {
             console.error(`Failed to load user profile: ${error}`);
           }
-  
+
           try {
             await store.notification.setup();
           } catch (error) {
@@ -60,7 +99,7 @@ const App = observer(() => {
         store.isStarting = false;
       }
     };
-  
+
     if (initialized) {
       initializeApp();
     }
@@ -70,7 +109,67 @@ const App = observer(() => {
   if (!store.isStarting) {
     return (
       <Layout>
-        <Header />
+        <Header handleOpenChat={handleOpenChat} />
+        {openChat.shouldOpenMaximizedChat === true && (
+          <ChatBox
+            recipientEmail={openChat.recipientEmail!}
+            profilePicture={
+              openChat.profilePicture !== undefined
+                ? openChat.profilePicture
+                : null
+            }
+            onMinimize={() => {
+              setOpenChat({
+                ...openChat,
+                shouldOpenMaximizedChat: false,
+                shouldOpenMinimizedChat: true,
+              });
+            }}
+            onClose={() =>
+              setOpenChat({
+                shouldOpenMaximizedChat: false,
+                shouldOpenMinimizedChat: false,
+                recipientEmail: undefined,
+                profilePicture: undefined,
+                name: undefined,
+                surname: undefined,
+                profile: undefined,
+              })
+            }
+            name={openChat.name ?? ""}
+            surname={openChat.surname ?? ""}
+            profile={
+              store.user.profile!.selected_profile === "CLIENT"
+                ? "Caretaker"
+                : "Client"
+            }
+          />
+        )}
+        {openChat.shouldOpenMinimizedChat === true && (
+          <ChatMinimized
+            name={openChat.name!}
+            surname={openChat.surname!}
+            profile={openChat.profile!}
+            onClose={() =>
+              setOpenChat({
+                shouldOpenMaximizedChat: false,
+                shouldOpenMinimizedChat: false,
+                recipientEmail: undefined,
+                profilePicture: undefined,
+                name: undefined,
+                surname: undefined,
+                profile: undefined,
+              })
+            }
+            onMaximize={() => {
+              setOpenChat({
+                ...openChat,
+                shouldOpenMaximizedChat: true,
+                shouldOpenMinimizedChat: false,
+              });
+            }}
+          />
+        )}
         <Content className="page-content">
           <Routes>
             {keycloak.authenticated ? (
@@ -87,21 +186,11 @@ const App = observer(() => {
                     element={<OfferManagement />}
                   />
                   <Route
-                    path="/care/reservation/:caretakerEmail" 
+                    path="/care/reservation/:caretakerEmail"
                     element={<CareReservationForm />}
                   />
-                  <Route
-                    path="/cares"
-                    element={
-                      <CareList />
-                    }
-                  />
-                  <Route
-                    path="/care/:careId"
-                    element={
-                      <CareDetails />
-                    }
-                  />
+                  <Route path="/cares" element={<CareList />} />
+                  <Route path="/care/:careId" element={<CareDetails />} />
                   <Route
                     path="/profile-selection"
                     element={
@@ -138,7 +227,7 @@ const App = observer(() => {
                   element={<CaretakerProfile />}
                 />
                 <Route path="/caretaker/search" element={<CaretakerSearch />} />
-                <Route path="*" element={<Navigate to ="/" replace />} />
+                <Route path="*" element={<Navigate to="/" replace />} />
               </>
             )}
           </Routes>

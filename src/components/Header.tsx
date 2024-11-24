@@ -11,7 +11,11 @@ import { useState } from "react";
 import NotificationBadge from "./NotificationBadge";
 import ChatBadge from "./ChatBadge";
 
-const PageHeader = observer(() => {
+interface PageHeaderProperties {
+  handleOpenChat: Function;
+}
+
+const PageHeader = observer<PageHeaderProperties>(({ handleOpenChat }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { keycloak } = useKeycloak();
@@ -29,8 +33,8 @@ const PageHeader = observer(() => {
     {
       key: "cares",
       label: t("care.yourCares"),
-      onClick: () => navigate("/cares")
-    }
+      onClick: () => navigate("/cares"),
+    },
   ];
 
   const menuItems = [
@@ -48,7 +52,7 @@ const PageHeader = observer(() => {
     {
       key: "aboutUs",
       label: t("aboutUs"),
-      onClick: () => {}
+      onClick: () => {},
     },
   ];
 
@@ -97,12 +101,14 @@ const PageHeader = observer(() => {
       </div>
 
       <div className="right-corner">
-        {keycloak.authenticated &&
+        {keycloak.authenticated && (
           <>
-            <ChatBadge/>
+            {store.user.profile?.selected_profile !== null && (
+              <ChatBadge handleOpenChat={handleOpenChat} />
+            )}
             <NotificationBadge />
           </>
-        }
+        )}
         <LanguageSwitcher />
         {keycloak.authenticated ? (
           <Button
