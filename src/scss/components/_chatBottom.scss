@@ -5,5 +5,7 @@
   color: white;
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
+  padding: 10px;
+  justify-content: space-around;
+  gap: 15px;
 }
