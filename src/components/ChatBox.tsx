@@ -124,7 +124,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
               data.content.seenByRecipient ||
             data.content.senderEmail !== store.user.profile?.email
           ) {
-            if (data.content.seenByRecipient === true) {
+            if (data.content.seenByRecipient) {
               setLastSeenMessage(data.content.id);
             }
           }
