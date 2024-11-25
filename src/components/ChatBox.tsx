@@ -61,9 +61,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
 
   useEffect(() => {
     if (
-      wsClient !== null &&
-      store.user.profile !== null &&
-      store.user.profile?.selected_profile !== null
+      wsClient && store.user.profile && store.user.profile?.selected_profile
     ) {
       checkIfChatRoomExists();
     }
