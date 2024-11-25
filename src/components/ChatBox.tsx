@@ -121,7 +121,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
         if (data.type === "SEND") {
           if (
             (data.content.senderEmail === store.user.profile?.email &&
-              data.content.seenByRecipient === true) ||
+              data.content.seenByRecipient ||
             data.content.senderEmail !== store.user.profile?.email
           ) {
             if (data.content.seenByRecipient === true) {
