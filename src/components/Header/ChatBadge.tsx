@@ -130,7 +130,7 @@ const ChatBadge = observer<ChatBadgeProperties>(({ handleOpenChat }) => {
                   title={
                     <div className="chat-badge-title">
                       {item.chatterName} {item.chatterSurname}
-                      {item.seenByPrincipal === false && (
+                      {!item.seenByPrincipal && (
                         <div className="chat-badge-not-read"></div>
                       )}
                     </div>
