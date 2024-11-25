@@ -180,7 +180,7 @@ class API {
     acceptTimezone: string | null
   ): Promise<ChatMessage> {
     const headers: HeadersInit = {
-      "Accept-Role": store.user.profile!.selected_profile!.toUpperCase(),
+      "Accept-Role": store.user.profile!.selected_profile,
     };
     if (acceptTimezone) {
       headers["Accept-Timezone"] = acceptTimezone;
