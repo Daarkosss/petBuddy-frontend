@@ -61,7 +61,9 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
 
   useEffect(() => {
     if (
-      wsClient && store.user.profile && store.user.profile?.selected_profile
+      wsClient &&
+      store.user.profile &&
+      store.user.profile?.selected_profile
     ) {
       checkIfChatRoomExists();
     }
@@ -121,7 +123,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
         if (data.type === "SEND") {
           if (
             (data.content.senderEmail === store.user.profile?.email &&
-              data.content.seenByRecipient ||
+              data.content.seenByRecipient) ||
             data.content.senderEmail !== store.user.profile?.email
           ) {
             if (data.content.seenByRecipient) {
@@ -171,9 +173,8 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
         setLastSeenMessage(messagesResponse.content[0].id);
       } else {
         setLastSeenMessage(
-          messagesResponse.content.find(
-            (message) => message.seenByRecipient
-          )?.id
+          messagesResponse.content.find((message) => message.seenByRecipient)
+            ?.id
         );
       }
     }
@@ -203,8 +204,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
 
   const sendMessageToChatRoom = (message: string) => {
     const headers = {
-      "Accept-Role":
-        store.user.profile!.selected_profile
+      "Accept-Role": store.user.profile!.selected_profile as string,
       "Accept-Timezone": timeZone,
     };
     if (wsClient && message) {

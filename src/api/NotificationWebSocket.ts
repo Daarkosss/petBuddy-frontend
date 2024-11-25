@@ -47,7 +47,7 @@ class NotificationWebSocket {
 
       if (newNotification.dType === "CHAT_NOTIFICATION") {
         this.changeReceiveMessagetriggerValue();
-        store.notification.setunreadChats(
+        store.notification.setUnreadChats(
           newNotification.unseenChatsAsClient,
           newNotification.unseenChatsAsCaretaker
         );
