@@ -3,7 +3,7 @@ import ChatTopBar from "./ChatTopBar";
 import ChatMessages from "./ChatMessages";
 import ChatBottom from "./ChatBottom";
 import "../scss/components/_chatBox.scss";
-import { Client, IFrame, Stomp } from "@stomp/stompjs";
+import { Client, Stomp } from "@stomp/stompjs";
 import sockjs from "sockjs-client/dist/sockjs";
 import store from "../store/RootStore";
 import { api } from "../api/api";
