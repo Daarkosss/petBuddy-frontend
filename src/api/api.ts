@@ -152,7 +152,7 @@ class API {
   ): Promise<ChatRoom> {
     try {
       const headers: HeadersInit = {
-        "Accept-Role": store.user.profile!.selected_profile,
+        "Accept-Role": store.user.profile!.selected_profile!,
       };
       if (acceptTimezone) {
         headers["Accept-Timezone"] = acceptTimezone;
@@ -180,7 +180,7 @@ class API {
     acceptTimezone: string | null
   ): Promise<ChatMessage> {
     const headers: HeadersInit = {
-      "Accept-Role": store.user.profile!.selected_profile,
+      "Accept-Role": store.user.profile!.selected_profile!,
     };
     if (acceptTimezone) {
       headers["Accept-Timezone"] = acceptTimezone;
@@ -203,7 +203,7 @@ class API {
   ): Promise<ChatMessagesResponse> {
     try {
       const headers: HeadersInit = {
-        "Accept-Role": store.user.profile!.selected_profile,
+        "Accept-Role": store.user.profile!.selected_profile!,
       };
       if (acceptTimezone) {
         headers["Accept-Timezone"] = acceptTimezone;
