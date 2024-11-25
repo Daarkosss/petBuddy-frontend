@@ -9,7 +9,13 @@ import ChatListTile from "./ChatListTile";
 import "../scss/components/_chatBadge.scss";
 
 interface ChatBadgeProperties {
-  handleOpenChat: Function;
+  handleOpenChat: (
+    recipientEmail: string,
+    profilePicture: string | undefined,
+    name: string,
+    surname: string,
+    profile: string
+  ) => void;
 }
 
 const ChatBadge = observer<ChatBadgeProperties>(({ handleOpenChat }) => {
