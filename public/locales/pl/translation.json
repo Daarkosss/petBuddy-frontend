@@ -30,6 +30,8 @@
   "caretaker": "Opiekun",
   "client": "Klient",
 
+  "you": "Ty",
+
   "amenities": "Udogodnienia",
   "amenityTypes": {
     "toys": "Zabawki",
@@ -61,7 +63,8 @@
     "date": "Naciśnij, aby wybrać datę",
     "dailyPrice": "np. 52",
     "selectFromList": "Wybierz z listy",
-    "animalDescription": "np. Moj pupil musi jeść specjalną karmę..."
+    "animalDescription": "np. Moj pupil musi jeść specjalną karmę...",
+    "writeMessage": "Napisz wiadomość"
   },
 
   "personalData": {

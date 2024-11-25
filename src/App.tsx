@@ -18,6 +18,7 @@ import CareList from "./pages/CareList";
 import CareDetails from "./pages/CareDetails";
 import ChatBox from "./components/ChatBox";
 import ChatMinimized from "./components/ChatMinimized";
+import { useTranslation } from "react-i18next";
 
 const { Content } = Layout;
 
@@ -32,6 +33,7 @@ interface OpenChatAttributes {
 }
 
 const App = observer(() => {
+  const { t } = useTranslation();
   const { keycloak, initialized } = useKeycloak();
   const [isUserDataFetched, setIsUserDataFetched] = useState(false);
   const [openChat, setOpenChat] = useState<OpenChatAttributes>({
@@ -138,18 +140,14 @@ const App = observer(() => {
             }
             name={openChat.name ?? ""}
             surname={openChat.surname ?? ""}
-            profile={
-              store.user.profile!.selected_profile === "CLIENT"
-                ? "Caretaker"
-                : "Client"
-            }
+            profile={t(openChat.profile ?? "")}
           />
         )}
         {openChat.shouldOpenMinimizedChat === true && (
           <ChatMinimized
             name={openChat.name!}
             surname={openChat.surname!}
-            profile={openChat.profile!}
+            profile={t(openChat.profile ?? "")}
             onClose={() =>
               setOpenChat({
                 shouldOpenMaximizedChat: false,

@@ -1,6 +1,7 @@
 import React from "react";
 import store from "../store/RootStore";
 import "../scss/components/_chatListTile.scss";
+import { useTranslation } from "react-i18next";
 
 interface ChatListTileProperties {
   chatterName: string;
@@ -16,13 +17,14 @@ const ChatListTile: React.FC<ChatListTileProperties> = ({
   lastMessageSendBy,
   seenByPrincipal,
 }) => {
+  const { t } = useTranslation();
   return (
     <div
       className="chat-list-tile-container"
       style={{ fontWeight: seenByPrincipal === true ? "normal" : "bold" }}
     >
       {lastMessageSendBy === store.user.profile?.email
-        ? "Ty: "
+        ? `${t("you")}:`
         : `${chatterName}: `}{" "}
       {lastMessage.length > 9
         ? `${lastMessage.substring(0, 9)}... `

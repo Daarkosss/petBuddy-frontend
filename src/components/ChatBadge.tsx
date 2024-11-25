@@ -49,7 +49,7 @@ const ChatBadge = observer<ChatBadgeProperties>(({ handleOpenChat }) => {
     api.notificationWebSocket.receiveNewMessageTrigger,
   ]);
 
-  const handleOnPageCHange = (page: number, pageSize?: number) => {
+  const handleOnPageChange = (page: number, pageSize?: number) => {
     console.log(page);
     setPagingParams({
       page: page - 1,
@@ -83,7 +83,7 @@ const ChatBadge = observer<ChatBadgeProperties>(({ handleOpenChat }) => {
               current: pagination.current,
               pageSize: pagination.size,
               total: pagination.total,
-              onChange: handleOnPageCHange,
+              onChange: handleOnPageChange,
             }}
             renderItem={(item) => (
               <List.Item
@@ -112,8 +112,8 @@ const ChatBadge = observer<ChatBadgeProperties>(({ handleOpenChat }) => {
                     item.chatterName,
                     item.chatterSurname,
                     store.user.profile!.selected_profile === "CLIENT"
-                      ? "Caretaker"
-                      : "Client"
+                      ? "caretaker"
+                      : "client"
                   );
                 }}
               >

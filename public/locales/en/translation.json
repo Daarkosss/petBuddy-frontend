@@ -30,6 +30,8 @@
   "caretaker": "Caretaker",
   "client": "Client",
 
+  "you": "You",
+
   "amenities": "Amenities",
   "amenityTypes": {
     "toys": "Toys",
@@ -61,7 +63,8 @@
     "date": "Press to select date",
     "dailyPrice": "e.g. 52",
     "selectFromList": "Select from the list",
-    "animalDescription": "e.g. My pet has to eat special feed..."
+    "animalDescription": "e.g. My pet has to eat special feed...",
+    "writeMessage": "Write message"
   },
 
   "personalData": {
