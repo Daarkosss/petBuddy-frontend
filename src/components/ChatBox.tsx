@@ -172,7 +172,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
       } else {
         setLastSeenMessage(
           messagesResponse.content.find(
-            (message) => message.seenByRecipient === true
+            (message) => message.seenByRecipient
           )?.id
         );
       }
