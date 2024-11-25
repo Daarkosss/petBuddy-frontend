@@ -99,7 +99,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
 
   useEffect(() => {
     console.log(`chatId: ${chatId}`);
-    if (chatId !== null) {
+    if (chatId) {
       subscribeToChatRoom();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -113,7 +113,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
     const headers = {
       "Accept-Role":
         store.user.profile?.selected_profile?.toUpperCase() as string,
-      "Accept-Timezone": Intl.DateTimeFormat().resolvedOptions().timeZone
+      "Accept-Timezone": Intl.DateTimeFormat().resolvedOptions().timeZone,
     };
 
     wsClient.subscribe(
