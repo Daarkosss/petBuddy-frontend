@@ -57,7 +57,7 @@ const Message: React.FC<MessageContent> = ({
 
       <div
         className="message-send-time"
-        style={{ display: showDate === true ? "inline" : "none" }}
+        style={{ display: showDate ? "inline" : "none" }}
       >
         {`${new Date(timeSent).toLocaleDateString()} ${new Date(
           timeSent
