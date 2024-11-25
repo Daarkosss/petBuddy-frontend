@@ -113,7 +113,7 @@ const App = observer(() => {
     return (
       <Layout>
         <Header handleOpenChat={handleOpenChat} />
-        {openChat.shouldOpenMaximizedChat === true && (
+        {openChat.shouldOpenMaximizedChat && (
           <ChatBox
             recipientEmail={openChat.recipientEmail!}
             profilePicture={
