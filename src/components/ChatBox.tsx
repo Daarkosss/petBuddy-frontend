@@ -115,7 +115,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
     const headers = {
       "Accept-Role":
         store.user.profile?.selected_profile?.toUpperCase() as string,
-      "Accept-Timezone": timeZone, //TODO: change for correct timezone
+      "Accept-Timezone": Intl.DateTimeFormat().resolvedOptions().timeZone
     };
 
     wsClient.subscribe(
