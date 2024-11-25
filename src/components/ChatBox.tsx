@@ -214,7 +214,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
         body: JSON.stringify(chatMessage),
         headers: headers,
       });
-    } else console.log("sending message ended without sending message");
+    }
   };
 
   const disconnectWebSocket = async () => {
