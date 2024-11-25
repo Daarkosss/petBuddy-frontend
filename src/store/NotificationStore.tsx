@@ -46,9 +46,6 @@ class NotificationStore {
     }
 
     if (store.user.profile?.selected_profile === "CLIENT") {
-      console.log(
-        `setting unseen chat messages as client to: ${unseenChatsAsClient}`
-      );
       this.unreadChats = unseenChatsAsClient;
     }
   }
