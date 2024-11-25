@@ -227,7 +227,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
   };
 
   const onSend = (input: string) => {
-    if (doesChatRoomExist === false) {
+    if (!doesChatRoomExist) {
       try {
         initializeChatRoom(input);
       } catch (error: unknown) {
