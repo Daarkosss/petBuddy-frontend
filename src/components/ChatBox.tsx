@@ -204,7 +204,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
   const sendMessageToChatRoom = (message: string) => {
     const headers = {
       "Accept-Role":
-        store.user.profile!.selected_profile?.toUpperCase() as string,
+        store.user.profile!.selected_profile
       "Accept-Timezone": timeZone,
     };
     if (wsClient && message) {
