@@ -5,8 +5,11 @@
   "dog": "Dog",
   "cat": "Cat",
   "bird": "Bird",
-  "reptile": "Reptile",
+  "turtle": "Turtle",
+  "snake": "Snake",
   "fish": "Fish",
+  "rabbit": "Rabbit",
+  "hamster": "Hamster",
 
   "sex": "Sex",
   "male": "Male",
@@ -219,16 +222,22 @@
     "cat": "Your offer for cats",
     "dog": "Your offer for dogs",
     "bird": "Your offer for birds",
-    "rabbit": "Your offer for rabbits",
-    "reptile": "Your offer for reptiles"
+    "turtle": "Your offer for turtles",
+    "snake": "Your offer for snakes",
+    "fish": "Your offer for fish",
+    "hamster": "Your offer for hamsters",
+    "rabbit": "Your offer for rabbits"
   },
 
   "caretakerOffers": {
     "cat": "Offer for cats",
     "dog": "Offer for dogs",
     "bird": "Offer for birds",
-    "rabbit": "Offer for rabbits",
-    "reptile": "Offer for reptiles"
+    "turtle": "Offer for turtles",
+    "snake": "Offer for snakes",
+    "fish": "Offer for fish",
+    "hamster": "Offer for hamsters",
+    "rabbit": "Offer for rabbits"  
   },
 
   "availabilityAlert": "Availability will be overwritten with selected dates for all offers, you choose.",

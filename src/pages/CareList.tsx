@@ -90,7 +90,7 @@ const CareList = () => {
                   </Button>
                 ]}
                 extra={
-                  <img className="animal-image" src={`/images/${care.animalType.toLowerCase()}-card.jpg`}/>
+                  <img className="animal-image" src={`/images/animals${care.animalType.toLowerCase()}.jpg`}/>
                 }
               >
                 <List.Item.Meta

@@ -61,7 +61,7 @@ const MapWithCaretakers: React.FC<MapWithCaretakersProps> = ({
     L.divIcon({
       html: ReactDOMServer.renderToString(
         <img
-          src={photoUrl || "/default-avatar.png"}
+          src={photoUrl || "/images/default-avatar.png"}
         />
       ),
       iconSize: [40, 40],

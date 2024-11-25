@@ -216,7 +216,7 @@ const CareDetails = () => {
           }
         </div>
       </Card>
-      <img src={`/images/${care.animalType.toLowerCase()}-card.jpg`}/>
+      <img src={`/images/animals/${care.animalType.toLowerCase()}.jpg`}/>
       <Modal
         title={t("care.proposeNewPrice")}
         open={isModalOpen}

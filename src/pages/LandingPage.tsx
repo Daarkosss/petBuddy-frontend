@@ -44,7 +44,7 @@ const LandingPage = () => {
       </div>
 
       <div className="main-image">
-        <img src="/caretaker-image.jpg" alt="Dog and Man" />
+        <img src="/images/caretaker.jpg" alt="Dog and Man" />
       </div>
 
       <div className="search-container">

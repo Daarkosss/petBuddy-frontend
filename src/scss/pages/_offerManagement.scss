@@ -4,6 +4,7 @@
 .offer-management-page {
   display: flex;
   flex-direction: column;
+  height: 100%;
   gap: 15px;
 
   .offer-management-header {
@@ -82,6 +83,12 @@
 
 .offer-card {
   width: 400px !important;
+
+  img {
+    width: 100%;
+    aspect-ratio: 5/7;
+    object-fit: cover;
+  }
 
   @media (max-width: 500px) {
     width: 320px !important;;

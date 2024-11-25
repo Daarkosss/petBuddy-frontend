@@ -79,7 +79,7 @@ const OfferCard: React.FC<OfferCardProps> = ({
         className="offer-card"
         cover={
           <img
-            src={`/images/${offer.animal.animalType.toLowerCase()}-card.jpg`}
+            src={`/images/animals/${offer.animal.animalType.toLowerCase()}.jpg`}
             alt={offer.animal.animalType}
           />
         }

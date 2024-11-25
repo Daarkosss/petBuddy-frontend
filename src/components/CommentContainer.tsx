@@ -1,5 +1,5 @@
 import React from "react";
-import testImg from "../../public/pet_buddy_logo.svg";
+import testImg from "/images/pet-buddy-logo.svg?url";
 import { Card, Rate } from "antd";
 import "../scss/components/_commentContainer.scss";
 import RoundedLine from "./RoundedLine";

@@ -5,8 +5,11 @@
   "dog": "Pies",
   "cat": "Kot",
   "bird": "Ptak",
-  "reptile": "Gad",
-  "fish": "Ryba",
+  "turtle": "Żółw",
+  "snake": "Wąż",
+  "fish": "Ryby",
+  "rabbit": "Królik",
+  "hamster": "Chomik",
 
   "sex": "Płeć",
   "male": "Samiec",
@@ -227,16 +230,23 @@
     "cat": "Twoja oferta dla kotów",
     "dog": "Twoja oferta dla psów",
     "bird": "Twoja oferta dla ptaków",
-    "rabbit": "Twoja oferta dla królików",
-    "reptile": "Twoja oferta dla gadów"
+    "turtle": "Twoja oferta dla żółwi",
+    "snake": "Twoja oferta dla węży",
+    "fish": "Twoja oferta dla ryb",
+    "hamster": "Twoja oferta dla chomików",
+    "rabbit": "Twoja oferta dla królików"  
   },
 
   "caretakerOffers": {
     "cat": "Oferta dla kotów",
     "dog": "Oferta dla psów",
     "bird": "Oferta dla ptaków",
-    "rabbit": "Oferta dla królików",
-    "reptile": "Oferta dla gadów"
+    "reptile": "Oferta dla gadów",
+    "turtle": "Oferta dla żółwi",
+    "snake": "Oferta dla węży",
+    "fish": "Oferta dla ryb",
+    "hamster": "Oferta dla chomików",
+    "rabbit": "Oferta dla królików"  
   },
 
   "availabilityAlert": "Dostępność zostanie nadpisana wybranymi datami dla wszystkich ofert, które zaznaczysz.",

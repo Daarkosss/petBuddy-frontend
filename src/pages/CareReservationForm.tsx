@@ -291,7 +291,7 @@ const CareReservationForm = () => {
         </h3>
       </div>
       <div className="care-reservation-container">
-        <img src={`/images/${animalType.toLowerCase()}-card.jpg`} alt="animal" />
+        <img src={`/images/animals/${animalType.toLowerCase()}.jpg`} alt="animal" />
         <div className="form-container">
           <Steps 
             current={currentStep}
