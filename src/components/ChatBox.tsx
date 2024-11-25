@@ -85,7 +85,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
   };
 
   useEffect(() => {
-    if (doesChatRoomExist === true && chatId !== null) {
+    if (doesChatRoomExist && chatId) {
       getMessages();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
