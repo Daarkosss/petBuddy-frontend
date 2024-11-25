@@ -238,7 +238,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
           "An unknown error occurred while initializing chat room"
         );
       }
-    } else if (doesChatRoomExist === true) {
+    } else if (doesChatRoomExist) {
       sendMessageToChatRoom(input);
     }
   };
