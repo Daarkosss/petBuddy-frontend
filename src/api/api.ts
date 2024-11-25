@@ -83,7 +83,7 @@ class API {
     if (!response.ok) {
       toast.error(data.message || "Wrong server response!");
       throw new Error(
-        data.message + `. Status code: ${response.status}` ||
+        `${data.message}. Status code: ${response.status}` ||
           "Wrong server response!"
       );
     } else {
