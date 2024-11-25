@@ -290,9 +290,7 @@ const CaretakerProfile: React.FC<CaretaakerProfileParameters> = ({
                   </div>
                 )}
               <div className="profile-comments-container">
-                {ratings !== null &&
-                ratings !== undefined &&
-                ratings.content.length > 0 ? (
+                {ratings && ratings.content.length > 0 ? (
                   ratings!.content.map((element, index) => (
                     <div key={index}>
                       <CommentContainer

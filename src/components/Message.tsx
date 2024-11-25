@@ -49,7 +49,7 @@ const Message: React.FC<MessageContent> = ({
             icon={profilePicture ? null : <UserOutlined />}
             size={16}
             style={{
-              visibility: showAvatar === true ? "visible" : "hidden",
+              visibility: showAvatar ? "visible" : "hidden",
             }}
           />
         </div>
@@ -57,7 +57,7 @@ const Message: React.FC<MessageContent> = ({
 
       <div
         className="message-send-time"
-        style={{ display: showDate === true ? "inline" : "none" }}
+        style={{ display: showDate ? "inline" : "none" }}
       >
         {`${new Date(timeSent).toLocaleDateString()} ${new Date(
           timeSent

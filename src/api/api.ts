@@ -83,7 +83,7 @@ class API {
     if (!response.ok) {
       toast.error(data.message || "Wrong server response!");
       throw new Error(
-        data.message + `. Status code: ${response.status}` ||
+        `${data.message}. Status code: ${response.status}` ||
           "Wrong server response!"
       );
     } else {
@@ -152,9 +152,9 @@ class API {
   ): Promise<ChatRoom> {
     try {
       const headers: HeadersInit = {
-        "Accept-Role": store.user.profile!.selected_profile!.toUpperCase(),
+        "Accept-Role": store.user.profile!.selected_profile,
       };
-      if (acceptTimezone !== null) {
+      if (acceptTimezone) {
         headers["Accept-Timezone"] = acceptTimezone;
       }
       const response = await this.authorizedFetch<ChatRoom>(
@@ -180,9 +180,9 @@ class API {
     acceptTimezone: string | null
   ): Promise<ChatMessage> {
     const headers: HeadersInit = {
-      "Accept-Role": store.user.profile!.selected_profile!.toUpperCase(),
+      "Accept-Role": store.user.profile!.selected_profile,
     };
-    if (acceptTimezone !== null) {
+    if (acceptTimezone) {
       headers["Accept-Timezone"] = acceptTimezone;
     }
     return this.authorizedFetch<ChatMessage>(
@@ -203,9 +203,9 @@ class API {
   ): Promise<ChatMessagesResponse> {
     try {
       const headers: HeadersInit = {
-        "Accept-Role": store.user.profile!.selected_profile!.toUpperCase(),
+        "Accept-Role": store.user.profile!.selected_profile,
       };
-      if (acceptTimezone !== null) {
+      if (acceptTimezone) {
         headers["Accept-Timezone"] = acceptTimezone;
       }
       const response = await this.authorizedFetch<ChatMessagesResponse>(
@@ -775,7 +775,7 @@ class API {
         "Accept-Role": store.user.profile!.selected_profile,
       };
 
-      if (acceptTimezone !== null) {
+      if (acceptTimezone) {
         headers["Accept-Timzeone"] = acceptTimezone;
       }
 
