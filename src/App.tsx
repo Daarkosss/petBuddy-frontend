@@ -9,13 +9,14 @@ import CaretakerSearch from "./pages/CaretakerSearch";
 import ProfileSelection from "./pages/ProfileSelection";
 import OfferManagement from "./pages/OfferManagement";
 import LandingPage from "./pages/LandingPage";
-import Header from "./components/Header";
+import Header from "./components/Header/Header";
 import { observer } from "mobx-react-lite";
 import CareReservationForm from "./pages/CareReservationForm";
 import CaretakerProfile from "./pages/CaretakerProfile";
 import ClientProfile from "./pages/ClientProfile";
 import CareList from "./pages/CareList";
 import CareDetails from "./pages/CareDetails";
+import TermsAndConditions from "./pages/TermsAndConditions";
 import ChatBox from "./components/ChatBox";
 import ChatMinimized from "./components/ChatMinimized";
 import { useTranslation } from "react-i18next";
@@ -202,6 +203,10 @@ const App = observer(() => {
                     }
                   />
                   <Route path="/profile-client" element={<ClientProfile />} />
+                  <Route
+                    path="/terms-and-conditions"
+                    element={<TermsAndConditions />}
+                  />
                   <Route path="*" element={<Navigate to="/" replace />} />
                 </>
               ) : (
@@ -227,6 +232,10 @@ const App = observer(() => {
                   element={<CaretakerProfile />}
                 />
                 <Route path="/caretaker/search" element={<CaretakerSearch />} />
+                <Route
+                  path="/terms-and-conditions"
+                  element={<TermsAndConditions />}
+                />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </>
             )}

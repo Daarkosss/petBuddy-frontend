@@ -5,23 +5,13 @@ import { useNavigate } from "react-router-dom";
 import { Menu, Button, Drawer } from "antd";
 import { Header } from "antd/es/layout/layout";
 import { MenuOutlined } from "@ant-design/icons";
-import store from "../store/RootStore";
+import store from "../../store/RootStore";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import NotificationBadge from "./NotificationBadge";
 import ChatBadge from "./ChatBadge";
 
-interface PageHeaderProperties {
-  handleOpenChat: (
-    recipientEmail: string,
-    profilePicture: string | undefined,
-    name: string,
-    surname: string,
-    profile: string
-  ) => void;
-}
-
-const PageHeader = observer<PageHeaderProperties>(({ handleOpenChat }) => {
+const PageHeader = observer(() => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { keycloak } = useKeycloak();
@@ -56,9 +46,9 @@ const PageHeader = observer<PageHeaderProperties>(({ handleOpenChat }) => {
     },
     ...(keycloak.authenticated ? authenticatedMenuItems : []),
     {
-      key: "aboutUs",
-      label: t("aboutUs"),
-      onClick: () => {},
+      key: "termsAndConditions",
+      label: t("termsAndConditions"),
+      onClick: () => navigate("/terms-and-conditions"),
     },
   ];
 
@@ -109,9 +99,7 @@ const PageHeader = observer<PageHeaderProperties>(({ handleOpenChat }) => {
       <div className="right-corner">
         {keycloak.authenticated && (
           <>
-            {store.user.profile?.selected_profile !== null && (
-              <ChatBadge handleOpenChat={handleOpenChat} />
-            )}
+            <ChatBadge />
             <NotificationBadge />
           </>
         )}

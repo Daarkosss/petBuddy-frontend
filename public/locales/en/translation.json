@@ -308,5 +308,7 @@
     "care_accepted": "Your care has been accepted",
     "care_rejected": "Your care has been rejected",
     "newNotification": "You have a new notification"
-  }
+  },
+
+  "termsAndConditions": "Terms and conditions"
 }

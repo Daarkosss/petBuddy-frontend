@@ -2,7 +2,7 @@ import { Badge, Popover, List, Button } from "antd";
 import { BellOutlined } from "@ant-design/icons";
 import { observer } from "mobx-react-lite";
 import { useTranslation } from "react-i18next";
-import store from "../store/RootStore";
+import store from "../../store/RootStore";
 import { Link } from "react-router-dom";
 
 const NotificationBadge = observer(() => {
