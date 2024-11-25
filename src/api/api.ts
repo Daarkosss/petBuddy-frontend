@@ -182,7 +182,7 @@ class API {
     const headers: HeadersInit = {
       "Accept-Role": store.user.profile!.selected_profile!.toUpperCase(),
     };
-    if (acceptTimezone !== null) {
+    if (acceptTimezone) {
       headers["Accept-Timezone"] = acceptTimezone;
     }
     return this.authorizedFetch<ChatMessage>(
