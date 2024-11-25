@@ -56,9 +56,9 @@ const PageHeader = observer<PageHeaderProperties>(({ handleOpenChat }) => {
     },
     ...(keycloak.authenticated ? authenticatedMenuItems : []),
     {
-      key: "aboutUs",
-      label: t("aboutUs"),
-      onClick: () => {},
+      key: "termsAndConditions",
+      label: t("termsAndConditions"),
+      onClick: () => navigate("/terms-and-conditions"),
     },
   ];
 
