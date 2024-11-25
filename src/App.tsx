@@ -144,7 +144,7 @@ const App = observer(() => {
             profile={t(openChat.profile ?? "")}
           />
         )}
-        {openChat.shouldOpenMinimizedChat === true && (
+        {openChat.shouldOpenMaximizedChat && (
           <ChatMinimized
             name={openChat.name!}
             surname={openChat.surname!}
