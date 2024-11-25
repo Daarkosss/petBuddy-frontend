@@ -246,7 +246,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
   return (
     <div className="chat-box-main-container-wrap">
       <div className="chat-box-main-container">
-        {doesChatRoomExist && (
+        {doesChatRoomExist !== null && (
           <div className="chat-box-inner-container">
             <ChatTopBar
               onClose={() => onClose()}
