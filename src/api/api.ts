@@ -775,7 +775,7 @@ class API {
         "Accept-Role": store.user.profile!.selected_profile,
       };
 
-      if (acceptTimezone !== null) {
+      if (acceptTimezone) {
         headers["Accept-Timzeone"] = acceptTimezone;
       }
 
