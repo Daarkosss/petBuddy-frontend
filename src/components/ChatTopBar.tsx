@@ -13,8 +13,8 @@ interface ChatTopBarProps {
   name: string;
   surname: string;
   profile: string;
-  onClose: Function;
-  onMinimize: Function;
+  onClose: () => void;
+  onMinimize: () => void;
 }
 
 const ChatTopBar: React.FC<ChatTopBarProps> = ({

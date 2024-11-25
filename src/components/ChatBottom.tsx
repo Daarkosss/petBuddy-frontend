@@ -5,7 +5,7 @@ import { MoreOutlined, SendOutlined } from "@ant-design/icons";
 import "../scss/components/_buttons.scss";
 
 interface ChatBottomParameters {
-  onSend: (input: string) => any;
+  onSend: (input: string) => void;
 }
 
 const ChatBottom: React.FC<ChatBottomParameters> = ({ onSend }) => {

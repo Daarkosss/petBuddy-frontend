@@ -3,17 +3,17 @@ import ChatTopBar from "./ChatTopBar";
 import ChatMessages from "./ChatMessages";
 import ChatBottom from "./ChatBottom";
 import "../scss/components/_chatBox.scss";
-import { Client, IFrame, Stomp, StompSubscription } from "@stomp/stompjs";
+import { Client, IFrame, Stomp } from "@stomp/stompjs";
 import sockjs from "sockjs-client/dist/sockjs";
 import store from "../store/RootStore";
 import { api } from "../api/api";
-import { ChatMessage, ChatRoom, WebsocketResponse } from "../types/chat.types";
+import { ChatMessage, WebsocketResponse } from "../types/chat.types";
 
 interface ChatBoxProperties {
   recipientEmail: string;
   profilePicture: string | null;
-  onClose: Function;
-  onMinimize: Function;
+  onClose: () => void;
+  onMinimize: () => void;
   name: string;
   surname: string;
   profile: string;
@@ -54,7 +54,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
       `http://localhost:8081/ws?token=${store.user.jwtToken}`
     );
     const client = Stomp.over(() => socket);
-    const onConnect = (frame: IFrame) => {
+    const onConnect = () => {
       setWsClient(client);
       console.log("WS client connected");
     };
@@ -80,7 +80,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
       if (error instanceof Error) {
         const regex = /Status code: ([0-9]{3})/;
         const match = error.message.match(regex);
-        if (match != null && match[1] === "404") {
+        if (match !== null && match[1] === "404") {
           setDoesChatRoomExist(false);
         }
       }
@@ -88,7 +88,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
   };
 
   useEffect(() => {
-    if (doesChatRoomExist == true && chatId != null) {
+    if (doesChatRoomExist === true && chatId !== null) {
       getMessages();
     }
   }, [doesChatRoomExist, chatId]);
@@ -99,7 +99,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
 
   useEffect(() => {
     console.log(`chatId: ${chatId}`);
-    if (chatId != null) {
+    if (chatId !== null) {
       subscribeToChatRoom();
     }
   }, [chatId]);
@@ -149,7 +149,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
         );
       }
     } else {
-      if (doesChatRoomExist == true && chatId != null) {
+      if (doesChatRoomExist === true && chatId !== null) {
         getMessages();
       }
     }
@@ -229,7 +229,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
   };
 
   const onSend = (input: string) => {
-    if (doesChatRoomExist == false) {
+    if (doesChatRoomExist === false) {
       try {
         initializeChatRoom(input);
       } catch (error: unknown) {
@@ -240,7 +240,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
           "An unknown error occurred while initializing chat room"
         );
       }
-    } else if (doesChatRoomExist == true) {
+    } else if (doesChatRoomExist === true) {
       sendMessageToChatRoom(input);
     }
   };
@@ -248,7 +248,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
   return (
     <div className="chat-box-main-container-wrap">
       <div className="chat-box-main-container">
-        {doesChatRoomExist != null && (
+        {doesChatRoomExist !== null && (
           <div className="chat-box-inner-container">
             <ChatTopBar
               onClose={() => onClose()}

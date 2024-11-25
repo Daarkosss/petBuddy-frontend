@@ -4,8 +4,7 @@ import i18next from "i18next";
 import store from "../store/RootStore";
 import { PATH_PREFIX } from "./api";
 import { toast } from "react-toastify";
-import { Notification } from "../types/notification.types";
-import { action, makeAutoObservable } from "mobx";
+import { makeAutoObservable } from "mobx";
 
 class NotificationWebSocket {
   private wsClient: Client | null = null;

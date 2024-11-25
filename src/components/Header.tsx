@@ -12,7 +12,13 @@ import NotificationBadge from "./NotificationBadge";
 import ChatBadge from "./ChatBadge";
 
 interface PageHeaderProperties {
-  handleOpenChat: Function;
+  handleOpenChat: (
+    recipientEmail: string,
+    profilePicture: string | undefined,
+    name: string,
+    surname: string,
+    profile: string
+  ) => void;
 }
 
 const PageHeader = observer<PageHeaderProperties>(({ handleOpenChat }) => {

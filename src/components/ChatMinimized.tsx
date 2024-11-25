@@ -6,8 +6,8 @@ interface MinimizedChatProps {
   name: string;
   surname: string;
   profile: string;
-  onClose: Function;
-  onMaximize: Function;
+  onClose: () => void;
+  onMaximize: () => void;
 }
 
 const ChatMinimized: React.FC<MinimizedChatProps> = ({
