@@ -49,7 +49,7 @@ const Message: React.FC<MessageContent> = ({
             icon={profilePicture ? null : <UserOutlined />}
             size={16}
             style={{
-              visibility: showAvatar === true ? "visible" : "hidden",
+              visibility: showAvatar ? "visible" : "hidden",
             }}
           />
         </div>
