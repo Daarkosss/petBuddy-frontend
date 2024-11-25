@@ -197,7 +197,9 @@ const App = observer(() => {
                   />
                   <Route
                     path="/profile-caretaker/:caretakerEmail"
-                    element={<CaretakerProfile />}
+                    element={
+                      <CaretakerProfile handleOpenChat={handleOpenChat} />
+                    }
                   />
                   <Route path="/profile-client" element={<ClientProfile />} />
                   <Route path="*" element={<Navigate to="/" replace />} />

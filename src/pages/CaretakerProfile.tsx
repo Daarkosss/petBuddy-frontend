@@ -13,9 +13,20 @@ import OfferCard from "../components/Offer/OfferCard";
 import ImgCrop from "antd-img-crop";
 import { handleFilePreview, hasFilePhotoType } from "../functions/imageHandle";
 import OfferManagement from "./OfferManagement";
-import ChatBox from "../components/ChatBox";
 
-const CaretakerProfile: React.FC = () => {
+interface CaretaakerProfileParameters {
+  handleOpenChat?: (
+    recipientEmail: string,
+    profilePicture: string | undefined,
+    name: string,
+    surname: string,
+    profile: string
+  ) => void;
+}
+
+const CaretakerProfile: React.FC<CaretaakerProfileParameters> = ({
+  handleOpenChat,
+}) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { caretakerEmail } = useParams();
@@ -28,8 +39,6 @@ const CaretakerProfile: React.FC = () => {
   const [ratings, setRatings] = useState<CaretakerRatingsResponse>();
 
   const [profilePicture, setProfilePicture] = useState<string | null>(null);
-
-  const [shouldStartChat, setShouldStartChat] = useState<boolean>(false);
 
   const getCaretakerDetails = (email: string) => {
     api.getCaretakerDetails(email).then((data) => {
@@ -192,25 +201,18 @@ const CaretakerProfile: React.FC = () => {
                           type="primary"
                           className="profile-action-button"
                           onClick={() => {
-                            setShouldStartChat(true);
+                            handleOpenChat!(
+                              profileData.accountData.email,
+                              profileData.accountData.profilePicture?.url ||
+                                undefined,
+                              profileData.accountData.name,
+                              profileData.accountData.surname,
+                              "caretaker"
+                            );
                           }}
                         >
                           {t("profilePage.openChat")}
                         </Button>
-                        {shouldStartChat && (
-                          <ChatBox
-                            recipientEmail={profileData.accountData.email}
-                            profilePicture={profilePicture}
-                            onClose={() => setShouldStartChat(false)}
-                            name={profileData.accountData.name}
-                            surname={profileData.accountData.surname}
-                            profile={
-                              store.user.profile.selected_profile === "CLIENT"
-                                ? "Caretaker"
-                                : "Client"
-                            }
-                          />
-                        )}
                       </div>
                     )}
                 </div>
