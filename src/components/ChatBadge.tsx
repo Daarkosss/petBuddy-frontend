@@ -42,6 +42,7 @@ const ChatBadge = observer<ChatBadgeProperties>(({ handleOpenChat }) => {
       });
     };
     getUserChats();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     pagingParams,
     store.user.profile?.selected_profile,

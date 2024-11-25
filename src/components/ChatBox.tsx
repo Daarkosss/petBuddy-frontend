@@ -69,6 +69,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
     ) {
       checkIfChatRoomExists();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wsClient, store.user.profile?.selected_profile]);
 
   const checkIfChatRoomExists = async () => {
@@ -91,6 +92,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
     if (doesChatRoomExist === true && chatId !== null) {
       getMessages();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [doesChatRoomExist, chatId]);
 
   useEffect(() => {
@@ -102,6 +104,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
     if (chatId !== null) {
       subscribeToChatRoom();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatId]);
 
   const subscribeToChatRoom = () => {
