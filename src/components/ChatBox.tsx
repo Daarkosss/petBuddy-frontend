@@ -148,7 +148,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
         );
       }
     } else {
-      if (doesChatRoomExist === true && chatId !== null) {
+      if (doesChatRoomExist && chatId !== null) {
         getMessages();
       }
     }
