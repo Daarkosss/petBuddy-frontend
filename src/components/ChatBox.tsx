@@ -4,7 +4,7 @@ import ChatMessages from "./ChatMessages";
 import ChatBottom from "./ChatBottom";
 import "../scss/components/_chatBox.scss";
 import { Client, Stomp } from "@stomp/stompjs";
-import sockjs from "sockjs-client/dist/sockjs";
+import sockJS from "sockjs-client";
 import store from "../store/RootStore";
 import { api } from "../api/api";
 import { ChatMessage, WebsocketResponse } from "../types/chat.types";
@@ -50,7 +50,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
   }, [recipientEmail]); //to change, when chat with other recipient selected
 
   const initWebsocketConnection = () => {
-    const socket = new sockjs(
+    const socket = new sockJS(
       `http://localhost:8081/ws?token=${store.user.jwtToken}`
     );
     const client = Stomp.over(() => socket);
