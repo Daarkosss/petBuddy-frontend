@@ -38,7 +38,6 @@ class NotificationWebSocket {
 
     this.wsClient.subscribe("/user/topic/notification", (message) => {
       const newNotification = JSON.parse(message.body);
-      console.log(`Nowa wiadomość ${JSON.stringify(newNotification)} dd`);
       if (
         newNotification.receiverProfile === store.user.profile?.selected_profile
       ) {
