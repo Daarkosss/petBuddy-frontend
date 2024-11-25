@@ -61,9 +61,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
 
   useEffect(() => {
     if (
-      wsClient !== null &&
-      store.user.profile !== null &&
-      store.user.profile?.selected_profile !== null
+      wsClient && store.user.profile && store.user.profile?.selected_profile
     ) {
       checkIfChatRoomExists();
     }
@@ -87,7 +85,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
   };
 
   useEffect(() => {
-    if (doesChatRoomExist === true && chatId !== null) {
+    if (doesChatRoomExist && chatId) {
       getMessages();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -123,10 +121,10 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
         if (data.type === "SEND") {
           if (
             (data.content.senderEmail === store.user.profile?.email &&
-              data.content.seenByRecipient === true) ||
+              data.content.seenByRecipient ||
             data.content.senderEmail !== store.user.profile?.email
           ) {
-            if (data.content.seenByRecipient === true) {
+            if (data.content.seenByRecipient) {
               setLastSeenMessage(data.content.id);
             }
           }
@@ -150,7 +148,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
         );
       }
     } else {
-      if (doesChatRoomExist === true && chatId !== null) {
+      if (doesChatRoomExist && chatId !== null) {
         getMessages();
       }
     }
@@ -174,7 +172,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
       } else {
         setLastSeenMessage(
           messagesResponse.content.find(
-            (message) => message.seenByRecipient === true
+            (message) => message.seenByRecipient
           )?.id
         );
       }
@@ -183,7 +181,6 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
 
   //TODO: timezone
   const initializeChatRoom = async (message: string) => {
-    console.log("initializing chat room");
     const data = await api.initializeChatRoom(
       recipientEmail,
       message,
@@ -207,7 +204,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
   const sendMessageToChatRoom = (message: string) => {
     const headers = {
       "Accept-Role":
-        store.user.profile!.selected_profile?.toUpperCase() as string,
+        store.user.profile!.selected_profile
       "Accept-Timezone": timeZone,
     };
     if (wsClient && message) {
@@ -217,7 +214,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
         body: JSON.stringify(chatMessage),
         headers: headers,
       });
-    } else console.log("sending message ended without sending message");
+    }
   };
 
   const disconnectWebSocket = async () => {
@@ -230,7 +227,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
   };
 
   const onSend = (input: string) => {
-    if (doesChatRoomExist === false) {
+    if (!doesChatRoomExist) {
       try {
         initializeChatRoom(input);
       } catch (error: unknown) {
@@ -241,7 +238,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
           "An unknown error occurred while initializing chat room"
         );
       }
-    } else if (doesChatRoomExist === true) {
+    } else if (doesChatRoomExist) {
       sendMessageToChatRoom(input);
     }
   };
@@ -249,7 +246,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
   return (
     <div className="chat-box-main-container-wrap">
       <div className="chat-box-main-container">
-        {doesChatRoomExist !== null && (
+        {doesChatRoomExist && (
           <div className="chat-box-inner-container">
             <ChatTopBar
               onClose={() => onClose()}
