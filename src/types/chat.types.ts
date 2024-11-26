@@ -1,6 +1,18 @@
 import { PageableDTO, SortDTO } from "./pagination.types";
 import { Photo } from "./user.types";
 
+export interface HandleSetOpenChat {
+  handleSetOpenChat?: (
+    recipientEmail: string | undefined,
+    profilePicture: string | undefined,
+    name: string | undefined,
+    surname: string | undefined,
+    profile: string | undefined,
+    shouldOpenMaximizedChat?: boolean,
+    shouldOpenMinimizedChat?: boolean
+  ) => void;
+}
+
 export type ChatRoom = {
   id: number;
   chatterEmail: string;
