@@ -13,21 +13,10 @@ import OfferCard from "../components/Offer/OfferCard";
 import ImgCrop from "antd-img-crop";
 import { handleFilePreview, hasFilePhotoType } from "../functions/imageHandle";
 import OfferManagement from "./OfferManagement";
+import { HandleSetOpenChat } from "../types/chat.types";
 
-interface CaretakerProfileParameters {
-  handleSetOpenChat?: (
-    recipientEmail: string | undefined,
-    profilePicture: string | undefined,
-    name: string | undefined,
-    surname: string | undefined,
-    profile: string | undefined,
-    shouldOpenMaximizedChat?: boolean,
-    shouldOpenMinimizedChat?: boolean
-  ) => void;
-}
-
-const CaretakerProfile: React.FC<CaretakerProfileParameters> = ({
-  handleSetOpenChat: handleOpenChat,
+const CaretakerProfile: React.FC<HandleSetOpenChat> = ({
+  handleSetOpenChat,
 }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -154,7 +143,7 @@ const CaretakerProfile: React.FC<CaretakerProfileParameters> = ({
                     type="primary"
                     className="profile-action-button"
                     onClick={() => {
-                      handleOpenChat!(
+                      handleSetOpenChat!(
                         undefined,
                         undefined,
                         undefined,
@@ -212,7 +201,7 @@ const CaretakerProfile: React.FC<CaretakerProfileParameters> = ({
                           type="primary"
                           className="profile-action-button"
                           onClick={() => {
-                            handleOpenChat!(
+                            handleSetOpenChat!(
                               profileData.accountData.email,
                               profileData.accountData.profilePicture?.url ||
                                 undefined,
