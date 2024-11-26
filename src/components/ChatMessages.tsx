@@ -49,6 +49,12 @@ const ChatMessages: React.FC<ChatBoxContent> = ({
           />
         </div>
       ))}
+      {messages.length === 0 && (
+        <div className="chat-messages-no-chat-history">
+          Brak historii chatu z{" "}
+          {`${recipientName} ${recipientSurname}. Napisz pierwszą wiadomość`}
+        </div>
+      )}
       <div ref={messagesEndRef} />
     </div>
   );
