@@ -200,7 +200,6 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
         seenByRecipient: false,
       },
     ]);
-    api.notificationWebSocket.changeNewMessageTriggerValue();
   };
 
   const sendMessageToChatRoom = (message: string) => {
@@ -215,7 +214,6 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
         body: JSON.stringify(chatMessage),
         headers: headers,
       });
-      api.notificationWebSocket.changeNewMessageTriggerValue();
     }
   };
 
