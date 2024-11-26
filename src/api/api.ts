@@ -64,7 +64,8 @@ class API {
     method: Method,
     path: string,
     body?: unknown,
-    headers: HeadersInit = {}
+    headers: HeadersInit = {},
+    showToast?: boolean
   ): Promise<T> {
     const options = {
       method,
@@ -81,7 +82,8 @@ class API {
     const data = await response.json();
 
     if (!response.ok) {
-      toast.error(data.message || "Wrong server response!");
+      if (showToast !== false)
+        toast.error(data.message || "Wrong server response!");
       throw new Error(
         `${data.message}. Status code: ${response.status}` ||
           "Wrong server response!"
@@ -95,16 +97,23 @@ class API {
     method: Method,
     path: string,
     body?: unknown,
-    headers?: HeadersInit
+    headers?: HeadersInit,
+    showToast?: boolean
   ): Promise<T> {
     if (store.user.jwtToken) {
-      return this.fetch<T>(method, path, body, {
-        ...headers,
-        Authorization: `Bearer ${store.user.jwtToken}`,
-        ...headers,
-      });
+      return this.fetch<T>(
+        method,
+        path,
+        body,
+        {
+          ...headers,
+          Authorization: `Bearer ${store.user.jwtToken}`,
+          ...headers,
+        },
+        false
+      );
     } else {
-      toast.error("No user token available");
+      if (showToast !== false) toast.error("No user token available");
       return Promise.reject(new Error("No user token available"));
     }
   }
@@ -161,7 +170,8 @@ class API {
         "GET",
         `api/chat/${participantEmail}`,
         null,
-        headers
+        headers,
+        false
       );
       return response;
     } catch (error: unknown) {
