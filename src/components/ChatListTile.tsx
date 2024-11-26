@@ -8,20 +8,26 @@ interface ChatListTileProperties {
   lastMessageCreatedAt: string;
   lastMessage: string;
   lastMessageSendBy: string;
-  seenByPrincipal: boolean;
+  seenByRecipient: boolean;
 }
 
 const ChatListTile: React.FC<ChatListTileProperties> = ({
   chatterName,
   lastMessage,
   lastMessageSendBy,
-  seenByPrincipal,
+  seenByRecipient,
 }) => {
   const { t } = useTranslation();
   return (
     <div
       className="chat-list-tile-container"
-      style={{ fontWeight: seenByPrincipal === true ? "normal" : "bold" }}
+      style={{
+        fontWeight:
+          seenByRecipient === false &&
+          lastMessageSendBy !== store.user.profile?.email
+            ? "bold"
+            : "normal",
+      }}
     >
       {lastMessageSendBy === store.user.profile?.email
         ? `${t("you")}:`

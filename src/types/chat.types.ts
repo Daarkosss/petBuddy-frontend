@@ -1,4 +1,5 @@
 import { PageableDTO, SortDTO } from "./pagination.types";
+import { Photo } from "./user.types";
 
 export type ChatRoom = {
   id: number;
@@ -57,11 +58,18 @@ export type ChatsResponse = {
 
 export type Chat = {
   id: number;
-  chatterEmail: string;
-  chatterName: string;
-  chatterSurname: string;
-  lastMessageCreatedAt: string;
-  lastMessage: string;
-  lastMessageSendBy: string;
-  seenByPrincipal: boolean;
+  chatter: {
+    email: string;
+    name: string;
+    surname: string;
+    profilePicture: Photo | null;
+  };
+  lastMessage: {
+    id: number;
+    chatId: number;
+    senderEmail: string;
+    content: string;
+    createdAt: string;
+    seenByRecipient: boolean;
+  };
 };

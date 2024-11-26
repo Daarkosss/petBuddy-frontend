@@ -1,5 +1,9 @@
-import { Badge, List, Modal } from "antd";
-import { LoadingOutlined, MessageOutlined } from "@ant-design/icons";
+import { Avatar, Badge, List, Modal } from "antd";
+import {
+  LoadingOutlined,
+  MessageOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import { observer } from "mobx-react-lite";
 
 import { useEffect, useState } from "react";
@@ -55,7 +59,7 @@ const ChatBadge = observer<ChatBadgeProperties>(({ handleOpenChat }) => {
     pagingParams,
     store.user.profile?.selected_profile,
     store.notification.unreadChats,
-    api.notificationWebSocket.receiveNewMessageTrigger,
+    api.notificationWebSocket.newMessageTrigger,
   ]);
 
   const handleOnPageChange = (page: number, pageSize?: number) => {
@@ -96,19 +100,28 @@ const ChatBadge = observer<ChatBadgeProperties>(({ handleOpenChat }) => {
             }}
             renderItem={(item) => (
               <List.Item
+                className="chat-badge-list-item"
                 extra={
                   <div
                     className="chat-badge-extra"
                     style={{
                       fontWeight:
-                        item.seenByPrincipal === false ? "bold" : "normal",
+                        item.lastMessage.seenByRecipient === false &&
+                        item.lastMessage.senderEmail !==
+                          store.user.profile?.email
+                          ? "bold"
+                          : "normal",
                     }}
                   >
                     <div>
-                      {new Date(item.lastMessageCreatedAt).toLocaleDateString()}
+                      {new Date(
+                        item.lastMessage.createdAt
+                      ).toLocaleDateString()}
                     </div>
                     <div>
-                      {new Date(item.lastMessageCreatedAt).toLocaleTimeString()}
+                      {new Date(
+                        item.lastMessage.createdAt
+                      ).toLocaleTimeString()}
                     </div>
                   </div>
                 }
@@ -116,10 +129,10 @@ const ChatBadge = observer<ChatBadgeProperties>(({ handleOpenChat }) => {
                 onClick={() => {
                   setIsModalOpen(false);
                   handleOpenChat(
-                    item.chatterEmail,
-                    undefined,
-                    item.chatterName,
-                    item.chatterSurname,
+                    item.chatter.email,
+                    item.chatter.profilePicture?.url || undefined,
+                    item.chatter.name,
+                    item.chatter.surname,
                     store.user.profile!.selected_profile === "CLIENT"
                       ? "caretaker"
                       : "client"
@@ -127,22 +140,35 @@ const ChatBadge = observer<ChatBadgeProperties>(({ handleOpenChat }) => {
                 }}
               >
                 <List.Item.Meta
+                  avatar={
+                    <Avatar
+                      src={item.chatter.profilePicture?.url}
+                      icon={
+                        item.chatter.profilePicture?.url ? null : (
+                          <UserOutlined />
+                        )
+                      }
+                      size={50}
+                    />
+                  }
                   title={
                     <div className="chat-badge-title">
-                      {item.chatterName} {item.chatterSurname}
-                      {!item.seenByPrincipal && (
-                        <div className="chat-badge-not-read"></div>
-                      )}
+                      {item.chatter.name} {item.chatter.surname}
+                      {!item.lastMessage.seenByRecipient &&
+                        item.lastMessage.senderEmail !==
+                          store.user.profile?.email && (
+                          <div className="chat-badge-not-read"></div>
+                        )}
                     </div>
                   }
-                  description={item.chatterEmail}
+                  description={item.chatter.email}
                 />
                 <ChatListTile
-                  chatterName={item.chatterName}
-                  lastMessageCreatedAt={item.lastMessageCreatedAt}
-                  lastMessage={item.lastMessage}
-                  lastMessageSendBy={item.lastMessageSendBy}
-                  seenByPrincipal={item.seenByPrincipal}
+                  chatterName={item.chatter.name}
+                  lastMessageCreatedAt={item.lastMessage.createdAt}
+                  lastMessage={item.lastMessage.content}
+                  lastMessageSendBy={item.lastMessage.senderEmail}
+                  seenByRecipient={item.lastMessage.seenByRecipient}
                 />
               </List.Item>
             )}
