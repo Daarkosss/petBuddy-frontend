@@ -307,5 +307,6 @@
     "newNotification": "You have a new notification"
   },
 
-  "termsAndConditions": "Terms and conditions"
+  "termsAndConditions": "Terms and conditions",
+  "clickToZoom": "Click to zoom"
 }
