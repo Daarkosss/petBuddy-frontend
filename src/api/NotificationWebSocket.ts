@@ -8,7 +8,7 @@ import { makeAutoObservable } from "mobx";
 
 class NotificationWebSocket {
   private wsClient: Client | null = null;
-  receiveNewMessageTrigger: boolean = false;
+  newMessageTrigger: boolean = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -26,9 +26,9 @@ class NotificationWebSocket {
     client.connect({}, onConnect);
   };
 
-  changeReceiveMessagetriggerValue = () => {
+  changeNewMessageTriggerValue = () => {
     //to trigger chatBadge load chat rooms with newest data
-    this.receiveNewMessageTrigger = !this.receiveNewMessageTrigger;
+    this.newMessageTrigger = !this.newMessageTrigger;
   };
 
   subscribeToSession = () => {
@@ -46,7 +46,7 @@ class NotificationWebSocket {
       }
 
       if (newNotification.dType === "CHAT_NOTIFICATION") {
-        this.changeReceiveMessagetriggerValue();
+        this.changeNewMessageTriggerValue();
         store.notification.setUnreadChats(
           newNotification.unseenChatsAsClient,
           newNotification.unseenChatsAsCaretaker
