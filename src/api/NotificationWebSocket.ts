@@ -32,7 +32,7 @@ class NotificationWebSocket {
   };
 
   subscribeToSession = () => {
-    if (!this.wsClient || !store.user.profile?.selected_profile) {
+    if (!this.wsClient) {
       return;
     }
 
