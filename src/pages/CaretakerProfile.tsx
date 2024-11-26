@@ -14,7 +14,7 @@ import ImgCrop from "antd-img-crop";
 import { handleFilePreview, hasFilePhotoType } from "../functions/imageHandle";
 import OfferManagement from "./OfferManagement";
 
-interface CaretaakerProfileParameters {
+interface CaretakerProfileParameters {
   handleSetOpenChat?: (
     recipientEmail: string | undefined,
     profilePicture: string | undefined,
@@ -26,7 +26,7 @@ interface CaretaakerProfileParameters {
   ) => void;
 }
 
-const CaretakerProfile: React.FC<CaretaakerProfileParameters> = ({
+const CaretakerProfile: React.FC<CaretakerProfileParameters> = ({
   handleSetOpenChat: handleOpenChat,
 }) => {
   const { t } = useTranslation();
