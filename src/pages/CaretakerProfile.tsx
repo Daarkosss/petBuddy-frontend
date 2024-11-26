@@ -15,17 +15,19 @@ import { handleFilePreview, hasFilePhotoType } from "../functions/imageHandle";
 import OfferManagement from "./OfferManagement";
 
 interface CaretaakerProfileParameters {
-  handleOpenChat?: (
-    recipientEmail: string,
+  handleSetOpenChat?: (
+    recipientEmail: string | undefined,
     profilePicture: string | undefined,
-    name: string,
-    surname: string,
-    profile: string
+    name: string | undefined,
+    surname: string | undefined,
+    profile: string | undefined,
+    shouldOpenMaximizedChat?: boolean,
+    shouldOpenMinimizedChat?: boolean
   ) => void;
 }
 
 const CaretakerProfile: React.FC<CaretaakerProfileParameters> = ({
-  handleOpenChat,
+  handleSetOpenChat: handleOpenChat,
 }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -152,6 +154,15 @@ const CaretakerProfile: React.FC<CaretaakerProfileParameters> = ({
                     type="primary"
                     className="profile-action-button"
                     onClick={() => {
+                      handleOpenChat!(
+                        undefined,
+                        undefined,
+                        undefined,
+                        undefined,
+                        undefined,
+                        false,
+                        false
+                      );
                       store.user.setSelectedProfile("CLIENT");
                       store.user.saveProfileToStorage(store.user.profile);
                       navigate("/profile-client");

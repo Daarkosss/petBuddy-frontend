@@ -47,16 +47,18 @@ const App = observer(() => {
     profile: undefined,
   });
 
-  const handleOpenChat = (
-    recipientEmail: string,
+  const handleSetOpenChat = (
+    recipientEmail: string | undefined,
     profilePicture: string | undefined,
-    name: string,
-    surname: string,
-    profile: string
+    name: string | undefined,
+    surname: string | undefined,
+    profile: string | undefined,
+    shouldOpenMaximizedChat?: boolean,
+    shouldOpenMinimizedChat?: boolean
   ) => {
     setOpenChat({
-      shouldOpenMaximizedChat: true,
-      shouldOpenMinimizedChat: false,
+      shouldOpenMaximizedChat: shouldOpenMaximizedChat ?? true,
+      shouldOpenMinimizedChat: shouldOpenMinimizedChat ?? false,
       recipientEmail: recipientEmail,
       profilePicture: profilePicture,
       name: name,
@@ -112,7 +114,7 @@ const App = observer(() => {
   if (!store.isStarting) {
     return (
       <Layout>
-        <Header handleOpenChat={handleOpenChat} />
+        <Header handleOpenChat={handleSetOpenChat} />
         {openChat.shouldOpenMaximizedChat && (
           <ChatBox
             recipientEmail={openChat.recipientEmail!}
@@ -199,7 +201,7 @@ const App = observer(() => {
                   <Route
                     path="/profile-caretaker/:caretakerEmail"
                     element={
-                      <CaretakerProfile handleOpenChat={handleOpenChat} />
+                      <CaretakerProfile handleSetOpenChat={handleSetOpenChat} />
                     }
                   />
                   <Route path="/profile-client" element={<ClientProfile />} />
