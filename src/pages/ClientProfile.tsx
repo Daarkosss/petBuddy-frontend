@@ -1,12 +1,7 @@
 import { useEffect, useState } from "react";
 import store from "../store/RootStore";
 import "../scss/pages/_profile.scss";
-import {
-  Avatar,
-  Button,
-  Card,
-  Upload,
-} from "antd";
+import { Avatar, Button, Card, Upload } from "antd";
 import RoundedLine from "../components/RoundedLine";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -15,9 +10,9 @@ import { UserProfiles } from "../types";
 import { PictureOutlined, UserOutlined } from "@ant-design/icons";
 import ImgCrop from "antd-img-crop";
 import { handleFilePreview, hasFilePhotoType } from "../functions/imageHandle";
+import { HandleSetOpenChat } from "../types/chat.types";
 
-
-function ClientProfile() {
+const ClientProfile: React.FC<HandleSetOpenChat> = ({ handleSetOpenChat }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [profileData, setProfileData] = useState<UserProfiles>();
@@ -126,9 +121,20 @@ function ClientProfile() {
                         type="primary"
                         className="profile-action-button"
                         onClick={() => {
+                          handleSetOpenChat!(
+                            undefined,
+                            undefined,
+                            undefined,
+                            undefined,
+                            undefined,
+                            false,
+                            false
+                          );
                           store.user.setSelectedProfile("CARETAKER");
                           store.user.saveProfileToStorage(store.user.profile);
-                          navigate(`/profile-caretaker/${store.user.profile?.email}`);
+                          navigate(
+                            `/profile-caretaker/${store.user.profile?.email}`
+                          );
                         }}
                       >
                         {t("profilePage.changeToCaretakerProfile")}
@@ -177,7 +183,9 @@ function ClientProfile() {
                       onClick={() => {
                         store.user.setSelectedProfile("CARETAKER");
                         store.user.saveProfileToStorage(store.user.profile);
-                        navigate(`/profile-caretaker/${store.user.profile?.email}`);
+                        navigate(
+                          `/profile-caretaker/${store.user.profile?.email}`
+                        );
                       }}
                     >
                       {t("profilePage.changeToCaretakerProfile")}
@@ -204,6 +212,6 @@ function ClientProfile() {
       )}
     </div>
   );
-}
+};
 
 export default ClientProfile;

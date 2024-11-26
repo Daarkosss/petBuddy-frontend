@@ -204,7 +204,12 @@ const App = observer(() => {
                       <CaretakerProfile handleSetOpenChat={handleSetOpenChat} />
                     }
                   />
-                  <Route path="/profile-client" element={<ClientProfile />} />
+                  <Route
+                    path="/profile-client"
+                    element={
+                      <ClientProfile handleSetOpenChat={handleSetOpenChat} />
+                    }
+                  />
                   <Route
                     path="/terms-and-conditions"
                     element={<TermsAndConditions />}
