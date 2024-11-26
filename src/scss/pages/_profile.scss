@@ -26,7 +26,7 @@
       //   flex-direction: column;
       // }
       .profile-picture-container {
-        position: relative; /* Dla kontrolowania z-index */
+        position: relative;
         padding: 40px 20px;
         width: 100%;
         display: flex;
@@ -37,6 +37,7 @@
           z-index: 1;
           border-radius: 50%; /* przycinanie do kształtu koła */
           object-fit: cover;
+          background-color: v.$grey-light;
           border: 4px solid v.$blue-dark;
           width: 250px;
           height: 250px;

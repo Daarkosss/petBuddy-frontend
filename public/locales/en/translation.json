@@ -118,6 +118,7 @@
   "description": "Description",
   "upload": "Upload",
   "offerPhotos": "Offer photos",
+  "caretakerForm": "Caretaker form",
   "currentPhotos": "Current photos",
   "newPhotos": "New photos",
   "photosLimitMessage": "Photos limit",
