@@ -41,17 +41,19 @@ const ChatBadge = observer<ChatBadgeProperties>(({ handleOpenChat }) => {
 
   useEffect(() => {
     const getUserChats = async () => {
-      await api.getUserChats(pagingParams, null).then((data) => {
-        if (data !== undefined) {
-          setUserChats([...data.content]);
-          setPagination({
-            size: data.pageable.pageSize,
-            current: data.pageable.pageNumber + 1,
-            total: data.totalElements,
-          });
-        }
-        setIsLoading(false);
-      });
+      setTimeout(async () => {
+        await api.getUserChats(pagingParams, null).then((data) => {
+          if (data !== undefined) {
+            setUserChats([...data.content]);
+            setPagination({
+              size: data.pageable.pageSize,
+              current: data.pageable.pageNumber + 1,
+              total: data.totalElements,
+            });
+          }
+          setIsLoading(false);
+        });
+      }, 500);
     };
     getUserChats();
     // eslint-disable-next-line react-hooks/exhaustive-deps
