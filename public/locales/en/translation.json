@@ -296,6 +296,7 @@
   "youWillLose": "You will lose",
 
   "noAvailability": "Caretaker did not set the availability",
+  "needToLoginAsClient": "You need to log in as client to be able to request care",
 
   "notification": {
     "title": "Notifications",

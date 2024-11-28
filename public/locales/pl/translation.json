@@ -304,6 +304,7 @@
   "youWillLose": "Stracisz",
 
   "noAvailability": "Opiekun nie ustawił dostępności",
+  "needToLoginAsClient": "Musisz być zalogowany jako klient, aby dokonać rezerwacji opieki",
 
   "notification": {
     "title": "Powiadomienia",
