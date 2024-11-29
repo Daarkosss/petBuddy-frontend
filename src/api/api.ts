@@ -18,10 +18,19 @@ import {
   OfferWithId,
   AccountDataDTO,
   CaretakerRatingsResponse,
-  AvailabilityValues
+  AvailabilityValues,
 } from "../types";
-import { CareDTO, CareReservation, CareReservationDTO, GetCaresDTO } from "../types/care.types";
-import { AnimalAttributes, AnimalConfigurationsDTO } from "../types/animal.types";
+import {
+  CareDTO,
+  CareReservation,
+  CareReservationDTO,
+  CareSearchFilters,
+  GetCaresDTO,
+} from "../types/care.types";
+import {
+  AnimalAttributes,
+  AnimalConfigurationsDTO,
+} from "../types/animal.types";
 import { UploadFile } from "antd";
 
 const backendHost =
@@ -57,7 +66,6 @@ class API {
 
     const response = await fetch(`${PATH_PREFIX}${path}`, options);
     const data = await response.json();
-
     if (!response.ok) {
       toast.error(data.message || "Wrong server response!");
       throw new Error(data.message || "Wrong server response!");
@@ -158,7 +166,6 @@ class API {
         ? this.convertValuesToAvailabilityRanges(filters.availabilities)
         : [],
     }));
-
     return this.fetch<CaretakerBasicsResponse>(
       "POST",
       `api/caretaker/all?${queryString}`,
@@ -500,8 +507,11 @@ class API {
   async getAnimalsConfigurations(): Promise<AnimalConfigurationsDTO> {
     return this.fetch<AnimalConfigurationsDTO>("GET", "api/animal/complex");
   }
-  
-  async makeCareReservation(caretakerEmail: string, careReservation: CareReservation): Promise<CareDTO | undefined> {
+
+  async makeCareReservation(
+    caretakerEmail: string,
+    careReservation: CareReservation
+  ): Promise<CareDTO | undefined> {
     if (store.user.profile?.selected_profile === "CLIENT") {
       const [dateFrom, dateTo] = careReservation.dateRange;
       const body: CareReservationDTO = {
@@ -516,19 +526,31 @@ class API {
         description: careReservation.description,
         dailyPrice: careReservation.dailyPrice,
         careStart: dateFrom?.toString() || "",
-        careEnd: dateTo?.toString() || dateFrom?.toString() || ""
+        careEnd: dateTo?.toString() || dateFrom?.toString() || "",
       };
 
       return this.authorizedFetch<CareDTO>(
         "POST",
         `api/care/${caretakerEmail}`,
         body,
-        { "Accept-Role": "CLIENT"}
+        { "Accept-Role": "CLIENT" }
       );
     }
   }
 
-  async getCares(pagingParams: PagingParams): Promise<GetCaresDTO | undefined> {
+  convertArrayToQueryParam = (array: any[]) => {
+    let stringifiedArray = "";
+    for (let i = 0; i < array.length - 1; i++) {
+      stringifiedArray += `${array[i]},`;
+    }
+    stringifiedArray += array[array.length - 1];
+    return stringifiedArray;
+  };
+
+  async getCares(
+    pagingParams: PagingParams,
+    filters: CareSearchFilters
+  ): Promise<GetCaresDTO | undefined> {
     if (store.user.profile?.selected_profile) {
       const queryParams = new URLSearchParams({
         page: pagingParams.page.toString(),
@@ -541,7 +563,72 @@ class API {
       if (pagingParams.sortDirection) {
         queryParams.append("sortDirection", pagingParams.sortDirection);
       }
-  
+
+      if (filters.animalTypes.length > 0) {
+        queryParams.append(
+          "animalTypes",
+          this.convertArrayToQueryParam(filters.animalTypes)
+        );
+      }
+
+      if (filters.caretakerStatuses.length > 0) {
+        queryParams.append(
+          "caretakerStatuses",
+          this.convertArrayToQueryParam(filters.caretakerStatuses)
+        );
+      }
+
+      if (filters.clientStatuses.length > 0) {
+        queryParams.append(
+          "clientStatuses",
+          this.convertArrayToQueryParam(filters.clientStatuses)
+        );
+      }
+
+      if (filters.emails.length > 0) {
+        queryParams.append(
+          "emails",
+          this.convertArrayToQueryParam(filters.emails)
+        );
+      }
+
+      if (
+        filters.minCreatedTime !== "" &&
+        filters.minCreatedTime !== undefined
+      ) {
+        queryParams.append("minCreatedTime", filters.minCreatedTime!);
+      }
+
+      if (
+        filters.maxCreatedTime !== "" &&
+        filters.maxCreatedTime !== undefined
+      ) {
+        queryParams.append("maxCreatedTime", filters.maxCreatedTime!);
+      }
+
+      if (filters.minCareStart !== "" && filters.minCareStart !== undefined) {
+        queryParams.append("minCareStart", filters.minCareStart!);
+      }
+
+      if (filters.maxCareStart !== "" && filters.maxCareStart !== undefined) {
+        queryParams.append("maxCareStart", filters.maxCareStart!);
+      }
+
+      if (filters.minCareEnd !== "" && filters.minCareEnd !== undefined) {
+        queryParams.append("minCareEnd", filters.minCareEnd!);
+      }
+
+      if (filters.maxCareEnd !== "" && filters.maxCareEnd !== undefined) {
+        queryParams.append("maxCareEnd", filters.maxCareEnd!);
+      }
+
+      if (filters.minDailyPrice !== undefined) {
+        queryParams.append("minDailyPrice", filters.minDailyPrice!.toString());
+      }
+      if (filters.maxDailyPrice !== undefined) {
+        queryParams.append("maxDailyPrice", filters.maxDailyPrice!.toString());
+      }
+
       const queryString = queryParams.toString();
       return this.authorizedFetch<GetCaresDTO>(
         "GET",
@@ -554,10 +641,7 @@ class API {
 
   async getCare(careId: number): Promise<CareDTO | undefined> {
     if (store.user.profile?.selected_profile) {
-      return this.authorizedFetch<CareDTO>(
-        "GET",
-        `api/care/${careId}`,
-      );
+      return this.authorizedFetch<CareDTO>("GET", `api/care/${careId}`);
     }
   }
 
@@ -578,17 +662,20 @@ class API {
         "POST",
         `api/care/${careId}/reject`,
         undefined,
-        { "Accept-Role": store.user.profile?.selected_profile}
+        { "Accept-Role": store.user.profile?.selected_profile }
       );
     }
   }
 
-  async updateCarePrice(careId: number, dailyPrice: number): Promise<CareDTO | undefined> {
+  async updateCarePrice(
+    careId: number,
+    dailyPrice: number
+  ): Promise<CareDTO | undefined> {
     if (store.user.profile?.selected_profile === "CARETAKER") {
       return this.authorizedFetch<CareDTO>(
         "PATCH",
         `api/care/${careId}`,
-        {dailyPrice},
+        { dailyPrice },
         { "Accept-Role": "CARETAKER" }
       );
     }
@@ -607,14 +694,18 @@ class API {
     };
   };
 
-  convertAvailabilityRangesToValues = (availabilities: AvailabilityRanges): AvailabilityValues => {
+  convertAvailabilityRangesToValues = (
+    availabilities: AvailabilityRanges
+  ): AvailabilityValues => {
     return availabilities.map((availability) => [
       availability.availableFrom,
       availability.availableTo || availability.availableFrom,
     ]);
-  }
-  
-  convertValuesToAvailabilityRanges = (values: AvailabilityValues): AvailabilityRanges => {
+  };
+
+  convertValuesToAvailabilityRanges = (
+    values: AvailabilityValues
+  ): AvailabilityRanges => {
     return values.map(([from, to]) => ({
       availableFrom: from?.toString() || "",
       availableTo: to?.toString() || from?.toString() || "",
