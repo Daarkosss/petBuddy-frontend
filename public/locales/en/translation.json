@@ -113,6 +113,25 @@
     "cancelSort": "Click to cancel sorting"
   },
 
+  "careSearch": {
+    "animalTypes": "Animal types",
+    "caretakerStatuses": "Caretaker status",
+    "clientStatuses": "Client status",
+    "minCreatedTime": "Earliest creation time",
+    "maxCreatedTime": "Latest creation time",
+    "minCareStart": "Earliest start time",
+    "maxCareStart": "Latest start time",
+    "minCareEnd": "Earliest end time",
+    "maxCareEnd": "Latest end time",
+    "minDailyPrice": "Minimal daily price",
+    "maxDailyPrice": "Maximal daily price",
+    "emails": "Caretaker email",
+    "CreatedTime": "Creation date",
+    "CareStart": "Start time",
+    "CareEnd": "End time",
+    "filter": "Filter"
+  },
+
   "description": "Description",
   "upload": "Upload",
   "offerPhotos": "Offer photos",
@@ -281,7 +300,10 @@
     "cancelled": "Cancelled",
     "waitingToTakePlace": "Waiting to take place",
     "isTakingPlace": "Is taking place",
-    "done": "Done"
+    "done": "Done",
+    "confirmed": "Confirmed",
+    "outdated": "Outdated",
+    "ready_to_proceed": "Ready to proceed"
   },
 
   "petDescription": "Pet description",
