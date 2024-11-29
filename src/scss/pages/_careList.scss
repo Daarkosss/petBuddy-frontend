@@ -9,12 +9,46 @@
   }
 }
 .cares-list-container {
+  max-width: 1000px;
   margin: 3vh auto;
   gap: 3vh;
 
   h1 {
     color: v.$white;
   }
+}
+
+.cares-filters-section {
+  display: flex;
+  flex-direction: row;
+  margin: 20px;
+  gap: 10px;
+}
+
+.cares-filters {
+  min-width: 200px;
+}
+
+.cares-selected-filters {
+  display: flex;
+  flex-direction: row;
+  margin: 20px;
+  gap: 10px;
+
+  flex-wrap: wrap;
+
+  .care-list-daily-price {
+    width: 200px;
+  }
+
+  .care-list-date {
+    width: 200px;
+  }
+}
+
+.ant-input-group-addon {
+  color: v.$white !important;
+  background-color: v.$blue-medium !important;
 }
 
 .cares-title {
@@ -24,7 +58,6 @@
 }
 
 .cares-list {
-  max-width: 1000px;
   margin: 0 auto;
   border-radius: 8px;
 
@@ -50,7 +83,7 @@
     border-radius: 5%;
 
     @media (max-width: 576px) {
-      display: none
+      display: none;
     }
   }
 }
