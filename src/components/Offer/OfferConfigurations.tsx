@@ -194,7 +194,7 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
             />
           </Form.Item>
         ) : values ? (
-          values.map((value) => t(value)).join(", ")
+          values.map((value) => t(`${attributeKey}.${value}`)).join(", ")
         ) : (
           ""
         );
@@ -233,7 +233,7 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
       render: (_: number, record: OfferConfigurationWithOptionalId) => {
         const editable = isEditing(record);
         return editable ? (
-          <NumericFormItem name="dailyPrice" />
+          <NumericFormItem name="dailyPrice" width={120}/>
         ) : (
           record.dailyPrice
         );

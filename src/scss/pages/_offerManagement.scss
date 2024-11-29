@@ -38,6 +38,14 @@
   gap: 25px;
   overflow-x: auto;
   padding: 10px;
+
+  .ant-collapse-content-box {
+    padding: 0 0 10px 0 !important;
+  }
+
+  @media (max-width: 480px) {
+    padding: 2px;
+  }
 }
 
 .offer-field {
