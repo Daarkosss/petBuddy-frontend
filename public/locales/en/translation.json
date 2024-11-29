@@ -129,7 +129,22 @@
     "CreatedTime": "Creation date",
     "CareStart": "Start time",
     "CareEnd": "End time",
-    "filter": "Filter"
+    "filter": "Filter",
+    "sort": "Sort",
+    "id": "Id",
+    "submittedAt": "Submitted at",
+    "caretakerStatus": "Caretaker status",
+    "clientStatus": "Client status",
+    "careStart": "Care start",
+    "careEnd": "Care end",
+    "description": "Description",
+    "dailyPrice": "Daily price",
+    "animal_animalType": "Animal type",
+    "selectedOptions": "Selected options",
+    "caretaker_email": "Caretaker email",
+    "client_email": "Client email",
+    "ASC": "Ascending",
+    "DESC": "Descending"
   },
 
   "description": "Description",

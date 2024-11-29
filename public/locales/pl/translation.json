@@ -135,7 +135,22 @@
     "CreatedTime": "Data utworzenia",
     "CareStart": "Data rozpoczęcia",
     "CareEnd": "Data zakończenia",
-    "filter": "Filtruj"
+    "filter": "Filtruj",
+    "sort": "Sortowanie",
+    "id": "Id",
+    "submittedAt": "Data złożenia rezerwacji",
+    "caretakerStatus": "Status opiekuna",
+    "clientStatus": "Status klienta",
+    "careStart": "Rozpoczęcie opieki",
+    "careEnd": "Zakończenie opieki",
+    "description": "Opis",
+    "dailyPrice": "Dzienna cena",
+    "animal_animalType": "Rodzaj zwierzęcia",
+    "selectedOptions": "Wybrane opcje",
+    "caretaker_email": "Email Opiekuna",
+    "client_email": "Email Klienta",
+    "ASC": "Rosnąco",
+    "DESC": "Malejąco"
   },
 
   "description": "Opis",

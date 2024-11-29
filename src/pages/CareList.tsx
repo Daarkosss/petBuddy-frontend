@@ -113,7 +113,7 @@ const CareList = () => {
   const [pagingParams, setPagingParams] = useState({
     page: 0,
     size: 10,
-    sortBy: "submittedAt", //TODO: change
+    sortBy: "", //TODO: change
     sortDirection: "DESC", //TODO: change
   });
 
@@ -300,7 +300,10 @@ const CareList = () => {
       <Spin spinning={isLoading} fullscreen />
       <h1 className="cares-title">{t("care.yourCares")}</h1>
       <div className="cares-filters-section">
-        <FilterOutlined style={{ color: "white" }} />
+        <FilterOutlined
+          style={{ color: "white" }}
+          className="care-list-filter-icon"
+        />
         <Select
           key={i18n.language}
           className="cares-filters"
@@ -363,182 +366,268 @@ const CareList = () => {
             }))}
         />
       </div>
-      <div className="cares-selected-filters">
-        {selectedFilters.map((filterName, index) => {
-          switch (true) {
-            case filterName === "CareStart" ||
-              filterName === "CareEnd" ||
-              filterName === "CreatedTime":
-              return (
-                <DatePicker
-                  onChange={(dates) => {
-                    if (filterName === "CareStart") {
-                      onDateChange(dates, "minCareStart", "maxCareStart");
-                    } else {
-                      if (filterName === "CareEnd") {
-                        onDateChange(dates, "minCareEnd", "maxCareEnd");
+      {selectedFilters.length > 0 && (
+        <div className="cares-selected-filters">
+          {selectedFilters.map((filterName, index) => {
+            switch (true) {
+              case filterName === "CareStart" ||
+                filterName === "CareEnd" ||
+                filterName === "CreatedTime":
+                return (
+                  <DatePicker
+                    onChange={(dates) => {
+                      if (filterName === "CareStart") {
+                        onDateChange(dates, "minCareStart", "maxCareStart");
                       } else {
-                        onDateChange(dates, "minCreatedTime", "maxCreatedTime");
+                        if (filterName === "CareEnd") {
+                          onDateChange(dates, "minCareEnd", "maxCareEnd");
+                        } else {
+                          onDateChange(
+                            dates,
+                            "minCreatedTime",
+                            "maxCreatedTime"
+                          );
+                        }
                       }
-                    }
-                  }}
-                  locale={i18n.language === "pl" ? calendar_pl : calendar_en}
-                  style={{ width: 185 }}
-                  range
-                  plugins={[
-                    highlightWeekends(),
-                    <DatePanel
-                      header={t("selectedDates")}
-                      style={{ minWidth: 150 }}
-                    />,
-                  ]}
-                  render={(value, openCalendar) => (
-                    <Tooltip
-                      trigger={["focus"]}
-                      title={t(`careSearch.${filterName}`)}
-                    >
-                      <Input
-                        className="care-list-date"
-                        value={value}
-                        onFocus={openCalendar}
-                        placeholder={t("placeholder.date")}
-                        style={{ width: 185 }}
-                      />
-                    </Tooltip>
-                  )}
-                />
-              );
-            case filterName === "caretakerStatuses" ||
-              filterName === "clientStatuses":
-              return (
-                <Select
-                  key={index}
-                  className="cares-filters"
-                  mode="multiple"
-                  allowClear
-                  placeholder={t(`careSearch.${filterName}`)} //TODO: translation
-                  onSelect={(value) => {
-                    console.log(filterName, value);
-                    filters[filterName].push(value as CareStatus);
-                    handleChangeFilters([
-                      {
-                        filterName: filterName,
-                        filterNewValue: filters[filterName],
-                      },
-                    ]);
-                  }}
-                  onDeselect={(value: string) => {
-                    handleChangeFilters([
-                      {
-                        filterName: filterName,
-                        filterNewValue: [
-                          ...filters[filterName].filter((val) => val !== value),
-                        ],
-                      },
-                    ]);
-                  }}
-                  onClear={() => {
-                    handleChangeFilters([
-                      { filterName: filterName, filterNewValue: [] },
-                    ]);
-                  }}
-                >
-                  {careStatuses.map((filterValue, indexStatus) => (
-                    <Select.Option key={indexStatus} value={filterValue}>
-                      {t(`careStatus.${filterValue.toLowerCase()}`)}
-                    </Select.Option>
-                  ))}
-                </Select>
-              );
-            case filterName === "animalTypes":
-              return (
-                <Select
-                  key={index}
-                  className="cares-filters"
-                  mode="multiple"
-                  allowClear
-                  placeholder={t(`careSearch.${filterName}`)} //TODO: translation
-                  onSelect={(value) => {
-                    filters[filterName].push(value);
-                    handleChangeFilters([
-                      {
-                        filterName: filterName,
-                        filterNewValue: filters[filterName],
-                      },
-                    ]);
-                  }}
-                  onDeselect={(value: string) =>
-                    handleChangeFilters([
-                      {
-                        filterName: filterName,
-                        filterNewValue: [
-                          ...filters[filterName].filter((val) => val !== value),
-                        ],
-                      },
-                    ])
-                  }
-                  onClear={() =>
-                    handleChangeFilters([
-                      { filterName: filterName, filterNewValue: [] },
-                    ])
-                  }
-                >
-                  {store.animal.allAnimalTypes.map(
-                    (animalType, indexAnimals) => (
-                      <Select.Option key={indexAnimals} value={animalType}>
-                        {t(animalType.toLowerCase())}
-                      </Select.Option>
-                    )
-                  )}
-                </Select>
-              );
-
-            case filterName === "minDailyPrice" ||
-              filterName === "maxDailyPrice":
-              return (
-                <Tooltip
-                  trigger={["focus"]}
-                  title={t(`careSearch.${filterName}`)}
-                >
-                  <Input
-                    key={index}
-                    addonAfter={`zł ${filterName.substring(0, 3)}`}
-                    className="care-list-daily-price"
-                    value={filters[filterName] ?? 0}
-                    onChange={(e) =>
-                      onDailyPriceChanged(e.target.value, filterName)
-                    }
-                    onBlur={(e) => onDailyPriceBlur(e.target.value, filterName)}
+                    }}
+                    locale={i18n.language === "pl" ? calendar_pl : calendar_en}
+                    style={{ width: 185 }}
+                    range
+                    plugins={[
+                      highlightWeekends(),
+                      <DatePanel
+                        header={t("selectedDates")}
+                        style={{ minWidth: 150 }}
+                      />,
+                    ]}
+                    render={(value, openCalendar) => (
+                      <Tooltip
+                        trigger={["focus"]}
+                        title={t(`careSearch.${filterName}`)}
+                      >
+                        <Input
+                          className="care-list-date"
+                          value={value}
+                          onFocus={openCalendar}
+                          placeholder={t("placeholder.date")}
+                          style={{ width: 185 }}
+                        />
+                      </Tooltip>
+                    )}
                   />
-                </Tooltip>
-              );
+                );
+              case filterName === "caretakerStatuses" ||
+                filterName === "clientStatuses":
+                return (
+                  <Select
+                    key={index}
+                    className="cares-filters"
+                    mode="multiple"
+                    allowClear
+                    placeholder={t(`careSearch.${filterName}`)} //TODO: translation
+                    onSelect={(value) => {
+                      console.log(filterName, value);
+                      filters[filterName].push(value as CareStatus);
+                      handleChangeFilters([
+                        {
+                          filterName: filterName,
+                          filterNewValue: filters[filterName],
+                        },
+                      ]);
+                    }}
+                    onDeselect={(value: string) => {
+                      handleChangeFilters([
+                        {
+                          filterName: filterName,
+                          filterNewValue: [
+                            ...filters[filterName].filter(
+                              (val) => val !== value
+                            ),
+                          ],
+                        },
+                      ]);
+                    }}
+                    onClear={() => {
+                      handleChangeFilters([
+                        { filterName: filterName, filterNewValue: [] },
+                      ]);
+                    }}
+                  >
+                    {careStatuses.map((filterValue, indexStatus) => (
+                      <Select.Option key={indexStatus} value={filterValue}>
+                        {t(`careStatus.${filterValue.toLowerCase()}`)}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                );
+              case filterName === "animalTypes":
+                return (
+                  <Select
+                    key={index}
+                    className="cares-filters"
+                    mode="multiple"
+                    allowClear
+                    placeholder={t(`careSearch.${filterName}`)} //TODO: translation
+                    onSelect={(value) => {
+                      filters[filterName].push(value);
+                      handleChangeFilters([
+                        {
+                          filterName: filterName,
+                          filterNewValue: filters[filterName],
+                        },
+                      ]);
+                    }}
+                    onDeselect={(value: string) =>
+                      handleChangeFilters([
+                        {
+                          filterName: filterName,
+                          filterNewValue: [
+                            ...filters[filterName].filter(
+                              (val) => val !== value
+                            ),
+                          ],
+                        },
+                      ])
+                    }
+                    onClear={() =>
+                      handleChangeFilters([
+                        { filterName: filterName, filterNewValue: [] },
+                      ])
+                    }
+                  >
+                    {store.animal.allAnimalTypes.map(
+                      (animalType, indexAnimals) => (
+                        <Select.Option key={indexAnimals} value={animalType}>
+                          {t(animalType.toLowerCase())}
+                        </Select.Option>
+                      )
+                    )}
+                  </Select>
+                );
 
-            case filterName === "emails":
-              return (
-                <div>
+              case filterName === "minDailyPrice" ||
+                filterName === "maxDailyPrice":
+                return (
                   <Tooltip
                     trigger={["focus"]}
                     title={t(`careSearch.${filterName}`)}
                   >
                     <Input
                       key={index}
-                      allowClear
-                      placeholder={t(`careSearch.${filterName}`)}
-                      onBlur={() => onEmailsBlur()}
-                      className="care-list-emails"
-                      value={filters[filterName]}
-                      onChange={(e) => onEmailsChanged(e.target.value)}
+                      addonAfter={`zł ${filterName.substring(0, 3)}`}
+                      className="care-list-daily-price"
+                      value={filters[filterName] ?? 0}
+                      onChange={(e) =>
+                        onDailyPriceChanged(e.target.value, filterName)
+                      }
+                      onBlur={(e) =>
+                        onDailyPriceBlur(e.target.value, filterName)
+                      }
                     />
                   </Tooltip>
-                </div>
-              );
+                );
 
-            default:
-              return null;
-          }
-        })}
-      </div>
+              case filterName === "emails":
+                return (
+                  <div>
+                    <Tooltip
+                      trigger={["focus"]}
+                      title={t(`careSearch.${filterName}`)}
+                    >
+                      <Input
+                        key={index}
+                        allowClear
+                        placeholder={t(`careSearch.${filterName}`)}
+                        onBlur={() => onEmailsBlur()}
+                        className="care-list-emails"
+                        value={filters[filterName]}
+                        onChange={(e) => onEmailsChanged(e.target.value)}
+                      />
+                    </Tooltip>
+                  </div>
+                );
+
+              default:
+                return null;
+            }
+          })}
+        </div>
+      )}
       <div className="care-list-filter-button-container">
+        <div className="care-list-sort-container">
+          <div className="care-list-sort">{t("careSearch.sort")}</div>
+          <Select
+            className="cares-filters"
+            allowClear
+            placeholder={t(`careSearch.sort`)}
+            onSelect={(value) => {
+              setPagingParams({
+                page: pagingParams.page,
+                size: pagingParams.size,
+                sortBy: value,
+                sortDirection: pagingParams.sortDirection,
+              });
+            }}
+            onClear={() =>
+              setPagingParams({
+                page: pagingParams.page,
+                size: pagingParams.size,
+                sortBy: "",
+                sortDirection: pagingParams.sortDirection,
+              })
+            }
+          >
+            {[
+              "id",
+              "submittedAt",
+              "caretakerStatus",
+              "clientStatus",
+              "careStart",
+              "careEnd",
+              "description",
+              "dailyPrice",
+              "animal_animalType",
+              "selectedOptions",
+              "caretaker_email",
+              "client_email",
+            ].map((sortName, indexAnimals) => (
+              <Select.Option key={indexAnimals} value={sortName}>
+                {t(`careSearch.${sortName}`)}
+              </Select.Option>
+            ))}
+          </Select>
+
+          {pagingParams.sortBy !== "" && (
+            <Select
+              className="cares-filters"
+              allowClear
+              defaultValue={"DESC"}
+              placeholder={t(`careSearch.sort`)}
+              onSelect={(value) => {
+                setPagingParams({
+                  page: pagingParams.page,
+                  size: pagingParams.size,
+                  sortBy: pagingParams.sortBy,
+                  sortDirection: value,
+                });
+              }}
+              onClear={() =>
+                setPagingParams({
+                  page: pagingParams.page,
+                  size: pagingParams.size,
+                  sortBy: pagingParams.sortBy,
+                  sortDirection: "",
+                })
+              }
+            >
+              {["ASC", "DESC"].map((sortName, indexAnimals) => (
+                <Select.Option key={indexAnimals} value={sortName}>
+                  {t(`careSearch.${sortName}`)}
+                </Select.Option>
+              ))}
+            </Select>
+          )}
+        </div>
         <Button
           disabled={hasFilterChanged !== true}
           type="primary"

@@ -19,7 +19,26 @@
 
   .care-list-filter-button-container {
     margin: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    .care-list-sort-container {
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+
+      .care-list-sort {
+        background-color: v.$blue-very-dark;
+        padding: 7px;
+        text-align: center;
+        width: 100px;
+        font-size: 16px;
+        color: v.$white;
+        border-radius: 9px;
+      }
+    }
     .care-list-filter-button {
+      width: 100px;
       font-size: 16px;
       color: v.$white;
       background: v.$orange-medium;
@@ -54,6 +73,12 @@
   flex-direction: row;
   margin: 20px;
   gap: 10px;
+
+  .care-list-filter-icon {
+    background-color: v.$blue-very-dark;
+    padding: 10px;
+    border-radius: 7px;
+  }
 }
 
 .cares-filters {
