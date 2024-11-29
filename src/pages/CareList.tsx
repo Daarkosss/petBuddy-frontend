@@ -538,10 +538,11 @@ const CareList = () => {
           }
         })}
       </div>
-      <div>
+      <div className="care-list-filter-button-container">
         <Button
           disabled={hasFilterChanged !== true}
           type="primary"
+          className="care-list-filter-button"
           onClick={() => {
             setHasFilterChanged(false);
             fetchCares();

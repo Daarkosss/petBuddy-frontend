@@ -16,6 +16,37 @@
   h1 {
     color: v.$white;
   }
+
+  .care-list-filter-button-container {
+    margin: 20px;
+    .care-list-filter-button {
+      font-size: 16px;
+      color: v.$white;
+      background: v.$orange-medium;
+      border: v.$orange-medium;
+
+      &:hover,
+      &:focus {
+        color: v.$white;
+        background: v.$orange-light !important;
+        border: v.$white;
+      }
+    }
+
+    .care-list-filter-button:disabled {
+      font-size: 16px;
+      color: v.$white;
+      background: v.$blue-very-dark;
+      border: none;
+
+      &:hover,
+      &:focus {
+        color: v.$white;
+        background: v.$blue-very-dark !important;
+        border: none;
+      }
+    }
+  }
 }
 
 .cares-filters-section {
