@@ -106,7 +106,7 @@ const CareList = () => {
                       size="small"
                     >
                       <Descriptions.Item label={t("animalType")}>
-                        {t(care.animalType.toLowerCase())}
+                        {t(`animalTypes.${care.animalType}`)}
                       </Descriptions.Item>
                       <Descriptions.Item label={t("totalPrice")}>
                         {care.totalPrice}

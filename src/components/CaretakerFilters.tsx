@@ -61,7 +61,7 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
   const renderAnimalFilters = () =>
     filters.animals?.map(({ animalType }) => (
       <div key={animalType} className="animal-filter">
-        <h3>{t(animalType.toLowerCase())}</h3>
+        <h3>{t(`animalTypes.${animalType}`)}</h3>
         <div className="prices">
           <div>{t("price")}</div>
           <Input
@@ -90,7 +90,7 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
           <Select
             mode="multiple"
             showSearch={false}
-            placeholder={t(attributeKey.toLowerCase())}
+            placeholder={t(`${attributeKey}.title`)}
             onChange={(value) =>
               onAnimalFiltersChange(animalType, { attributes: { [attributeKey]: value } })
             }
@@ -98,7 +98,7 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
             notFoundContent={t("noData")}
             options={store.animal.getAttributeValues(animalType, attributeKey).map((value) => ({
               value,
-              label: t(value.toLowerCase())
+              label: t(`${attributeKey}.${value}`)
             }))}
           />
         ))}
@@ -148,12 +148,12 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
         <Select
           mode="multiple"
           showSearch={false}
-          placeholder={t("caretakerSearch.animalTypes")}
+          placeholder={t("animalTypes.title")}
           onChange={onAnimalTypesChange}
           value={filters.animals?.map((animal) => animal.animalType)}
           options={store.animal.allAnimalTypes.map((animalType) => ({
             value: animalType,
-            label: t(animalType.toLowerCase())
+            label: t(`animalTypes.${animalType}`)
           }))}
         />
         {filters.animals && filters.animals.length > 0 && 

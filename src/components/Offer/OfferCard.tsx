@@ -86,7 +86,7 @@ const OfferCard: React.FC<OfferCardProps> = ({
         actions={actions}
       >
         <Meta
-          title={t(`yourOffers.${offer.animal.animalType.toLowerCase()}`)}
+          title={t(`yourOffers.${offer.animal.animalType}`)}
           description={offer.description.length <= 40 
             ? offer.description 
             : `${offer.description.substring(0, 40)}...`

@@ -60,15 +60,15 @@ const SetAvailabilityModal: React.FC<SetAvailabilityFormProps> = ({
         />
         <Form.Item
           name={["offerIds"]}
-          label={t("animalTypes")}
+          label={t("animalTypes.title")}
           rules={[{ required: true, message: t("validation.required") }]}
         >
           <Select
-            placeholder={t("caretakerSearch.animalTypes")}
+            placeholder={t("animalTypes.title")}
             mode="multiple"
             showSearch={false}
             options={availableOffers.map(
-              (offer) => ({ value: offer.id, label: t(offer.animal.animalType.toLowerCase()) })
+              (offer) => ({ value: offer.id, label: t(`animalTypes.${offer.animal.animalType}`) })
             )}
           />
         </Form.Item>

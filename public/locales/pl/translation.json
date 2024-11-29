@@ -2,25 +2,106 @@
   "from": "Od",
   "to": "Do",
 
-  "dog": "Pies",
-  "cat": "Kot",
-  "bird": "Ptak",
-  "turtle": "Żółw",
-  "snake": "Wąż",
-  "fish": "Ryby",
-  "rabbit": "Królik",
-  "hamster": "Chomik",
+  "animalTypes": {
+    "title": "Rodzaje zwierząt",
+    "DOG": "Pies",
+    "CAT": "Kot",
+    "BIRD": "Ptak",
+    "TURTLE": "Żółw",
+    "SNAKE": "Wąż",
+    "FISH": "Ryby",
+    "RABBIT": "Królik",
+    "HAMSTER": "Chomik",
+    "HEDGEHOG": "Jeż",
+    "GUINEA_PIG": "Świnka morska",
+    "MOUSE": "Mysz",
+    "OTHER": "Inne"
+  },
 
-  "sex": "Płeć",
-  "male": "Samiec",
-  "she": "Samiczka",
+  "SEX": {
+    "title": "Płeć",
+    "MALE": "Samiec",
+    "SHE": "Samiczka"
+  },
 
-  "size": "Wielkość",
-  "small": "Mały",
-  "medium": "Średni",
-  "big": "Duży",
+  "SIZE": {
+    "title": "Rozmiar",
 
-  "dangerous": "Niebezpieczny?",
+    "SMALL <0.5 KG": "Mały < 0.5kg",
+    "SMALL <3 KG": "Mały < 3kg",
+    "SMALL <10 KG": "Mały < 10kg",
+
+    "MEDIUM 0.5-2 KG": "Średni 0.5-2kg",
+    "MEDIUM 0.5-1 KG": "Średni 0.5-1kg",
+    "MEDIUM 0.5-5 KG": "Średni 0.5-5kg",
+    "MEDIUM 3-6 KG": "Średni 3-6kg",
+    "MEDIUM 10-25 KG": "Średni 10-25kg",
+
+    "BIG >1 KG": "Duży > 1kg",
+    "BIG >2 KG": "Duży > 2kg",
+    "BIG >5 KG": "Duży > 5kg",
+    "BIG >6 KG": "Duży > 6kg",
+    "BIG >25 KG": "Duży > 25kg"
+  },
+
+  "AGE": {
+    "title": "Wiek",
+
+    "YOUNG <2 MONTHS": "Młody < 2 miesiące",
+    "YOUNG <1 YEAR": "Młody < 1 rok",
+    "YOUNG <2 YEARS": "Młody < 2 lata",
+
+    "ADULT >2 MONTHS": "Dorosły > 2 miesiące",
+    "ADULT 1-8 YEARS": "Dorosły 1-8 lat",
+    "ADULT >2 YEARS": "Dorosły > 2 lata",
+
+    "SENIOR >8 YEARS": "Senior > 8 lat"
+  },
+
+  "WATER": {
+    "title": "Woda",
+    "FRESH": "Słodka",
+    "SALT": "Słona"
+  },
+
+  "VENOMOUS": {
+    "title": "Jadowity?",
+    "YES": "Tak",
+    "NO": "Nie"
+  },
+  
+  "DANGEROUS": {
+    "title": "Niebezpieczny?",
+    "YES": "Tak",
+    "NO": "Nie"
+  },
+
+  "amenities": "Udogodnienia",
+  "amenityTypes": {
+    "toys": "Zabawki",
+    "scratching post": "Drapak",
+    "cage": "Klatka",
+    "garden": "Ogród",
+    "aquarium": "Akwarium",
+    "litter tray": "Kuweta",
+    "spacious cage": "Przestronna klatka",
+    "tank decorations": "Dekoracje zbiornika",
+    "water filtration": "Filtr do wody",
+    "thermal regulation": "Regulacja temperatury",
+    "terrarium": "Terrarium",
+    "heat lamp": "Lampa grzewcza",
+    "basking area": "Miejsce do wygrzewania się",
+    "UVB lighting": "Lampa UV",
+    "water area": "Zbiornik wodny",
+    "secure terrarium": "Zabezpieczone terrarium",
+    "hiding spots": "Kryjówki",
+    "humidity control": "Kontrola wilgotności",
+    "exercise wheel": "Kółko do ćwiczeń",
+    "bedding" : "Ściółka",
+    "tunnels": "Tunele",
+    "catnip": "Kocimiętka",
+    "aviary": "Woliera"
+  },
 
   "search": "Szukaj",
   "filters": "Filtry",
@@ -32,15 +113,6 @@
   "logout": "Wyloguj",
   "caretaker": "Opiekun",
   "client": "Klient",
-
-  "amenities": "Udogodnienia",
-  "amenityTypes": {
-    "toys": "Zabawki",
-    "scratching post": "Drapak",
-    "cage": "Klatka",
-    "garden": "Ogród",
-    "aquarium": "Akwarium"
-  },
 
   "address": "Adres",
   "addressDetails": {
@@ -116,7 +188,6 @@
 
   "caretakerSearch": {
     "personalData": "Dane personalne",
-    "animalTypes": "Rodzaje zwierząt",
     "animalType": "Typ zwierzęcia",
     "minPrice": "Minimalna cena",
     "maxPrice": "Maksymalna cena",
@@ -207,7 +278,6 @@
   "addConfiguration": "Dodaj konfigurację",
   "editConfiguration": "Edytuj konfigurację",
   "animalType": "Rodzaj zwierzęcia",
-  "animalTypes": "Rodzaje zwierząt",
   "actions": "Akcje",
   "requestCare": "Poproś o opiekę",
   "availability": "Dostępność",
@@ -228,26 +298,33 @@
 
   "yourOffers": {
     "manageOffer": "Zarządzaj swoją ofertą",
-    "cat": "Twoja oferta dla kotów",
-    "dog": "Twoja oferta dla psów",
-    "bird": "Twoja oferta dla ptaków",
-    "turtle": "Twoja oferta dla żółwi",
-    "snake": "Twoja oferta dla węży",
-    "fish": "Twoja oferta dla ryb",
-    "hamster": "Twoja oferta dla chomików",
-    "rabbit": "Twoja oferta dla królików"  
+    "CAT": "Twoja oferta dla kotów",
+    "DOG": "Twoja oferta dla psów",
+    "BIRD": "Twoja oferta dla ptaków",
+    "TRUTLE": "Twoja oferta dla żółwi",
+    "SNAKE": "Twoja oferta dla węży",
+    "FISH": "Twoja oferta dla ryb",
+    "HAMSTER": "Twoja oferta dla chomików",
+    "RABBIT": "Twoja oferta dla królików",
+    "HEDGEHOG": "Twoja oferta dla jeży",
+    "GUINEA_PIG": "Twoja oferta dla świnek morskich",
+    "MOUSE": "Twoja oferta dla myszy",
+    "OTHER": "Twoja oferta dla innych zwierząt"
   },
 
   "caretakerOffers": {
-    "cat": "Oferta dla kotów",
-    "dog": "Oferta dla psów",
-    "bird": "Oferta dla ptaków",
-    "reptile": "Oferta dla gadów",
-    "turtle": "Oferta dla żółwi",
-    "snake": "Oferta dla węży",
-    "fish": "Oferta dla ryb",
-    "hamster": "Oferta dla chomików",
-    "rabbit": "Oferta dla królików"  
+    "CAT": "Oferta dla kotów",
+    "DOG": "Oferta dla psów",
+    "BIRD": "Oferta dla ptaków",
+    "TURTLE": "Oferta dla żółwi",
+    "SNAKE": "Oferta dla węży",
+    "FISH": "Oferta dla ryb",
+    "HAMSTER": "Oferta dla chomików",
+    "RABBIT": "Oferta dla królików",
+    "HEDGEHOG": "Oferta dla jeży",
+    "GUINEA_PIG": "Oferta dla świnek morskich",
+    "MOUSE": "Oferta dla myszy",
+    "OTHER": "Oferta dla innych zwierząt"
   },
 
   "availabilityAlert": "Dostępność zostanie nadpisana wybranymi datami dla wszystkich ofert, które zaznaczysz.",

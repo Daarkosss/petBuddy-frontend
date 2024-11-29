@@ -41,9 +41,9 @@ const AddOfferForm: React.FC<OfferFormProps> = ({ currentAnimalTypes, onSuccess 
         rules={[{ required: true, message: t("validation.required") }]}
       >
         <Select
-          placeholder={t("caretakerSearch.animalTypes")}
+          placeholder={t("animalTypes.title")}
           options={availableAnimalTypes.map(
-            (type) => ({ value: type, label: t(type.toLowerCase()) })
+            (type) => ({ value: type, label: t(`animalTypes.${type}`) })
           )}
         />
       </Form.Item>

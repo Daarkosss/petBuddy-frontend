@@ -114,8 +114,8 @@ const OfferModal: React.FC<OfferModalProps> = ({
       title={
         <div className="offer-modal-title">
           {canBeEdited
-            ? t(`yourOffers.${offer.animal.animalType.toLowerCase()}`)
-            : t(`caretakerOffers.${offer.animal.animalType.toLowerCase()}`)}
+            ? t(`yourOffers.${offer.animal.animalType}`)
+            : t(`caretakerOffers.${offer.animal.animalType}`)}
         </div>
       }
       open={isModalOpen}

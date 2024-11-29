@@ -156,13 +156,13 @@ const CareDetails = () => {
             column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }}
           >
             <Descriptions.Item label={t("animalType")}>
-              {t(care.animalType.toLowerCase())}
+              {t(`animalTypes.${care.animalType}`)}
             </Descriptions.Item>
             <Descriptions.Item label={t("animalAttributes")}>
               <div>
                 {Object.entries(care.selectedOptions).map(([key, value]) => (
                   <div key={key}>
-                    {t(key.toLowerCase())}: {value.map((option) => t(option.toLowerCase())).join(", ")}
+                    {t(`${key}.title`)}: {value.map((option) => t(`${key}.${option}`)).join(", ")}
                   </div>
                 ))}
               </div>
