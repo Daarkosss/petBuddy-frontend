@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Input, Button, Select } from "antd";
 import { OfferDTO } from "../../types";
 import { api } from "../../api/api";
@@ -32,6 +32,11 @@ const AddOfferForm: React.FC<OfferFormProps> = ({ currentAnimalTypes, onSuccess 
       form.resetFields();
     }
   };
+
+  useEffect(() => {
+    console.log(animalType);
+    form.setFieldValue(["animalAmenities"], []);
+  }, [form, animalType]);
 
   return (
     <Form form={form} onFinish={handleFinish}>
