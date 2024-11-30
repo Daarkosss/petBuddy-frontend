@@ -106,9 +106,14 @@
     "noCaretakerProfile": "Nie posiadasz jeszcze profilu opiekuna"
   },
 
-  "triggerDesc": "Naciśnij aby sortowac malejąco",
-  "triggerAsc": "Naciśnij aby sortowac rosnąco",
-  "cancelSort": "Naciśnij aby anulowac sortowanie",
+  "sort": {
+    "title": "Sortuj",
+    "default": "Domyślnie",
+    "avgRatingDesc": "Po sredniej ocenie malejąco",
+    "avgRatingAsc": "Po sredniej ocenie rosnąco",
+    "numberOfRatingsDesc": "Po liczbie ocen malejąco",
+    "numberOfRatingsAsc": "Po liczbie ocen rosnąco"
+  },
 
   "caretakerSearch": {
     "personalData": "Dane personalne",
