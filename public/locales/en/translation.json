@@ -263,7 +263,7 @@
     "confirmBeginOfCare": "Are you sure you want to confirm begin of care?",
     "timeRemaining": "Time remaining",
     "careStartsTomorrow": "Care starts tomorrow.",
-    "rememberToConfirmBeginOfCare": "Don't forget to confirm begin of care. You can to it only tomorrow.",
+    "rememberToConfirmBeginOfCare": "Don't forget to confirm begin of care. You can do it only tomorrow.",
     "caretakerShouldConfirmBeginOfCare": "Caretaker should confirm begin of care tomorrow.",
     "ifCaretakerDoesntConfirm": "If you don't confirm begin of care, care will be cancelled."
   },
