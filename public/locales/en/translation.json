@@ -51,14 +51,14 @@
     "title": "Age",
 
     "YOUNG <2 MONTHS": "Young < 2 months",
-    "YOUNG <1 YEAR": "Young < 1 rok",
-    "YOUNG <2 YEARS": "Young < 2 lat",
+    "YOUNG <1 YEAR": "Young < 1 year",
+    "YOUNG <2 YEARS": "Young < 2 years",
 
     "ADULT >2 MONTHS": "Adult > 2 months",
-    "ADULT 1-8 YEARS": "Adult 1-8 lat",
-    "ADULT >2 YEARS": "Adult > 2 lat",
+    "ADULT 1-8 YEARS": "Adult 1-8 years",
+    "ADULT >2 YEARS": "Adult > 2 years",
 
-    "SENIOR >8 YEAR": "Senior > 8 lat"
+    "SENIOR >8 YEAR": "Senior > 8 years"
   },
 
   "WATER": {
