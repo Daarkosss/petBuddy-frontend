@@ -28,17 +28,20 @@
     "title": "Size",
 
     "SMALL <0.5 KG": "Small < 0.5kg",
+    "SMALL <1 KG": "Small < 1kg",
     "SMALL <3 KG": "Small < 3kg",
     "SMALL <10 KG": "Small < 10kg",
 
     "MEDIUM 0.5-2 KG": "Medium 0.5-2kg",
     "MEDIUM 0.5-1 KG": "Medium 0.5-1kg",
     "MEDIUM 0.5-5 KG": "Medium 0.5-5kg",
+    "MEDIUM 1-3 KG": "Medium 1-3kg",
     "MEDIUM 3-6 KG": "Medium 3-6kg",
     "MEDIUM 10-25 KG": "Medium 10-25kg",
 
-    "BIG >1 KG": "Big > 5kg",
+    "BIG >1 KG": "Big > 1kg",
     "BIG >2 KG": "Big > 2kg",
+    "BIG >3 KG": "Big > 3kg",
     "BIG >5 KG": "Duży > 5kg",
     "BIG >6 KG": "Big > 6kg",
     "BIG >25 KG": "Big > 25kg"
