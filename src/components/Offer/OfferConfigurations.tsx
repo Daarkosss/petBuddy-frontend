@@ -194,7 +194,9 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
             />
           </Form.Item>
         ) : values ? (
-          values.map((value) => t(`${attributeKey}.${value}`)).join(", ")
+          values.map((value) => <span key={`${attributeKey}.${value}`}>
+            {t(`${attributeKey}.${value}`)}<br/>
+          </span>)
         ) : (
           ""
         );
