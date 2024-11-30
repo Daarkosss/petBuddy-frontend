@@ -88,6 +88,7 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
         </div>
         {store.animal.getAnimalAttributeKeys(animalType).map((attributeKey) => (
           <Select
+            key={animalType + attributeKey}
             mode="multiple"
             showSearch={false}
             placeholder={t(`${attributeKey}.title`)}
