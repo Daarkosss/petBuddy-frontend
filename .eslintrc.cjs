@@ -17,5 +17,7 @@ module.exports = {
     "quotes": ["error", "double"], // Enforce the use of double quotes
     "max-len": ["warn", { "code": 120 }], // Enforce maximum line length
     "eqeqeq": ["error", "always"], // Enforce use of === and !==
+    "semi": ["error", "always"], // Enforce use of semicolons
+    "no-console": ["warn", { allow: ["warn", "error"] }],
   },
 }

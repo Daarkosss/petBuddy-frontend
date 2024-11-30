@@ -50,9 +50,9 @@ class NotificationStore {
   async markAllAsRead() {
     try {
       await api.markAllNotificationsAsRead();
-      this.reset()
+      this.reset();
     } catch(error) {
-      console.error("Error")
+      console.error("Error");
     }
   }
 
@@ -73,8 +73,6 @@ class NotificationStore {
       this.removeNotifications(deletedNotifications.map((notif) => notif!.notificationId));
     } catch (error) {
       throw new Error("Something went wrong while marking notifications as read");
-    } finally {
-      console.log(this.unread.length);
     }
   }
 

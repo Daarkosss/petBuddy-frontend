@@ -92,7 +92,7 @@ const CaretakerList = () => {
         pageSize: data.caretakers.pageable.pageSize,
         total: data.caretakers.totalElements,
       });
-      setMapCenter([data.cityLatitude, data.cityLongitude])
+      setMapCenter([data.cityLatitude, data.cityLongitude]);
     } catch (error) {
       toast.error(t("error.getCaretakers"));
     } finally {

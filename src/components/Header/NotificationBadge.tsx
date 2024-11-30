@@ -28,7 +28,7 @@ const NotificationBadge = observer(() => {
         {t("notification.markAllAsRead")}
       </Button>
     </div>
-  )
+  );
 
   const content = (
     <div className="notification-content">

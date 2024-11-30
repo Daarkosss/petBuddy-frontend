@@ -1,7 +1,7 @@
 import { makeAutoObservable } from "mobx";
 import keycloak from "../Keycloack";
 import { getCookie, removeCookie } from "typescript-cookie";
-import store from "./RootStore"
+import store from "./RootStore";
 
 export type Profile = "CLIENT" | "CARETAKER" | null;
 

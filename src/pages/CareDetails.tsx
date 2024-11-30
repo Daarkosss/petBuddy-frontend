@@ -27,7 +27,7 @@ const CareDetails = () => {
     if (careIdNumber) {
       store.notification.markCareNotificationsAsRead(careIdNumber);
     }
-  }
+  };
 
   useEffect(() => {
     const fetchCareDetails = async () => {
@@ -128,15 +128,15 @@ const CareDetails = () => {
 
   const calculatePriceDifference = () => {
     return Math.abs(calculateTotalPrice(newPrice) - calculateTotalPrice(care!.dailyPrice));
-  }
+  };
 
   const isNewPriceHigher = () => {
     return calculateTotalPrice(newPrice) >= calculateTotalPrice(care!.dailyPrice);
-  }
+  };
 
   const isSamePrice = () => {
     return parseFloat(newPrice || "0") === care?.dailyPrice;
-  }
+  };
 
   if (!care) {
     return <Spin fullscreen />;

@@ -8,11 +8,11 @@ export const calculateNumberOfDays = (dateFrom: string, dateTo: string) => {
   const diff = new Date(dateTo).getTime() - new Date(dateFrom).getTime();
   const days = Math.ceil(diff / (1000 * 60 * 60 * 24)) + 1; // + 1 to include the end date
   return days;
-}
+};
 
 export const formatPrice = (price: number) => {
   return `${(price).toFixed(2).replace(".", ",")} zł`;
-}
+};
 
 export class Care {
   id: number;

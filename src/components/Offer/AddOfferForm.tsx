@@ -34,7 +34,6 @@ const AddOfferForm: React.FC<OfferFormProps> = ({ currentAnimalTypes, onSuccess 
   };
 
   useEffect(() => {
-    console.log(animalType);
     form.setFieldValue(["animalAmenities"], []);
   }, [form, animalType]);
 

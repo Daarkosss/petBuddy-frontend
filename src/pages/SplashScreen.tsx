@@ -9,7 +9,7 @@ const SplashScreen = observer(() => {
         <img src="/images/pet-buddy-logo.svg"/>
       </div>
     </div>
-  )
+  );
 }); 
 
 export default SplashScreen;

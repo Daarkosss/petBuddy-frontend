@@ -45,7 +45,7 @@ function ClientProfile() {
     } catch (e: unknown) {
       onError?.(e);
       if (e instanceof Error) {
-        console.log(`ERROR: ${e.message}`);
+        console.error(`ERROR: ${e.message}`);
       }
     }
   };

@@ -37,7 +37,7 @@ const SetAvailabilityModal: React.FC<SetAvailabilityFormProps> = ({
     } catch (error) {
       toast.error(t("error.setAvailabilityForOffers"));
     }
-  }
+  };
 
   return (
     <Modal
@@ -86,7 +86,7 @@ const SetAvailabilityModal: React.FC<SetAvailabilityFormProps> = ({
         </Button>
       </Form>
     </Modal>
-  )
+  );
 };
 
 export default SetAvailabilityModal;

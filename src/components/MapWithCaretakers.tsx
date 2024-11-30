@@ -33,7 +33,7 @@ const MapCenterUpdater = ({ center }: { center: [number, number] | undefined }) 
     }
     const [latitude, longitude] = center;
     if (latitude === 52.0 && longitude === 20.0) { 
-      map.flyTo(center, 6) // If it is the country center, decrase the zoom
+      map.flyTo(center, 6); // If it is the country center, decrase the zoom
     } else {
       map.flyTo(center, 10);
     }

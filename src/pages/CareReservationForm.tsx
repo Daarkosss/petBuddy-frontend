@@ -119,11 +119,11 @@ const CareReservationForm = () => {
 
   const calculatePriceDifference = () => {
     return Math.abs(calculateTotalPrice(location.state?.dailyPrice) - calculateTotalPrice(currentPrice));
-  }
+  };
 
   const isNewPriceLower = () => {
     return calculateTotalPrice(location.state?.dailyPrice) >= calculateTotalPrice(currentPrice);
-  }
+  };
 
   const next = async () => {
     const isFormValid = await form.validateFields();
@@ -137,7 +137,7 @@ const CareReservationForm = () => {
   };
 
   if (isStarting) {
-    return <Spin fullscreen />
+    return <Spin fullscreen />;
   }
 
   const steps = [
