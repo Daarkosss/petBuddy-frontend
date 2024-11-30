@@ -73,8 +73,6 @@ class NotificationStore {
       this.removeNotifications(deletedNotifications.map((notif) => notif!.notificationId));
     } catch (error) {
       throw new Error("Something went wrong while marking notifications as read");
-    } finally {
-      console.log(this.unread.length);
     }
   }
 

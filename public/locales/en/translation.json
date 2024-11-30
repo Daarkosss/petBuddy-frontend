@@ -117,7 +117,7 @@
 
   "description": "Description",
   "upload": "Upload",
-  "offerPhotos": "Offer photos",
+  "caretakerPhotos": "Caretaker photos",
   "currentPhotos": "Current photos",
   "newPhotos": "New photos",
   "photosLimitMessage": "Photos limit",
@@ -167,7 +167,8 @@
     "getCares": "An error occurred while loading cares",
     "getCare": "An error occurred while loading care",
     "updatePrice": "An error occurred while updating price",
-    "acceptCare": "An error occurred while accepting care"
+    "acceptCare": "An error occurred while accepting care",
+    "confirmBeginOfCare": "An error occurred while confirming begin of care"
   },
 
   "success": {
@@ -182,7 +183,8 @@
     "setAvailabilityForOffers": "Availability has been successfully set for selected offers",
     "askForCare": "You have successfully sent a request for care. Wait for a caretaker response",
     "updatePrice": "Care price has been successfully updated",
-    "acceptCare": "Care has been successfully accepted"
+    "acceptCare": "Care has been successfully accepted",
+    "confirmBeginOfCare": "Begin of care has been successfully confirmed"
   },
 
   "dailyPrice": "Daily price",
@@ -256,7 +258,14 @@
     "confirmNewPrice": "Confirm new price",
     "currentStatus": "Current status",
     "confirmAccept": "Are you sure you want to accept care?",
-    "confirmReject": "Are you sure you want to reject care?"
+    "confirmReject": "Are you sure you want to reject care?",
+    "beginOfCare": "Confirm begin of care",
+    "confirmBeginOfCare": "Are you sure you want to confirm begin of care?",
+    "timeRemaining": "Time remaining",
+    "careStartsTomorrow": "Care starts tomorrow.",
+    "rememberToConfirmBeginOfCare": "Don't forget to confirm begin of care. You can do it only tomorrow.",
+    "caretakerShouldConfirmBeginOfCare": "Caretaker should confirm begin of care tomorrow.",
+    "ifCaretakerDoesntConfirm": "If you don't confirm begin of care, care will be cancelled."
   },
 
   "careReservation": {
@@ -274,15 +283,23 @@
   },
 
   "careStatus": {
-    "reported": "Reported by client",
-    "accepted": "Accepted by caretaker",
+    "reported": "Client reported care",
+    "acceptedByCaretaker": "Accepted by caretaker",
     "pending": "Waiting for response",
     "waitingForOtherResponse": "Waiting for other response",
     "waitingForYourResponse": "Waiting for your response",
-    "cancelled": "Cancelled",
+    "cancelled": "Care cancelled",
     "waitingToTakePlace": "Waiting to take place",
+    "waitingForCaretakerToConfirm": "Waiting for caretaker to confirm the start of the care",
     "isTakingPlace": "Is taking place",
-    "done": "Done"
+    "done": "Done",
+    "outdated": "Outdated, caretaker did not confirm the start of the care in time",
+    "outdatedShortened": "Outdated",
+    "newPriceProposedByCaretaker": "Caretaker proposed new price",
+    "newPriceAcceptedByClient": "Client accepted the price",
+    "waitingForCaretakerResponse": "Waiting for caretaker response",
+    "waitingForClientResponse": "Waiting for client response",
+    "startConfirmedByCaretaker" : "Caretaker confirmed care begin"
   },
 
   "petDescription": "Pet description",
@@ -304,6 +321,7 @@
     "care_update": "Price has beeen updated in one of your cares",
     "care_accepted": "Your care has been accepted",
     "care_rejected": "Your care has been rejected",
+    "confirmation_needed": "Your care is waiting for confirmation of begin",
     "newNotification": "You have a new notification"
   },
 
