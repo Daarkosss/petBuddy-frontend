@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Table, Button, Rate, Tabs, Spin } from "antd";
+import { Table, Button, Rate, Tabs } from "antd";
 import { TablePaginationConfig, ColumnsType } from "antd/es/table/interface";
 import { api } from "../api/api";
 import { useTranslation } from "react-i18next";
