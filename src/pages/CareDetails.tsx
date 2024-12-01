@@ -116,7 +116,7 @@ const CareDetails = () => {
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   const renderTimeline = () => (
     <Timeline 

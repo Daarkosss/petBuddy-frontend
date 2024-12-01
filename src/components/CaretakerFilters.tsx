@@ -86,7 +86,7 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
     { value: "avgRatingAsc", label: t("sort.avgRatingAsc") },
     { value: "numberOfRatingsDesc", label: t("sort.numberOfRatingsDesc") },
     { value: "numberOfRatingsAsc", label: t("sort.numberOfRatingsAsc") },
-  ]
+  ];
 
   const renderAnimalFilters = () =>
     filters.animals?.map(({ animalType }) => (
