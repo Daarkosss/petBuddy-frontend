@@ -12,6 +12,7 @@ interface CaretakerFiltersProps {
   onFiltersChange: (filters: CaretakerSearchFilters) => void;
   onAnimalFiltersChange: (animalType: string, updatedConfig: Partial<OfferConfiguration>) => void;
   onAnimalTypesChange: (selectedAnimalTypes: string[]) => void;
+  onSortChange: (sortBy: string, sortDirection: string) => void;
   onSearch: () => void;
 }
 
@@ -21,6 +22,7 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
   onFiltersChange,
   onAnimalFiltersChange,
   onAnimalTypesChange,
+  onSortChange,
   onSearch,
 }) => {
   const { t } = useTranslation();
@@ -57,6 +59,34 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
     checkAndSwapPrices();
     onSearch();
   };
+
+  const handleSortChange = (sorter: string) => {
+    switch (sorter) {
+      case "default":
+        onSortChange("ratingScore", "DESC");
+        break;
+      case "avgRatingDesc":
+        onSortChange("avgRating", "DESC");
+        break;
+      case "avgRatingAsc":
+        onSortChange("avgRating", "ASC");
+        break;
+      case "numberOfRatingsDesc":
+        onSortChange("numberOfRatings", "DESC");
+        break;
+      case "numberOfRatingsAsc":
+        onSortChange("numberOfRatings", "ASC");
+        break;
+    }
+  };
+
+  const renderAvailableSorters = () => [
+    { value : "default", label: t("sort.default") },
+    { value: "avgRatingDesc", label: t("sort.avgRatingDesc") },
+    { value: "avgRatingAsc", label: t("sort.avgRatingAsc") },
+    { value: "numberOfRatingsDesc", label: t("sort.numberOfRatingsDesc") },
+    { value: "numberOfRatingsAsc", label: t("sort.numberOfRatingsAsc") },
+  ]
 
   const renderAnimalFilters = () =>
     filters.animals?.map(({ animalType }) => (
@@ -122,6 +152,14 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
 
   return (
     <div className="caretaker-sidebar">
+      <h2>{t("sort.title")}</h2>
+      <Select
+        style={{ width: "100%" }}
+        showSearch={false}
+        defaultValue="default"
+        options={renderAvailableSorters()}
+        onChange={handleSortChange}
+      />
       <h2>{t("filters")}</h2>
       <div className="filters">
         <Input

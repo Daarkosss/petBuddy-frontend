@@ -28,7 +28,7 @@ const MultiDatePicker: React.FC<DatePickerProps> = ({ handleChange, isDisabled=f
       multiple
       range
       highlightToday
-      minDate={new Date()}
+      minDate={new DateObject().add(1, "days")}
       inputMode="none"
       format="YYYY-MM-DD"
       locale={i18n.language === "pl" ? calendar_pl : calendar_en}

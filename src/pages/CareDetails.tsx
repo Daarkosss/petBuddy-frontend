@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Button, Spin, Timeline, Card, Descriptions, Modal, Form, Space, Popconfirm } from "antd";
+import { Button, Spin, Timeline, Card, Descriptions, Modal, Form, Space, Popconfirm, Alert } from "antd";
 import { api } from "../api/api";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
@@ -10,6 +10,7 @@ import UserInfoPill from "../components/UserInfoPill";
 import StatisticCard from "../components/StatisticCard";
 import NumericFormItem from "../components/NumericFormItem";
 import { formatPrice } from "../models/Care";
+import StatisticCountdown from "../components/StatisticCountdown";
 
 const CareDetails = () => {
   const { t } = useTranslation();
@@ -59,11 +60,7 @@ const CareDetails = () => {
     try {
       const data = await api.acceptCare(careIdNumber!);
       if (data) {
-        setCare(new Care({
-          ...data,
-          caretaker: care!.caretaker,
-          client: care!.client
-        }));
+        setCare(new Care(data));
       }
       toast.success(t("success.acceptCare"));
     } catch (error) {
@@ -78,11 +75,7 @@ const CareDetails = () => {
     try {
       const data = await api.rejectCare(careIdNumber!);
       if (data) {
-        setCare(new Care({
-          ...data,
-          caretaker: care!.caretaker,
-          client: care!.client
-        }));
+        setCare(new Care(data));
       }
       toast.success(t("success.rejectCare"));
     } catch (error) {
@@ -99,11 +92,7 @@ const CareDetails = () => {
       const newPrice = form.getFieldValue("newPrice");
       const data = await api.updateCarePrice(careIdNumber!, newPrice);
       if (data) {
-        setCare(new Care({
-          ...data,
-          caretaker: care!.caretaker,
-          client: care!.client
-        }));
+        setCare(new Care(data));
       }
       setIsModalOpen(false);
       toast.success(t("success.updatePrice"));
@@ -113,6 +102,21 @@ const CareDetails = () => {
       setIsLoading(false);
     }
   };
+
+  const confirmBeginOfCare = async () => {
+    setIsLoading(true);
+    try {
+      const data = await api.confirmBeginOfCare(careIdNumber!);
+      if (data) {
+        setCare(new Care(data));
+      }
+      toast.success(t("success.confirmBeginOfCare"));
+    } catch (error) {
+      toast.error(t("error.confirmBeginOfCare"));
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   const renderTimeline = () => (
     <Timeline 
@@ -213,6 +217,36 @@ const CareDetails = () => {
                 </Button>
               </Popconfirm>
             </div>
+          }
+          {care.isAbleToConfirmBeginOfCare && 
+            <>
+              <div className="actions-with-countdown">
+                <StatisticCountdown />
+                <Popconfirm
+                  title={t("care.beginOfCare")}
+                  description={t("care.confirmBeginOfCare")}
+                  onConfirm={confirmBeginOfCare}
+                  okText={t("yes")}
+                  cancelText={t("no")}
+                >
+                  <Button type="primary" loading={isLoading}>
+                    {t("care.beginOfCare")}
+                  </Button>
+                </Popconfirm>
+              </div>
+              <Alert message={t("care.ifCaretakerDoesntConfirm")} type="warning" showIcon />
+            </>
+          }
+          {care.currentUserStatus === "READY_TO_PROCEED" && care.isStartTomorrow &&
+            <Alert
+              message={t("care.careStartsTomorrow")}
+              description={store.user.profile?.selected_profile === "CARETAKER" 
+                ? t("care.rememberToConfirmBeginOfCare")
+                : t("care.caretakerShouldConfirmBeginOfCare")
+              }
+              type="info"
+              showIcon
+            />
           }
         </div>
       </Card>

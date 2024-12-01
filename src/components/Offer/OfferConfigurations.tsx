@@ -167,6 +167,16 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
     setEditingKey(undefined);
   };
 
+  const getTooltipText = () => {
+    if (availabilities.length === 0) {
+      return t("noAvailability");
+    } else if (store.user.profile?.selected_profile !== "CLIENT") {
+      return t("needToLoginAsClient");
+    } else {
+      return undefined;
+    }
+  };
+
   const selectedOptionsColumns: ColumnType<OfferConfigurationWithOptionalId>[] =
     store.animal.getAnimalAttributeKeys(animalType).map((attributeKey) => ({
       title: t(`${attributeKey}.title`),
@@ -247,7 +257,6 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
       onCell: () => ({
         style: { minWidth: 150, maxWidth: 200 },
       }),
-      hidden: !canBeEdited && store.user.profile?.selected_profile !== "CLIENT",
       render: (record: OfferConfigurationWithOptionalId) => {
         const editable = isEditing(record);
         return canBeEdited ? (
@@ -295,7 +304,7 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
             </Space>
           )
         ) : (
-          <Tooltip title={availabilities.length === 0 && t("noAvailability")}>
+          <Tooltip title={getTooltipText()}>
             <Button
               type="primary"
               onClick={() => navigate(
@@ -310,7 +319,7 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
                 }
               )}
               loading={isLoading}
-              disabled={availabilities.length === 0}
+              disabled={availabilities.length === 0 || store.user.profile?.selected_profile !== "CLIENT"}
             >
               {t("sendRequest")}
             </Button>

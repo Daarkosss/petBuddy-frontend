@@ -7,6 +7,7 @@ import {
   Rate,
   Upload,
   Avatar,
+  Image,
 } from "antd";
 import { PictureOutlined, UserOutlined } from "@ant-design/icons";
 import CommentContainer from "../components/CommentContainer";
@@ -121,6 +122,21 @@ const CaretakerProfile: React.FC = () => {
                     className="profile-image"
                     icon={<UserOutlined />}
                   />
+                )}
+                {profileData.offerPhotos && profileData.offerPhotos.length > 0 && (
+                  <div className="background-images">
+                    <Image.PreviewGroup>
+                      {profileData.offerPhotos.map((photo, index) => (
+                        <Image
+                          key={index}
+                          src={photo.url}
+                          preview={{
+                            mask: <span>{t("clickToZoom")}</span>,
+                          }}
+                        />
+                      ))}
+                    </Image.PreviewGroup>
+                  </div>
                 )}
               </div>
               {isMyProfile === true && (
