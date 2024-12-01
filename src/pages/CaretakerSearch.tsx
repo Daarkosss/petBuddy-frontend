@@ -182,7 +182,7 @@ const CaretakerList = () => {
       render: (_: unknown, record: CaretakerBasics) => (
         <div className="caretaker-list-item">
           <div className="profile-picture">
-            <img src={record.accountData.profilePicture?.url || "/default-avatar.png"} alt="avatar" />
+            <img src={record.accountData.profilePicture?.url || "/images/default-avatar.png"} alt="avatar" />
           </div>
           <div>
             <h4>
