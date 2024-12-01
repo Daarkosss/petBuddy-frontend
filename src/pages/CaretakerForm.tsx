@@ -293,7 +293,7 @@ const CaretakerForm = () => {
                 </Form.Item>
               </Card>
 
-              <Card title={t("offerPhotos")}>
+              <Card title={t("caretakerPhotos")}>
                 <Skeleton loading={isPhotosLoading} paragraph={{ rows: 2 }}>
                   <Form.Item
                     name="offerPhotos"
