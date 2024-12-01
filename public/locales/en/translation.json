@@ -123,6 +123,7 @@
 
   "description": "Description",
   "upload": "Upload",
+  "caretakerForm": "Caretaker form",
   "caretakerPhotos": "Caretaker photos",
   "currentPhotos": "Current photos",
   "newPhotos": "New photos",
@@ -318,6 +319,7 @@
   "youWillLose": "You will lose",
 
   "noAvailability": "Caretaker did not set the availability",
+  "needToLoginAsClient": "You need to log in as client to be able to request care",
 
   "notification": {
     "title": "Notifications",
@@ -331,5 +333,6 @@
     "newNotification": "You have a new notification"
   },
 
-  "termsAndConditions": "Terms and conditions"
+  "termsAndConditions": "Terms and conditions",
+  "clickToZoom": "Click to zoom"
 }

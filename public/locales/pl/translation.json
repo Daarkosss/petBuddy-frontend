@@ -128,7 +128,7 @@
 
   "description": "Opis",
   "upload": "Prześlij",
-  "caretakerPhotos": "Zdjęcia opiekuna",
+  "caretakerForm": "Formularz opiekuna",
   "currentPhotos": "Aktualne zdjęcia",
   "newPhotos": "Nowe zdjęcia",
   "photosLimitMessage": "Limit zdjęć",
@@ -325,6 +325,7 @@
   "youWillLose": "Stracisz",
 
   "noAvailability": "Opiekun nie ustawił dostępności",
+  "needToLoginAsClient": "Musisz być zalogowany jako klient, aby dokonać rezerwacji opieki",
 
   "notification": {
     "title": "Powiadomienia",
@@ -338,5 +339,6 @@
     "newNotification": "Masz nowe powiadomienie"
   },
 
-  "termsAndConditions": "Polityka prywatności"
+  "termsAndConditions": "Polityka prywatności",
+  "clickToZoom": "Naciśnij aby powiekszyć"
 }
