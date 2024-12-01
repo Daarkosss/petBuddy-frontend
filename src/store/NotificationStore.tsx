@@ -50,9 +50,9 @@ class NotificationStore {
   async markAllAsRead() {
     try {
       await api.markAllNotificationsAsRead();
-      this.reset()
+      this.reset();
     } catch(error) {
-      console.error("Error")
+      console.error("Error");
     }
   }
 

@@ -90,7 +90,7 @@ const CareList = () => {
                   </Button>
                 ]}
                 extra={
-                  <img className="animal-image" src={`/images/${care.animalType.toLowerCase()}-card.jpg`}/>
+                  <img className="animal-image" src={`/images/animals/${care.animalType.toLowerCase()}.jpg`}/>
                 }
               >
                 <List.Item.Meta
@@ -106,7 +106,7 @@ const CareList = () => {
                       size="small"
                     >
                       <Descriptions.Item label={t("animalType")}>
-                        {t(care.animalType.toLowerCase())}
+                        {t(`animalTypes.${care.animalType}`)}
                       </Descriptions.Item>
                       <Descriptions.Item label={t("totalPrice")}>
                         {care.totalPrice}

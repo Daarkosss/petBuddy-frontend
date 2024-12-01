@@ -179,7 +179,7 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
 
   const selectedOptionsColumns: ColumnType<OfferConfigurationWithOptionalId>[] =
     store.animal.getAnimalAttributeKeys(animalType).map((attributeKey) => ({
-      title: t(attributeKey.toLowerCase()),
+      title: t(`${attributeKey}.title`),
       dataIndex: ["selectedOptions", attributeKey],
       onCell: () => ({
         style: { width: 150 },
@@ -199,12 +199,14 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
                 .getAttributeValues(animalType, attributeKey)
                 .map((value) => ({
                   value,
-                  label: t(value.toLowerCase()),
+                  label: t(`${attributeKey}.${value}`),
                 }))}
             />
           </Form.Item>
         ) : values ? (
-          values.map((value) => t(value.toLowerCase())).join(", ")
+          values.map((value) => <span key={`${attributeKey}.${value}`}>
+            {t(`${attributeKey}.${value}`)}<br/>
+          </span>)
         ) : (
           ""
         );
@@ -243,7 +245,7 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
       render: (_: number, record: OfferConfigurationWithOptionalId) => {
         const editable = isEditing(record);
         return editable ? (
-          <NumericFormItem name="dailyPrice" />
+          <NumericFormItem name="dailyPrice" width={120}/>
         ) : (
           record.dailyPrice
         );

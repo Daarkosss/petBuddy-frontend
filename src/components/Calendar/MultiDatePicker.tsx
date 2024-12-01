@@ -51,6 +51,6 @@ const MultiDatePicker: React.FC<DatePickerProps> = ({ handleChange, isDisabled=f
       )}
     />
   );
-}
+};
 
 export default MultiDatePicker;

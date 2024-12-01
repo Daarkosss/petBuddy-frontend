@@ -28,7 +28,7 @@ const CareDetails = () => {
     if (careIdNumber) {
       store.notification.markCareNotificationsAsRead(careIdNumber);
     }
-  }
+  };
 
   useEffect(() => {
     const fetchCareDetails = async () => {
@@ -116,7 +116,7 @@ const CareDetails = () => {
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   const renderTimeline = () => (
     <Timeline 
@@ -132,15 +132,15 @@ const CareDetails = () => {
 
   const calculatePriceDifference = () => {
     return Math.abs(calculateTotalPrice(newPrice) - calculateTotalPrice(care!.dailyPrice));
-  }
+  };
 
   const isNewPriceHigher = () => {
     return calculateTotalPrice(newPrice) >= calculateTotalPrice(care!.dailyPrice);
-  }
+  };
 
   const isSamePrice = () => {
     return parseFloat(newPrice || "0") === care?.dailyPrice;
-  }
+  };
 
   if (!care) {
     return <Spin fullscreen />;
@@ -160,13 +160,13 @@ const CareDetails = () => {
             column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }}
           >
             <Descriptions.Item label={t("animalType")}>
-              {t(care.animalType.toLowerCase())}
+              {t(`animalTypes.${care.animalType}`)}
             </Descriptions.Item>
             <Descriptions.Item label={t("animalAttributes")}>
               <div>
                 {Object.entries(care.selectedOptions).map(([key, value]) => (
                   <div key={key}>
-                    {t(key.toLowerCase())}: {value.map((option) => t(option.toLowerCase())).join(", ")}
+                    {t(`${key}.title`)}: {value.map((option) => t(`${key}.${option}`)).join(", ")}
                   </div>
                 ))}
               </div>
@@ -250,7 +250,7 @@ const CareDetails = () => {
           }
         </div>
       </Card>
-      <img src={`/images/${care.animalType.toLowerCase()}-card.jpg`}/>
+      <img src={`/images/animals/${care.animalType.toLowerCase()}.jpg`}/>
       <Modal
         title={t("care.proposeNewPrice")}
         open={isModalOpen}

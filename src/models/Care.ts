@@ -8,15 +8,15 @@ export const calculateNumberOfDays = (dateFrom: string, dateTo: string) => {
   const diff = new Date(dateTo).getTime() - new Date(dateFrom).getTime();
   const days = Math.ceil(diff / (1000 * 60 * 60 * 24)) + 1; // + 1 to include the end date
   return days;
-}
+};
 
 export const formatPrice = (price: number) => {
   return `${(price).toFixed(2).replace(".", ",")} zł`;
-}
+};
 
 export const getTodayDate = () => {
   return new Date().toISOString().split("T")[0];
-}
+};
 
 export class Care {
   id: number;
@@ -65,7 +65,7 @@ export class Care {
   get isAbleToConfirmBeginOfCare() {
     return store.user.profile?.selected_profile === "CARETAKER" 
       && this.currentUserStatus === "READY_TO_PROCEED" 
-      && this.careStart === getTodayDate()
+      && this.careStart === getTodayDate();
   }
 
   get isStartTomorrow() {
@@ -124,11 +124,11 @@ export class Care {
         return i18next.t("careStatus.waitingForClientResponse");
       case "READY_TO_PROCEED-READY_TO_PROCEED":
         if (this.careStart === getTodayDate()) {
-          return i18next.t("careStatus.waitingForCaretakerToConfirm")
+          return i18next.t("careStatus.waitingForCaretakerToConfirm");
         } else if (this.careStart > getTodayDate()) {
           return i18next.t("careStatus.waitingToTakePlace");
         } else {
-          return shortened ? i18next.t("careStatus.outdatedShortened") : i18next.t("careStatus.outdated")
+          return shortened ? i18next.t("careStatus.outdatedShortened") : i18next.t("careStatus.outdated");
         }
       case "CONFIRMED-CONFIRMED":
         if (this.careEnd >= getTodayDate()) {
@@ -139,7 +139,7 @@ export class Care {
       case "CANCELLED-CANCELLED":
         return i18next.t("careStatus.cancelled");
       case "OUTDATED-OUTDATED":
-        return shortened ? i18next.t("careStatus.outdatedShortened") : i18next.t("careStatus.outdated")
+        return shortened ? i18next.t("careStatus.outdatedShortened") : i18next.t("careStatus.outdated");
     }
   }
 
@@ -212,8 +212,8 @@ export class Care {
           status.caretakerStatus,
           this.statusesHistory[index - 1] || null
         )
-      }
-    })
+      };
+    });
 
     if (!this.isRejected) {
       items.push({

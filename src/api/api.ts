@@ -694,7 +694,7 @@ class API {
       availability.availableFrom,
       availability.availableTo || availability.availableFrom,
     ]);
-  }
+  };
   
   convertValuesToAvailabilityRanges = (values: AvailabilityValues): AvailabilityRanges => {
     return values.map(([from, to]) => ({

@@ -85,6 +85,6 @@ const RestrictedDatePicker: React.FC<DatePickerProps> = ({
       )}
     />
   );
-}
+};
 
 export default RestrictedDatePicker;

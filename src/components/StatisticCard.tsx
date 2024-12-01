@@ -22,7 +22,7 @@ const StatisticCard: React.FC<StatisticCardProps> = ({ titlePositive, titleNegat
         suffix="zł"
       />
     </Card>
-  )
+  );
 };
 
 export default StatisticCard;

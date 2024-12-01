@@ -29,7 +29,7 @@ const App = observer(() => {
       try {
         if (keycloak.authenticated) {
           if (!store.user.xsrfToken) {
-            await api.getXsrfToken()
+            await api.getXsrfToken();
           }
 
           try {

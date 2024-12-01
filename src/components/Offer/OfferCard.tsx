@@ -79,14 +79,17 @@ const OfferCard: React.FC<OfferCardProps> = ({
         className="offer-card"
         cover={
           <img
-            src={`/images/${offer.animal.animalType.toLowerCase()}-card.jpg`}
+            src={`/images/animals/${offer.animal.animalType.toLowerCase()}.jpg`}
             alt={offer.animal.animalType}
           />
         }
         actions={actions}
       >
         <Meta
-          title={t(`yourOffers.${offer.animal.animalType.toLowerCase()}`)}
+          title={canBeEdited
+            ? t(`yourOffers.${offer.animal.animalType}`)
+            : t(`caretakerOffers.${offer.animal.animalType}`)
+          }
           description={offer.description.length <= 40 
             ? offer.description 
             : `${offer.description.substring(0, 40)}...`
