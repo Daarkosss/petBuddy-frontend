@@ -515,7 +515,7 @@ const CareList = () => {
                           key={`ant${indexAnimals}`}
                           value={animalType}
                         >
-                          {t(animalType.toLowerCase())}
+                          {t(`animalTypes.${animalType}`)}
                         </Select.Option>
                       )
                     )}
@@ -577,7 +577,6 @@ const CareList = () => {
           <div className="care-list-sort">{t("careSearch.sort")}</div>
           <Select
             className="cares-filters"
-            allowClear
             defaultValue="submittedAt"
             placeholder={t(`careSearch.sort`)}
             onSelect={(value) =>
@@ -608,9 +607,7 @@ const CareList = () => {
           {pagingParams.sortBy !== "" && (
             <Select
               className="cares-filters"
-              allowClear
               defaultValue={"DESC"}
-              placeholder={t(`careSearch.sort`)}
               onSelect={(value) => {
                 setPagingParams({
                   page: pagingParams.page,
@@ -645,7 +642,7 @@ const CareList = () => {
             fetchCares();
           }}
         >
-          {t("careSearch.filter")}
+          {t("filters")}
         </Button>
       </div>
       {cares.length > 0 ? (
