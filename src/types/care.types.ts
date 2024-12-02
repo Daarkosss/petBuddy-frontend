@@ -24,8 +24,16 @@ export type CareStatus =
   | "ACCEPTED"
   | "CANCELLED"
   | "READY_TO_PROCEED"
-  | "OUTDATED"
-  | "CONFIRMED";
+  | "CONFIRMED"
+  | "OUTDATED";
+
+export type CareHistoricalStatus = {
+  createdAt: string;
+  caretakerStatus: CareStatus;
+  clientStatus: CareStatus;
+};
+
+export type StatusesHistory = CareHistoricalStatus[];
 
 export type CareDTO = {
   id: number;
@@ -40,6 +48,7 @@ export type CareDTO = {
   selectedOptions: AnimalAttributes;
   caretaker: AccountDataDTO;
   client: AccountDataDTO;
+  statusesHistory: StatusesHistory;
 };
 
 export type GetCaresDTO = {

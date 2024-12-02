@@ -1,25 +1,52 @@
 @use "../helpers/variables" as v;
 
-.caretaker-form-container {
-  max-width: 800px;
-  margin: 5vh auto;
-  padding: 20px;
-  background-color: v.$white;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
 
-.card-grid-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 50px;
-}
+.caretaker-form-wrapper {
+  margin: 3vh auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
 
-.ant-card {
-  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
-
-  .ant-card-head {
-    background: v.$blue-dark;
-    color: v.$white
+  h1 {
+    color: v.$white;
   }
+
+  .caretaker-form-container {
+    max-width: 800px;
+    width: 90%;
+    padding: 20px;
+    background-color: v.$white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+    @media (max-width: 768px) {
+      width: 95%;
+    }
+  }
+  
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 30px;
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;  
+    }
+
+    @media (max-width: 480px) {
+      grid-template-columns: 1fr;
+      gap: 20px;  
+    }
+  }
+  
+  .ant-card {
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+  
+    .ant-card-head {
+      background: v.$blue-dark;
+      color: v.$white
+    }
+  }  
 }

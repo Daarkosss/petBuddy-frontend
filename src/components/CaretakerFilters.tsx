@@ -12,6 +12,7 @@ interface CaretakerFiltersProps {
   onFiltersChange: (filters: CaretakerSearchFilters) => void;
   onAnimalFiltersChange: (animalType: string, updatedConfig: Partial<OfferConfiguration>) => void;
   onAnimalTypesChange: (selectedAnimalTypes: string[]) => void;
+  onSortChange: (sortBy: string, sortDirection: string) => void;
   onSearch: () => void;
 }
 
@@ -21,6 +22,7 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
   onFiltersChange,
   onAnimalFiltersChange,
   onAnimalTypesChange,
+  onSortChange,
   onSearch,
 }) => {
   const { t } = useTranslation();
@@ -58,10 +60,38 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
     onSearch();
   };
 
+  const handleSortChange = (sorter: string) => {
+    switch (sorter) {
+      case "default":
+        onSortChange("ratingScore", "DESC");
+        break;
+      case "avgRatingDesc":
+        onSortChange("avgRating", "DESC");
+        break;
+      case "avgRatingAsc":
+        onSortChange("avgRating", "ASC");
+        break;
+      case "numberOfRatingsDesc":
+        onSortChange("numberOfRatings", "DESC");
+        break;
+      case "numberOfRatingsAsc":
+        onSortChange("numberOfRatings", "ASC");
+        break;
+    }
+  };
+
+  const renderAvailableSorters = () => [
+    { value : "default", label: t("sort.default") },
+    { value: "avgRatingDesc", label: t("sort.avgRatingDesc") },
+    { value: "avgRatingAsc", label: t("sort.avgRatingAsc") },
+    { value: "numberOfRatingsDesc", label: t("sort.numberOfRatingsDesc") },
+    { value: "numberOfRatingsAsc", label: t("sort.numberOfRatingsAsc") },
+  ];
+
   const renderAnimalFilters = () =>
     filters.animals?.map(({ animalType }) => (
       <div key={animalType} className="animal-filter">
-        <h3>{t(animalType.toLowerCase())}</h3>
+        <h3>{t(`animalTypes.${animalType}`)}</h3>
         <div className="prices">
           <div>{t("price")}</div>
           <Input
@@ -88,9 +118,10 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
         </div>
         {store.animal.getAnimalAttributeKeys(animalType).map((attributeKey) => (
           <Select
+            key={animalType + attributeKey}
             mode="multiple"
             showSearch={false}
-            placeholder={t(attributeKey.toLowerCase())}
+            placeholder={t(`${attributeKey}.title`)}
             onChange={(value) =>
               onAnimalFiltersChange(animalType, { attributes: { [attributeKey]: value } })
             }
@@ -98,7 +129,7 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
             notFoundContent={t("noData")}
             options={store.animal.getAttributeValues(animalType, attributeKey).map((value) => ({
               value,
-              label: t(value.toLowerCase())
+              label: t(`${attributeKey}.${value}`)
             }))}
           />
         ))}
@@ -121,6 +152,14 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
 
   return (
     <div className="caretaker-sidebar">
+      <h2>{t("sort.title")}</h2>
+      <Select
+        style={{ width: "100%" }}
+        showSearch={false}
+        defaultValue="default"
+        options={renderAvailableSorters()}
+        onChange={handleSortChange}
+      />
       <h2>{t("filters")}</h2>
       <div className="filters">
         <Input
@@ -148,12 +187,12 @@ const CaretakerFilters: React.FC<CaretakerFiltersProps> = ({
         <Select
           mode="multiple"
           showSearch={false}
-          placeholder={t("caretakerSearch.animalTypes")}
+          placeholder={t("animalTypes.title")}
           onChange={onAnimalTypesChange}
           value={filters.animals?.map((animal) => animal.animalType)}
           options={store.animal.allAnimalTypes.map((animalType) => ({
             value: animalType,
-            label: t(animalType.toLowerCase())
+            label: t(`animalTypes.${animalType}`)
           }))}
         />
         {filters.animals && filters.animals.length > 0 && 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Form, Input, Button, Select, Steps, Descriptions, Row, Col, Spin } from "antd";
+import { Form, Input, Button, Select, Steps, Descriptions, Row, Col, Spin, Tooltip } from "antd";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -119,11 +119,11 @@ const CareReservationForm = () => {
 
   const calculatePriceDifference = () => {
     return Math.abs(calculateTotalPrice(location.state?.dailyPrice) - calculateTotalPrice(currentPrice));
-  }
+  };
 
   const isNewPriceLower = () => {
     return calculateTotalPrice(location.state?.dailyPrice) >= calculateTotalPrice(currentPrice);
-  }
+  };
 
   const next = async () => {
     const isFormValid = await form.validateFields();
@@ -137,7 +137,7 @@ const CareReservationForm = () => {
   };
 
   if (isStarting) {
-    return <Spin fullscreen />
+    return <Spin fullscreen />;
   }
 
   const steps = [
@@ -150,7 +150,7 @@ const CareReservationForm = () => {
             <Form.Item
               key={attributeKey}
               name={["selectedOptions", attributeKey]}
-              label={t(attributeKey.toLowerCase())}
+              label={t(`${attributeKey}.title`)}
               rules={[{ required: true, message: t("validation.required") }]}
               style={{ maxWidth: 200 }}
             >
@@ -158,7 +158,7 @@ const CareReservationForm = () => {
                 placeholder={t("placeholder.selectFromList")}
                 options={possibleAttributes[attributeKey].map((value) => ({
                   value,
-                  label: t(value.toLowerCase()),
+                  label: t(`${attributeKey}.${value}`),
                 }))}
               />
             </Form.Item>
@@ -231,9 +231,16 @@ const CareReservationForm = () => {
                 {t("care.goBackToOriginalPrice")}
               </Button>
             ) : (
-              <Button type="primary" className="add-button" onClick={() => setIsNegotiating(true)}>
-                {t("care.negotiatePrice")}
-              </Button>
+              <Tooltip title={careDateRange.length === 0 && t("careReservation.chooseDateFirst")}>
+                <Button 
+                  type="primary"
+                  className={careDateRange.length > 0 ? "add-button" : ""}
+                  onClick={() => setIsNegotiating(true)}
+                  disabled={careDateRange.length === 0}
+                >
+                  {t("care.negotiatePrice")}
+                </Button>
+              </Tooltip>
             )}
           </Row>
         </>
@@ -244,7 +251,7 @@ const CareReservationForm = () => {
       description: t("careReservation.step3Description"),
       content: (
         <Descriptions bordered column={1} size="middle" layout={windowInnerWidth < 768 ? "vertical" : "horizontal"}>
-          <Descriptions.Item label={t("animalType")}>{t(animalType.toLowerCase())}</Descriptions.Item>
+          <Descriptions.Item label={t("animalType")}>{t(`animalTypes.${animalType}`)}</Descriptions.Item>
           <Descriptions.Item label={t("care.date")}>
             {careDateRange.join(" ~ ")} <b>({calculateNumberOfDaysOfCare()} dni)</b>
           </Descriptions.Item>
@@ -252,9 +259,9 @@ const CareReservationForm = () => {
             {formatPrice(calculateTotalPrice(form.getFieldValue("dailyPrice")))}
           </Descriptions.Item>
           {Object.keys(possibleAttributes).map((key) => (
-            <Descriptions.Item key={key} label={t(key.toLowerCase())}>
+            <Descriptions.Item key={key} label={t(`${key}.title`)}>
               {form.getFieldValue(["selectedOptions", key]) && 
-                t(form.getFieldValue(["selectedOptions", key]).toLowerCase())
+                t(`${key}.${form.getFieldValue(["selectedOptions", key])}`)
               }
             </Descriptions.Item>
           ))}
@@ -280,11 +287,11 @@ const CareReservationForm = () => {
           </h2>
         </div>
         <h3>
-          {t("careReservation.forAnimal", { animalType: t(animalType.toLowerCase())})}
+          {t("careReservation.forAnimal", { animalType: t(`animalTypes.${animalType}`)})}
         </h3>
       </div>
       <div className="care-reservation-container">
-        <img src={`/images/${animalType.toLowerCase()}-card.jpg`} alt="animal" />
+        <img src={`/images/animals/${animalType.toLowerCase()}.jpg`} alt="animal" />
         <div className="form-container">
           <Steps 
             current={currentStep}

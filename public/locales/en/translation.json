@@ -2,22 +2,109 @@
   "from": "From",
   "to": "To",
 
-  "dog": "Dog",
-  "cat": "Cat",
-  "bird": "Bird",
-  "reptile": "Reptile",
-  "fish": "Fish",
+  "animalTypes": {
+    "title": "Animal types",
+    "DOG": "Dog",
+    "CAT": "Cat",
+    "BIRD": "Bird",
+    "TURTLE": "Turtle",
+    "SNAKE": "Snake",
+    "FISH": "Fish",
+    "RABBIT": "Rabbit",
+    "HAMSTER": "Hamster",
+    "HEDGEHOG": "Hedgehog",
+    "GUINEA_PIG": "Guinea pig",
+    "MOUSE": "Mouse",
+    "OTHER": "Others"
+  },
 
-  "sex": "Sex",
-  "male": "Male",
-  "she": "She",
+  "SEX": {
+    "title": "Sex",
+    "MALE": "Male",
+    "SHE": "She"
+  },
 
-  "size": "Size",
-  "small": "Small",
-  "medium": "Medium",
-  "big": "Big",
+  "SIZE": {
+    "title": "Size",
 
-  "dangerous": "Dangerous?",
+    "SMALL <0.5 KG": "Small < 0.5kg",
+    "SMALL <1 KG": "Small < 1kg",
+    "SMALL <3 KG": "Small < 3kg",
+    "SMALL <10 KG": "Small < 10kg",
+
+    "MEDIUM 0.5-2 KG": "Medium 0.5-2kg",
+    "MEDIUM 0.5-1 KG": "Medium 0.5-1kg",
+    "MEDIUM 0.5-5 KG": "Medium 0.5-5kg",
+    "MEDIUM 1-3 KG": "Medium 1-3kg",
+    "MEDIUM 3-6 KG": "Medium 3-6kg",
+    "MEDIUM 10-25 KG": "Medium 10-25kg",
+
+    "BIG >1 KG": "Big > 1kg",
+    "BIG >2 KG": "Big > 2kg",
+    "BIG >3 KG": "Big > 3kg",
+    "BIG >5 KG": "Duży > 5kg",
+    "BIG >6 KG": "Big > 6kg",
+    "BIG >25 KG": "Big > 25kg"
+  },
+
+  "AGE": {
+    "title": "Age",
+
+    "YOUNG <2 MONTHS": "Young < 2 months",
+    "YOUNG <1 YEAR": "Young < 1 year",
+    "YOUNG <2 YEARS": "Young < 2 years",
+
+    "ADULT >2 MONTHS": "Adult > 2 months",
+    "ADULT 1-8 YEARS": "Adult 1-8 years",
+    "ADULT >2 YEARS": "Adult > 2 years",
+
+    "SENIOR >8 YEAR": "Senior > 8 years"
+  },
+
+  "WATER": {
+    "title": "Water",
+    "FRESH": "Fresh",
+    "SALT": "Salt"
+  },
+
+  "VENOMOUS": {
+    "title": "Venomous?",
+    "YES": "Yes",
+    "NO": "No"
+  },
+
+  "DANGEROUS": {
+    "title": "Dangerous?",
+    "YES": "Yes",
+    "NO": "No"
+  },
+
+  "amenities": "Amenities",
+  "amenityTypes": {
+    "toys": "Toys",
+    "scratching post": "Scratching post",
+    "cage": "Cage",
+    "secured garden": "Secured garden",
+    "aquarium": "Aquarium",
+    "litter tray": "Litter tray",
+    "spacious cage": "Spacious cage",
+    "tank decorations": "Tank decorations",
+    "water filtration": "Water filter",
+    "thermal regulation": "Thermal regulation",
+    "terrarium": "Terrarium",
+    "heat lamp": "Heat lamp",
+    "basking area": "Basking area",
+    "UVB lighting": "UVB lightning",
+    "water area": "Water area",
+    "secure terrarium": "Secure terrarium",
+    "hiding spots": "Hiding spots",
+    "humidity control": "Humidity control",
+    "exercise wheel": "Exercise wheel",
+    "bedding": "Bedding",
+    "tunnels": "Tunnels",
+    "catnip": "Catnip",
+    "aviary": "Aviary"
+  },
 
   "search": "Search",
   "filters": "Filters",
@@ -29,14 +116,6 @@
   "logout": "Logout",
   "caretaker": "Caretaker",
   "client": "Client",
-
-  "amenities": "Amenities",
-  "amenityTypes": {
-    "toys": "Toys",
-    "scratching post": "Scratching Post",
-    "cage": "Cage",
-    "garden": "Garden"
-  },
 
   "address": "Address",
   "addressDetails": {
@@ -101,16 +180,23 @@
     "noCaretakerProfile": "Currently you do not have caretaker profile"
   },
 
+  "sort": {
+    "title": "Sort",
+    "default": "By default",
+    "avgRatingDesc": "By average rating descending",
+    "avgRatingAsc": "By average rating ascending",
+    "numberOfRatingsDesc": "By number of ratings descending",
+    "numberOfRatingsAsc": "By number of ratings ascending"
+  },
+
   "caretakerSearch": {
     "personalData": "Personal data",
-    "animalTypes": "Animal types",
     "animalType": "Animal type",
     "minPrice": "Min price",
     "maxPrice": "Max price",
     "noCaretakers": "There are no caretakers for selected filters",
-    "triggerDesc": "Click to sort descending",
-    "triggerAsc": "Click to sort ascending",
-    "cancelSort": "Click to cancel sorting"
+    "list": "Caretaker list",
+    "map": "Caretaker map"
   },
 
   "careSearch": {
@@ -149,7 +235,8 @@
 
   "description": "Description",
   "upload": "Upload",
-  "offerPhotos": "Offer photos",
+  "caretakerForm": "Caretaker form",
+  "caretakerPhotos": "Caretaker photos",
   "currentPhotos": "Current photos",
   "newPhotos": "New photos",
   "photosLimitMessage": "Photos limit",
@@ -161,7 +248,7 @@
     "required": "Required",
     "zipCodeFormat": "Invalid format (00-000)",
     "phoneNumberFormat": "Invalid format (at least 9 digits)",
-    "price": "Invalid format (0,00)"
+    "price": "Max. 2 decimal places, minimum 0,01 zł"
   },
 
   "landingPage": {
@@ -200,7 +287,8 @@
     "getCare": "An error occurred while loading care",
     "updatePrice": "An error occurred while updating price",
     "acceptCare": "An error occurred while accepting care",
-    "changeProfilePicture": "An error occured while changing profile picture"
+    "changeProfilePicture": "An error occured while changing profile picture",
+    "confirmBeginOfCare": "An error occurred while confirming begin of care"
   },
 
   "success": {
@@ -216,7 +304,8 @@
     "askForCare": "You have successfully sent a request for care. Wait for a caretaker response",
     "updatePrice": "Care price has been successfully updated",
     "acceptCare": "Care has been successfully accepted",
-    "changeProfilePicture": "You have successfully changed your profile picture"
+    "changeProfilePicture": "You have successfully changed your profile picture",
+    "confirmBeginOfCare": "Begin of care has been successfully confirmed"
   },
 
   "dailyPrice": "Daily price",
@@ -229,7 +318,6 @@
   "addConfiguration": "Add configuration",
   "editConfiguration": "Edit configuration",
   "animalType": "Animal type",
-  "animalTypes": "Animal types",
   "actions": "Actions",
   "requestCare": "Request care",
   "availability": "Availability",
@@ -250,19 +338,33 @@
 
   "yourOffers": {
     "manageOffer": "Manage your offer",
-    "cat": "Your offer for cats",
-    "dog": "Your offer for dogs",
-    "bird": "Your offer for birds",
-    "rabbit": "Your offer for rabbits",
-    "reptile": "Your offer for reptiles"
+    "CAT": "Your offer for cats",
+    "DOG": "Your offer for dogs",
+    "BIRD": "Your offer for birds",
+    "TURTLE": "Your offer for turtles",
+    "SNAKE": "Your offer for snakes",
+    "FISH": "Your offer for fish",
+    "HAMSTER": "Your offer for hamsters",
+    "RABBIT": "Your offer for rabbits",
+    "HEDGEHG": "Your offer for hedgehogs",
+    "GUINEA_PIG": "Your offer for guinea pigs",
+    "MOUSE": "Your offer for mice",
+    "OTHER": "Your offer for other animals"
   },
 
   "caretakerOffers": {
-    "cat": "Offer for cats",
-    "dog": "Offer for dogs",
-    "bird": "Offer for birds",
-    "rabbit": "Offer for rabbits",
-    "reptile": "Offer for reptiles"
+    "CAT": "Offer for cats",
+    "DOG": "Offer for dogs",
+    "BIRD": "Offer for birds",
+    "TURTLE": "Offer for turtles",
+    "SNAKE": "Offer for snakes",
+    "FISH": "Offer for fish",
+    "HAMSTER": "Offer for hamsters",
+    "RABBIT": "Offer for rabbits",
+    "HEDGEHG": "Offer for hedgehogs",
+    "GUINEA_PIG": "Offer for guinea pigs",
+    "MOUSE": "Offer for mice",
+    "OTHER": "Offer for other animals"
   },
 
   "availabilityAlert": "Availability will be overwritten with selected dates for all offers, you choose.",
@@ -290,7 +392,14 @@
     "confirmNewPrice": "Confirm new price",
     "currentStatus": "Current status",
     "confirmAccept": "Are you sure you want to accept care?",
-    "confirmReject": "Are you sure you want to reject care?"
+    "confirmReject": "Are you sure you want to reject care?",
+    "beginOfCare": "Confirm begin of care",
+    "confirmBeginOfCare": "Are you sure you want to confirm begin of care?",
+    "timeRemaining": "Time remaining",
+    "careStartsTomorrow": "Care starts tomorrow.",
+    "rememberToConfirmBeginOfCare": "Don't forget to confirm begin of care. You can do it only tomorrow.",
+    "caretakerShouldConfirmBeginOfCare": "Caretaker should confirm begin of care tomorrow.",
+    "ifCaretakerDoesntConfirm": "If you don't confirm begin of care, care will be cancelled."
   },
 
   "careReservation": {
@@ -303,22 +412,28 @@
     "step3Description": "Confirm your reservation",
     "originalPrice": "Original price from offer",
     "confirm": "Confirm reservation",
-    "forAnimal": "For animal {{animalType}}"
+    "forAnimal": "For animal {{animalType}}",
+    "chooseDateFirst": "Choose date first"
   },
 
   "careStatus": {
-    "reported": "Reported by client",
-    "accepted": "Accepted by caretaker",
+    "reported": "Client reported care",
+    "acceptedByCaretaker": "Accepted by caretaker",
     "pending": "Waiting for response",
     "waitingForOtherResponse": "Waiting for other response",
     "waitingForYourResponse": "Waiting for your response",
-    "cancelled": "Cancelled",
+    "cancelled": "Care cancelled",
     "waitingToTakePlace": "Waiting to take place",
+    "waitingForCaretakerToConfirm": "Waiting for caretaker to confirm the start of the care",
     "isTakingPlace": "Is taking place",
     "done": "Done",
-    "confirmed": "Confirmed",
-    "outdated": "Outdated",
-    "ready_to_proceed": "Ready to proceed"
+    "outdated": "Outdated, caretaker did not confirm the start of the care in time",
+    "outdatedShortened": "Outdated",
+    "newPriceProposedByCaretaker": "Caretaker proposed new price",
+    "newPriceAcceptedByClient": "Client accepted the price",
+    "waitingForCaretakerResponse": "Waiting for caretaker response",
+    "waitingForClientResponse": "Waiting for client response",
+    "startConfirmedByCaretaker": "Caretaker confirmed care begin"
   },
 
   "petDescription": "Pet description",
@@ -328,5 +443,23 @@
   "next": "Next",
   "youWillSave": "You will save",
   "youWillGain": "You will gain",
-  "youWillLose": "You will lose"
+  "youWillLose": "You will lose",
+
+  "noAvailability": "Caretaker did not set the availability",
+  "needToLoginAsClient": "You need to log in as client to be able to request care",
+
+  "notification": {
+    "title": "Notifications",
+    "markAllAsRead": "Mark all as read",
+    "noNotifications": "No notifications",
+    "care_reservation": "New reservation has been made for one of your cares",
+    "care_update": "Price has beeen updated in one of your cares",
+    "care_accepted": "Your care has been accepted",
+    "care_rejected": "Your care has been rejected",
+    "confirmation_needed": "Your care is waiting for confirmation of begin",
+    "newNotification": "You have a new notification"
+  },
+
+  "termsAndConditions": "Terms and conditions",
+  "clickToZoom": "Click to zoom"
 }

@@ -8,66 +8,64 @@ import store from "./store/RootStore";
 import CaretakerSearch from "./pages/CaretakerSearch";
 import ProfileSelection from "./pages/ProfileSelection";
 import LandingPage from "./pages/LandingPage";
-import Header from "./components/Header";
+import Header from "./components/Header/Header";
 import { observer } from "mobx-react-lite";
 import CareReservationForm from "./pages/CareReservationForm";
 import CaretakerProfile from "./pages/CaretakerProfile";
 import ClientProfile from "./pages/ClientProfile";
 import CareList from "./pages/CareList";
 import CareDetails from "./pages/CareDetails";
+import TermsAndConditions from "./pages/TermsAndConditions";
 
 const { Content } = Layout;
 
 const App = observer(() => {
   const { keycloak, initialized } = useKeycloak();
-  const [isXsrfTokenFetched, setIsXsrfTokenFetched] = useState(false);
   const [isUserDataFetched, setIsUserDataFetched] = useState(false);
 
   useEffect(() => {
-    const fetchXsrfToken = async () => {
-      if (keycloak.authenticated && !store.user.xsrfToken) {
-        await api.getXsrfToken();
-      }
-      setIsXsrfTokenFetched(true);
-    };
-
-    const fetchUserData = async () => {
+    const initializeApp = async () => {
       try {
-        const userData = await keycloak.loadUserProfile();
-        const userProfiles = await api.getUserProfiles();
-        const userProfileData = {
-          email: userData.email,
-          firstName: userData.firstName,
-          lastName: userData.lastName,
-          token: store.user.xsrfToken,
-          selected_profile: store.user.profile?.selected_profile || null,
-          hasCaretakerProfile: userProfiles.hasCaretakerProfile,
-        };
-        store.user.saveProfileToStorage(userProfileData);
-        setIsUserDataFetched(true);
-      } catch (error) {
-        console.error(`Failed to load user profile: ${error}`);
+        if (keycloak.authenticated) {
+          if (!store.user.xsrfToken) {
+            await api.getXsrfToken();
+          }
+
+          try {
+            const userData = await keycloak.loadUserProfile();
+            const userProfiles = await api.getUserProfiles();
+            const userProfileData = {
+              email: userData.email,
+              firstName: userData.firstName,
+              lastName: userData.lastName,
+              token: store.user.xsrfToken,
+              selected_profile: store.user.profile?.selected_profile || null,
+              hasCaretakerProfile: userProfiles.hasCaretakerProfile,
+            };
+            store.user.saveProfileToStorage(userProfileData);
+            setIsUserDataFetched(true);
+          } catch (error) {
+            console.error(`Failed to load user profile: ${error}`);
+          }
+
+          try {
+            await store.notification.setup();
+          } catch (error) {
+            console.error(`Failed to setup notifications: ${error}`);
+          }
+        } else {
+          store.user.reset();
+        }
+      } finally {
+        store.isStarting = false;
       }
     };
 
     if (initialized) {
-      if (keycloak.authenticated) {
-        fetchXsrfToken();
-        fetchUserData();
-        setIsUserDataFetched(true);
-      } else {
-        store.user.reset();
-      }
-      store.isStarting = false;
+      initializeApp();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialized, keycloak.authenticated]);
-
-  useEffect(() => {
-    if (isXsrfTokenFetched && isUserDataFetched) {
-      store.isStarting = false;
-    }
-  }, [isXsrfTokenFetched, isUserDataFetched]);
 
   if (!store.isStarting) {
     return (
@@ -101,6 +99,10 @@ const App = observer(() => {
                     element={<CaretakerProfile />}
                   />
                   <Route path="/profile-client" element={<ClientProfile />} />
+                  <Route
+                    path="/terms-and-conditions"
+                    element={<TermsAndConditions />}
+                  />
                   <Route path="*" element={<Navigate to="/" replace />} />
                 </>
               ) : (
@@ -126,6 +128,10 @@ const App = observer(() => {
                   element={<CaretakerProfile />}
                 />
                 <Route path="/caretaker/search" element={<CaretakerSearch />} />
+                <Route
+                  path="/terms-and-conditions"
+                  element={<TermsAndConditions />}
+                />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </>
             )}

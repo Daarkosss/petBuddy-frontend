@@ -61,6 +61,8 @@ export type AddressDTO = {
   street: string;
   streetNumber: string;
   apartmentNumber: string;
+  latitude: number;
+  longitude: number;
 };
 
 export type VoivodeshipDTO =
@@ -83,20 +85,20 @@ export type VoivodeshipDTO =
 
 export type CaretakerBasicsResponse = {
   caretakers: {
+    content: CaretakerBasicsDTO[];
+    pageable: PageableDTO;
     totalElements: number;
     totalPages: number;
     size: number;
-    content: CaretakerBasicsDTO[];
     number: number;
     sort: SortDTO[];
-    pageable: PageableDTO;
     first: boolean;
     last: boolean;
     numberOfElements: number;
     empty: boolean;
-    cityLatitude: number;
-    cityLongitude: number;
   };
+  cityLatitude: number;
+  cityLongitude: number;
 };
 
 export type CaretakerSearchFilters = {

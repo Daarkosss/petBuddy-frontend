@@ -4,6 +4,7 @@
 .offer-management-page {
   display: flex;
   flex-direction: column;
+  height: 100%;
   gap: 15px;
   height: 100%;
 
@@ -50,6 +51,14 @@
   gap: 25px;
   overflow-x: auto;
   padding: 10px;
+
+  .ant-collapse-content-box {
+    padding: 0 0 10px 0 !important;
+  }
+
+  @media (max-width: 480px) {
+    padding: 2px;
+  }
 }
 
 .offer-field {
@@ -95,6 +104,12 @@
 
 .offer-card {
   width: 400px !important;
+
+  img {
+    width: 100%;
+    aspect-ratio: 5/7;
+    object-fit: cover;
+  }
 
   @media (max-width: 500px) {
     width: 320px !important;

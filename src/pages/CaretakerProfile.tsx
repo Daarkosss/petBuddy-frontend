@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import store from "../store/RootStore";
 import "../scss/pages/_profile.scss";
-import { Button, Card, Rate, Upload, Avatar } from "antd";
+import { Button, Card, Rate, Upload, Avatar, Image } from "antd";
 import { PictureOutlined, UserOutlined } from "@ant-design/icons";
 import CommentContainer from "../components/CommentContainer";
 import RoundedLine from "../components/RoundedLine";
@@ -115,7 +115,7 @@ const CaretakerProfile: React.FC = () => {
     } catch (e: unknown) {
       onError?.(e);
       if (e instanceof Error) {
-        console.log(`ERROR: ${e.message}`);
+        console.error(`ERROR: ${e.message}`);
       }
       toast.error(t("error.changeProfilePicture"));
     }
@@ -137,6 +137,22 @@ const CaretakerProfile: React.FC = () => {
                     icon={<UserOutlined />}
                   />
                 )}
+                {profileData.offerPhotos &&
+                  profileData.offerPhotos.length > 0 && (
+                    <div className="background-images">
+                      <Image.PreviewGroup>
+                        {profileData.offerPhotos.map((photo, index) => (
+                          <Image
+                            key={index}
+                            src={photo.url}
+                            preview={{
+                              mask: <span>{t("clickToZoom")}</span>,
+                            }}
+                          />
+                        ))}
+                      </Image.PreviewGroup>
+                    </div>
+                  )}
               </div>
               {isMyProfile === true && (
                 <div className="my-actions">

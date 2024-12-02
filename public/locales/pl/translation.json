@@ -2,22 +2,106 @@
   "from": "Od",
   "to": "Do",
 
-  "dog": "Pies",
-  "cat": "Kot",
-  "bird": "Ptak",
-  "reptile": "Gad",
-  "fish": "Ryba",
+  "animalTypes": {
+    "title": "Rodzaje zwierząt",
+    "DOG": "Pies",
+    "CAT": "Kot",
+    "BIRD": "Ptak",
+    "TURTLE": "Żółw",
+    "SNAKE": "Wąż",
+    "FISH": "Ryby",
+    "RABBIT": "Królik",
+    "HAMSTER": "Chomik",
+    "HEDGEHOG": "Jeż",
+    "GUINEA_PIG": "Świnka morska",
+    "MOUSE": "Mysz",
+    "OTHER": "Inne"
+  },
 
-  "sex": "Płeć",
-  "male": "Samiec",
-  "she": "Samiczka",
+  "SEX": {
+    "title": "Płeć",
+    "MALE": "Samiec",
+    "SHE": "Samiczka"
+  },
 
-  "size": "Wielkość",
-  "small": "Mały",
-  "medium": "Średni",
-  "big": "Duży",
+  "SIZE": {
+    "title": "Rozmiar",
 
-  "dangerous": "Niebezpieczny?",
+    "SMALL <0.5 KG": "Mały < 0.5kg",
+    "SMALL <3 KG": "Mały < 3kg",
+    "SMALL <10 KG": "Mały < 10kg",
+
+    "MEDIUM 0.5-2 KG": "Średni 0.5-2kg",
+    "MEDIUM 0.5-1 KG": "Średni 0.5-1kg",
+    "MEDIUM 0.5-5 KG": "Średni 0.5-5kg",
+    "MEDIUM 3-6 KG": "Średni 3-6kg",
+    "MEDIUM 10-25 KG": "Średni 10-25kg",
+
+    "BIG >1 KG": "Duży > 1kg",
+    "BIG >2 KG": "Duży > 2kg",
+    "BIG >5 KG": "Duży > 5kg",
+    "BIG >6 KG": "Duży > 6kg",
+    "BIG >25 KG": "Duży > 25kg"
+  },
+
+  "AGE": {
+    "title": "Wiek",
+
+    "YOUNG <2 MONTHS": "Młody < 2 miesiące",
+    "YOUNG <1 YEAR": "Młody < 1 rok",
+    "YOUNG <2 YEARS": "Młody < 2 lata",
+
+    "ADULT >2 MONTHS": "Dorosły > 2 miesiące",
+    "ADULT 1-8 YEARS": "Dorosły 1-8 lat",
+    "ADULT >2 YEARS": "Dorosły > 2 lata",
+
+    "SENIOR >8 YEARS": "Senior > 8 lat"
+  },
+
+  "WATER": {
+    "title": "Woda",
+    "FRESH": "Słodka",
+    "SALT": "Słona"
+  },
+
+  "VENOMOUS": {
+    "title": "Jadowity?",
+    "YES": "Tak",
+    "NO": "Nie"
+  },
+
+  "DANGEROUS": {
+    "title": "Niebezpieczny?",
+    "YES": "Tak",
+    "NO": "Nie"
+  },
+
+  "amenities": "Udogodnienia",
+  "amenityTypes": {
+    "toys": "Zabawki",
+    "scratching post": "Drapak",
+    "cage": "Klatka",
+    "secured garden": "Zabezpieczony ogród",
+    "aquarium": "Akwarium",
+    "litter tray": "Kuweta",
+    "spacious cage": "Przestronna klatka",
+    "tank decorations": "Dekoracje zbiornika",
+    "water filtration": "Filtr do wody",
+    "thermal regulation": "Regulacja temperatury",
+    "terrarium": "Terrarium",
+    "heat lamp": "Lampa grzewcza",
+    "basking area": "Miejsce do wygrzewania się",
+    "UVB lighting": "Lampa UV",
+    "water area": "Zbiornik wodny",
+    "secure terrarium": "Zabezpieczone terrarium",
+    "hiding spots": "Kryjówki",
+    "humidity control": "Kontrola wilgotności",
+    "exercise wheel": "Kółko do ćwiczeń",
+    "bedding": "Ściółka",
+    "tunnels": "Tunele",
+    "catnip": "Kocimiętka",
+    "aviary": "Woliera"
+  },
 
   "search": "Szukaj",
   "filters": "Filtry",
@@ -29,14 +113,6 @@
   "logout": "Wyloguj",
   "caretaker": "Opiekun",
   "client": "Klient",
-
-  "amenities": "Udogodnienia",
-  "amenityTypes": {
-    "toys": "Zabawki",
-    "scratching post": "Drapak",
-    "cage": "Klatka",
-    "garden": "Ogród"
-  },
 
   "address": "Adres",
   "addressDetails": {
@@ -106,17 +182,57 @@
     "noCaretakerProfile": "Nie posiadasz jeszcze profilu opiekuna"
   },
 
-  "triggerDesc": "Naciśnij aby sortowac malejąco",
-  "triggerAsc": "Naciśnij aby sortowac rosnąco",
-  "cancelSort": "Naciśnij aby anulowac sortowanie",
+  "sort": {
+    "title": "Sortuj",
+    "default": "Domyślnie",
+    "avgRatingDesc": "Po sredniej ocenie malejąco",
+    "avgRatingAsc": "Po sredniej ocenie rosnąco",
+    "numberOfRatingsDesc": "Po liczbie ocen malejąco",
+    "numberOfRatingsAsc": "Po liczbie ocen rosnąco"
+  },
 
   "caretakerSearch": {
     "personalData": "Dane personalne",
-    "animalTypes": "Rodzaje zwierząt",
     "animalType": "Typ zwierzęcia",
     "minPrice": "Minimalna cena",
     "maxPrice": "Maksymalna cena",
-    "noCaretakers": "Brak opiekunów dla podanych parametrów"
+    "noCaretakers": "Brak opiekunów dla podanych parametrów",
+    "list": "Lista opiekunów",
+    "map": "Mapa opiekunów"
+  },
+
+  "careSearch": {
+    "animalTypes": "Rodzaj zwierzęcia",
+    "caretakerStatuses": "Status opiekuna",
+    "clientStatuses": "Status klienta",
+    "minCreatedTime": "Najwcześniej utworzona",
+    "maxCreatedTime": "Najpóźniej utworzona",
+    "minCareStart": "Najwcześniejsze rozpoczęcie",
+    "maxCareStart": "Najpóźniejsze rozpoczęcie",
+    "minCareEnd": "Najwcześniejsze zakończenie",
+    "maxCareEnd": "Najpóźniejsze zakończenie",
+    "minDailyPrice": "Minimalna cena za dzień",
+    "maxDailyPrice": "Maksymalna cena za dzień",
+    "emails": "Email opiekuna",
+    "CreatedTime": "Data utworzenia",
+    "CareStart": "Data rozpoczęcia",
+    "CareEnd": "Data zakończenia",
+    "filter": "Filtruj",
+    "sort": "Sortowanie",
+    "id": "Id",
+    "submittedAt": "Data złożenia rezerwacji",
+    "caretakerStatus": "Status opiekuna",
+    "clientStatus": "Status klienta",
+    "careStart": "Rozpoczęcie opieki",
+    "careEnd": "Zakończenie opieki",
+    "description": "Opis",
+    "dailyPrice": "Dzienna cena",
+    "animal_animalType": "Rodzaj zwierzęcia",
+    "selectedOptions": "Wybrane opcje",
+    "caretaker_email": "Email Opiekuna",
+    "client_email": "Email Klienta",
+    "ASC": "Rosnąco",
+    "DESC": "Malejąco"
   },
 
   "careSearch": {
@@ -155,7 +271,7 @@
 
   "description": "Opis",
   "upload": "Prześlij",
-  "offerPhotos": "Zdjęcia oferty",
+  "caretakerForm": "Formularz opiekuna",
   "currentPhotos": "Aktualne zdjęcia",
   "newPhotos": "Nowe zdjęcia",
   "photosLimitMessage": "Limit zdjęć",
@@ -167,7 +283,7 @@
     "required": "Wymagane",
     "zipCodeFormat": "Nieprawidłowy format (00-000)",
     "phoneNumberFormat": "Nieprawidłowy format (minimum 9 cyfr)",
-    "price": "Nieprawidłowy format (0,00)"
+    "price": "Maks. 2 miejsca po przecinku, minimum 0,01 zł"
   },
 
   "landingPage": {
@@ -199,15 +315,16 @@
     "editConfiguration": "Wystąpił błąd podczas edycji konfiguracji",
     "addConfiguration": "Wystąpił błąd podczas tworzenia konfiguracji",
     "duplicateConfiguration": "Konfiguracja z wybranymi parametrami juz istnieje",
-    "setAvailabilityForOffers": "Wystąpił bład podczas ustawiania dostępności dla ofert",
-    "getCaretakers": "Wystąpił bład podczas pobrania opiekunów",
-    "askForCare": "Wystąpił bład podczas wysyłania zapytania o opiekę",
-    "getCares": "Wystąpił bład podczas pobrania opiek",
-    "getCare": "Wystąpił bład podczas pobrania opieki",
-    "updatePrice": "Wystąpił bład podczas aktualizacji ceny",
-    "acceptCare": "Wystąpił bład podczas akceptacji opieki",
-    "rejectCare": "Wystąpił bład podczas odrzucenia opieki",
-    "changeProfilePicture": "Wystąpił błąd podczas zmieniania zdjęcia profilowego"
+    "setAvailabilityForOffers": "Wystąpił błąd podczas ustawiania dostępności dla ofert",
+    "getCaretakers": "Wystąpił błąd podczas pobierania opiekunów",
+    "askForCare": "Wystąpił błąd podczas wysyłania zapytania o opiekę",
+    "getCares": "Wystąpił błąd podczas pobierania opiek",
+    "getCare": "Wystąpił błąd podczas pobierania opieki",
+    "updatePrice": "Wystąpił błąd podczas aktualizacji ceny",
+    "acceptCare": "Wystąpił błąd podczas akceptacji opieki",
+    "rejectCare": "Wystąpił błąd podczas odrzucenia opieki",
+    "changeProfilePicture": "Wystąpił błąd podczas zmieniania zdjęcia profilowego",
+    "confirmBeginOfCare": "Wystąpił błąd podczas potwierdzania rozpoczęcia opieki"
   },
 
   "success": {
@@ -221,10 +338,11 @@
     "addConfiguration": "Konfiguracja została pomyślnie utworzona",
     "setAvailabilityForOffers": "Dostępność została pomyślnie ustawiona dla wybranych ofert",
     "askForCare": "Zapytanie o opiekę zostało pomyślnie wysłane. Czekaj na odpowiedź opiekuna",
-    "updatePrice": "Nowa cena opieki została pomyślnie zaktualizowana",
+    "updatePrice": "Cena opieki została pomyślnie zaktualizowana",
     "acceptCare": "Opieka została pomyślnie zaakceptowana",
     "rejectCare": "Opieka została pomyślnie odrzucona",
-    "changeProfilePicture": "Zdjęcie zostało pomyślnie zmienione"
+    "changeProfilePicture": "Zdjęcie zostało pomyślnie zmienione",
+    "confirmBeginOfCare": "Rozpoczęcie opieki zostało pomyślnie potwierdzone"
   },
 
   "dailyPrice": "Cena za dzień",
@@ -237,7 +355,6 @@
   "addConfiguration": "Dodaj konfigurację",
   "editConfiguration": "Edytuj konfigurację",
   "animalType": "Rodzaj zwierzęcia",
-  "animalTypes": "Rodzaje zwierząt",
   "actions": "Akcje",
   "requestCare": "Poproś o opiekę",
   "availability": "Dostępność",
@@ -258,19 +375,33 @@
 
   "yourOffers": {
     "manageOffer": "Zarządzaj swoją ofertą",
-    "cat": "Twoja oferta dla kotów",
-    "dog": "Twoja oferta dla psów",
-    "bird": "Twoja oferta dla ptaków",
-    "rabbit": "Twoja oferta dla królików",
-    "reptile": "Twoja oferta dla gadów"
+    "CAT": "Twoja oferta dla kotów",
+    "DOG": "Twoja oferta dla psów",
+    "BIRD": "Twoja oferta dla ptaków",
+    "TURTLE": "Twoja oferta dla żółwi",
+    "SNAKE": "Twoja oferta dla węży",
+    "FISH": "Twoja oferta dla ryb",
+    "HAMSTER": "Twoja oferta dla chomików",
+    "RABBIT": "Twoja oferta dla królików",
+    "HEDGEHOG": "Twoja oferta dla jeży",
+    "GUINEA_PIG": "Twoja oferta dla świnek morskich",
+    "MOUSE": "Twoja oferta dla myszy",
+    "OTHER": "Twoja oferta dla innych zwierząt"
   },
 
   "caretakerOffers": {
-    "cat": "Oferta dla kotów",
-    "dog": "Oferta dla psów",
-    "bird": "Oferta dla ptaków",
-    "rabbit": "Oferta dla królików",
-    "reptile": "Oferta dla gadów"
+    "CAT": "Oferta dla kotów",
+    "DOG": "Oferta dla psów",
+    "BIRD": "Oferta dla ptaków",
+    "TURTLE": "Oferta dla żółwi",
+    "SNAKE": "Oferta dla węży",
+    "FISH": "Oferta dla ryb",
+    "HAMSTER": "Oferta dla chomików",
+    "RABBIT": "Oferta dla królików",
+    "HEDGEHOG": "Oferta dla jeży",
+    "GUINEA_PIG": "Oferta dla świnek morskich",
+    "MOUSE": "Oferta dla myszy",
+    "OTHER": "Oferta dla innych zwierząt"
   },
 
   "availabilityAlert": "Dostępność zostanie nadpisana wybranymi datami dla wszystkich ofert, które zaznaczysz.",
@@ -298,7 +429,14 @@
     "confirmNewPrice": "Potwierdź nową cenę",
     "currentStatus": "Aktualny status",
     "confirmAccept": "Czy na pewno chcesz zaakceptować opiekę?",
-    "confirmReject": "Czy na pewno chcesz odrzucić opiekę?"
+    "confirmReject": "Czy na pewno chcesz odrzucić opiekę?",
+    "beginOfCare": "Potwierdź rozpoczęcie opieki",
+    "confirmBeginOfCare": "Czy na pewno chcesz potwierdzić rozpoczęcie opieki?",
+    "timeRemaining": "Pozostały czas",
+    "careStartsTomorrow": "Opieka rozpoczyna się już jutro.",
+    "rememberToConfirmBeginOfCare": "Nie zapomnij potwierdzić rozpoczęcia opieki. Możesz to zrobić tylko jutro.",
+    "caretakerShouldConfirmBeginOfCare": "Opiekun powinien jutro potwierdzić rozpoczęcie opieki.",
+    "ifCaretakerDoesntConfirm": "Jezeli nie potwierdzisz rozpoczęcia opieki, zostanie ona anulowana."
   },
 
   "careReservation": {
@@ -311,22 +449,28 @@
     "step3Description": "Potwierdź rezerwację",
     "originalPrice": "Początkowa cena z oferty",
     "confirm": "Potwierdź rezerwację",
-    "forAnimal": "Dla zwierzęcia {{animalType}}"
+    "forAnimal": "Dla zwierzęcia {{animalType}}",
+    "chooseDateFirst": "Najpierw wybierz datę"
   },
 
   "careStatus": {
-    "reported": "Zgłoszona przez klienta",
-    "accepted": "Zaakceptowana przez obie strony",
+    "reported": "Klient zgłosił rezerwację",
+    "acceptedByCaretaker": "Zaakceptowana przez opiekuna",
     "pending": "Oczekuje na odpowiedź",
     "waitingForOtherResponse": "Oczekuje na odpowiedź drugiej strony",
-    "waitingForYourResponse": "Oczekuje na twoją akcję",
-    "cancelled": "Anulowana",
+    "waitingForYourResponse": "Oczekuje na Twoją akcję",
+    "cancelled": "Opieka anulowana",
     "waitingToTakePlace": "Oczekuje na odbycie",
+    "waitingForCaretakerToConfirm": "Oczekuje na potwierdzenie rozpoczęcia opieki przez opiekuna",
     "isTakingPlace": "W trakcie odbywania",
     "done": "Zakończona",
-    "confirmed": "Potwierdzona",
-    "outdated": "Przedawniona",
-    "ready_to_proceed": "Gotowa do rozpoczęcia"
+    "outdated": "Przeterminowana, opiekun nie potwierdził rozpoczęcia opieki na czas",
+    "outdatedShortened": "Przeterminowana",
+    "newPriceProposedByCaretaker": "Opiekun zaproponował nową cenę",
+    "newPriceAcceptedByClient": "Klient zaakceptował cenę",
+    "waitingForCaretakerResponse": "Oczekuje na odpowiedź opiekuna",
+    "waitingForClientResponse": "Oczekuje na odpowiedź klienta",
+    "startConfirmedByCaretaker": "Opiekun potwierdził rozpoczęcie opieki"
   },
 
   "petDescription": "Opis zwierzęcia",
@@ -336,5 +480,23 @@
   "next": "Dalej",
   "youWillSave": "Zaoszczędzisz",
   "youWillGain": "Zyskasz",
-  "youWillLose": "Stracisz"
+  "youWillLose": "Stracisz",
+
+  "noAvailability": "Opiekun nie ustawił dostępności",
+  "needToLoginAsClient": "Musisz być zalogowany jako klient, aby dokonać rezerwacji opieki",
+
+  "notification": {
+    "title": "Powiadomienia",
+    "markAllAsRead": "Oznacz jako przeczytane",
+    "noNotifications": "Brak powiadomień",
+    "care_reservation": "Dokonano rezerwacji opieki na jedną z Twoich ofert",
+    "care_update": "Cena została zaktualizowana w jednej z Twoich opiek",
+    "care_accepted": "Twoja opieka została zaakceptowana",
+    "care_rejected": "Twoja opieka została odrzucona",
+    "confirmation_needed": "Twoja opieka oczekuje na potwierdzenie rozpoczęcia",
+    "newNotification": "Masz nowe powiadomienie"
+  },
+
+  "termsAndConditions": "Polityka prywatności",
+  "clickToZoom": "Naciśnij aby powiekszyć"
 }

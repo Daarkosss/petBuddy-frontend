@@ -1,10 +1,10 @@
-import ReactDOM from "react-dom/client"
+import ReactDOM from "react-dom/client";
 import { ReactKeycloakProvider } from "@react-keycloak/web";
 import keycloak from "./Keycloack.ts";
 import { BrowserRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "./i18n";
-import App from "./App.tsx"
+import App from "./App.tsx";
 import "./scss/main.scss";
 import SplashScreen from "./pages/SplashScreen.tsx";
 
@@ -25,4 +25,4 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <SplashScreen />
     </BrowserRouter>
   </ReactKeycloakProvider>
-)
+);
