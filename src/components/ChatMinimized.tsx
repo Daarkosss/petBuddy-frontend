@@ -18,31 +18,22 @@ const ChatMinimized: React.FC<MinimizedChatProps> = ({
   onMaximize,
 }) => {
   return (
-    <div className="chat-minimized-box-main-container-wrap">
-      <div className="chat-minimized-box-main-container">
-        <div className="chat-minimized-box-inner-container">
-          <div className="chat-top-bar-container">
-            <div className="options-top-big-container">
-              <div className="options-top-small-container-left">
-                <MenuOutlined />
-              </div>
-              <div className="options-top-small-container-right">
-                <BorderOutlined onClick={() => onMaximize()} />
-                <CloseOutlined onClick={() => onClose()} />
-              </div>
-            </div>
-            <div className="comment-container-top">
-              <div className="comment-container-user-rating">
-                <div className="comment-container-user-nick-container">
-                  <h5 className="comment-container-user-nick">
-                    {name} {surname}
-                  </h5>
-                  <p>{profile}</p>
-                </div>
-              </div>
-            </div>
-          </div>
+    <div className="chat-minimized-box-main-container">
+      <div className="chat-minimized-options-top-big-container">
+        <div className="chat-minimized-options-top-small-container-left">
+          <MenuOutlined />
         </div>
+        <div className="chat-minimized-options-top-small-container-right">
+          <BorderOutlined onClick={() => onMaximize()} />
+          <CloseOutlined onClick={() => onClose()} />
+        </div>
+      </div>
+
+      <div className="chat-minimized-inner-container">
+        <h5 className="chat-minimized-inner-container-user-nick">
+          {name} {surname}
+        </h5>
+        <p>{profile}</p>
       </div>
     </div>
   );
