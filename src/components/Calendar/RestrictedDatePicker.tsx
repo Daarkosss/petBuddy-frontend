@@ -60,6 +60,7 @@ const RestrictedDatePicker: React.FC<DatePickerProps> = ({
       range
       value={dateValue}
       locale={i18n.language === "pl" ? calendar_pl : calendar_en}
+      minDate={new DateObject().add(1, "days")}
       currentDate={new DateObject(availabilities[0][0])}
       onChange={handleDateChange}
       style={{ width: 185 }}
@@ -84,6 +85,6 @@ const RestrictedDatePicker: React.FC<DatePickerProps> = ({
       )}
     />
   );
-}
+};
 
 export default RestrictedDatePicker;

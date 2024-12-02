@@ -6,10 +6,10 @@ const SplashScreen = observer(() => {
   return (
     <div className={cx("splash-screen", { done: !store.isStarting })}>
       <div className="spinner">
-        <img src="/pet_buddy_logo.svg"/>
+        <img src="/images/pet-buddy-logo.svg"/>
       </div>
     </div>
-  )
+  );
 }); 
 
 export default SplashScreen;

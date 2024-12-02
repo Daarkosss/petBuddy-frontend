@@ -94,8 +94,6 @@ class NotificationStore {
       throw new Error(
         "Something went wrong while marking notifications as read"
       );
-    } finally {
-      console.log(this.unread.length);
     }
   }
 

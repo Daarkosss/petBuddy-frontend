@@ -8,9 +8,12 @@ interface NumberInputProps {
   initialValue?: number;
   disabled?: boolean;
   placeholder?: string;
+  width?: number
 }
 
-const NumericFormItem: React.FC<NumberInputProps> = ({name, label, initialValue, disabled=false, placeholder}) => {
+const NumericFormItem: React.FC<NumberInputProps> = ({
+  name, label, initialValue, disabled=false, placeholder, width=185
+}) => {
   const minNumber = 0.01;
   const maxNumber = 99999.99;
 
@@ -38,7 +41,7 @@ const NumericFormItem: React.FC<NumberInputProps> = ({name, label, initialValue,
     <Form.Item
       name={name}
       label={label}
-      style={{ width: 185 }}
+      style={{ width }}
       rules={[
         { required: true, message: t("validation.required") },
         { pattern: /^(?!0$)(0(\.\d{1,2})?|[1-9]\d{0,4}(\.\d{1,2})?)$/, message: t("validation.price") }

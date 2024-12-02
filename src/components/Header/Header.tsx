@@ -94,7 +94,7 @@ const PageHeader = observer<PageHeaderProperties>(({ handleOpenChat }) => {
       </div>
 
       <div className="logo" onClick={() => navigate("/")}>
-        <img src="/pet_buddy_logo.svg" alt="Logo" />
+        <img src="/images/pet-buddy-logo.svg" alt="Logo" />
       </div>
 
       <div className="menu-desktop">

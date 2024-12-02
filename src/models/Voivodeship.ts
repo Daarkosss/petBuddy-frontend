@@ -39,7 +39,7 @@ class Voivodeship {
 
   toString = () : string => {
     return Voivodeship.voivodeshipMap[this.name];
-  }
+  };
 }
 
 export default Voivodeship;

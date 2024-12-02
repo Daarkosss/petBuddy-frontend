@@ -26,15 +26,40 @@
       //   flex-direction: column;
       // }
       .profile-picture-container {
+        position: relative;
+        padding: 40px 20px;
         width: 100%;
         display: flex;
         justify-content: center;
+        align-items: center;
+
         .profile-image {
-          border-radius: 50%;
+          z-index: 1;
+          border-radius: 50%; /* przycinanie do kształtu koła */
           object-fit: cover;
+          background-color: v.$grey-light;
           border: 4px solid v.$blue-dark;
           width: 250px;
           height: 250px;
+        }
+
+        .background-images {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 2px;
+          z-index: 0;
+          overflow: hidden;
+          opacity: 0.9;
+          border-radius: 8px;
+
+          .ant-image {
+            height: 100%;
+            width: auto !important;
+            aspect-ratio: 1 / 1;
+          }
         }
       }
 
