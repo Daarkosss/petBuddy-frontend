@@ -227,16 +227,6 @@ const CareList = () => {
       emails: filters.emails,
     };
     filterNames.map((filterName) => {
-      (newFilters as any)[filterName] =
-        filterName === "animalTypes" ||
-        filterName === "caretakerStatuses" ||
-        filterName === "clientStatuses" ||
-        filterName === "emails"
-          ? []
-          : filterName === "minDailyPrice" || filterName === "maxDailyPrice"
-          ? undefined
-          : "";
-
       switch (true) {
         case filterName === "animalTypes":
           newFilters["animalTypes"] = [];
@@ -643,7 +633,7 @@ const CareList = () => {
           <Select
             className="cares-filters"
             defaultValue="submittedAt"
-            placeholder={t(`careSearch.sort`)}
+            placeholder={t("careSearch.sort")}
             onSelect={(value) =>
               onSortChange(value, pagingParams.sortDirection)
             }
