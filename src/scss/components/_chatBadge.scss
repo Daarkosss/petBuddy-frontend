@@ -28,14 +28,17 @@
   }
 }
 
-.chat-badge-chat-list {
-  margin-top: 10px;
-  button.ant-pagination-item-link {
-    background-color: v.$blue-medium !important;
+.chat-badge-modal-content-container {
+  margin-top: 30px;
+  .chat-badge-chat-list {
+    margin-top: 10px;
+    button.ant-pagination-item-link {
+      background-color: v.$blue-medium !important;
 
-    &:hover {
-      background-color: v.$blue-light !important;
-      cursor: pointer;
+      &:hover {
+        background-color: v.$blue-light !important;
+        cursor: pointer;
+      }
     }
   }
 }

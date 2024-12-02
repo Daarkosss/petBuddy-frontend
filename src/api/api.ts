@@ -794,20 +794,26 @@ class API {
 
   async getUserChats(
     pagingParams: PagingParams,
-    acceptTimezone: string | null
+    acceptTimezone: string | null,
+    chatterDataLike: string | null
   ): Promise<ChatsResponse | undefined> {
     if (store.user.profile?.selected_profile) {
       const queryParams = new URLSearchParams({
         page: pagingParams.page.toString(),
         size: pagingParams.size.toString(),
       });
+
+      if (chatterDataLike !== null) {
+        queryParams.append("chatterDataLike", chatterDataLike);
+      }
       const headers: HeadersInit = {
         "Accept-Role": store.user.profile!.selected_profile,
       };
 
       if (acceptTimezone) {
-        headers["Accept-Timzeone"] = acceptTimezone;
+        headers["Accept-Timezone"] = acceptTimezone;
       }
+      console.log(acceptTimezone);
 
       return await this.authorizedFetch<ChatsResponse>(
         "GET",
