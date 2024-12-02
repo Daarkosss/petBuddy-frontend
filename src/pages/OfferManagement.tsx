@@ -10,7 +10,7 @@ import { useTranslation } from "react-i18next";
 import SetAvailabilityModal from "../components/Offer/SetAvailabilityModal";
 
 interface OfferManagementProps {
-  onOffersChange?: Function;
+  onOffersChange?: (offers: OfferWithId[]) => void;
   providedOffers: OfferWithId[];
 }
 
