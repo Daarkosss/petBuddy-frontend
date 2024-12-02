@@ -113,8 +113,8 @@ const CareList = () => {
   const [pagingParams, setPagingParams] = useState({
     page: 0,
     size: 10,
-    sortBy: "", //TODO: change
-    sortDirection: "DESC", //TODO: change
+    sortBy: "submittedAt",
+    sortDirection: "DESC",
   });
 
   const [pagination, setPagination] = useState({
@@ -147,6 +147,7 @@ const CareList = () => {
       setHasFilterChanged(true);
       console.log(JSON.stringify(filters));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedFilters, filters]);
 
   const handleChangeFilters = (changedFilters: HandleFiltersChangeProps[]) => {
@@ -295,6 +296,15 @@ const CareList = () => {
     }
   };
 
+  const onSortChange = (sortBy: string, howSort: string) => {
+    setPagingParams({
+      page: pagingParams.page,
+      size: pagingParams.size,
+      sortBy: sortBy,
+      sortDirection: howSort,
+    });
+  };
+
   return (
     <div className="cares-list-container">
       <Spin spinning={isLoading} fullscreen />
@@ -375,6 +385,7 @@ const CareList = () => {
                 filterName === "CreatedTime":
                 return (
                   <DatePicker
+                    key={filterName}
                     onChange={(dates) => {
                       if (filterName === "CareStart") {
                         onDateChange(dates, "minCareStart", "maxCareStart");
@@ -391,13 +402,13 @@ const CareList = () => {
                       }
                     }}
                     locale={i18n.language === "pl" ? calendar_pl : calendar_en}
-                    style={{ width: 185 }}
+                    style={{ maxWidth: 170 }}
                     range
                     plugins={[
                       highlightWeekends(),
                       <DatePanel
                         header={t("selectedDates")}
-                        style={{ minWidth: 150 }}
+                        style={{ maxWidth: 150 }}
                       />,
                     ]}
                     render={(value, openCalendar) => (
@@ -420,7 +431,7 @@ const CareList = () => {
                 filterName === "clientStatuses":
                 return (
                   <Select
-                    key={index}
+                    key={`cs${index}`}
                     className="cares-filters"
                     mode="multiple"
                     allowClear
@@ -454,7 +465,10 @@ const CareList = () => {
                     }}
                   >
                     {careStatuses.map((filterValue, indexStatus) => (
-                      <Select.Option key={indexStatus} value={filterValue}>
+                      <Select.Option
+                        key={`cst${indexStatus}`}
+                        value={filterValue}
+                      >
                         {t(`careStatus.${filterValue.toLowerCase()}`)}
                       </Select.Option>
                     ))}
@@ -463,7 +477,7 @@ const CareList = () => {
               case filterName === "animalTypes":
                 return (
                   <Select
-                    key={index}
+                    key={`at${index}`}
                     className="cares-filters"
                     mode="multiple"
                     allowClear
@@ -497,7 +511,10 @@ const CareList = () => {
                   >
                     {store.animal.allAnimalTypes.map(
                       (animalType, indexAnimals) => (
-                        <Select.Option key={indexAnimals} value={animalType}>
+                        <Select.Option
+                          key={`ant${indexAnimals}`}
+                          value={animalType}
+                        >
                           {t(animalType.toLowerCase())}
                         </Select.Option>
                       )
@@ -509,11 +526,12 @@ const CareList = () => {
                 filterName === "maxDailyPrice":
                 return (
                   <Tooltip
+                    key={`dpT${index}`}
                     trigger={["focus"]}
                     title={t(`careSearch.${filterName}`)}
                   >
                     <Input
-                      key={index}
+                      key={`dp${index}`}
                       addonAfter={`zł ${filterName.substring(0, 3)}`}
                       className="care-list-daily-price"
                       value={filters[filterName] ?? 0}
@@ -529,13 +547,14 @@ const CareList = () => {
 
               case filterName === "emails":
                 return (
-                  <div>
+                  <div key={`emd${index}`}>
                     <Tooltip
+                      key="emT"
                       trigger={["focus"]}
                       title={t(`careSearch.${filterName}`)}
                     >
                       <Input
-                        key={index}
+                        key={`emails${index}`}
                         allowClear
                         placeholder={t(`careSearch.${filterName}`)}
                         onBlur={() => onEmailsBlur()}
@@ -559,23 +578,12 @@ const CareList = () => {
           <Select
             className="cares-filters"
             allowClear
+            defaultValue="submittedAt"
             placeholder={t(`careSearch.sort`)}
-            onSelect={(value) => {
-              setPagingParams({
-                page: pagingParams.page,
-                size: pagingParams.size,
-                sortBy: value,
-                sortDirection: pagingParams.sortDirection,
-              });
-            }}
-            onClear={() =>
-              setPagingParams({
-                page: pagingParams.page,
-                size: pagingParams.size,
-                sortBy: "",
-                sortDirection: pagingParams.sortDirection,
-              })
+            onSelect={(value) =>
+              onSortChange(value, pagingParams.sortDirection)
             }
+            onClear={() => onSortChange("submittedAt", "DESC")}
           >
             {[
               "id",

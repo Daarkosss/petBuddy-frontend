@@ -23,6 +23,7 @@
     flex-direction: column;
     gap: 10px;
     .care-list-sort-container {
+      flex-wrap: wrap;
       display: flex;
       flex-direction: row;
       gap: 10px;
