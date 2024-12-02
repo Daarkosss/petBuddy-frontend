@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import store from "../store/RootStore";
 import "../scss/pages/_profile.scss";
-import { Avatar, Button, Card, Flex, Upload } from "antd";
+import { Avatar, Button, Card, Upload } from "antd";
 import RoundedLine from "../components/RoundedLine";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -10,7 +10,6 @@ import { UserProfiles } from "../types";
 import { PictureOutlined, UserOutlined } from "@ant-design/icons";
 import ImgCrop from "antd-img-crop";
 import { handleFilePreview, hasFilePhotoType } from "../functions/imageHandle";
-import { CgEnter } from "react-icons/cg";
 import { toast } from "react-toastify";
 
 function ClientProfile() {

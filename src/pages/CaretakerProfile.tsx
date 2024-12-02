@@ -267,8 +267,6 @@ const CaretakerProfile: React.FC = () => {
                     <OfferManagement
                       providedOffers={offers ?? []}
                       onOffersChange={(offers: OfferWithId[]) => {
-                        console.log("setting offers");
-                        console.log(JSON.stringify(offers));
                         setOffers(offers);
                       }}
                     />
@@ -385,8 +383,6 @@ const CaretakerProfile: React.FC = () => {
                 <OfferManagement
                   providedOffers={offers ?? []}
                   onOffersChange={(offers: OfferWithId[]) => {
-                    console.log("setting offers");
-                    console.log(JSON.stringify(offers));
                     setOffers(offers);
                   }}
                 />

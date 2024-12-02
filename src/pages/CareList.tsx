@@ -73,7 +73,6 @@ const CareList = () => {
 
   const onDailyPriceChanged = (value: string, filterName: string) => {
     const regex = /^\d{0,5}(\.\d{0,2})?$/;
-    console.log(`regex: ${regex.test(value)}`);
     if (value === "." || regex.test(value)) {
       handleChangeFilters([
         { filterName: filterName, filterNewValue: value ?? 0 },
@@ -145,7 +144,6 @@ const CareList = () => {
   useEffect(() => {
     if (wasFilterSelected === true) {
       setHasFilterChanged(true);
-      console.log(JSON.stringify(filters));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedFilters, filters]);
@@ -167,17 +165,46 @@ const CareList = () => {
       emails: filters.emails,
     };
     changedFilters.map((newFilter) => {
-      (newFilters as any)[newFilter.filterName] =
-        newFilter.filterName === "animalTypes" ||
-        newFilter.filterName === "emails"
-          ? (newFilter.filterNewValue as string[])
-          : newFilter.filterName === "caretakerStatuses" ||
-            newFilter.filterName === "clientStatuses"
-          ? (newFilter.filterNewValue as CareStatus[])
-          : newFilter.filterName === "minDailyPrice" ||
-            newFilter.filterName === "maxDailyPrice"
-          ? (newFilter.filterNewValue as number)
-          : (newFilter.filterNewValue as string);
+      switch (true) {
+        case newFilter.filterName === "animalTypes":
+          newFilters["animalTypes"] = newFilter.filterNewValue as string[];
+          break;
+        case newFilter.filterName === "emails":
+          newFilters["emails"] = newFilter.filterNewValue as string[];
+          break;
+        case newFilter.filterName === "caretakerStatuses":
+          newFilters["caretakerStatuses"] =
+            newFilter.filterNewValue as CareStatus[];
+          break;
+        case newFilter.filterName === "clientStatuses":
+          newFilters["clientStatuses"] =
+            newFilter.filterNewValue as CareStatus[];
+          break;
+        case newFilter.filterName === "minDailyPrice":
+          newFilters["minDailyPrice"] = newFilter.filterNewValue as number;
+          break;
+        case newFilter.filterName === "maxDailyPrice":
+          newFilters["maxDailyPrice"] = newFilter.filterNewValue as number;
+          break;
+        case newFilter.filterName === "minCreatedTime":
+          newFilters["minCreatedTime"] = newFilter.filterNewValue as string;
+          break;
+        case newFilter.filterName === "maxCreatedTime":
+          newFilters["maxCreatedTime"] = newFilter.filterNewValue as string;
+          break;
+        case newFilter.filterName === "minCareStart":
+          newFilters["minCareStart"] = newFilter.filterNewValue as string;
+          break;
+        case newFilter.filterName === "maxCareStart":
+          newFilters["maxCareStart"] = newFilter.filterNewValue as string;
+          break;
+        case newFilter.filterName === "minCareEnd":
+          newFilters["minCareEnd"] = newFilter.filterNewValue as string;
+          break;
+        case newFilter.filterName === "maxCareEnd":
+          newFilters["maxCareEnd"] = newFilter.filterNewValue as string;
+          break;
+      }
     });
 
     setFilters(newFilters);
@@ -209,6 +236,45 @@ const CareList = () => {
           : filterName === "minDailyPrice" || filterName === "maxDailyPrice"
           ? undefined
           : "";
+
+      switch (true) {
+        case filterName === "animalTypes":
+          newFilters["animalTypes"] = [];
+          break;
+        case filterName === "emails":
+          newFilters["emails"] = [];
+          break;
+        case filterName === "caretakerStatuses":
+          newFilters["caretakerStatuses"] = [];
+          break;
+        case filterName === "clientStatuses":
+          newFilters["clientStatuses"] = [];
+          break;
+        case filterName === "minDailyPrice":
+          newFilters["minDailyPrice"] = undefined;
+          break;
+        case filterName === "maxDailyPrice":
+          newFilters["maxDailyPrice"] = undefined;
+          break;
+        case filterName === "minCreatedTime":
+          newFilters["minCreatedTime"] = "";
+          break;
+        case filterName === "maxCreatedTime":
+          newFilters["maxCreatedTime"] = "";
+          break;
+        case filterName === "minCareStart":
+          newFilters["minCareStart"] = "";
+          break;
+        case filterName === "maxCareStart":
+          newFilters["maxCareStart"] = "";
+          break;
+        case filterName === "minCareEnd":
+          newFilters["minCareEnd"] = "";
+          break;
+        case filterName === "maxCareEnd":
+          newFilters["maxCareEnd"] = "";
+          break;
+      }
     });
     setFilters(newFilters);
   };
@@ -435,9 +501,8 @@ const CareList = () => {
                     className="cares-filters"
                     mode="multiple"
                     allowClear
-                    placeholder={t(`careSearch.${filterName}`)} //TODO: translation
+                    placeholder={t(`careSearch.${filterName}`)}
                     onSelect={(value) => {
-                      console.log(filterName, value);
                       filters[filterName].push(value as CareStatus);
                       handleChangeFilters([
                         {
