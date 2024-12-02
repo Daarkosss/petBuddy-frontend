@@ -54,7 +54,6 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
     const client = Stomp.over(() => socket);
     const onConnect = () => {
       setWsClient(client);
-      console.log("WS client connected");
     };
     client.connect({}, onConnect);
   };
@@ -98,7 +97,6 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
   }, [messages]);
 
   useEffect(() => {
-    console.log(`chatId: ${chatId}`);
     if (chatId) {
       subscribeToChatRoom();
     }
@@ -107,7 +105,6 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
 
   const subscribeToChatRoom = () => {
     if (wsClient === null) {
-      console.log("not subscribing to chat room");
       return;
     }
     const headers = {
@@ -219,9 +216,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
 
   const disconnectWebSocket = async () => {
     if (wsClientRef.current !== null) {
-      wsClientRef.current.deactivate().then(() => {
-        console.log("Disconnected");
-      });
+      wsClientRef.current.deactivate().then(() => {});
       setWsClient(null);
     }
   };

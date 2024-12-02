@@ -813,7 +813,6 @@ class API {
       if (acceptTimezone) {
         headers["Accept-Timezone"] = acceptTimezone;
       }
-      console.log(acceptTimezone);
 
       return await this.authorizedFetch<ChatsResponse>(
         "GET",

@@ -73,7 +73,6 @@ const ChatBadge = observer<ChatBadgeProperties>(({ handleOpenChat }) => {
   ]);
 
   const handleOnPageChange = (page: number, pageSize?: number) => {
-    console.log(page);
     setPagingParams({
       page: page - 1,
       size: pageSize || 5,
