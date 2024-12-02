@@ -177,7 +177,6 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
     }
   };
 
-  //TODO: timezone
   const initializeChatRoom = async (message: string) => {
     const data = await api.initializeChatRoom(
       recipientEmail,

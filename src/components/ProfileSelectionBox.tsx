@@ -24,7 +24,6 @@ const ProfileSelectionBox: React.FC<Image> = ({
   const navigate = useNavigate();
 
   return (
-    //TODO: add create caretaker profile logic
     <div
       className="profile-container"
       onMouseEnter={onHover}
