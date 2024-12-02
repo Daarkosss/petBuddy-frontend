@@ -15,7 +15,9 @@
     "HEDGEHOG": "Jeż",
     "GUINEA_PIG": "Świnka morska",
     "MOUSE": "Mysz",
-    "OTHER": "Inne"
+    "OTHER": "Inne",
+    "REPTILE": "Gad",
+    "HORSE": "Koń"
   },
 
   "SEX": {
@@ -217,7 +219,6 @@
     "CreatedTime": "Data utworzenia",
     "CareStart": "Data rozpoczęcia",
     "CareEnd": "Data zakończenia",
-    "filter": "Filtruj",
     "sort": "Sortowanie",
     "id": "Id",
     "submittedAt": "Data złożenia rezerwacji",
@@ -436,7 +437,10 @@
     "newPriceAcceptedByClient": "Klient zaakceptował cenę",
     "waitingForCaretakerResponse": "Oczekuje na odpowiedź opiekuna",
     "waitingForClientResponse": "Oczekuje na odpowiedź klienta",
-    "startConfirmedByCaretaker": "Opiekun potwierdził rozpoczęcie opieki"
+    "startConfirmedByCaretaker": "Opiekun potwierdził rozpoczęcie opieki",
+    "accepted": "Zaakceptowana",
+    "ready_to_proceed": "Gotowa do rozpoczęcia",
+    "confirmed": "Potwierdzona"
   },
 
   "petDescription": "Opis zwierzęcia",

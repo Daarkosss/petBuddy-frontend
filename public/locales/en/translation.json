@@ -15,7 +15,9 @@
     "HEDGEHOG": "Hedgehog",
     "GUINEA_PIG": "Guinea pig",
     "MOUSE": "Mouse",
-    "OTHER": "Others"
+    "OTHER": "Others",
+    "REPTILE": "Reptile",
+    "HORSE": "Horse"
   },
 
   "SEX": {
@@ -215,7 +217,6 @@
     "CreatedTime": "Creation date",
     "CareStart": "Start time",
     "CareEnd": "End time",
-    "filter": "Filter",
     "sort": "Sort",
     "id": "Id",
     "submittedAt": "Submitted at",
@@ -433,7 +434,10 @@
     "newPriceAcceptedByClient": "Client accepted the price",
     "waitingForCaretakerResponse": "Waiting for caretaker response",
     "waitingForClientResponse": "Waiting for client response",
-    "startConfirmedByCaretaker": "Caretaker confirmed care begin"
+    "startConfirmedByCaretaker": "Caretaker confirmed care begin",
+    "accepted": "Accepted",
+    "ready_to_proceed": "Ready to proceed",
+    "confirmed": "Confirmed"
   },
 
   "petDescription": "Pet description",
