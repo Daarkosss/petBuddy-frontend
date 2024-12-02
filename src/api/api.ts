@@ -25,6 +25,7 @@ import {
   CareReservation,
   CareReservationDTO,
   CareSearchFilters,
+  CareStatus,
   GetCaresDTO,
 } from "../types/care.types";
 import {
@@ -538,7 +539,7 @@ class API {
     }
   }
 
-  convertArrayToQueryParam = (array: any[]) => {
+  convertArrayToQueryParam = (array: string[] | CareStatus[]) => {
     let stringifiedArray = "";
     for (let i = 0; i < array.length - 1; i++) {
       stringifiedArray += `${array[i]},`;
