@@ -7,10 +7,16 @@ export type Notification = {
   objectType: string;
   messageKey: string;
   args: string[];
-  receiverProfile: "CLIENT" | "CARETAKER" 
+  receiverProfile: "CLIENT" | "CARETAKER";
   read: boolean;
-  dtype: string; 
-}
+  dtype: string;
+};
+
+export type ChatMessageNotification = {
+  dtype: string;
+  unseenChatsAsClient: number;
+  unseenChatsAsCaretaker: number;
+};
 
 export type NotificationDTO = {
   content: Notification[];
@@ -24,10 +30,10 @@ export type NotificationDTO = {
   last: boolean;
   numberOfElements: number;
   empty: boolean;
-}
+};
 
 export type NumberOfUnreadChats = {
   createdAt: string;
   unseenChatsAsClient: number;
   unseenChatsAsCaretaker: number;
-}
+};

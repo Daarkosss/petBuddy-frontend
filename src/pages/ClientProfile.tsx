@@ -11,8 +11,9 @@ import { PictureOutlined, UserOutlined } from "@ant-design/icons";
 import ImgCrop from "antd-img-crop";
 import { handleFilePreview, hasFilePhotoType } from "../functions/imageHandle";
 import { toast } from "react-toastify";
+import { HandleSetOpenChat } from "../types/chat.types";
 
-function ClientProfile() {
+const ClientProfile: React.FC<HandleSetOpenChat> = ({ handleSetOpenChat }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [profileData, setProfileData] = useState<UserProfiles>();
@@ -142,6 +143,15 @@ function ClientProfile() {
                           type="primary"
                           className="profile-action-button"
                           onClick={() => {
+                            handleSetOpenChat!(
+                              undefined,
+                              undefined,
+                              undefined,
+                              undefined,
+                              undefined,
+                              false,
+                              false
+                            );
                             store.user.setSelectedProfile("CARETAKER");
                             store.user.saveProfileToStorage(store.user.profile);
                             navigate(
@@ -175,6 +185,6 @@ function ClientProfile() {
       )}
     </div>
   );
-}
+};
 
 export default ClientProfile;

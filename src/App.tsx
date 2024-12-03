@@ -16,12 +16,55 @@ import ClientProfile from "./pages/ClientProfile";
 import CareList from "./pages/CareList";
 import CareDetails from "./pages/CareDetails";
 import TermsAndConditions from "./pages/TermsAndConditions";
+import ChatBox from "./components/ChatBox";
+import ChatMinimized from "./components/ChatMinimized";
+import { useTranslation } from "react-i18next";
 
 const { Content } = Layout;
 
+interface OpenChatAttributes {
+  shouldOpenMaximizedChat: boolean;
+  shouldOpenMinimizedChat: boolean;
+  recipientEmail: string | undefined;
+  profilePicture: string | undefined;
+  name: string | undefined;
+  surname: string | undefined;
+  profile: string | undefined;
+}
+
 const App = observer(() => {
+  const { t } = useTranslation();
   const { keycloak, initialized } = useKeycloak();
   const [isUserDataFetched, setIsUserDataFetched] = useState(false);
+  const [openChat, setOpenChat] = useState<OpenChatAttributes>({
+    shouldOpenMaximizedChat: false,
+    shouldOpenMinimizedChat: false,
+    recipientEmail: undefined,
+    profilePicture: undefined,
+    name: undefined,
+    surname: undefined,
+    profile: undefined,
+  });
+
+  const handleSetOpenChat = (
+    recipientEmail: string | undefined,
+    profilePicture: string | undefined,
+    name: string | undefined,
+    surname: string | undefined,
+    profile: string | undefined,
+    shouldOpenMaximizedChat?: boolean,
+    shouldOpenMinimizedChat?: boolean
+  ) => {
+    setOpenChat({
+      shouldOpenMaximizedChat: shouldOpenMaximizedChat ?? true,
+      shouldOpenMinimizedChat: shouldOpenMinimizedChat ?? false,
+      recipientEmail: recipientEmail,
+      profilePicture: profilePicture,
+      name: name,
+      surname: surname,
+      profile: profile,
+    });
+  };
 
   useEffect(() => {
     const initializeApp = async () => {
@@ -70,7 +113,63 @@ const App = observer(() => {
   if (!store.isStarting) {
     return (
       <Layout>
-        <Header />
+        <Header handleOpenChat={handleSetOpenChat} />
+        {openChat.shouldOpenMaximizedChat && (
+          <ChatBox
+            recipientEmail={openChat.recipientEmail!}
+            profilePicture={
+              openChat.profilePicture !== undefined
+                ? openChat.profilePicture
+                : null
+            }
+            onMinimize={() => {
+              setOpenChat({
+                ...openChat,
+                shouldOpenMaximizedChat: false,
+                shouldOpenMinimizedChat: true,
+              });
+            }}
+            onClose={() =>
+              setOpenChat({
+                shouldOpenMaximizedChat: false,
+                shouldOpenMinimizedChat: false,
+                recipientEmail: undefined,
+                profilePicture: undefined,
+                name: undefined,
+                surname: undefined,
+                profile: undefined,
+              })
+            }
+            name={openChat.name ?? ""}
+            surname={openChat.surname ?? ""}
+            profile={t(openChat.profile ?? "")}
+          />
+        )}
+        {openChat.shouldOpenMinimizedChat && (
+          <ChatMinimized
+            name={openChat.name!}
+            surname={openChat.surname!}
+            profile={t(openChat.profile ?? "")}
+            onClose={() =>
+              setOpenChat({
+                shouldOpenMaximizedChat: false,
+                shouldOpenMinimizedChat: false,
+                recipientEmail: undefined,
+                profilePicture: undefined,
+                name: undefined,
+                surname: undefined,
+                profile: undefined,
+              })
+            }
+            onMaximize={() => {
+              setOpenChat({
+                ...openChat,
+                shouldOpenMaximizedChat: true,
+                shouldOpenMinimizedChat: false,
+              });
+            }}
+          />
+        )}
         <Content className="page-content">
           <Routes>
             {keycloak.authenticated ? (
@@ -96,9 +195,16 @@ const App = observer(() => {
                   />
                   <Route
                     path="/profile-caretaker/:caretakerEmail"
-                    element={<CaretakerProfile />}
+                    element={
+                      <CaretakerProfile handleSetOpenChat={handleSetOpenChat} />
+                    }
                   />
-                  <Route path="/profile-client" element={<ClientProfile />} />
+                  <Route
+                    path="/profile-client"
+                    element={
+                      <ClientProfile handleSetOpenChat={handleSetOpenChat} />
+                    }
+                  />
                   <Route
                     path="/terms-and-conditions"
                     element={<TermsAndConditions />}

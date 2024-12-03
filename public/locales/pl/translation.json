@@ -116,6 +116,8 @@
   "caretaker": "Opiekun",
   "client": "Klient",
 
+  "you": "Ty",
+
   "address": "Adres",
   "addressDetails": {
     "city": "Miejscowość",
@@ -139,7 +141,9 @@
     "date": "Naciśnij, aby wybrać datę",
     "dailyPrice": "np. 52",
     "selectFromList": "Wybierz z listy",
-    "animalDescription": "np. Moj pupil musi jeść specjalną karmę..."
+    "animalDescription": "np. Moj pupil musi jeść specjalną karmę...",
+    "writeMessage": "Napisz wiadomość",
+    "inputSearchedText": "Wpisz szukany tekst"
   },
 
   "personalData": {
@@ -256,7 +260,7 @@
   "landingPage": {
     "title": "Witamy w Pet Buddy, miejscu gdzie możesz znaleźć opiekuna dla swojego pupila lub samemu zacząć opiekować się zwierzętami innych osób",
     "subtitle": "Użyj poniższego paska wyszukiwania, aby znaleźć opiekuna lub zaloguj się, aby uzyskać więcej opcji.",
-    "searchTitle": "Znajdz najlepszego opiekuna dla swojego pupila"
+    "searchTitle": "Znajdź najlepszego opiekuna dla swojego pupila"
   },
 
   "home": "Strona główna",

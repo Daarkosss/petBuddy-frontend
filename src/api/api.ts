@@ -25,9 +25,9 @@ import {
   CareDTO,
   CareReservation,
   CareReservationDTO,
+  GetCaresDTO,
   CareSearchFilters,
   CareStatus,
-  GetCaresDTO,
 } from "../types/care.types";
 import {
   AnimalAttributes,
@@ -39,6 +39,12 @@ import {
   NotificationDTO,
   NumberOfUnreadChats,
 } from "../types/notification.types";
+import {
+  ChatMessage,
+  ChatMessagesResponse,
+  ChatRoom,
+  ChatsResponse,
+} from "../types/chat.types";
 
 const backendHost =
   import.meta.env.VITE_BACKEND_HOST || window.location.hostname;
@@ -60,7 +66,8 @@ class API {
     method: Method,
     path: string,
     body?: unknown,
-    headers: HeadersInit = {}
+    headers: HeadersInit = {},
+    showToast?: boolean
   ): Promise<T> {
     const options = {
       method,
@@ -76,8 +83,12 @@ class API {
     const response = await fetch(`${PATH_PREFIX}${path}`, options);
     const data = await response.json();
     if (!response.ok) {
-      toast.error(data.message || "Wrong server response!");
-      throw new Error(data.message || "Wrong server response!");
+      if (showToast !== false)
+        toast.error(data.message || "Wrong server response!");
+      throw new Error(
+        `${data.message}. Status code: ${response.status}` ||
+          "Wrong server response!"
+      );
     } else {
       return data;
     }
@@ -87,15 +98,23 @@ class API {
     method: Method,
     path: string,
     body?: unknown,
-    headers?: HeadersInit
+    headers?: HeadersInit,
+    showToast?: boolean
   ): Promise<T> {
     if (store.user.jwtToken) {
-      return this.fetch<T>(method, path, body, {
-        ...headers,
-        Authorization: `Bearer ${store.user.jwtToken}`,
-      });
+      return this.fetch<T>(
+        method,
+        path,
+        body,
+        {
+          ...headers,
+          Authorization: `Bearer ${store.user.jwtToken}`,
+          ...headers,
+        },
+        false
+      );
     } else {
-      toast.error("No user token available");
+      if (showToast !== false) toast.error("No user token available");
       return Promise.reject(new Error("No user token available"));
     }
   }
@@ -134,6 +153,86 @@ class API {
       return response;
     } catch (error: unknown) {
       return;
+    }
+  }
+
+  async getChatRoomWithGivenUser(
+    participantEmail: string,
+    acceptTimezone: string | null
+  ): Promise<ChatRoom> {
+    try {
+      const headers: HeadersInit = {
+        "Accept-Role": store.user.profile!.selected_profile!,
+      };
+      if (acceptTimezone) {
+        headers["Accept-Timezone"] = acceptTimezone;
+      }
+      const response = await this.authorizedFetch<ChatRoom>(
+        "GET",
+        `api/chat/${participantEmail}`,
+        null,
+        headers,
+        false
+      );
+      return response;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new Error(`Failed to find chat: ${error.message}`);
+      }
+      throw new Error(
+        "An unknown error occurred while fetching caretaker profile"
+      );
+    }
+  }
+
+  async initializeChatRoom(
+    messageReceiverEmail: string,
+    content: string,
+    acceptTimezone: string | null
+  ): Promise<ChatMessage> {
+    const headers: HeadersInit = {
+      "Accept-Role": store.user.profile!.selected_profile!,
+    };
+    if (acceptTimezone) {
+      headers["Accept-Timezone"] = acceptTimezone;
+    }
+    return this.authorizedFetch<ChatMessage>(
+      "POST",
+      `api/chat/${messageReceiverEmail}`,
+      {
+        content: content,
+      },
+      headers
+    );
+  }
+
+  async getMessagesFromSpecifiedChatRoom(
+    chatId: number,
+    page: string | null,
+    size: string | null,
+    acceptTimezone: string | null
+  ): Promise<ChatMessagesResponse> {
+    try {
+      const headers: HeadersInit = {
+        "Accept-Role": store.user.profile!.selected_profile!,
+      };
+      if (acceptTimezone) {
+        headers["Accept-Timezone"] = acceptTimezone;
+      }
+      const response = await this.authorizedFetch<ChatMessagesResponse>(
+        "GET",
+        `api/chat/${chatId}/messages?page=${page}&size=${size}`,
+        null,
+        headers
+      );
+      return response;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new Error(`Failed to find chat: ${error.message}`);
+      }
+      throw new Error(
+        "An unknown error occurred while fetching caretaker profile"
+      );
     }
   }
 
@@ -767,6 +866,37 @@ class API {
       } else {
         return data.unseenChatsAsCaretaker;
       }
+    }
+  }
+
+  async getUserChats(
+    pagingParams: PagingParams,
+    acceptTimezone: string | null,
+    chatterDataLike: string | null
+  ): Promise<ChatsResponse | undefined> {
+    if (store.user.profile?.selected_profile) {
+      const queryParams = new URLSearchParams({
+        page: pagingParams.page.toString(),
+        size: pagingParams.size.toString(),
+      });
+
+      if (chatterDataLike !== null) {
+        queryParams.append("chatterDataLike", chatterDataLike);
+      }
+      const headers: HeadersInit = {
+        "Accept-Role": store.user.profile!.selected_profile,
+      };
+
+      if (acceptTimezone) {
+        headers["Accept-Timezone"] = acceptTimezone;
+      }
+
+      return await this.authorizedFetch<ChatsResponse>(
+        "GET",
+        `api/chat?${queryParams}`,
+        undefined,
+        headers
+      );
     }
   }
 

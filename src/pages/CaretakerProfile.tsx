@@ -18,8 +18,11 @@ import ImgCrop from "antd-img-crop";
 import { handleFilePreview, hasFilePhotoType } from "../functions/imageHandle";
 import OfferManagement from "./OfferManagement";
 import { toast } from "react-toastify";
+import { HandleSetOpenChat } from "../types/chat.types";
 
-const CaretakerProfile: React.FC = () => {
+const CaretakerProfile: React.FC<HandleSetOpenChat> = ({
+  handleSetOpenChat,
+}) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { caretakerEmail } = useParams();
@@ -178,6 +181,15 @@ const CaretakerProfile: React.FC = () => {
                       type="primary"
                       className="profile-action-button"
                       onClick={() => {
+                        handleSetOpenChat!(
+                          undefined,
+                          undefined,
+                          undefined,
+                          undefined,
+                          undefined,
+                          false,
+                          false
+                        );
                         store.user.setSelectedProfile("CLIENT");
                         store.user.saveProfileToStorage(store.user.profile);
                         navigate("/profile-client");
@@ -227,6 +239,16 @@ const CaretakerProfile: React.FC = () => {
                         <Button
                           type="primary"
                           className="profile-action-button"
+                          onClick={() => {
+                            handleSetOpenChat!(
+                              profileData.accountData.email,
+                              profileData.accountData.profilePicture?.url ||
+                                undefined,
+                              profileData.accountData.name,
+                              profileData.accountData.surname,
+                              "caretaker"
+                            );
+                          }}
                         >
                           {t("profilePage.openChat")}
                         </Button>
@@ -309,7 +331,7 @@ const CaretakerProfile: React.FC = () => {
               )}
               <h1>{t("profilePage.ratings")}</h1>
               {isMyProfile === false &&
-                store.user.profile?.selected_profile !== "CARETAKER" && (
+                store.user.profile?.selected_profile === "CLIENT" && (
                   <div className="profile-add-a-comment">
                     <Button type="primary" className="add-button">
                       {t("profilePage.rate")}
@@ -317,9 +339,7 @@ const CaretakerProfile: React.FC = () => {
                   </div>
                 )}
               <div className="profile-comments-container">
-                {ratings !== null &&
-                ratings !== undefined &&
-                ratings.content.length > 0 ? (
+                {ratings && ratings.content.length > 0 ? (
                   ratings!.content.map((element, index) => (
                     <div key={index}>
                       <CommentContainer

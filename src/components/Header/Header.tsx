@@ -5,13 +5,23 @@ import { useNavigate } from "react-router-dom";
 import { Menu, Button, Drawer } from "antd";
 import { Header } from "antd/es/layout/layout";
 import { MenuOutlined } from "@ant-design/icons";
-import store from "../../store/RootStore";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import NotificationBadge from "./NotificationBadge";
 import ChatBadge from "./ChatBadge";
+import store from "../../store/RootStore";
 
-const PageHeader = observer(() => {
+interface PageHeaderProperties {
+  handleOpenChat: (
+    recipientEmail: string,
+    profilePicture: string | undefined,
+    name: string,
+    surname: string,
+    profile: string
+  ) => void;
+}
+
+const PageHeader = observer<PageHeaderProperties>(({ handleOpenChat }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { keycloak } = useKeycloak();
@@ -29,8 +39,8 @@ const PageHeader = observer(() => {
     {
       key: "cares",
       label: t("care.yourCares"),
-      onClick: () => navigate("/cares")
-    }
+      onClick: () => navigate("/cares"),
+    },
   ];
 
   const menuItems = [
@@ -97,12 +107,14 @@ const PageHeader = observer(() => {
       </div>
 
       <div className="right-corner">
-        {keycloak.authenticated &&
+        {keycloak.authenticated && (
           <>
-            <ChatBadge/>
+            {store.user.profile?.selected_profile !== null && (
+              <ChatBadge handleOpenChat={handleOpenChat} />
+            )}
             <NotificationBadge />
           </>
-        }
+        )}
         <LanguageSwitcher />
         {keycloak.authenticated ? (
           <Button
