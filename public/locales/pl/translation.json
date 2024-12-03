@@ -140,7 +140,8 @@
     "dailyPrice": "np. 52",
     "selectFromList": "Wybierz z listy",
     "animalDescription": "np. Moj pupil musi jeść specjalną karmę...",
-    "writeMessage": "Napisz wiadomość"
+    "writeMessage": "Napisz wiadomość",
+    "inputSearchedText": "Wpisz szukany tekst"
   },
 
   "personalData": {

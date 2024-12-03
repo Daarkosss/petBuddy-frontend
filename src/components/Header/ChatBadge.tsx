@@ -13,6 +13,7 @@ import { Chat } from "../../types/chat.types";
 import { api } from "../../api/api";
 import store from "../../store/RootStore";
 import ChatListTile from "../ChatListTile";
+import { useTranslation } from "react-i18next";
 
 const { Search } = Input;
 
@@ -27,6 +28,7 @@ interface ChatBadgeProperties {
 }
 
 const ChatBadge = observer<ChatBadgeProperties>(({ handleOpenChat }) => {
+  const { t } = useTranslation();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [userChats, setUserChats] = useState<Chat[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -107,7 +109,7 @@ const ChatBadge = observer<ChatBadgeProperties>(({ handleOpenChat }) => {
         ) : (
           <div className="chat-badge-modal-content-container">
             <Search
-              placeholder="input search text"
+              placeholder={t("placeholder.inputSearchedText")}
               onSearch={gUserChats}
               enterButton
               loading={isLoading}
@@ -122,6 +124,7 @@ const ChatBadge = observer<ChatBadgeProperties>(({ handleOpenChat }) => {
               className="chat-badge-chat-list"
               itemLayout="vertical"
               dataSource={userChats}
+              locale={{ emptyText: t("noData") }}
               pagination={{
                 current: pagination.current,
                 pageSize: pagination.size,
