@@ -34,14 +34,14 @@
   .chat-badge-chat-list {
     margin-top: 10px;
   }
-}
 
-button.ant-btn,
-button.ant-pagination-item-link {
-  background-color: v.$blue-medium !important;
+  button.ant-btn,
+  button.ant-pagination-item-link {
+    background-color: v.$blue-medium !important;
 
-  &:hover {
-    background-color: v.$blue-light !important;
-    cursor: pointer;
+    &:hover {
+      background-color: v.$blue-light !important;
+      cursor: pointer;
+    }
   }
 }
