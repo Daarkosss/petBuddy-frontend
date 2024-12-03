@@ -78,7 +78,9 @@ const CaretakerList = () => {
       await assignFiltersToAnimals();
       const data = await api.getCaretakers(pagingParams, filters);
       setCaretakers(
-        data.caretakers.content.map((caretaker) => new CaretakerBasics(caretaker))
+        data.caretakers.content.map(
+          (caretaker) => new CaretakerBasics(caretaker)
+        )
       );
       setPagination({
         current: data.caretakers.pageable.pageNumber + 1,
@@ -103,11 +105,10 @@ const CaretakerList = () => {
   }, [pagingParams]);
 
   const handleTableChange = (pagination: TablePaginationConfig) => {
-
     setPagingParams({
       ...pagingParams,
       page: (pagination.current || 1) - 1,
-      size: pagination.pageSize || 10
+      size: pagination.pageSize || 10,
     });
   };
 
@@ -182,7 +183,13 @@ const CaretakerList = () => {
       render: (_: unknown, record: CaretakerBasics) => (
         <div className="caretaker-list-item">
           <div className="profile-picture">
-            <img src={record.accountData.profilePicture?.url || "/images/default-avatar.png"} alt="avatar" />
+            <img
+              src={
+                record.accountData.profilePicture?.url ||
+                "/images/default-avatar.png"
+              }
+              alt="avatar"
+            />
           </div>
           <div>
             <h4>
@@ -242,44 +249,48 @@ const CaretakerList = () => {
         onSortChange={handleSortChange}
         onSearch={handleSearch}
       />
-      <Tabs 
-        style={{width: "100%"}} 
-        centered 
+      <Tabs
+        style={{ width: "100%" }}
+        centered
         size="small"
         items={[
           {
             key: "list",
             label: t("caretakerSearch.list"),
-            children: <div className="caretaker-content">
-              <Table
-                loading={isLoading}
-                columns={columns}
-                locale={{
-                  emptyText: t("caretakerSearch.noCaretakers"),
-                  triggerDesc: t("triggerDesc"),
-                  triggerAsc: t("triggerAsc"),
-                  cancelSort: t("cancelSort"),
-                }}
-                dataSource={caretakers}
-                rowKey={(record) => record.accountData.email}
-                pagination={{
-                  current: pagination.current,
-                  pageSize: pagination.pageSize,
-                  total: pagination.total,
-                  showSizeChanger: true,
-                  locale: {
-                    items_per_page: t("perPage"),
-                  },
-                }}
-                scroll={{ x: "max-content" }}
-                onChange={handleTableChange}
-              />
-            </div>
+            children: (
+              <div className="caretaker-content">
+                <Table
+                  loading={isLoading}
+                  columns={columns}
+                  locale={{
+                    emptyText: t("caretakerSearch.noCaretakers"),
+                    triggerDesc: t("triggerDesc"),
+                    triggerAsc: t("triggerAsc"),
+                    cancelSort: t("cancelSort"),
+                  }}
+                  dataSource={caretakers}
+                  rowKey={(record) => record.accountData.email}
+                  pagination={{
+                    current: pagination.current,
+                    pageSize: pagination.pageSize,
+                    total: pagination.total,
+                    showSizeChanger: true,
+                    locale: {
+                      items_per_page: t("perPage"),
+                    },
+                  }}
+                  scroll={{ x: "max-content" }}
+                  onChange={handleTableChange}
+                />
+              </div>
+            ),
           },
           {
             key: "map",
             label: t("caretakerSearch.map"),
-            children: <MapWithCaretakers caretakers={caretakers} center={mapCenter} />
+            children: (
+              <MapWithCaretakers caretakers={caretakers} center={mapCenter} />
+            ),
           },
         ]}
       />

@@ -1,0 +1,49 @@
+@use "../helpers/variables" as v;
+$scrollbar_width: 3px;
+
+.chat-messages-container {
+  height: 300px;
+  width: 100%;
+  overflow-y: scroll;
+
+  .chat-messages-inner-container {
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  .chat-messages-no-chat-history {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-weight: bold;
+    color: v.$blue-dark;
+  }
+}
+
+// .chat-messages-container:hover {
+//   overflow-y: scroll;
+// }
+
+/* hide scrollbar */
+.chat-messages-container::-webkit-scrollbar {
+  //   display: none; /* Chrome, Safari i Opera */
+  width: $scrollbar_width;
+  height: 5px;
+}
+
+/* Stylowanie toru (track) paska przewijania */
+.chat-messages-container::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+  border-radius: 10px;
+}
+
+/* Stylowanie suwaka (thumb) paska przewijania */
+.chat-messages-container::-webkit-scrollbar-thumb {
+  background-color: #96969686; /* Kolor suwaka */
+  border-radius: 10px;
+  /* Przestrzeń wokół suwaka */
+}

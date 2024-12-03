@@ -17,7 +17,7 @@
     "MOUSE": "Mouse",
     "OTHER": "Others"
   },
-  
+
   "SEX": {
     "title": "Sex",
     "MALE": "Male",
@@ -72,7 +72,7 @@
     "YES": "Yes",
     "NO": "No"
   },
-  
+
   "DANGEROUS": {
     "title": "Dangerous?",
     "YES": "Yes",
@@ -100,7 +100,7 @@
     "hiding spots": "Hiding spots",
     "humidity control": "Humidity control",
     "exercise wheel": "Exercise wheel",
-    "bedding" : "Bedding",
+    "bedding": "Bedding",
     "tunnels": "Tunnels",
     "catnip": "Catnip",
     "aviary": "Aviary"
@@ -116,6 +116,8 @@
   "logout": "Logout",
   "caretaker": "Caretaker",
   "client": "Client",
+
+  "you": "You",
 
   "address": "Address",
   "addressDetails": {
@@ -140,7 +142,9 @@
     "date": "Press to select date",
     "dailyPrice": "e.g. 52",
     "selectFromList": "Select from the list",
-    "animalDescription": "e.g. My pet has to eat special feed..."
+    "animalDescription": "e.g. My pet has to eat special feed...",
+    "writeMessage": "Write message",
+    "inputSearchedText": "Input searched text"
   },
 
   "personalData": {
@@ -324,7 +328,7 @@
     "SNAKE": "Offer for snakes",
     "FISH": "Offer for fish",
     "HAMSTER": "Offer for hamsters",
-    "RABBIT": "Offer for rabbits",  
+    "RABBIT": "Offer for rabbits",
     "HEDGEHG": "Offer for hedgehogs",
     "GUINEA_PIG": "Offer for guinea pigs",
     "MOUSE": "Offer for mice",
@@ -397,7 +401,7 @@
     "newPriceAcceptedByClient": "Client accepted the price",
     "waitingForCaretakerResponse": "Waiting for caretaker response",
     "waitingForClientResponse": "Waiting for client response",
-    "startConfirmedByCaretaker" : "Caretaker confirmed care begin"
+    "startConfirmedByCaretaker": "Caretaker confirmed care begin"
   },
 
   "petDescription": "Pet description",

@@ -69,7 +69,7 @@
     "YES": "Tak",
     "NO": "Nie"
   },
-  
+
   "DANGEROUS": {
     "title": "Niebezpieczny?",
     "YES": "Tak",
@@ -97,7 +97,7 @@
     "hiding spots": "Kryjówki",
     "humidity control": "Kontrola wilgotności",
     "exercise wheel": "Kółko do ćwiczeń",
-    "bedding" : "Ściółka",
+    "bedding": "Ściółka",
     "tunnels": "Tunele",
     "catnip": "Kocimiętka",
     "aviary": "Woliera"
@@ -113,6 +113,8 @@
   "logout": "Wyloguj",
   "caretaker": "Opiekun",
   "client": "Klient",
+
+  "you": "Ty",
 
   "address": "Adres",
   "addressDetails": {
@@ -137,7 +139,9 @@
     "date": "Naciśnij, aby wybrać datę",
     "dailyPrice": "np. 52",
     "selectFromList": "Wybierz z listy",
-    "animalDescription": "np. Moj pupil musi jeść specjalną karmę..."
+    "animalDescription": "np. Moj pupil musi jeść specjalną karmę...",
+    "writeMessage": "Napisz wiadomość",
+    "inputSearchedText": "Wpisz szukany tekst"
   },
 
   "personalData": {
@@ -221,7 +225,7 @@
   "landingPage": {
     "title": "Witamy w Pet Buddy, miejscu gdzie możesz znaleźć opiekuna dla swojego pupila lub samemu zacząć opiekować się zwierzętami innych osób",
     "subtitle": "Użyj poniższego paska wyszukiwania, aby znaleźć opiekuna lub zaloguj się, aby uzyskać więcej opcji.",
-    "searchTitle": "Znajdz najlepszego opiekuna dla swojego pupila"
+    "searchTitle": "Znajdź najlepszego opiekuna dla swojego pupila"
   },
 
   "home": "Strona główna",
@@ -400,7 +404,7 @@
     "newPriceAcceptedByClient": "Klient zaakceptował cenę",
     "waitingForCaretakerResponse": "Oczekuje na odpowiedź opiekuna",
     "waitingForClientResponse": "Oczekuje na odpowiedź klienta",
-    "startConfirmedByCaretaker" : "Opiekun potwierdził rozpoczęcie opieki"
+    "startConfirmedByCaretaker": "Opiekun potwierdził rozpoczęcie opieki"
   },
 
   "petDescription": "Opis zwierzęcia",
