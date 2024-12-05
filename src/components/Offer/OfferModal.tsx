@@ -121,7 +121,7 @@ const OfferModal: React.FC<OfferModalProps> = ({
       open={isModalOpen}
       onCancel={closeModal}
       footer={null}
-      width={900}
+      width={1000}
       className="offer-modal"
     >
       <div className="offer-modal">
