@@ -77,9 +77,15 @@ const CaretakerForm = () => {
     setNewOfferPhotos([]);
   };
 
-  const handleNewPhoto: UploadProps["onChange"] = ({ fileList }) => {
-    if (hasFilePhotoType(fileList[fileList.length - 1])) {
-      // Check last added photo
+  const handlePhotosChange: UploadProps["onChange"] = ({ fileList }) => {
+    // If photo was removed, just update photos
+    if (fileList.length < newOfferPhotos.length) {
+      setNewOfferPhotos(fileList);
+      return;
+    }
+
+    const lastFile = fileList[fileList.length - 1];
+    if (lastFile && hasFilePhotoType(fileList[fileList.length - 1])) {
       setNewOfferPhotos(fileList);
     } else {
       toast.error(t("error.wrongFileTypeForPhoto"));
@@ -324,7 +330,7 @@ const CaretakerForm = () => {
                       customRequest={dummyRequest}
                       listType="picture-card"
                       fileList={newOfferPhotos}
-                      onChange={handleNewPhoto}
+                      onChange={handlePhotosChange}
                       onPreview={handleFilePreview}
                       accept="image/*"
                     >
