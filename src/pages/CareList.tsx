@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { Care } from "../models/Care";
 import UserInfoPill from "../components/UserInfoPill";
 import { CareSearchFilters, CareStatus } from "../types/care.types";
-import DatePicker, { Calendar, DateObject } from "react-multi-date-picker";
+import DatePicker, { DateObject } from "react-multi-date-picker";
 import highlightWeekends from "react-multi-date-picker/plugins/highlight_weekends";
 import DatePanel from "react-multi-date-picker/plugins/date_panel";
 import i18n from "../i18n";
@@ -102,7 +102,6 @@ const CareList = () => {
     "OUTDATED",
     "CONFIRMED",
   ];
-  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
 
   const availableFilters = [
     "animalTypes",
@@ -121,10 +120,6 @@ const CareList = () => {
     "CareEnd",
     "CreatedTime",
   ];
-
-  const [hasFilterChanged, setHasFilterChanged] = useState<boolean>(false);
-
-  const [wasFilterSelected, setWasFilterSelected] = useState<boolean>(false);
 
   const [pagingParams, setPagingParams] = useState({
     page: 0,
@@ -158,16 +153,7 @@ const CareList = () => {
     }
   };
 
-  useEffect(() => {
-    if (wasFilterSelected === true) {
-      setHasFilterChanged(true);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedFilters, filters]);
-
   const handleChangeFilters = (changedFilters: HandleFiltersChangeProps[]) => {
-    console.log(changedFilters);
-    setWasFilterSelected(true);
     const newFilters = {
       animalTypes: filters.animalTypes,
       caretakerStatuses: filters.caretakerStatuses,
@@ -224,12 +210,10 @@ const CareList = () => {
           break;
       }
     });
-    console.log(newFilters);
     setFilters(newFilters);
   };
 
   const handleDeselectFilter = (filterNames: string[]) => {
-    setWasFilterSelected(true);
     const newFilters = {
       animalTypes: filters.animalTypes,
       caretakerStatuses: filters.caretakerStatuses,
@@ -309,11 +293,6 @@ const CareList = () => {
       time = "23:59:59.999";
     }
     const wrappedDate = new Date(date.toString());
-    console.log(
-      `${date.format("YYYY-MM-DD")} ${time} ${
-        wrappedDate.toTimeString().split(" GMT")[1].split(" (")[0]
-      }`
-    );
     return `${date.format("YYYY-MM-DD")} ${time} ${
       wrappedDate.toTimeString().split(" GMT")[1].split(" (")[0]
     }`;
