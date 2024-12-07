@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import testImg from "../../public/pet_buddy_logo.svg";
-import { Button, Card, Rate } from "antd";
+import { Button, Card, Rate, Select } from "antd";
 import "../scss/components/_commentContainer.scss";
 import RoundedLine from "./RoundedLine";
 import { Input } from "antd";
 import { StarFilled } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
+import { api } from "../api/api";
 
 interface Rating {
   clientEmail: string;
@@ -13,6 +14,7 @@ interface Rating {
   comment: string;
   isRating?: boolean;
   onSubmit?: (myRating: number, myComment: string) => void;
+  careId?: number;
 }
 
 const CommentContainer: React.FC<Rating> = ({
@@ -21,10 +23,27 @@ const CommentContainer: React.FC<Rating> = ({
   comment,
   isRating = false,
   onSubmit,
+  careId,
 }) => {
   const { t } = useTranslation();
   const [myRating, setMyRating] = useState<number>(0);
   const [myComment, setMyComment] = useState<string>("");
+
+  const rate = async () => {
+    if (careId !== null && careId !== undefined) {
+      return api.rateCaretaker(careId, myRating, myComment);
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (onSubmit !== null && onSubmit !== undefined) {
+      rate().then((data) => {
+        console.log("success");
+        onSubmit(myRating, myComment);
+      });
+    }
+  };
+
   return (
     <Card className="comment-container-main">
       <div className="comment-container-top">
@@ -36,7 +55,7 @@ const CommentContainer: React.FC<Rating> = ({
             </div>
           </div>
         )}
-        <div>{t("profilePage.setRating")}:</div>
+        {isRating && <div>{t("profilePage.setRating")}:</div>}
         <div className="comment-container-rating">
           <span>
             <StarFilled /> {`${isRating === true ? myRating : rating}/5`}
@@ -50,7 +69,7 @@ const CommentContainer: React.FC<Rating> = ({
         </div>
       </div>
       <RoundedLine width={"100%"} height={"2px"} backgroundColor="#E1F7FF" />
-      <div>{t("profilePage.writeAComment")}:</div>
+      {isRating && <div>{t("profilePage.writeAComment")}:</div>}
       <div className="comment-container-bottom">
         {isRating === false ? (
           <p>{comment}</p>
@@ -65,9 +84,7 @@ const CommentContainer: React.FC<Rating> = ({
           <Button
             type="primary"
             className="add-button"
-            onClick={() =>
-              isRating === true ? onSubmit!(myRating, myComment) : null
-            }
+            onClick={() => (isRating === true ? handleSubmit() : null)}
           >
             {t("profilePage.submit")}
           </Button>

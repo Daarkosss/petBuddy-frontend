@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { List, Button, Spin, Descriptions, Badge } from "antd";
+import { List, Button, Spin, Descriptions, Badge, Modal } from "antd";
 import { api } from "../api/api";
 import { useTranslation } from "react-i18next";
 import store from "../store/RootStore";
@@ -7,12 +7,15 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { Care } from "../models/Care";
 import UserInfoPill from "../components/UserInfoPill";
+import CommentContainer from "../components/CommentContainer";
 
 const CareList = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [cares, setCares] = useState<Care[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
+  const [careToRateIndex, setCareToRateIndex] = useState<number | null>(null);
   const [pagingParams, setPagingParams] = useState({
     page: 0,
     size: 10,
@@ -61,7 +64,23 @@ const CareList = () => {
 
   return (
     <div className="cares-list-container">
-      <Spin spinning={isLoading} fullscreen/>
+      <Modal
+        title={t("profilePage.rate")}
+        open={isOfferModalOpen}
+        onCancel={() => setIsOfferModalOpen(false)}
+        footer={null}
+        maskClosable={false}
+      >
+        <CommentContainer
+          clientEmail={store.user.profile?.email ?? ""}
+          rating={0}
+          comment={""}
+          isRating={true}
+          onSubmit={() => setIsOfferModalOpen(false)}
+          careId={careToRateIndex ?? undefined}
+        />
+      </Modal>
+      <Spin spinning={isLoading} fullscreen />
       <h1 className="cares-title">{t("care.yourCares")}</h1>
       {cares.length > 0 ? (
         <List
@@ -76,8 +95,11 @@ const CareList = () => {
             onChange: handlePageChange,
           }}
           renderItem={(care) => (
-            <Badge.Ribbon text={care.currentStatusText} color={care.careStatusColor}>
-              <List.Item 
+            <Badge.Ribbon
+              text={care.currentStatusText}
+              color={care.careStatusColor}
+            >
+              <List.Item
                 key={care.id}
                 className="item"
                 actions={[
@@ -87,16 +109,33 @@ const CareList = () => {
                     onClick={() => navigate(`/care/${care.id}`)}
                   >
                     {t("viewDetails")}
-                  </Button>
+                  </Button>,
+                  <Button
+                    className="view-details-button"
+                    type="primary"
+                    onClick={() => {
+                      setCareToRateIndex(care.id);
+                      setIsOfferModalOpen(true);
+                    }}
+                  >
+                    {t("profilePage.rate")}
+                  </Button>,
                 ]}
                 extra={
-                  <img className="animal-image" src={`/images/${care.animalType.toLowerCase()}-card.jpg`}/>
+                  <img
+                    className="animal-image"
+                    src={`/images/${care.animalType.toLowerCase()}-card.jpg`}
+                  />
                 }
               >
                 <List.Item.Meta
                   title={
                     <div className="pretty-wrapper">
-                      {t("care.fromTo", { from: care.careStart, to: care.careEnd, days: care.numberOfDays })}
+                      {t("care.fromTo", {
+                        from: care.careStart,
+                        to: care.careEnd,
+                        days: care.numberOfDays,
+                      })}
                     </div>
                   }
                   description={
@@ -112,7 +151,7 @@ const CareList = () => {
                         {care.totalPrice} zł
                       </Descriptions.Item>
                       <Descriptions.Item label={t("caretaker")}>
-                        <UserInfoPill user={care.caretaker} isLink={true} />          
+                        <UserInfoPill user={care.caretaker} isLink={true} />
                       </Descriptions.Item>
                       <Descriptions.Item label={t("client")}>
                         <UserInfoPill user={care.client} isLink={false} />

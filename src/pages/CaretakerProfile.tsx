@@ -346,6 +346,32 @@ const CaretakerProfile: React.FC = () => {
                   ) : (
                     <div>{t("profilePage.noRatingsToShow")}</div>
                   ))}
+                {[
+                  {
+                    client: {
+                      accountData: {
+                        email: "testowy@gmail.com",
+                        name: "Test",
+                        surname: "User",
+                        profilePicture: {
+                          blob: "",
+                          url: "",
+                        },
+                      },
+                    },
+                    caretakerEmail: "kuba.staniszewski.ks@gmail.com",
+                    rating: 3.5,
+                    comment: "Było super!",
+                  },
+                ].map((element, index) => (
+                  <div key={index}>
+                    <CommentContainer
+                      clientEmail={element.client.accountData.email}
+                      rating={element.rating}
+                      comment={element.comment}
+                    />
+                  </div>
+                ))}
               </div>
               {ratings !== null &&
                 ratings !== undefined &&
