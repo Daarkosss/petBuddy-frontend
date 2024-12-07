@@ -233,10 +233,10 @@ const CareList = () => {
 
   const renderCareFilters = () => {
     return availableFilters.map((filterName, index) => {
-      switch (true) {
-        case filterName === "CareStart" ||
-          filterName === "CareEnd" ||
-          filterName === "CreatedTime":
+      switch (filterName) {
+        case "CareStart":
+        case "CareEnd":
+        case "CreatedTime":
           return (
             <div className="calendar-wrapper">
               <h3>{t(`careSearch.${filterName}`)}</h3>
