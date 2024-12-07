@@ -764,7 +764,7 @@ class API {
     if (store.user.profile?.selected_profile) {
       this.authorizedFetch<void>(
         "POST",
-        "api/notifications/all-read",
+        "api/notifications/mark-read",
         undefined,
         {
           "Accept-Role": store.user.profile?.selected_profile,

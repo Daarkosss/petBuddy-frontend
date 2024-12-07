@@ -425,7 +425,9 @@
     "care_accepted": "{{ user }} accepted your care",
     "care_rejected": "{{ user }} rejected your care",
     "confirmation_needed": "Your care is waiting for confirmation of begin",
-    "newNotification": "You have a new notification"
+    "newNotification": "You have a new notification",
+    "unread": "Unread",
+    "read": "Read"
   },
 
   "termsAndConditions": "Terms and conditions",

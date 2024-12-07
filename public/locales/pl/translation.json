@@ -432,7 +432,9 @@
     "care_accepted": "{{ user }} zaakceptował/a Twoją opiekę",
     "care_rejected": "{{ user }} odrzucił/a Twoją opiekę",
     "confirmation_needed": "Twoja opieka dla {{ user }} oczekuje na potwierdzenie rozpoczęcia",
-    "newNotification": "Masz nowe powiadomienie"
+    "newNotification": "Masz nowe powiadomienie",
+    "unread": "Nieprzeczytane",
+    "read": "Przeczytane"
   },
 
   "termsAndConditions": "Polityka prywatności",
