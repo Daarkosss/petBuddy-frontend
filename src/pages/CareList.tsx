@@ -310,7 +310,7 @@ const CareList = () => {
               ))}
             </Select>
           );
-        case filterName === "animalTypes":
+        case "animalTypes":
           return (
             <Select
               key={`at${index}`}
