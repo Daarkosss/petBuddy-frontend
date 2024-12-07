@@ -368,7 +368,7 @@ const CareList = () => {
             </Tooltip>
           );
 
-        case filterName === "emails":
+        case "emails":
           return (
             <div key={`emd${index}`} className="care-list-emails">
               <Tooltip
