@@ -109,14 +109,14 @@ const CareList = () => {
 
   const [pagingParams, setPagingParams] = useState({
     page: 0,
-    size: 10,
+    size: 5,
     sortBy: "submittedAt",
     sortDirection: "DESC",
   });
 
   const [pagination, setPagination] = useState({
     current: 1,
-    pageSize: 10,
+    pageSize: 5,
     total: 0,
   });
 
