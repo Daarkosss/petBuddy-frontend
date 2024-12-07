@@ -19,7 +19,6 @@ import UserInfoPill from "../components/UserInfoPill";
 import { CareSearchFilters, CareStatus } from "../types/care.types";
 import DatePicker, { DateObject } from "react-multi-date-picker";
 import highlightWeekends from "react-multi-date-picker/plugins/highlight_weekends";
-import DatePanel from "react-multi-date-picker/plugins/date_panel";
 import i18n from "../i18n";
 import {
   calendar_en,
@@ -353,15 +352,9 @@ const CareList = () => {
                   }
                 }}
                 locale={i18n.language === "pl" ? calendar_pl : calendar_en}
-                style={{ maxWidth: 100 }}
                 range
                 plugins={[
                   highlightWeekends(),
-                  <DatePanel
-                    header={t("selectedDates")}
-                    style={{ maxWidth: 150 }}
-                    position="bottom"
-                  />,
                 ]}
                 render={(value, openCalendar) => (
                   <Tooltip
