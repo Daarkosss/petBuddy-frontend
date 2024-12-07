@@ -77,9 +77,15 @@ const CaretakerForm = () => {
     setNewOfferPhotos([]);
   };
 
-  const handleNewPhoto: UploadProps["onChange"] = ({ fileList }) => {
-    if (hasFilePhotoType(fileList[fileList.length - 1])) {
-      // Check last added photo
+  const handlePhotosChange: UploadProps["onChange"] = ({ fileList }) => {
+    // If photo was removed, just update photos
+    if (fileList.length < newOfferPhotos.length) {
+      setNewOfferPhotos(fileList);
+      return;
+    }
+
+    const lastFile = fileList[fileList.length - 1];
+    if (lastFile && hasFilePhotoType(fileList[fileList.length - 1])) {
       setNewOfferPhotos(fileList);
     } else {
       toast.error(t("error.wrongFileTypeForPhoto"));
@@ -174,182 +180,190 @@ const CaretakerForm = () => {
   };
 
   return (
-    <div className="caretaker-form-container">
-      <Spin size="large" spinning={isStarting}>
-        <Form form={form} layout="vertical" onFinish={handleSubmit} scrollToFirstError>
-          <Space direction="vertical" size="large" style={{ width: "100%" }}>
-            <Card title={t("address")}>
-              <div className="card-grid-row">
-                <Form.Item
-                  label={t("addressDetails.street")}
-                  name={["address", "street"]}
-                  rules={[
-                    { required: true, message: t("validation.required") },
-                  ]}
-                >
-                  <Input
-                    maxLength={150}
-                    placeholder={t("placeholder.street")}
-                  />
-                </Form.Item>
-                <Form.Item
-                  label={t("addressDetails.streetNumber")}
-                  name={["address", "streetNumber"]}
-                  rules={[
-                    { required: true, message: t("validation.required") },
-                  ]}
-                >
-                  <Input
-                    maxLength={10}
-                    placeholder={t("placeholder.streetNumber")}
-                  />
-                </Form.Item>
-                <Form.Item
-                  label={t("addressDetails.apartmentNumber")}
-                  name={["address", "apartmentNumber"]}
-                >
-                  <Input
-                    maxLength={10}
-                    placeholder={t("placeholder.apartmentNumber")}
-                  />
-                </Form.Item>
-              </div>
+    <div className="caretaker-form-wrapper">
+      <h1>{t("caretakerForm")}</h1>
+      <div className="caretaker-form-container">
+        <Spin size="large" spinning={isStarting}>
+          <Form
+            form={form}
+            layout="vertical"
+            onFinish={handleSubmit}
+            scrollToFirstError
+          >
+            <Space direction="vertical" size="large" style={{ width: "100%" }}>
+              <Card title={t("address")}>
+                <div className="card-grid">
+                  <Form.Item
+                    label={t("addressDetails.street")}
+                    name={["address", "street"]}
+                    rules={[
+                      { required: true, message: t("validation.required") },
+                    ]}
+                  >
+                    <Input
+                      maxLength={150}
+                      placeholder={t("placeholder.street")}
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    label={t("addressDetails.streetNumber")}
+                    name={["address", "streetNumber"]}
+                    rules={[
+                      { required: true, message: t("validation.required") },
+                    ]}
+                  >
+                    <Input
+                      maxLength={10}
+                      placeholder={t("placeholder.streetNumber")}
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    label={t("addressDetails.apartmentNumber")}
+                    name={["address", "apartmentNumber"]}
+                  >
+                    <Input
+                      maxLength={10}
+                      placeholder={t("placeholder.apartmentNumber")}
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    label={t("addressDetails.zipCode")}
+                    name={["address", "zipCode"]}
+                    rules={[
+                      { required: true, message: t("validation.required") },
+                      {
+                        pattern: /^[0-9]{2}-[0-9]{3}$/,
+                        message: t("validation.zipCodeFormat"),
+                      },
+                    ]}
+                  >
+                    <Input
+                      maxLength={6}
+                      onKeyDown={handleZipCodeKeyDown}
+                      placeholder={t("placeholder.zipCode")}
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    label={t("addressDetails.city")}
+                    name={["address", "city"]}
+                    rules={[
+                      { required: true, message: t("validation.required") },
+                    ]}
+                  >
+                    <Input maxLength={50} placeholder={t("placeholder.city")} />
+                  </Form.Item>
+                  <Form.Item
+                    label={t("addressDetails.voivodeship")}
+                    name={["address", "voivodeship"]}
+                    rules={[
+                      { required: true, message: t("validation.required") },
+                    ]}
+                  >
+                    <Select placeholder={t("placeholder.voivodeship")}>
+                      {renderSelectOptions(Voivodeship.voivodeshipMap)}
+                    </Select>
+                  </Form.Item>
+                </div>
+              </Card>
 
-              <div className="card-grid-row">
+              <Card title={t("personalData.contactDetails")}>
                 <Form.Item
-                  label={t("addressDetails.zipCode")}
-                  name={["address", "zipCode"]}
+                  label={t("personalData.phoneNumber")}
+                  name="phoneNumber"
                   rules={[
                     { required: true, message: t("validation.required") },
                     {
-                      pattern: /^[0-9]{2}-[0-9]{3}$/,
-                      message: t("validation.zipCodeFormat"),
+                      pattern: /^([0-9]){9,14}$/,
+                      message: t("validation.phoneNumberFormat"),
                     },
                   ]}
+                  style={{ width: "200px" }}
                 >
                   <Input
-                    maxLength={6}
-                    onKeyDown={handleZipCodeKeyDown}
-                    placeholder={t("placeholder.zipCode")}
+                    maxLength={14}
+                    placeholder={t("placeholder.phoneNumber")}
+                    onKeyDown={handleKeyDownForNumeric}
+                    addonBefore="+48"
                   />
                 </Form.Item>
-                <Form.Item
-                  label={t("addressDetails.city")}
-                  name={["address", "city"]}
-                  rules={[
-                    { required: true, message: t("validation.required") },
-                  ]}
-                >
-                  <Input maxLength={50} placeholder={t("placeholder.city")} />
-                </Form.Item>
-                <Form.Item
-                  label={t("addressDetails.voivodeship")}
-                  name={["address", "voivodeship"]}
-                  rules={[
-                    { required: true, message: t("validation.required") },
-                  ]}
-                >
-                  <Select placeholder={t("placeholder.voivodeship")}>
-                    {renderSelectOptions(Voivodeship.voivodeshipMap)}
-                  </Select>
-                </Form.Item>
-              </div>
-            </Card>
+              </Card>
 
-            <Card title={t("personalData.contactDetails")}>
-              <Form.Item
-                label={t("personalData.phoneNumber")}
-                name="phoneNumber"
-                rules={[
-                  { required: true, message: t("validation.required") },
-                  {
-                    pattern: /^([0-9]){9,14}$/,
-                    message: t("validation.phoneNumberFormat"),
-                  },
-                ]}
-                style={{ width: "200px" }}
-              >
-                <Input
-                  maxLength={14}
-                  placeholder={t("placeholder.phoneNumber")}
-                  onKeyDown={handleKeyDownForNumeric}
-                  addonBefore="+48"
-                />
-              </Form.Item>
-            </Card>
-
-            <Card title={t("description")}>
-              <Form.Item name="description">
-                <Input.TextArea
-                  showCount
-                  autoSize={{ minRows: 2, maxRows: 4 }}
-                  maxLength={1500}
-                  placeholder={t("placeholder.description")}
-                />
-              </Form.Item>
-            </Card>
-
-            <Card title={t("offerPhotos")}>
-              <Skeleton loading={isPhotosLoading} paragraph={{ rows: 2 }}>
-                <Form.Item
-                  name="offerPhotos"
-                  label={t("currentPhotos")}
-                  hidden={currentOfferPhotos.length === 0}
-                >
-                  <Upload
-                    listType="picture-card"
-                    fileList={currentOfferPhotos.map((photo) => photo.file)}
-                    onRemove={handleRemoveCurrentPhoto}
-                    onPreview={handleFilePreview}
+              <Card title={t("description")}>
+                <Form.Item name="description">
+                  <Input.TextArea
+                    showCount
+                    autoSize={{ minRows: 2, maxRows: 4 }}
+                    maxLength={1500}
+                    placeholder={t("placeholder.description")}
                   />
                 </Form.Item>
-              </Skeleton>
-              <Form.Item
-                name="newOfferPhotos"
-                label={t("newPhotos")}
-                hidden={currentOfferPhotos.length >= PHOTOS_LIMIT}
-              >
-                <ImgCrop
-                  beforeCrop={hasFilePhotoType}
-                  rotationSlider
-                  modalTitle={t("imageCropperTitle")}
-                  modalOk={t("apply")}
-                  modalCancel={t("cancel")}
-                >
-                  <Upload
-                    customRequest={dummyRequest}
-                    listType="picture-card"
-                    fileList={newOfferPhotos}
-                    onChange={handleNewPhoto}
-                    onPreview={handleFilePreview}
-                    accept="image/*"
+              </Card>
+
+              <Card title={t("caretakerPhotos")}>
+                <Skeleton loading={isPhotosLoading} paragraph={{ rows: 2 }}>
+                  <Form.Item
+                    name="offerPhotos"
+                    label={t("currentPhotos")}
+                    hidden={currentOfferPhotos.length === 0}
                   >
-                    {currentOfferPhotos.length + newOfferPhotos.length <
-                      PHOTOS_LIMIT && `+ ${t("upload")}`}
-                  </Upload>
-                </ImgCrop>
-              </Form.Item>
-              {currentOfferPhotos.length + newOfferPhotos.length >=
-                PHOTOS_LIMIT && (
-                <Alert
-                  type="warning"
-                  showIcon
-                  message={t("photosLimitMessage")}
-                  description={t("photosLimitDescription")}
-                />
-              )}
-            </Card>
-            <Button
-              type="primary"
-              htmlType="submit"
-              className="submit-button"
-              loading={isLoading}
-            >
-              {t("save")}
-            </Button>
-          </Space>
-        </Form>
-      </Spin>
+                    <Upload
+                      listType="picture-card"
+                      fileList={currentOfferPhotos.map((photo) => photo.file)}
+                      onRemove={handleRemoveCurrentPhoto}
+                      onPreview={handleFilePreview}
+                    />
+                  </Form.Item>
+                </Skeleton>
+                <Form.Item
+                  name="newOfferPhotos"
+                  label={t("newPhotos")}
+                  hidden={currentOfferPhotos.length >= PHOTOS_LIMIT}
+                >
+                  <ImgCrop
+                    beforeCrop={hasFilePhotoType}
+                    rotationSlider
+                    modalTitle={t("imageCropperTitle")}
+                    modalOk={t("apply")}
+                    modalCancel={t("cancel")}
+                  >
+                    <Upload
+                      customRequest={dummyRequest}
+                      listType="picture-card"
+                      fileList={newOfferPhotos}
+                      onChange={handlePhotosChange}
+                      onPreview={handleFilePreview}
+                      accept="image/*"
+                    >
+                      {currentOfferPhotos.length + newOfferPhotos.length <
+                        PHOTOS_LIMIT && `+ ${t("upload")}`}
+                    </Upload>
+                  </ImgCrop>
+                </Form.Item>
+                {currentOfferPhotos.length + newOfferPhotos.length >=
+                  PHOTOS_LIMIT && (
+                  <Alert
+                    type="warning"
+                    showIcon
+                    message={t("photosLimitMessage")}
+                    description={t("photosLimitDescription")}
+                  />
+                )}
+              </Card>
+              <Space style={{ float: "right" }}>
+                <Button onClick={() => navigate(-1)}>{t("cancel")}</Button>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  className="submit-button"
+                  loading={isLoading}
+                >
+                  {t("save")}
+                </Button>
+              </Space>
+            </Space>
+          </Form>
+        </Spin>
+      </div>
     </div>
   );
 };

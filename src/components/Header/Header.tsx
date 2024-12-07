@@ -5,11 +5,23 @@ import { useNavigate } from "react-router-dom";
 import { Menu, Button, Drawer } from "antd";
 import { Header } from "antd/es/layout/layout";
 import { MenuOutlined } from "@ant-design/icons";
-import store from "../store/RootStore";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
+import NotificationBadge from "./NotificationBadge";
+import ChatBadge from "./ChatBadge";
+import store from "../../store/RootStore";
 
-const PageHeader = observer(() => {
+interface PageHeaderProperties {
+  handleOpenChat: (
+    recipientEmail: string,
+    profilePicture: string | undefined,
+    name: string,
+    surname: string,
+    profile: string
+  ) => void;
+}
+
+const PageHeader = observer<PageHeaderProperties>(({ handleOpenChat }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { keycloak } = useKeycloak();
@@ -44,9 +56,9 @@ const PageHeader = observer(() => {
     },
     ...(keycloak.authenticated ? authenticatedMenuItems : []),
     {
-      key: "aboutUs",
-      label: t("aboutUs"),
-      onClick: () => {},
+      key: "termsAndConditions",
+      label: t("termsAndConditions"),
+      onClick: () => navigate("/terms-and-conditions"),
     },
   ];
 
@@ -82,7 +94,7 @@ const PageHeader = observer(() => {
       </div>
 
       <div className="logo" onClick={() => navigate("/")}>
-        <img src="/pet_buddy_logo.svg" alt="Logo" />
+        <img src="/images/pet-buddy-logo.svg" alt="Logo" />
       </div>
 
       <div className="menu-desktop">
@@ -95,6 +107,14 @@ const PageHeader = observer(() => {
       </div>
 
       <div className="right-corner">
+        {keycloak.authenticated && (
+          <>
+            {store.user.profile?.selected_profile !== null && (
+              <ChatBadge handleOpenChat={handleOpenChat} />
+            )}
+            <NotificationBadge />
+          </>
+        )}
         <LanguageSwitcher />
         {keycloak.authenticated ? (
           <Button

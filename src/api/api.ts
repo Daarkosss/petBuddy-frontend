@@ -1,5 +1,6 @@
 import { toast } from "react-toastify";
 import store from "../store/RootStore";
+import NotificationWebSocket from "./NotificationWebSocket";
 import {
   CaretakerBasicsResponse,
   CaretakerSearchFilters,
@@ -22,9 +23,28 @@ import {
   Rating,
   CaretakerRatingDTO,
 } from "../types";
-import { CareDTO, CareReservation, CareReservationDTO, GetCaresDTO } from "../types/care.types";
-import { AnimalAttributes, AnimalConfigurationsDTO } from "../types/animal.types";
+import {
+  CareDTO,
+  CareReservation,
+  CareReservationDTO,
+  GetCaresDTO,
+} from "../types/care.types";
+import {
+  AnimalAttributes,
+  AnimalConfigurationsDTO,
+} from "../types/animal.types";
 import { UploadFile } from "antd";
+import {
+  Notification,
+  NotificationDTO,
+  NumberOfUnreadChats,
+} from "../types/notification.types";
+import {
+  ChatMessage,
+  ChatMessagesResponse,
+  ChatRoom,
+  ChatsResponse,
+} from "../types/chat.types";
 
 const backendHost =
   import.meta.env.VITE_BACKEND_HOST || window.location.hostname;
@@ -34,6 +54,8 @@ export const PATH_PREFIX = `http://${backendHost}:${backendPort}/`;
 type Method = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
 class API {
+  notificationWebSocket = new NotificationWebSocket();
+
   constructor() {
     this.getAnimalsConfigurations().then((animalConfigurations) => {
       store.animal.allAnimalConfigurations = animalConfigurations;
@@ -44,7 +66,8 @@ class API {
     method: Method,
     path: string,
     body?: unknown,
-    headers: HeadersInit = {}
+    headers: HeadersInit = {},
+    showToast?: boolean
   ): Promise<T> {
     const options = {
       method,
@@ -61,8 +84,12 @@ class API {
     const data = await response.json();
 
     if (!response.ok) {
-      toast.error(data.message || "Wrong server response!");
-      throw new Error(data.message || "Wrong server response!");
+      if (showToast !== false)
+        toast.error(data.message || "Wrong server response!");
+      throw new Error(
+        `${data.message}. Status code: ${response.status}` ||
+          "Wrong server response!"
+      );
     } else {
       return data;
     }
@@ -72,15 +99,23 @@ class API {
     method: Method,
     path: string,
     body?: unknown,
-    headers?: HeadersInit
+    headers?: HeadersInit,
+    showToast?: boolean
   ): Promise<T> {
     if (store.user.jwtToken) {
-      return this.fetch<T>(method, path, body, {
-        ...headers,
-        Authorization: `Bearer ${store.user.jwtToken}`,
-      });
+      return this.fetch<T>(
+        method,
+        path,
+        body,
+        {
+          ...headers,
+          Authorization: `Bearer ${store.user.jwtToken}`,
+          ...headers,
+        },
+        false
+      );
     } else {
-      toast.error("No user token available");
+      if (showToast !== false) toast.error("No user token available");
       return Promise.reject(new Error("No user token available"));
     }
   }
@@ -119,6 +154,86 @@ class API {
       return response;
     } catch (error: unknown) {
       return;
+    }
+  }
+
+  async getChatRoomWithGivenUser(
+    participantEmail: string,
+    acceptTimezone: string | null
+  ): Promise<ChatRoom> {
+    try {
+      const headers: HeadersInit = {
+        "Accept-Role": store.user.profile!.selected_profile!,
+      };
+      if (acceptTimezone) {
+        headers["Accept-Timezone"] = acceptTimezone;
+      }
+      const response = await this.authorizedFetch<ChatRoom>(
+        "GET",
+        `api/chat/${participantEmail}`,
+        null,
+        headers,
+        false
+      );
+      return response;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new Error(`Failed to find chat: ${error.message}`);
+      }
+      throw new Error(
+        "An unknown error occurred while fetching caretaker profile"
+      );
+    }
+  }
+
+  async initializeChatRoom(
+    messageReceiverEmail: string,
+    content: string,
+    acceptTimezone: string | null
+  ): Promise<ChatMessage> {
+    const headers: HeadersInit = {
+      "Accept-Role": store.user.profile!.selected_profile!,
+    };
+    if (acceptTimezone) {
+      headers["Accept-Timezone"] = acceptTimezone;
+    }
+    return this.authorizedFetch<ChatMessage>(
+      "POST",
+      `api/chat/${messageReceiverEmail}`,
+      {
+        content: content,
+      },
+      headers
+    );
+  }
+
+  async getMessagesFromSpecifiedChatRoom(
+    chatId: number,
+    page: string | null,
+    size: string | null,
+    acceptTimezone: string | null
+  ): Promise<ChatMessagesResponse> {
+    try {
+      const headers: HeadersInit = {
+        "Accept-Role": store.user.profile!.selected_profile!,
+      };
+      if (acceptTimezone) {
+        headers["Accept-Timezone"] = acceptTimezone;
+      }
+      const response = await this.authorizedFetch<ChatMessagesResponse>(
+        "GET",
+        `api/chat/${chatId}/messages?page=${page}&size=${size}`,
+        null,
+        headers
+      );
+      return response;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new Error(`Failed to find chat: ${error.message}`);
+      }
+      throw new Error(
+        "An unknown error occurred while fetching caretaker profile"
+      );
     }
   }
 
@@ -518,8 +633,11 @@ class API {
   async getAnimalsConfigurations(): Promise<AnimalConfigurationsDTO> {
     return this.fetch<AnimalConfigurationsDTO>("GET", "api/animal/complex");
   }
-  
-  async makeCareReservation(caretakerEmail: string, careReservation: CareReservation): Promise<CareDTO | undefined> {
+
+  async makeCareReservation(
+    caretakerEmail: string,
+    careReservation: CareReservation
+  ): Promise<CareDTO | undefined> {
     if (store.user.profile?.selected_profile === "CLIENT") {
       const [dateFrom, dateTo] = careReservation.dateRange;
       const body: CareReservationDTO = {
@@ -534,14 +652,14 @@ class API {
         description: careReservation.description,
         dailyPrice: careReservation.dailyPrice,
         careStart: dateFrom?.toString() || "",
-        careEnd: dateTo?.toString() || dateFrom?.toString() || ""
+        careEnd: dateTo?.toString() || dateFrom?.toString() || "",
       };
 
       return this.authorizedFetch<CareDTO>(
         "POST",
         `api/care/${caretakerEmail}`,
         body,
-        { "Accept-Role": "CLIENT"}
+        { "Accept-Role": "CLIENT" }
       );
     }
   }
@@ -559,7 +677,7 @@ class API {
       if (pagingParams.sortDirection) {
         queryParams.append("sortDirection", pagingParams.sortDirection);
       }
-  
+
       const queryString = queryParams.toString();
       return this.authorizedFetch<GetCaresDTO>(
         "GET",
@@ -572,10 +690,7 @@ class API {
 
   async getCare(careId: number): Promise<CareDTO | undefined> {
     if (store.user.profile?.selected_profile) {
-      return this.authorizedFetch<CareDTO>(
-        "GET",
-        `api/care/${careId}`,
-      );
+      return this.authorizedFetch<CareDTO>("GET", `api/care/${careId}`);
     }
   }
 
@@ -596,18 +711,132 @@ class API {
         "POST",
         `api/care/${careId}/reject`,
         undefined,
-        { "Accept-Role": store.user.profile?.selected_profile}
+        { "Accept-Role": store.user.profile?.selected_profile }
       );
     }
   }
 
-  async updateCarePrice(careId: number, dailyPrice: number): Promise<CareDTO | undefined> {
+  async updateCarePrice(
+    careId: number,
+    dailyPrice: number
+  ): Promise<CareDTO | undefined> {
     if (store.user.profile?.selected_profile === "CARETAKER") {
       return this.authorizedFetch<CareDTO>(
         "PATCH",
         `api/care/${careId}`,
-        {dailyPrice},
+        { dailyPrice },
         { "Accept-Role": "CARETAKER" }
+      );
+    }
+  }
+
+  async confirmBeginOfCare(careId: number): Promise<CareDTO | undefined> {
+    if (store.user.profile?.selected_profile === "CARETAKER") {
+      return this.authorizedFetch<CareDTO>(
+        "POST",
+        `api/care/${careId}/confirm`,
+        undefined,
+        { "Accept-Role": store.user.profile?.selected_profile }
+      );
+    }
+  }
+
+  async getNotifications(): Promise<NotificationDTO | undefined> {
+    if (store.user.profile?.selected_profile) {
+      const queryParams = new URLSearchParams({
+        page: "0",
+        size: "1000000", // To fetch all notifications
+        sortBy: "createdAt",
+        sortDirection: "DESC",
+      });
+
+      return this.authorizedFetch<NotificationDTO>(
+        "GET",
+        `api/notifications?${queryParams}`,
+        undefined,
+        {
+          "Accept-Role": store.user.profile?.selected_profile,
+          "Accept-Timezone": Intl.DateTimeFormat().resolvedOptions().timeZone,
+        }
+      );
+    }
+  }
+
+  async markNotificationAsRead(
+    notificationId: number
+  ): Promise<Notification | undefined> {
+    if (store.user.profile?.selected_profile) {
+      return this.authorizedFetch<Notification>(
+        "PATCH",
+        `api/notifications/${notificationId}`,
+        undefined,
+        {
+          "Accept-Role": store.user.profile?.selected_profile,
+          "Accept-Timezone": Intl.DateTimeFormat().resolvedOptions().timeZone,
+        }
+      );
+    }
+  }
+
+  async markAllNotificationsAsRead(): Promise<void> {
+    if (store.user.profile?.selected_profile) {
+      this.authorizedFetch<void>(
+        "POST",
+        "api/notifications/all-read",
+        undefined,
+        {
+          "Accept-Role": store.user.profile?.selected_profile,
+          "Accept-Timezone": Intl.DateTimeFormat().resolvedOptions().timeZone,
+        }
+      );
+    }
+  }
+
+  async connectNotificationWebSocket(): Promise<void> {
+    this.notificationWebSocket.initWebsocketConnection();
+  }
+
+  async getNumberOfUnreadChats(): Promise<number | undefined> {
+    if (store.user.profile?.selected_profile) {
+      const data = await this.authorizedFetch<NumberOfUnreadChats>(
+        "GET",
+        "api/chat/unread/count"
+      );
+      if (store.user.profile.selected_profile === "CLIENT") {
+        return data.unseenChatsAsClient;
+      } else {
+        return data.unseenChatsAsCaretaker;
+      }
+    }
+  }
+
+  async getUserChats(
+    pagingParams: PagingParams,
+    acceptTimezone: string | null,
+    chatterDataLike: string | null
+  ): Promise<ChatsResponse | undefined> {
+    if (store.user.profile?.selected_profile) {
+      const queryParams = new URLSearchParams({
+        page: pagingParams.page.toString(),
+        size: pagingParams.size.toString(),
+      });
+
+      if (chatterDataLike !== null) {
+        queryParams.append("chatterDataLike", chatterDataLike);
+      }
+      const headers: HeadersInit = {
+        "Accept-Role": store.user.profile!.selected_profile,
+      };
+
+      if (acceptTimezone) {
+        headers["Accept-Timezone"] = acceptTimezone;
+      }
+
+      return await this.authorizedFetch<ChatsResponse>(
+        "GET",
+        `api/chat?${queryParams}`,
+        undefined,
+        headers
       );
     }
   }
@@ -625,14 +854,18 @@ class API {
     };
   };
 
-  convertAvailabilityRangesToValues = (availabilities: AvailabilityRanges): AvailabilityValues => {
+  convertAvailabilityRangesToValues = (
+    availabilities: AvailabilityRanges
+  ): AvailabilityValues => {
     return availabilities.map((availability) => [
       availability.availableFrom,
       availability.availableTo || availability.availableFrom,
     ]);
-  }
-  
-  convertValuesToAvailabilityRanges = (values: AvailabilityValues): AvailabilityRanges => {
+  };
+
+  convertValuesToAvailabilityRanges = (
+    values: AvailabilityValues
+  ): AvailabilityRanges => {
     return values.map(([from, to]) => ({
       availableFrom: from?.toString() || "",
       availableTo: to?.toString() || from?.toString() || "",

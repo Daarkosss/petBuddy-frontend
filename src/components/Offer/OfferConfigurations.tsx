@@ -1,4 +1,4 @@
-import React, { ChangeEvent, KeyboardEvent, useState } from "react";
+import React, { useState } from "react";
 import {
   Button,
   Table,
@@ -8,6 +8,7 @@ import {
   Popconfirm,
   Form,
   TableColumnsType,
+  Tooltip,
 } from "antd";
 import {
   AvailabilityValues,
@@ -22,6 +23,7 @@ import { api } from "../../api/api";
 import store from "../../store/RootStore";
 import { ColumnType } from "antd/es/table";
 import { useNavigate, useParams } from "react-router-dom";
+import NumericFormItem from "../NumericFormItem";
 
 type ConfigurationsProps = {
   offerId: number;
@@ -165,28 +167,19 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
     setEditingKey(undefined);
   };
 
-  const handlePriceKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    const value = e.key;
-    const regex = /^\d/;
-
-    const allowedKeys = ["Backspace", "Delete", ","];
-    if (!regex.test(value) && !allowedKeys.includes(e.key)) {
-      e.preventDefault();
-    }
-  };
-
-  const handlePriceChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const regex = /^\d{0,5}(\.\d{0,2})?$/;
-    const value = e.target.value;
-
-    if (!regex.test(value)) {
-      form.setFieldsValue({ dailyPrice: value.slice(0, -1) });
+  const getTooltipText = () => {
+    if (availabilities.length === 0) {
+      return t("noAvailability");
+    } else if (store.user.profile?.selected_profile !== "CLIENT") {
+      return t("needToLoginAsClient");
+    } else {
+      return undefined;
     }
   };
 
   const selectedOptionsColumns: ColumnType<OfferConfigurationWithOptionalId>[] =
     store.animal.getAnimalAttributeKeys(animalType).map((attributeKey) => ({
-      title: t(attributeKey.toLowerCase()),
+      title: t(`${attributeKey}.title`),
       dataIndex: ["selectedOptions", attributeKey],
       onCell: () => ({
         style: { width: 150 },
@@ -206,12 +199,14 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
                 .getAttributeValues(animalType, attributeKey)
                 .map((value) => ({
                   value,
-                  label: t(value.toLowerCase()),
+                  label: t(`${attributeKey}.${value}`),
                 }))}
             />
           </Form.Item>
         ) : values ? (
-          values.map((value) => t(value.toLowerCase())).join(", ")
+          values.map((value) => <span key={`${attributeKey}.${value}`}>
+            {t(`${attributeKey}.${value}`)}<br/>
+          </span>)
         ) : (
           ""
         );
@@ -250,17 +245,7 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
       render: (_: number, record: OfferConfigurationWithOptionalId) => {
         const editable = isEditing(record);
         return editable ? (
-          <Form.Item
-            name="dailyPrice"
-            rules={[{ required: true, message: t("validation.required") }]}
-          >
-            <Input
-              type="number"
-              min={0}
-              onKeyDown={handlePriceKeyDown}
-              onChange={handlePriceChange}
-            />
-          </Form.Item>
+          <NumericFormItem name="dailyPrice" width={120}/>
         ) : (
           record.dailyPrice
         );
@@ -272,7 +257,6 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
       onCell: () => ({
         style: { minWidth: 150, maxWidth: 200 },
       }),
-      hidden: !canBeEdited && store.user.profile?.selected_profile !== "CLIENT",
       render: (record: OfferConfigurationWithOptionalId) => {
         const editable = isEditing(record);
         return canBeEdited ? (
@@ -320,23 +304,26 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
             </Space>
           )
         ) : (
-          <Button
-            type="primary"
-            onClick={() => navigate(
-              `/care/reservation/${caretakerEmail}`,
-              { 
-                state: { 
-                  animalType,
-                  dailyPrice: record.dailyPrice,
-                  animalAttributes: record.selectedOptions,
-                  availabilities: availabilities
-                } 
-              }
-            )}
-            loading={isLoading}
-          >
-            {t("sendRequest")}
-          </Button>
+          <Tooltip title={getTooltipText()}>
+            <Button
+              type="primary"
+              onClick={() => navigate(
+                `/care/reservation/${caretakerEmail}`,
+                { 
+                  state: { 
+                    animalType,
+                    dailyPrice: record.dailyPrice,
+                    animalAttributes: record.selectedOptions,
+                    availabilities: availabilities
+                  } 
+                }
+              )}
+              loading={isLoading}
+              disabled={availabilities.length === 0 || store.user.profile?.selected_profile !== "CLIENT"}
+            >
+              {t("sendRequest")}
+            </Button>
+          </Tooltip>
         );
       },
     },

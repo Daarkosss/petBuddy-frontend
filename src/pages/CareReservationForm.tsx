@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
-import { Form, Input, Button, Select, Steps, Descriptions, Statistic, Card, Row, Col } from "antd";
+import { Form, Input, Button, Select, Steps, Descriptions, Row, Col, Spin, Tooltip } from "antd";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
 import { api } from "../api/api";
 import { AccountDataDTO, AnimalAttributes, AvailabilityValues } from "../types";
 import RestrictedDatePicker from "../components/Calendar/RestrictedDatePicker";
-import { calculateNumberOfDays } from "../models/Care";
+import { calculateNumberOfDays, formatPrice } from "../models/Care";
 import UserInfoPill from "../components/UserInfoPill";
+import StatisticCard from "../components/StatisticCard";
+import NumericFormItem from "../components/NumericFormItem";
 
 const CareReservationForm = () => {
   const { t } = useTranslation();
@@ -16,6 +17,7 @@ const CareReservationForm = () => {
   const { caretakerEmail } = useParams();
   const location = useLocation();
   const [form] = Form.useForm();
+  const [isStarting, setIsStarting] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [careDateRange, setCareDateRange] = useState<string[]>([]);
@@ -32,27 +34,40 @@ const CareReservationForm = () => {
   );
 
   useEffect(() => {
-    if (!location.state) {
-      navigate(-1);
-    }
-
-    setPossibleAttributes(location.state?.animalAttributes);
-    form.setFieldsValue({
-      dailyPrice: location.state?.dailyPrice,
-    });
-
-    api.getCaretakerDetails(caretakerEmail!).then((caretakerInfo) =>
-      setCaretakerInfo(caretakerInfo.accountData)
-    );
-
+    const fetchCaretakerDetails = async () => {
+      try {
+        const caretakerInfo = await api.getCaretakerDetails(caretakerEmail!);
+        setCaretakerInfo(caretakerInfo.accountData);
+  
+        if (!location.state) {
+          navigate(`/profile-caretaker/${caretakerEmail}`);
+          return;
+        }
+  
+        setPossibleAttributes(location.state.animalAttributes);
+        form.setFieldsValue({
+          dailyPrice: location.state.dailyPrice,
+        });
+      } catch (error) {
+        navigate("/caretaker/search");
+      } finally {
+        setIsStarting(false);
+      }
+    };
+    fetchCaretakerDetails();
+  
     const handleResize = () => {
       setWindowInnerWidth(window.innerWidth);
     };
     window.addEventListener("resize", handleResize);
-
+  
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+  
   const handleFinish = async () => {
     setIsLoading(true);
     try {
@@ -104,10 +119,25 @@ const CareReservationForm = () => {
 
   const calculatePriceDifference = () => {
     return Math.abs(calculateTotalPrice(location.state?.dailyPrice) - calculateTotalPrice(currentPrice));
-  }
+  };
 
   const isNewPriceLower = () => {
     return calculateTotalPrice(location.state?.dailyPrice) >= calculateTotalPrice(currentPrice);
+  };
+
+  const next = async () => {
+    const isFormValid = await form.validateFields();
+    if (isFormValid) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  const prev = () => {
+    setCurrentStep(currentStep - 1);
+  };
+
+  if (isStarting) {
+    return <Spin fullscreen />;
   }
 
   const steps = [
@@ -120,7 +150,7 @@ const CareReservationForm = () => {
             <Form.Item
               key={attributeKey}
               name={["selectedOptions", attributeKey]}
-              label={t(attributeKey.toLowerCase())}
+              label={t(`${attributeKey}.title`)}
               rules={[{ required: true, message: t("validation.required") }]}
               style={{ maxWidth: 200 }}
             >
@@ -128,7 +158,7 @@ const CareReservationForm = () => {
                 placeholder={t("placeholder.selectFromList")}
                 options={possibleAttributes[attributeKey].map((value) => ({
                   value,
-                  label: t(value.toLowerCase()),
+                  label: t(`${attributeKey}.${value}`),
                 }))}
               />
             </Form.Item>
@@ -175,45 +205,23 @@ const CareReservationForm = () => {
           </Row>
           <Row align="middle">
             <Col xs={24} sm={12} md={10} lg={10} xl={8}>
-              <Form.Item
-                name="dailyPrice"
-                label={t("dailyPrice")}
-                style={{ maxWidth: 185 }}
-                rules={[
-                  { required: true, message: t("validation.required") },
-                  { pattern: /^\d{0,5}(\.\d{0,2})?$/, message: t("validation.price") },
-                ]}
-              >
-                <Input
-                  className="price-input"
-                  type="number"
-                  min={0.01}
-                  max={99999.99}
-                  step={0.01}
-                  placeholder={t("placeholder.dailyPrice")}
-                  disabled={!isNegotiating}
-                />
-              </Form.Item>
+              <NumericFormItem name="dailyPrice" label={t("dailyPrice")} disabled={!isNegotiating} />
             </Col>
             <Col xs={24} sm={12} md={8} lg={8} xl={8}>
               <Descriptions>
-                <Descriptions.Item label={t("totalPrice")}>{calculateTotalPrice(currentPrice)}</Descriptions.Item>
+                <Descriptions.Item label={t("totalPrice")}>
+                  {formatPrice(calculateTotalPrice(currentPrice))}
+                </Descriptions.Item>
               </Descriptions>
             </Col>
             <Col xs={24} sm={4} md={8} lg={4} xl={4}>
               {isNegotiating && (
-                <Card style={{ width: "max-content" }} size="small">
-                  <Statistic
-                    title={isNewPriceLower() ? t("youWillSave") : t("youWillLose")}
-                    value={calculatePriceDifference()}
-                    precision={2}
-                    decimalSeparator=","
-                    groupSeparator="."
-                    valueStyle={{ color: isNewPriceLower() ? "green" : "red" }}
-                    prefix={isNewPriceLower() ? <ArrowUpOutlined/> : <ArrowDownOutlined/>}
-                    suffix="zł"
-                  />
-                </Card>
+                <StatisticCard
+                  titlePositive={t("youWillSave")}
+                  titleNegative={t("youWillLose")}
+                  value={calculatePriceDifference()}
+                  isPositive={isNewPriceLower()}
+                />
               )}
             </Col>
           </Row>
@@ -223,9 +231,16 @@ const CareReservationForm = () => {
                 {t("care.goBackToOriginalPrice")}
               </Button>
             ) : (
-              <Button type="primary" className="add-button" onClick={() => setIsNegotiating(true)}>
-                {t("care.negotiatePrice")}
-              </Button>
+              <Tooltip title={careDateRange.length === 0 && t("careReservation.chooseDateFirst")}>
+                <Button 
+                  type="primary"
+                  className={careDateRange.length > 0 ? "add-button" : ""}
+                  onClick={() => setIsNegotiating(true)}
+                  disabled={careDateRange.length === 0}
+                >
+                  {t("care.negotiatePrice")}
+                </Button>
+              </Tooltip>
             )}
           </Row>
         </>
@@ -236,17 +251,17 @@ const CareReservationForm = () => {
       description: t("careReservation.step3Description"),
       content: (
         <Descriptions bordered column={1} size="middle" layout={windowInnerWidth < 768 ? "vertical" : "horizontal"}>
-          <Descriptions.Item label={t("animalType")}>{t(animalType.toLowerCase())}</Descriptions.Item>
+          <Descriptions.Item label={t("animalType")}>{t(`animalTypes.${animalType}`)}</Descriptions.Item>
           <Descriptions.Item label={t("care.date")}>
             {careDateRange.join(" ~ ")} <b>({calculateNumberOfDaysOfCare()} dni)</b>
           </Descriptions.Item>
           <Descriptions.Item label={t("totalPrice")}>
-            {calculateTotalPrice(form.getFieldValue("dailyPrice"))} zł
+            {formatPrice(calculateTotalPrice(form.getFieldValue("dailyPrice")))}
           </Descriptions.Item>
           {Object.keys(possibleAttributes).map((key) => (
-            <Descriptions.Item key={key} label={t(key.toLowerCase())}>
+            <Descriptions.Item key={key} label={t(`${key}.title`)}>
               {form.getFieldValue(["selectedOptions", key]) && 
-                t(form.getFieldValue(["selectedOptions", key]).toLowerCase())
+                t(`${key}.${form.getFieldValue(["selectedOptions", key])}`)
               }
             </Descriptions.Item>
           ))}
@@ -262,17 +277,6 @@ const CareReservationForm = () => {
     },
   ];
 
-  const next = async () => {
-    const isFormValid = await form.validateFields();
-    if (isFormValid) {
-      setCurrentStep(currentStep + 1);
-    }
-  };
-
-  const prev = () => {
-    setCurrentStep(currentStep - 1);
-  };
-
   return (
     <div>
       <div className="care-reservation-title">
@@ -283,11 +287,11 @@ const CareReservationForm = () => {
           </h2>
         </div>
         <h3>
-          {t("careReservation.forAnimal", { animalType: t(animalType.toLowerCase())})}
+          {t("careReservation.forAnimal", { animalType: t(`animalTypes.${animalType}`)})}
         </h3>
       </div>
       <div className="care-reservation-container">
-        <img src={`/images/${animalType.toLowerCase()}-card.jpg`} alt="animal" />
+        <img src={`/images/animals/${animalType.toLowerCase()}.jpg`} alt="animal" />
         <div className="form-container">
           <Steps 
             current={currentStep}

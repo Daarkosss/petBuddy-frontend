@@ -1,0 +1,27 @@
+@use "../helpers/variables" as v;
+
+.terms-and-conditions {
+  width: 90%;
+  max-width: 1200px;
+  margin: 20px auto;
+  border-radius: 10px;
+  padding: 20px;
+  background-color: v.$white;
+
+  h1 {
+    margin-bottom: 20px;
+  }
+
+  h2 {
+    margin-top: 30px;
+    text-align: center;
+  }
+
+  li {
+    margin-bottom: 5px;
+  }
+
+  @media (max-width: 480px) {
+    width: 100%;
+  }
+}

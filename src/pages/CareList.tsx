@@ -96,8 +96,8 @@ const CareList = () => {
           }}
           renderItem={(care) => (
             <Badge.Ribbon
-              text={care.currentStatusText}
-              color={care.careStatusColor}
+              text={care.getCurrentStatusText(true)}
+              color={care.currentStatusColor}
             >
               <List.Item
                 key={care.id}
@@ -124,7 +124,7 @@ const CareList = () => {
                 extra={
                   <img
                     className="animal-image"
-                    src={`/images/${care.animalType.toLowerCase()}-card.jpg`}
+                    src={`/images/animals/${care.animalType.toLowerCase()}.jpg`}
                   />
                 }
               >
@@ -145,10 +145,10 @@ const CareList = () => {
                       size="small"
                     >
                       <Descriptions.Item label={t("animalType")}>
-                        {t(care.animalType.toLowerCase())}
+                        {t(`animalTypes.${care.animalType}`)}
                       </Descriptions.Item>
                       <Descriptions.Item label={t("totalPrice")}>
-                        {care.totalPrice} zł
+                        {care.totalPrice}
                       </Descriptions.Item>
                       <Descriptions.Item label={t("caretaker")}>
                         <UserInfoPill user={care.caretaker} isLink={true} />
@@ -157,7 +157,7 @@ const CareList = () => {
                         <UserInfoPill user={care.client} isLink={false} />
                       </Descriptions.Item>
                       <Descriptions.Item label={t("care.currentStatus")}>
-                        {care.currentStatusText}
+                        {care.getCurrentStatusText()}
                       </Descriptions.Item>
                     </Descriptions>
                   }

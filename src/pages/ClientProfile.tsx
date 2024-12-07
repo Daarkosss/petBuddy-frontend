@@ -10,10 +10,11 @@ import { UserProfiles } from "../types";
 import { PictureOutlined, UserOutlined } from "@ant-design/icons";
 import ImgCrop from "antd-img-crop";
 import { handleFilePreview, hasFilePhotoType } from "../functions/imageHandle";
+import { HandleSetOpenChat } from "../types/chat.types";
 import { CgEnter } from "react-icons/cg";
 import { toast } from "react-toastify";
 
-function ClientProfile() {
+const ClientProfile: React.FC<HandleSetOpenChat> = ({ handleSetOpenChat }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [profileData, setProfileData] = useState<UserProfiles>();
@@ -42,7 +43,7 @@ function ClientProfile() {
     } catch (e: unknown) {
       onError?.(e);
       if (e instanceof Error) {
-        console.log(`ERROR: ${e.message}`);
+        console.error(`ERROR: ${e.message}`);
       }
       toast.error(t("error.changeProfilePicture"));
     }
@@ -143,6 +144,15 @@ function ClientProfile() {
                           type="primary"
                           className="profile-action-button"
                           onClick={() => {
+                            handleSetOpenChat!(
+                              undefined,
+                              undefined,
+                              undefined,
+                              undefined,
+                              undefined,
+                              false,
+                              false
+                            );
                             store.user.setSelectedProfile("CARETAKER");
                             store.user.saveProfileToStorage(store.user.profile);
                             navigate(
@@ -176,6 +186,6 @@ function ClientProfile() {
       )}
     </div>
   );
-}
+};
 
 export default ClientProfile;

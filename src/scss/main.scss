@@ -4,6 +4,8 @@
 @use "components/modals";
 @use "components/pagination";
 @use "components/userInfoPill";
+@use "components/notification";
+@use "components/mapWithCaretakers";
 @use "pages/home";
 @use "pages/loginPage";
 @use "pages/caretakerForm";
@@ -14,4 +16,5 @@
 @use "pages/careReservation";
 @use "pages/careList";
 @use "pages/careDetails";
+@use "pages/termsAndConditions";
 @use "vendors/vendors";

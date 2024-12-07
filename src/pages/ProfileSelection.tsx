@@ -31,7 +31,7 @@ const ProfileSelection: React.FC<ProfileSelectionProps> = ({
           setHasCaretakerProfile(userProfiles.hasCaretakerProfile);
         }
       } catch (error) {
-        console.log("Failed to fetch user profiles data");
+        console.error("Failed to fetch user profiles data");
       } finally {
         setIsRequesting(false);
       }

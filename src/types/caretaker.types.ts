@@ -68,6 +68,8 @@ export type AddressDTO = {
   street: string;
   streetNumber: string;
   apartmentNumber: string;
+  latitude: number;
+  longitude: number;
 };
 
 export type VoivodeshipDTO =
@@ -89,17 +91,21 @@ export type VoivodeshipDTO =
   | "ZACHODNIOPOMORSKIE";
 
 export type CaretakerBasicsResponse = {
-  content: CaretakerBasicsDTO[];
-  pageable: PageableDTO;
-  totalElements: number;
-  totalPages: number;
-  size: number;
-  number: number;
-  sort: SortDTO[];
-  first: boolean;
-  last: boolean;
-  numberOfElements: number;
-  empty: boolean;
+  caretakers: {
+    content: CaretakerBasicsDTO[];
+    pageable: PageableDTO;
+    totalElements: number;
+    totalPages: number;
+    size: number;
+    number: number;
+    sort: SortDTO[];
+    first: boolean;
+    last: boolean;
+    numberOfElements: number;
+    empty: boolean;
+  };
+  cityLatitude: number;
+  cityLongitude: number;
 };
 
 export type CaretakerSearchFilters = {

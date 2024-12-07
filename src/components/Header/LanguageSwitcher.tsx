@@ -26,10 +26,12 @@ const LanguageSwitcher: React.FC = () => {
   return (
     <Dropdown
       menu={{items}}
-      className="language-switcher"
       trigger={["click"]}
+      className="language-switcher"
     >
-      <FaGlobe />
+      <div>
+        <FaGlobe fontSize={20}/>
+      </div>
     </Dropdown>
   );
 };

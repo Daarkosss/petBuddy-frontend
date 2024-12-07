@@ -15,6 +15,21 @@
   }
 }
 
+.send-message-button {
+  float: right;
+  background: v.$blue-medium;
+
+  &:hover,
+  &:focus {
+    background: v.$blue-light !important;
+  }
+
+  &.centered {
+    width: 100%;
+    grid-column: span 1;
+  }
+}
+
 .search-button {
   font-size: 16px;
   color: v.$white;

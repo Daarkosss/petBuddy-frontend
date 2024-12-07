@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Input, Button, Select } from "antd";
 import { OfferDTO } from "../../types";
 import { api } from "../../api/api";
@@ -33,6 +33,10 @@ const AddOfferForm: React.FC<OfferFormProps> = ({ currentAnimalTypes, onSuccess 
     }
   };
 
+  useEffect(() => {
+    form.setFieldValue(["animalAmenities"], []);
+  }, [form, animalType]);
+
   return (
     <Form form={form} onFinish={handleFinish}>
       <Form.Item
@@ -41,9 +45,9 @@ const AddOfferForm: React.FC<OfferFormProps> = ({ currentAnimalTypes, onSuccess 
         rules={[{ required: true, message: t("validation.required") }]}
       >
         <Select
-          placeholder={t("caretakerSearch.animalTypes")}
+          placeholder={t("animalTypes.title")}
           options={availableAnimalTypes.map(
-            (type) => ({ value: type, label: t(type.toLowerCase()) })
+            (type) => ({ value: type, label: t(`animalTypes.${type}`) })
           )}
         />
       </Form.Item>
