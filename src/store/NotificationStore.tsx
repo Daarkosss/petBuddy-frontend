@@ -69,9 +69,9 @@ class NotificationStore {
     }
   }
 
-  async markAllAsRead() {
+  markAllAsRead() {
     try {
-      await api.markAllNotificationsAsRead();
+      api.markAllNotificationsAsRead();
       this.all = this.all.map((notif) => ({ 
         ...notif, 
         read: true 
@@ -81,22 +81,19 @@ class NotificationStore {
     }
   }
 
-  async markCareNotificationsAsRead(careId: number) {
+  markCareNotificationsAsRead(careId: number) {
     const careNotificationIds = this.getCareNotifications(careId);
     try {
-      await Promise.all(
-        careNotificationIds.map(async (notifId) => {
-          try {
-            await api.markNotificationAsRead(notifId);
-          } catch (error) {
-            console.error(
-              `Failed to mark notification ${notifId} as read`,
-              error
-            );
-          }
-        })
-      );
-
+      careNotificationIds.map((notifId) => {
+        try {
+          api.markNotificationAsRead(notifId);
+        } catch (error) {
+          console.error(
+            `Failed to mark notification ${notifId} as read`,
+            error
+          );
+        }
+      });
       this.all = this.all.map((notif) => {
         if (careNotificationIds.includes(notif.notificationId)) {
           return { ...notif, read: true };
@@ -104,7 +101,6 @@ class NotificationStore {
           return notif;
         }
       });
-
     } catch (error) {
       throw new Error(
         "Something went wrong while marking notifications as read"
