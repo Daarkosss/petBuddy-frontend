@@ -109,7 +109,6 @@ class API {
         {
           ...headers,
           Authorization: `Bearer ${store.user.jwtToken}`,
-          ...headers, //TODO: delete this
         },
         false
       );
