@@ -274,8 +274,8 @@ const CareList = () => {
               />
             </div>
           );
-        case filterName === "caretakerStatuses" ||
-          filterName === "clientStatuses":
+        case "caretakerStatuses":
+        case "clientStatuses":
           return (
             <Select
               key={`cs${index}`}
