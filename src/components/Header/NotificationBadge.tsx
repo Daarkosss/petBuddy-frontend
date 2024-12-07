@@ -1,5 +1,5 @@
-import { Badge, Popover, List, Button } from "antd";
-import { BellOutlined } from "@ant-design/icons";
+import { Badge, Popover, List, Button, Avatar, Space } from "antd";
+import { BellOutlined, UserOutlined } from "@ant-design/icons";
 import { observer } from "mobx-react-lite";
 import { useTranslation } from "react-i18next";
 import store from "../../store/RootStore";
@@ -38,20 +38,31 @@ const NotificationBadge = observer(() => {
             dataSource={store.notification.unread}
             renderItem={(notification) => (
               <List.Item>
-                <div className="list-item">
-                  <Link
-                    to={`/care/${notification.objectId}`}
-                    style={{ textDecoration: "none" }}
-                  >
-                    {t(`notification.${notification.messageKey}`)}
-                  </Link>
-                  <div className="date-time">
-                    {new Date(notification.createdAt).toLocaleString(
-                      [],
-                      { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }
-                    )}
-                  </div>
-                </div>
+                  <Space align="start">
+                    <Avatar
+                      style={{ marginTop: "5px" }}
+                      size={40}
+                      icon={!notification.triggeredBy.profilePicture && <UserOutlined />}
+                      src={notification.triggeredBy.profilePicture && notification.triggeredBy.profilePicture.url} 
+                    />
+                    <div className="list-item">
+                      <Link
+                        to={`/care/${notification.objectId}`}
+                        style={{ textDecoration: "none" }}
+                      >
+                        {t(
+                           `notification.${notification.messageKey}`,
+                           { user: ` ${notification.triggeredBy.name} ${notification.triggeredBy.surname}` }
+                        )}
+                      </Link>
+                      <div className="date-time">
+                        {new Date(notification.createdAt).toLocaleString(
+                          [],
+                          { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }
+                        )}
+                      </div>
+                    </div>
+                  </Space>
               </List.Item>
             )}
           />

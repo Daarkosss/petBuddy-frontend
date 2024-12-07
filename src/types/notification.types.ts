@@ -1,4 +1,5 @@
 import { PageableDTO, SortDTO } from "./pagination.types";
+import { AccountDataDTO } from "./user.types";
 
 export type Notification = {
   createdAt: string;
@@ -8,6 +9,7 @@ export type Notification = {
   messageKey: string;
   args: string[];
   receiverProfile: "CLIENT" | "CARETAKER";
+  triggeredBy: AccountDataDTO;
   read: boolean;
   dtype: string;
 };
