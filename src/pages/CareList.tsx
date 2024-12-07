@@ -346,7 +346,8 @@ const CareList = () => {
             </Select>
           );
 
-        case filterName === "minDailyPrice" || filterName === "maxDailyPrice":
+        case "minDailyPrice":
+        case "maxDailyPrice":
           return (
             <Tooltip
               key={`dpT${index}`}
