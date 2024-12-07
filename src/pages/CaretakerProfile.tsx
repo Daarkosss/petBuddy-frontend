@@ -298,9 +298,7 @@ const CaretakerProfile: React.FC<HandleSetOpenChat> = ({
                         {t("profilePage.offers")}
                       </h1>
 
-                      {offers !== null &&
-                      offers !== undefined &&
-                      offers.length > 0 ? (
+                      {offers && offers.length > 0 ? (
                         offers.map((element, index) => (
                           <div
                             key={index}
