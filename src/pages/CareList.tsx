@@ -413,16 +413,13 @@ const CareList = () => {
           value={pagingParams.sortBy}
           defaultValue="submittedAt"
           options={[
-            "id",
             "submittedAt",
             "caretakerStatus",
             "clientStatus",
             "careStart",
             "careEnd",
-            "description",
             "dailyPrice",
             "animal_animalType",
-            "selectedOptions",
             "caretaker_email",
             "client_email",
           ].map((sortName) => ({
