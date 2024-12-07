@@ -488,14 +488,18 @@ const CareList = () => {
               <Tooltip
                 key="emT"
                 trigger={["focus"]}
-                title={t(`careSearch.${filterName}`)}
+                title={t(
+                  `careSearch.${filterName}${store.user.profile?.selected_profile}`
+                )}
               >
                 <Select
                   notFoundContent={t("noData")}
                   showSearch
                   allowClear
                   mode="multiple"
-                  placeholder={t(`careSearch.${filterName}`)}
+                  placeholder={t(
+                    `careSearch.${filterName}${store.user.profile?.selected_profile}`
+                  )}
                   filterOption={(searchedInput, option) =>
                     (option?.label ?? "")
                       .toLowerCase()
