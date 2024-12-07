@@ -1,4 +1,5 @@
 import { UploadFile } from "antd";
+import { PageableDTO, SortDTO } from "./pagination.types";
 
 export type UserProfiles = {
   accountData: AccountDataDTO;
@@ -16,9 +17,29 @@ export type AccountDataDTO = {
 export type Photo = {
   blob: string;
   url: string;
-}
+};
 
 export type UploadFileWithBlob = {
   file: UploadFile;
   blob: string;
-}
+};
+
+export type RelatedUsers = {
+  content: [
+    {
+      email: string;
+      name: string;
+      surname: string;
+    }
+  ];
+  pageable: PageableDTO;
+  totalElements: number;
+  totalPages: number;
+  size: number;
+  number: number;
+  sort: SortDTO[];
+  first: boolean;
+  last: boolean;
+  numberOfElements: number;
+  empty: boolean;
+};

@@ -20,6 +20,7 @@ import {
   AccountDataDTO,
   CaretakerRatingsResponse,
   AvailabilityValues,
+  RelatedUsers,
 } from "../types";
 import {
   CareDTO,
@@ -79,7 +80,6 @@ class API {
       body: body ? JSON.stringify(body) : undefined,
       credentials: "include",
     } as RequestInit;
-
     const response = await fetch(`${PATH_PREFIX}${path}`, options);
     const data = await response.json();
     if (!response.ok) {
@@ -109,7 +109,7 @@ class API {
         {
           ...headers,
           Authorization: `Bearer ${store.user.jwtToken}`,
-          ...headers,
+          ...headers, //TODO: delete this
         },
         false
       );
@@ -741,6 +741,23 @@ class API {
       return this.authorizedFetch<GetCaresDTO>(
         "GET",
         `api/care?${queryString}`,
+        undefined,
+        { "Accept-Role": store.user.profile?.selected_profile }
+      );
+    }
+  }
+
+  async getRelatedUsers(
+    pagingParams: PagingParams
+  ): Promise<RelatedUsers | undefined> {
+    if (store.user.profile?.selected_profile) {
+      const queryParams = new URLSearchParams({
+        page: pagingParams.page.toString(),
+        size: pagingParams.size.toString(),
+      });
+      return this.authorizedFetch<RelatedUsers>(
+        "GET",
+        `api/care/related-users?${queryParams}`,
         undefined,
         { "Accept-Role": store.user.profile?.selected_profile }
       );
