@@ -79,6 +79,10 @@ class API {
     } as RequestInit;
 
     const response = await fetch(`${PATH_PREFIX}${path}`, options);
+    if (response.headers.get("Content-Length") === "0") {
+      return {} as T;
+    }
+
     const data = await response.json();
 
     if (!response.ok) {
