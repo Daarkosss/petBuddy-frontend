@@ -402,7 +402,6 @@ const CareList = () => {
       }
     });
   };
-  //
 
   return (
     <div className="care-list-main-container">
