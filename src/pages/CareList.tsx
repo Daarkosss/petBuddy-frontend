@@ -340,17 +340,8 @@ const CareList = () => {
               <DatePicker
                 maxDate={filterName === "CreatedTime" ? new Date() : undefined}
                 key={filterName}
-                onChange={(dates) => {
-                  if (filterName === "CareStart") {
-                    onDateChange(dates, "minCareStart", "maxCareStart");
-                  } else {
-                    if (filterName === "CareEnd") {
-                      onDateChange(dates, "minCareEnd", "maxCareEnd");
-                    } else {
-                      onDateChange(dates, "minCreatedTime", "maxCreatedTime");
-                    }
-                  }
-                }}
+                onChange={(dates) => onDateChange(dates, `min${filterName}`, `max${filterName}`)}
+                value={[filters[`min${filterName}`] || "", filters[`max${filterName}`] || ""]}
                 locale={i18n.language === "pl" ? calendar_pl : calendar_en}
                 range
                 plugins={[
@@ -364,6 +355,8 @@ const CareList = () => {
                   >
                     <Input
                       value={value}
+                      allowClear
+                      onClear={() => handleDeselectFilter([`min${filterName}`, `max${filterName}`])}
                       onFocus={openCalendar}
                       placeholder={t("placeholder.date")}
                     />
