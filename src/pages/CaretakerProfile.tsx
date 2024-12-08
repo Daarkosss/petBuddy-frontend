@@ -8,11 +8,16 @@ import RoundedLine from "../components/RoundedLine";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { api } from "../api/api";
-import { CaretakerDetails, CaretakerRatingsResponse } from "../types";
+import {
+  CaretakerDetails,
+  CaretakerRatingsResponse,
+  OfferWithId,
+} from "../types";
 import OfferCard from "../components/Offer/OfferCard";
 import ImgCrop from "antd-img-crop";
 import { handleFilePreview, hasFilePhotoType } from "../functions/imageHandle";
 import OfferManagement from "./OfferManagement";
+import { toast } from "react-toastify";
 import { HandleSetOpenChat } from "../types/chat.types";
 
 const CaretakerProfile: React.FC<HandleSetOpenChat> = ({
@@ -22,6 +27,7 @@ const CaretakerProfile: React.FC<HandleSetOpenChat> = ({
   const navigate = useNavigate();
   const { caretakerEmail } = useParams();
   const [profileData, setProfileData] = useState<CaretakerDetails>();
+  const [offers, setOffers] = useState<OfferWithId[]>([]);
 
   const [isMyProfile, setIsMyProfile] = useState<boolean | null>(null);
 
@@ -29,11 +35,16 @@ const CaretakerProfile: React.FC<HandleSetOpenChat> = ({
   const size = 10;
   const [ratings, setRatings] = useState<CaretakerRatingsResponse>();
 
+  const [isSmallScreen, setIsSmallScreen] = useState(
+    window.matchMedia("(max-width: 780px)").matches
+  );
+
   const [profilePicture, setProfilePicture] = useState<string | null>(null);
 
   const getCaretakerDetails = (email: string) => {
     api.getCaretakerDetails(email).then((data) => {
       setProfileData(data);
+      setOffers(data.offers);
       if (data.accountData.profilePicture !== null) {
         setProfilePicture(data.accountData.profilePicture.url);
       }
@@ -82,6 +93,14 @@ const CaretakerProfile: React.FC<HandleSetOpenChat> = ({
         setIsMyProfile(false);
       }
     }
+
+    const mediaQuery = window.matchMedia("(max-width: 780px)");
+    const handleChange = (e: MediaQueryListEvent) =>
+      setIsSmallScreen(e.matches);
+    mediaQuery.addEventListener("change", handleChange);
+
+    return () => mediaQuery.removeEventListener("change", handleChange);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -95,11 +114,13 @@ const CaretakerProfile: React.FC<HandleSetOpenChat> = ({
         setProfilePicture(response.profilePicture.url);
       }
       onSuccess?.("ok");
+      toast.success(t("success.changeProfilePicture"));
     } catch (e: unknown) {
       onError?.(e);
       if (e instanceof Error) {
         console.error(`ERROR: ${e.message}`);
       }
+      toast.error(t("error.changeProfilePicture"));
     }
   };
 
@@ -155,26 +176,28 @@ const CaretakerProfile: React.FC<HandleSetOpenChat> = ({
                       </Button>
                     </Upload>
                   </ImgCrop>
-                  <Button
-                    type="primary"
-                    className="profile-action-button"
-                    onClick={() => {
-                      handleSetOpenChat!(
-                        undefined,
-                        undefined,
-                        undefined,
-                        undefined,
-                        undefined,
-                        false,
-                        false
-                      );
-                      store.user.setSelectedProfile("CLIENT");
-                      store.user.saveProfileToStorage(store.user.profile);
-                      navigate("/profile-client");
-                    }}
-                  >
-                    {t("profilePage.changeToClientProfile")}
-                  </Button>
+                  <div>
+                    <Button
+                      type="primary"
+                      className="profile-action-button"
+                      onClick={() => {
+                        handleSetOpenChat!(
+                          undefined,
+                          undefined,
+                          undefined,
+                          undefined,
+                          undefined,
+                          false,
+                          false
+                        );
+                        store.user.setSelectedProfile("CLIENT");
+                        store.user.saveProfileToStorage(store.user.profile);
+                        navigate("/profile-client");
+                      }}
+                    >
+                      {t("profilePage.changeToClientProfile")}
+                    </Button>
+                  </div>
                 </div>
               )}
               <div className="profile-user">
@@ -260,42 +283,50 @@ const CaretakerProfile: React.FC<HandleSetOpenChat> = ({
               <div>{profileData.description}</div>
             )}
             <div>
-              <div className="profile-offers-smaller-screen">
-                {isMyProfile ? (
-                  <OfferManagement />
-                ) : (
-                  <>
-                    <h1>{t("profilePage.offers")}</h1>
-                    {profileData !== null &&
-                    profileData !== undefined &&
-                    profileData.offers.length > 0 ? (
-                      profileData.offers.map((element, index) => (
-                        <div
-                          key={index}
-                          className="profile-offer-card-smaller-screen"
-                        >
-                          <OfferCard
-                            offer={element}
-                            handleUpdateOffer={() => {}}
-                            canBeEdited={false}
-                          />
-                        </div>
-                      ))
-                    ) : (
-                      <div className="profile-no-offers">
-                        <Card>
-                          <div>{t("profilePage.noOffersToShow")}</div>
-                          <div className="profile-no-offers-add-offer-button">
-                            <Button type="primary" className="add-button">
-                              + {t("profilePage.addOffer")}
-                            </Button>
+              {isSmallScreen && (
+                <div className="profile-offers-smaller-screen">
+                  {isMyProfile ? (
+                    <OfferManagement
+                      providedOffers={offers ?? []}
+                      onOffersChange={(offers: OfferWithId[]) => {
+                        setOffers(offers);
+                      }}
+                    />
+                  ) : (
+                    <>
+                      <h1 className="profile-offers-label">
+                        {t("profilePage.offers")}
+                      </h1>
+
+                      {offers && offers.length > 0 ? (
+                        offers.map((element, index) => (
+                          <div
+                            key={index}
+                            className="profile-offer-card-smaller-screen"
+                          >
+                            <OfferCard
+                              offer={element}
+                              handleUpdateOffer={() => {}}
+                              canBeEdited={false}
+                            />
                           </div>
-                        </Card>
-                      </div>
-                    )}
-                  </>
-                )}
-              </div>
+                        ))
+                      ) : (
+                        <div className="profile-no-offers">
+                          <Card>
+                            <div>{t("profilePage.noOffersToShow")}</div>
+                            <div className="profile-no-offers-add-offer-button">
+                              <Button type="primary" className="add-button">
+                                + {t("profilePage.addOffer")}
+                              </Button>
+                            </div>
+                          </Card>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+              )}
               <h1>{t("profilePage.ratings")}</h1>
               {isMyProfile === false &&
                 store.user.profile?.selected_profile === "CLIENT" && (
@@ -364,34 +395,43 @@ const CaretakerProfile: React.FC<HandleSetOpenChat> = ({
             </div>
           </div>
 
-          <div className="profile-right">
-            {isMyProfile ? (
-              <OfferManagement />
-            ) : (
-              <>
-                <h1>{t("profilePage.offers")}</h1>
-                <div className="profile-right-offers">
-                  {profileData && profileData.offers.length > 0 ? (
-                    profileData.offers.map((element, index) => (
-                      <div key={index}>
-                        <OfferCard
-                          offer={element}
-                          handleUpdateOffer={() => {}}
-                          canBeEdited={false}
-                        />
+          {!isSmallScreen && (
+            <div className="profile-right">
+              {isMyProfile ? (
+                <OfferManagement
+                  providedOffers={offers ?? []}
+                  onOffersChange={(offers: OfferWithId[]) => {
+                    setOffers(offers);
+                  }}
+                />
+              ) : (
+                <>
+                  <h1>{t("profilePage.offers")}</h1>
+                  <div className="profile-right-offers">
+                    {offers !== null &&
+                    offers !== undefined &&
+                    offers.length > 0 ? (
+                      offers.map((element, index) => (
+                        <div key={index}>
+                          <OfferCard
+                            offer={element}
+                            handleUpdateOffer={() => {}}
+                            canBeEdited={false}
+                          />
+                        </div>
+                      ))
+                    ) : (
+                      <div className="profile-no-offers">
+                        <Card>
+                          <div>{t("profilePage.noOffersToShow")}</div>
+                        </Card>
                       </div>
-                    ))
-                  ) : (
-                    <div className="profile-no-offers">
-                      <Card>
-                        <div>{t("profilePage.noOffersToShow")}</div>
-                      </Card>
-                    </div>
-                  )}
-                </div>
-              </>
-            )}
-          </div>
+                    )}
+                  </div>
+                </>
+              )}
+            </div>
+          )}
         </div>
       )}
     </div>

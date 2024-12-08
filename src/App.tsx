@@ -7,7 +7,6 @@ import CaretakerForm from "./pages/CaretakerForm";
 import store from "./store/RootStore";
 import CaretakerSearch from "./pages/CaretakerSearch";
 import ProfileSelection from "./pages/ProfileSelection";
-import OfferManagement from "./pages/OfferManagement";
 import LandingPage from "./pages/LandingPage";
 import Header from "./components/Header/Header";
 import { observer } from "mobx-react-lite";
@@ -181,10 +180,6 @@ const App = observer(() => {
                   <Route
                     path="/caretaker/search"
                     element={<CaretakerSearch />}
-                  />
-                  <Route
-                    path="/caretaker/offers"
-                    element={<OfferManagement />}
                   />
                   <Route
                     path="/care/reservation/:caretakerEmail"

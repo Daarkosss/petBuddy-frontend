@@ -15,7 +15,9 @@
     "HEDGEHOG": "Jeż",
     "GUINEA_PIG": "Świnka morska",
     "MOUSE": "Mysz",
-    "OTHER": "Inne"
+    "OTHER": "Inne",
+    "REPTILE": "Gad",
+    "HORSE": "Koń"
   },
 
   "SEX": {
@@ -208,6 +210,40 @@
     "map": "Mapa opiekunów"
   },
 
+  "careSearch": {
+    "animalTypes": "Rodzaj zwierzęcia",
+    "caretakerStatuses": "Status opiekuna",
+    "clientStatuses": "Status klienta",
+    "minCreatedTime": "Najwcześniej utworzona",
+    "maxCreatedTime": "Najpóźniej utworzona",
+    "minCareStart": "Najwcześniejsze rozpoczęcie",
+    "maxCareStart": "Najpóźniejsze rozpoczęcie",
+    "minCareEnd": "Najwcześniejsze zakończenie",
+    "maxCareEnd": "Najpóźniejsze zakończenie",
+    "minDailyPrice": "Minimalna cena za dzień",
+    "maxDailyPrice": "Maksymalna cena za dzień",
+    "emailsCARETAKER": "Email klienta",
+    "emailsCLIENT": "Email opiekuna",
+    "CreatedTime": "Data utworzenia",
+    "CareStart": "Data rozpoczęcia",
+    "CareEnd": "Data zakończenia",
+    "sort": "Sortowanie",
+    "id": "Id",
+    "submittedAt": "Data złożenia rezerwacji",
+    "caretakerStatus": "Status opiekuna",
+    "clientStatus": "Status klienta",
+    "careStart": "Rozpoczęcie opieki",
+    "careEnd": "Zakończenie opieki",
+    "description": "Opis",
+    "dailyPrice": "Cena za dzień",
+    "animal_animalType": "Rodzaj zwierzęcia",
+    "selectedOptions": "Wybrane opcje",
+    "caretaker_email": "Email opiekuna",
+    "client_email": "Email Klienta",
+    "ASC": "Rosnąco",
+    "DESC": "Malejąco"
+  },
+
   "description": "Opis",
   "upload": "Prześlij",
   "caretakerForm": "Formularz opiekuna",
@@ -263,6 +299,7 @@
     "updatePrice": "Wystąpił błąd podczas aktualizacji ceny",
     "acceptCare": "Wystąpił błąd podczas akceptacji opieki",
     "rejectCare": "Wystąpił błąd podczas odrzucenia opieki",
+    "changeProfilePicture": "Wystąpił błąd podczas zmieniania zdjęcia profilowego",
     "confirmBeginOfCare": "Wystąpił błąd podczas potwierdzania rozpoczęcia opieki"
   },
 
@@ -280,6 +317,7 @@
     "updatePrice": "Cena opieki została pomyślnie zaktualizowana",
     "acceptCare": "Opieka została pomyślnie zaakceptowana",
     "rejectCare": "Opieka została pomyślnie odrzucona",
+    "changeProfilePicture": "Zdjęcie zostało pomyślnie zmienione",
     "confirmBeginOfCare": "Rozpoczęcie opieki zostało pomyślnie potwierdzone"
   },
 
@@ -408,7 +446,10 @@
     "newPriceAcceptedByClient": "Klient zaakceptował cenę",
     "waitingForCaretakerResponse": "Oczekuje na odpowiedź opiekuna",
     "waitingForClientResponse": "Oczekuje na odpowiedź klienta",
-    "startConfirmedByCaretaker": "Opiekun potwierdził rozpoczęcie opieki"
+    "startConfirmedByCaretaker": "Opiekun potwierdził rozpoczęcie opieki",
+    "accepted": "Zaakceptowana",
+    "ready_to_proceed": "Gotowa do rozpoczęcia",
+    "confirmed": "Potwierdzona"
   },
 
   "petDescription": "Opis zwierzęcia",

@@ -69,6 +69,23 @@
         flex-direction: row;
         justify-content: space-evenly;
         gap: 10px;
+
+        @media (max-width: 900px) {
+          flex-direction: column;
+          justify-content: space-evenly;
+          align-items: center;
+        }
+
+        @media (max-width: 780px) {
+          flex-direction: row;
+          justify-content: center;
+        }
+
+        @media (max-width: 330px) {
+          flex-direction: column;
+          justify-content: space-evenly;
+          align-items: center;
+        }
       }
 
       .profile-user {
@@ -113,9 +130,11 @@
     }
 
     .profile-offers-smaller-screen {
-      display: none;
-
-      h1 {
+      // display: none;
+      .profile-offers-label {
+        color: white;
+      }
+      h3 {
         color: v.$white;
         text-align: center;
         margin-top: 20px;
@@ -191,9 +210,9 @@
     flex-direction: column;
     color: v.$white;
 
-    @media (max-width: 780px) {
-      display: none;
-    }
+    // @media (max-width: 780px) {
+    //   display: none;
+    // }
 
     .profile-client-data-container {
       display: flex;

@@ -9,16 +9,26 @@ import AddOfferForm from "../components/Offer/AddOfferForm";
 import { useTranslation } from "react-i18next";
 import SetAvailabilityModal from "../components/Offer/SetAvailabilityModal";
 
-const OfferManagement: React.FC = () => {
+interface OfferManagementProps {
+  onOffersChange?: (offers: OfferWithId[]) => void;
+  providedOffers: OfferWithId[];
+}
+
+const OfferManagement: React.FC<OfferManagementProps> = ({
+  onOffersChange,
+  providedOffers,
+}) => {
   const { t } = useTranslation();
-  const [offers, setOffers] = useState<OfferWithId[]>([]);
+  const [offers, setOffers] = useState<OfferWithId[]>(providedOffers);
   const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
   const [isAvailabilityModalOpen, setIsAvailabilityModalOpen] = useState(false);
 
   useEffect(() => {
-    loadOffers();
+    if (onOffersChange !== null && onOffersChange !== undefined) {
+      onOffersChange(offers);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [offers]);
 
   const loadOffers = async () => {
     try {
@@ -105,6 +115,7 @@ const OfferManagement: React.FC = () => {
           </Col>
         ))}
       </div>
+
       <Modal
         title={t("addOffer")}
         open={isOfferModalOpen}

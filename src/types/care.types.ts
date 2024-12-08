@@ -3,31 +3,37 @@ import { PageableDTO, SortDTO } from "./pagination.types";
 import { AccountDataDTO } from "./user.types";
 
 export type CareReservationDTO = {
-  careStart: string,
-  careEnd: string,
-  description: string,
-  dailyPrice: number,
-  animalType: string,
-  selectedOptions: AnimalAttributes
-}
+  careStart: string;
+  careEnd: string;
+  description: string;
+  dailyPrice: number;
+  animalType: string;
+  selectedOptions: AnimalAttributes;
+};
 
 export type CareReservation = {
-  dateRange: string[],
-  description: string,
-  dailyPrice: number,
-  animalType: string,
-  selectedOptions: AnimalAttributes
-}
+  dateRange: string[];
+  description: string;
+  dailyPrice: number;
+  animalType: string;
+  selectedOptions: AnimalAttributes;
+};
 
-export type CareStatus = "PENDING" | "ACCEPTED" | "CANCELLED" | "READY_TO_PROCEED" | "CONFIRMED" | "OUTDATED";
+export type CareStatus =
+  | "PENDING"
+  | "ACCEPTED"
+  | "CANCELLED"
+  | "READY_TO_PROCEED"
+  | "CONFIRMED"
+  | "OUTDATED";
 
 export type CareHistoricalStatus = {
   createdAt: string;
   caretakerStatus: CareStatus;
   clientStatus: CareStatus;
-}
+};
 
-export type StatusesHistory = CareHistoricalStatus[]
+export type StatusesHistory = CareHistoricalStatus[];
 
 export type CareDTO = {
   id: number;
@@ -42,8 +48,8 @@ export type CareDTO = {
   selectedOptions: AnimalAttributes;
   caretaker: AccountDataDTO;
   client: AccountDataDTO;
-  statusesHistory: StatusesHistory
-}
+  statusesHistory: StatusesHistory;
+};
 
 export type GetCaresDTO = {
   content: CareDTO[];
@@ -57,4 +63,19 @@ export type GetCaresDTO = {
   last: boolean;
   numberOfElements: number;
   empty: boolean;
-}
+};
+
+export type CareSearchFilters = {
+  animalTypes: string[];
+  caretakerStatuses: CareStatus[];
+  clientStatuses: CareStatus[];
+  minCreatedTime?: string;
+  maxCreatedTime?: string;
+  minCareStart?: string;
+  maxCareStart?: string;
+  minCareEnd?: string;
+  maxCareEnd?: string;
+  minDailyPrice?: number;
+  maxDailyPrice?: number;
+  emails: string[];
+};

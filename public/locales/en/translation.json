@@ -15,7 +15,9 @@
     "HEDGEHOG": "Hedgehog",
     "GUINEA_PIG": "Guinea pig",
     "MOUSE": "Mouse",
-    "OTHER": "Others"
+    "OTHER": "Others",
+    "REPTILE": "Reptile",
+    "HORSE": "Horse"
   },
 
   "SEX": {
@@ -203,6 +205,40 @@
     "map": "Caretaker map"
   },
 
+  "careSearch": {
+    "animalTypes": "Animal types",
+    "caretakerStatuses": "Caretaker status",
+    "clientStatuses": "Client status",
+    "minCreatedTime": "Earliest creation time",
+    "maxCreatedTime": "Latest creation time",
+    "minCareStart": "Earliest start time",
+    "maxCareStart": "Latest start time",
+    "minCareEnd": "Earliest end time",
+    "maxCareEnd": "Latest end time",
+    "minDailyPrice": "Minimal daily price",
+    "maxDailyPrice": "Maximal daily price",
+    "emailsCARETAKER": "Client email",
+    "emailsCLIENT": "Caretaker email",
+    "CreatedTime": "Creation date",
+    "CareStart": "Start time",
+    "CareEnd": "End time",
+    "sort": "Sort",
+    "id": "Id",
+    "submittedAt": "Submitted at",
+    "caretakerStatus": "Caretaker status",
+    "clientStatus": "Client status",
+    "careStart": "Care start",
+    "careEnd": "Care end",
+    "description": "Description",
+    "dailyPrice": "Daily price",
+    "animal_animalType": "Animal type",
+    "selectedOptions": "Selected options",
+    "caretaker_email": "Caretaker email",
+    "client_email": "Client email",
+    "ASC": "Ascending",
+    "DESC": "Descending"
+  },
+
   "description": "Description",
   "upload": "Upload",
   "caretakerForm": "Caretaker form",
@@ -257,6 +293,7 @@
     "getCare": "An error occurred while loading care",
     "updatePrice": "An error occurred while updating price",
     "acceptCare": "An error occurred while accepting care",
+    "changeProfilePicture": "An error occured while changing profile picture",
     "confirmBeginOfCare": "An error occurred while confirming begin of care"
   },
 
@@ -273,6 +310,7 @@
     "askForCare": "You have successfully sent a request for care. Wait for a caretaker response",
     "updatePrice": "Care price has been successfully updated",
     "acceptCare": "Care has been successfully accepted",
+    "changeProfilePicture": "You have successfully changed your profile picture",
     "confirmBeginOfCare": "Begin of care has been successfully confirmed"
   },
 
@@ -401,7 +439,10 @@
     "newPriceAcceptedByClient": "Client accepted the price",
     "waitingForCaretakerResponse": "Waiting for caretaker response",
     "waitingForClientResponse": "Waiting for client response",
-    "startConfirmedByCaretaker": "Caretaker confirmed care begin"
+    "startConfirmedByCaretaker": "Caretaker confirmed care begin",
+    "accepted": "Accepted",
+    "ready_to_proceed": "Ready to proceed",
+    "confirmed": "Confirmed"
   },
 
   "petDescription": "Pet description",

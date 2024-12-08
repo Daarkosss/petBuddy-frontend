@@ -10,6 +10,7 @@ import { UserProfiles } from "../types";
 import { PictureOutlined, UserOutlined } from "@ant-design/icons";
 import ImgCrop from "antd-img-crop";
 import { handleFilePreview, hasFilePhotoType } from "../functions/imageHandle";
+import { toast } from "react-toastify";
 import { HandleSetOpenChat } from "../types/chat.types";
 
 const ClientProfile: React.FC<HandleSetOpenChat> = ({ handleSetOpenChat }) => {
@@ -37,11 +38,13 @@ const ClientProfile: React.FC<HandleSetOpenChat> = ({ handleSetOpenChat }) => {
         setProfilePicture(response.profilePicture.url);
       }
       onSuccess?.("ok");
+      toast.success(t("success.changeProfilePicture"));
     } catch (e: unknown) {
       onError?.(e);
       if (e instanceof Error) {
         console.error(`ERROR: ${e.message}`);
       }
+      toast.error(t("error.changeProfilePicture"));
     }
   };
 
@@ -55,6 +58,7 @@ const ClientProfile: React.FC<HandleSetOpenChat> = ({ handleSetOpenChat }) => {
     } else if (store.user.profile!.selected_profile === "CARETAKER") {
       navigate(`/profile-caretaker/${store.user.profile?.email}`);
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -62,149 +66,118 @@ const ClientProfile: React.FC<HandleSetOpenChat> = ({ handleSetOpenChat }) => {
     <div>
       {profileData !== null && profileData !== undefined ? (
         <div className="profile-container">
-          <div className="profile-left-data">
-            <div className="profile-left-upper-container">
-              <div className="profile-picture-container">
-                {profilePicture !== null ? (
-                  <img src={profilePicture} className="profile-image" />
-                ) : (
-                  <Avatar
-                    size={250}
-                    className="profile-image"
-                    icon={<UserOutlined />}
-                  />
-                )}
-              </div>
-              <div className="my-actions">
-                <ImgCrop rotationSlider beforeCrop={hasFilePhotoType}>
-                  <Upload
-                    customRequest={handleCustomPhotoRequest}
-                    showUploadList={false}
-                    name="file"
-                    onPreview={handleFilePreview}
-                    accept="image/*"
-                  >
-                    <Button
-                      icon={<PictureOutlined />}
-                      type="primary"
-                      className="profile-action-button"
-                    >
-                      {t("profilePage.changeImage")}
-                    </Button>
-                  </Upload>
-                </ImgCrop>
-              </div>
-            </div>
-
-            <div className="profile-offers-smaller-screen">
-              <div className="profile-client-data-container-smaller-screen">
-                <Card className="profile-client-card">
-                  <div className="profile-user">
-                    <div className="profile-user-nick">
-                      <h1>
-                        {profileData.accountData.name}{" "}
-                        {profileData.accountData.surname}
-                      </h1>
-                    </div>
-                  </div>
-                  <div>
-                    <h2>{t("profilePage.userClientProfile")}</h2>
-                    <RoundedLine
-                      width={"100%"}
-                      height={"2px"}
-                      backgroundColor="#003459"
-                    />
-                  </div>
-                  {profileData.hasCaretakerProfile ? (
-                    <div>
-                      <Button
-                        type="primary"
-                        className="profile-action-button"
-                        onClick={() => {
-                          handleSetOpenChat!(
-                            undefined,
-                            undefined,
-                            undefined,
-                            undefined,
-                            undefined,
-                            false,
-                            false
-                          );
-                          store.user.setSelectedProfile("CARETAKER");
-                          store.user.saveProfileToStorage(store.user.profile);
-                          navigate(
-                            `/profile-caretaker/${store.user.profile?.email}`
-                          );
-                        }}
-                      >
-                        {t("profilePage.changeToCaretakerProfile")}
-                      </Button>
-                    </div>
+          <div
+            className="profile-left-data"
+            style={{
+              backgroundColor: "#003459",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Card style={{ maxWidth: "500px" }}>
+              <div className="profile-left-upper-container">
+                <div className="profile-picture-container">
+                  {profilePicture !== null ? (
+                    <img src={profilePicture} className="profile-image" />
                   ) : (
-                    <div>
-                      <h3>{t("profilePage.noCaretakerProfile")}</h3>
+                    <Avatar
+                      size={250}
+                      className="profile-image"
+                      icon={<UserOutlined />}
+                    />
+                  )}
+                </div>
+                <div className="my-actions">
+                  <ImgCrop rotationSlider beforeCrop={hasFilePhotoType}>
+                    <Upload
+                      customRequest={handleCustomPhotoRequest}
+                      showUploadList={false}
+                      name="file"
+                      onPreview={handleFilePreview}
+                      accept="image/*"
+                    >
                       <Button
+                        icon={<PictureOutlined />}
                         type="primary"
                         className="profile-action-button"
-                        onClick={() => navigate("/caretaker/form")}
                       >
-                        + {t("profileSelection.createCaretaker")}
+                        {t("profilePage.changeImage")}
                       </Button>
-                    </div>
-                  )}
-                </Card>
+                    </Upload>
+                  </ImgCrop>
+                </div>
               </div>
-            </div>
-          </div>
-          <div className="profile-right">
-            <div className="profile-client-data-container">
-              <Card className="profile-client-card">
-                <div className="profile-user">
-                  <div className="profile-user-nick">
-                    <h1>
-                      {profileData.accountData.name}{" "}
-                      {profileData.accountData.surname}
-                    </h1>
-                  </div>
+              <div
+                className="profile-offers-smaller-screen"
+                style={{ backgroundColor: "white" }}
+              >
+                <div className="profile-client-data-container-smaller-screen">
+                  <Card className="profile-client-card">
+                    <div className="profile-user">
+                      <div className="profile-user-nick">
+                        <h1>
+                          {profileData.accountData.name}{" "}
+                          {profileData.accountData.surname}
+                        </h1>
+                        <p
+                          style={{
+                            textAlign: "center",
+                          }}
+                        >
+                          {profileData.accountData.email}
+                        </p>
+                      </div>
+                    </div>
+                    <div>
+                      <h5>{t("profilePage.userClientProfile")}</h5>
+                      <RoundedLine
+                        width={"100%"}
+                        height={"2px"}
+                        backgroundColor="#003459"
+                      />
+                    </div>
+                    {profileData.hasCaretakerProfile ? (
+                      <div>
+                        <Button
+                          type="primary"
+                          className="profile-action-button"
+                          onClick={() => {
+                            handleSetOpenChat!(
+                              undefined,
+                              undefined,
+                              undefined,
+                              undefined,
+                              undefined,
+                              false,
+                              false
+                            );
+                            store.user.setSelectedProfile("CARETAKER");
+                            store.user.saveProfileToStorage(store.user.profile);
+                            navigate(
+                              `/profile-caretaker/${store.user.profile?.email}`
+                            );
+                          }}
+                        >
+                          {t("profilePage.changeToCaretakerProfile")}
+                        </Button>
+                      </div>
+                    ) : (
+                      <div>
+                        <h3>{t("profilePage.noCaretakerProfile")}</h3>
+                        <Button
+                          type="primary"
+                          className="profile-action-button"
+                          onClick={() => navigate("/caretaker/form")}
+                        >
+                          + {t("profileSelection.createCaretaker")}
+                        </Button>
+                      </div>
+                    )}
+                  </Card>
                 </div>
-                <div>
-                  <h2>{t("profilePage.userClientProfile")}</h2>
-                  <RoundedLine
-                    width={"100%"}
-                    height={"2px"}
-                    backgroundColor="#003459"
-                  />
-                </div>
-                {profileData.hasCaretakerProfile ? (
-                  <div>
-                    <Button
-                      type="primary"
-                      className="profile-action-button"
-                      onClick={() => {
-                        store.user.setSelectedProfile("CARETAKER");
-                        store.user.saveProfileToStorage(store.user.profile);
-                        navigate(
-                          `/profile-caretaker/${store.user.profile?.email}`
-                        );
-                      }}
-                    >
-                      {t("profilePage.changeToCaretakerProfile")}
-                    </Button>
-                  </div>
-                ) : (
-                  <div>
-                    <h3>{t("profilePage.noCaretakerProfile")}</h3>
-                    <Button
-                      type="primary"
-                      className="profile-action-button"
-                      onClick={() => navigate("/caretaker/form")}
-                    >
-                      + {t("profileSelection.createCaretaker")}
-                    </Button>
-                  </div>
-                )}
-              </Card>
-            </div>
+              </div>
+            </Card>
           </div>
         </div>
       ) : (
