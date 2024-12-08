@@ -5,8 +5,7 @@ import { TablePaginationConfig, ColumnsType } from "antd/es/table/interface";
 import { api } from "../api/api";
 import { useTranslation } from "react-i18next";
 import { CaretakerBasics } from "../models/Caretaker";
-import { CaretakerSearchFilters, OfferConfiguration,
-} from "../types";
+import { CaretakerSearchFilters, OfferConfiguration } from "../types";
 import CaretakerFilters from "../components/CaretakerFilters";
 import store from "../store/RootStore";
 import { toast } from "react-toastify";
@@ -38,7 +37,7 @@ const CaretakerList = () => {
     if (sessionFilters) {
       return JSON.parse(sessionFilters);
     } else {
-      return { 
+      return {
         personalDataLike: "",
         cityLike: "",
         voivodeship: undefined,
@@ -48,9 +47,13 @@ const CaretakerList = () => {
     }
   };
 
-  const [filters, setFilters] = useState<CaretakerSearchFilters>(loadFiltersFromSession());
+  const [filters, setFilters] = useState<CaretakerSearchFilters>(
+    loadFiltersFromSession()
+  );
 
-  const [animalFilters, setAnimalFilters] = useState<Record<string, OfferConfiguration>>({});
+  const [animalFilters, setAnimalFilters] = useState<
+    Record<string, OfferConfiguration>
+  >({});
 
   const assignFiltersToAnimals = async () => {
     setFilters((prevFilters) => ({
@@ -193,9 +196,16 @@ const CaretakerList = () => {
             <Button
               className="view-details-button"
               type="primary"
-              onClick={() =>
-                navigate(`/profile-caretaker/${record.accountData.email}`)
-              }
+              onClick={() => {
+                if (
+                  record.accountData.email === store.user.profile?.email &&
+                  store.user.profile?.selected_profile === "CLIENT"
+                ) {
+                  navigate(`/profile-client`);
+                } else {
+                  navigate(`/profile-caretaker/${record.accountData.email}`);
+                }
+              }}
             >
               {t("viewDetails")}
             </Button>
@@ -255,7 +265,7 @@ const CaretakerList = () => {
                   loading={isLoading}
                   columns={columns}
                   locale={{
-                    emptyText: t("caretakerSearch.noCaretakers")
+                    emptyText: t("caretakerSearch.noCaretakers"),
                   }}
                   dataSource={caretakers}
                   rowKey={(record) => record.accountData.email}
