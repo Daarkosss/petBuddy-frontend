@@ -130,10 +130,6 @@ const CaretakerList = () => {
       const updatedConfigFull = {
         ...existingConfig,
         ...updatedConfig,
-        offerConfiguration: {
-          ...existingConfig,
-          ...updatedConfig,
-        },
       };
 
       const newAnimalFilters = {
