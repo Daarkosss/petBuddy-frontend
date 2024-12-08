@@ -5,7 +5,7 @@ import store from "../store/RootStore";
 import { CaretakerSearchFilters } from "../types";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "../components/SearchBar";
-import { Value } from "react-multi-date-picker";
+// import { Value } from "react-multi-date-picker";
 
 const LandingPage = () => {
   const { t } = useTranslation();
@@ -24,16 +24,8 @@ const LandingPage = () => {
   }, []);
 
   const handleSearch = async () => {
-    const filtersToPass = {
-      ...filters, 
-      availabilities: filters.availabilities?.map((dateRange: Value[]) => ({
-        availableFrom: dateRange[0]?.toString() || "",
-        availableTo: dateRange[1] 
-        ? dateRange[1]?.toString()
-        : dateRange[0]?.toString() || "",
-      }))
-    };
-    navigate("/caretaker/search", { state: { filters: filtersToPass } });
+    sessionStorage.setItem("caretakerFilters", JSON.stringify(filters));
+    navigate("/caretaker/search");
   };
 
   return (

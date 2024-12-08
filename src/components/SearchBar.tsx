@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import Voivodeship from "../models/Voivodeship";
 import { AvailabilityValues, CaretakerSearchFilters } from "../types";
 import { Dispatch, SetStateAction } from "react";
+import store from "../store/RootStore";
 import MultiDatePicker from "./Calendar/MultiDatePicker";
 
 interface SearchBarProps {
@@ -27,7 +28,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ filters, setFilters, handleSearch
   const handleAnimalTypeChange = (value: string) => {
     setFilters({
       ...filters,
-      animals: [{ animalType: value, offerConfigurations: [] }],
+      animals: [{ animalType: value }],
     });
   };
 
@@ -78,13 +79,10 @@ const SearchBar: React.FC<SearchBarProps> = ({ filters, setFilters, handleSearch
           className="search-select"
           placeholder={t("placeholder.animalType")}
           onChange={handleAnimalTypeChange}
-          options={[
-            { value: "DOG", label: t("dog") },
-            { value: "CAT", label: t("cat") },
-            { value: "BIRD", label: t("bird") },
-            { value: "REPTILE", label: t("reptile") },
-            { value: "HORSE", label: t("horse") }
-          ]}
+          options={store.animal.allAnimalTypes.map((animalType) => ({
+            value: animalType,
+            label: t(`animalTypes.${animalType}`)
+          }))}
         />
       </Form.Item>
 

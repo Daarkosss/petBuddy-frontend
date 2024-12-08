@@ -268,14 +268,17 @@ class API {
     const queryString = queryParams.toString();
     const requestBody = filters.animals?.map((animal) => ({
       animalType: animal.animalType,
-      offerConfigurations: animal.offerConfigurations.map((offer) => ({
-        ...offer,
-        minPrice: offer.minPrice ? offer.minPrice : 0.01,
-        maxPrice: offer.maxPrice ? offer.maxPrice : 99999.99,
-      })),
+      offerConfigurations: animal.offerConfiguration && [
+        {
+          attributes: animal.offerConfiguration.attributes,
+          minPrice: animal.offerConfiguration.minPrice ? animal.offerConfiguration.minPrice : 0.01,
+          maxPrice: animal.offerConfiguration.maxPrice ? animal.offerConfiguration.maxPrice : 99999.99,
+        }
+      ],
       availabilities: filters.availabilities
         ? this.convertValuesToAvailabilityRanges(filters.availabilities)
         : [],
+      amenities: animal.offerConfiguration?.amenities
     }));
 
     return this.fetch<CaretakerBasicsResponse>(

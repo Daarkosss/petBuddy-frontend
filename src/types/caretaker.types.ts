@@ -111,7 +111,7 @@ export type CaretakerSearchFilters = {
 
 export type AnimalFilter = {
   animalType: string;
-  offerConfigurations: OfferConfiguration[];
+  offerConfiguration?: OfferConfiguration;
   availabilities?: AvailabilityValues;
 };
 
