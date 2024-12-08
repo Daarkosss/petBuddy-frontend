@@ -1,14 +1,11 @@
 import { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Table, Button, Rate, Tabs } from "antd";
 import { TablePaginationConfig, ColumnsType } from "antd/es/table/interface";
 import { api } from "../api/api";
 import { useTranslation } from "react-i18next";
 import { CaretakerBasics } from "../models/Caretaker";
-import {
-  Availability,
-  CaretakerSearchFilters,
-  OfferConfiguration,
+import { CaretakerSearchFilters, OfferConfiguration,
 } from "../types";
 import CaretakerFilters from "../components/CaretakerFilters";
 import store from "../store/RootStore";
@@ -17,7 +14,6 @@ import MapWithCaretakers from "../components/MapWithCaretakers";
 
 const CaretakerList = () => {
   const { t } = useTranslation();
-  const location = useLocation();
   const navigate = useNavigate();
 
   const [caretakers, setCaretakers] = useState<CaretakerBasics[]>([]);
@@ -37,30 +33,24 @@ const CaretakerList = () => {
     total: 0,
   });
 
-  const [filters, setFilters] = useState<CaretakerSearchFilters>(
-    (location.state?.filters && {
-      ...location.state.filters,
-      availabilities: location.state?.filters?.availabilities.map(
-        (value: Availability) => [value.availableFrom, value.availableTo]
-      ),
-    }) || {
-      personalDataLike: "",
-      cityLike: "",
-      voivodeship: undefined,
-      animals: [],
-      availabilities: [],
+  const loadFiltersFromSession = () => {
+    const sessionFilters = sessionStorage.getItem("caretakerFilters");
+    if (sessionFilters) {
+      return JSON.parse(sessionFilters);
+    } else {
+      return { 
+        personalDataLike: "",
+        cityLike: "",
+        voivodeship: undefined,
+        animals: [],
+        availabilities: [],
+      };
     }
-  );
+  };
 
-  const [animalFilters, setAnimalFilters] = useState<
-    Record<string, OfferConfiguration>
-  >(() => {
-    const animal = location.state?.filters?.animals?.[0];
-    if (animal) {
-      return { [animal.animalType]: animal.availabilities || [] };
-    }
-    return {};
-  });
+  const [filters, setFilters] = useState<CaretakerSearchFilters>(loadFiltersFromSession());
+
+  const [animalFilters, setAnimalFilters] = useState<Record<string, OfferConfiguration>>({});
 
   const assignFiltersToAnimals = async () => {
     setFilters((prevFilters) => ({
@@ -104,6 +94,10 @@ const CaretakerList = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagingParams]);
 
+  useEffect(() => {
+    sessionStorage.setItem("caretakerFilters", JSON.stringify(filters));
+  }, [filters]);
+
   const handleTableChange = (pagination: TablePaginationConfig) => {
     setPagingParams({
       ...pagingParams,
@@ -136,22 +130,19 @@ const CaretakerList = () => {
       const updatedConfigFull = {
         ...existingConfig,
         ...updatedConfig,
-        attributes: {
-          ...existingConfig.attributes,
-          ...updatedConfig.attributes,
-        },
       };
 
       const newAnimalFilters = {
         ...prevFilters,
-        [animalType]: updatedConfigFull,
+        [animalType]: updatedConfigFull || null,
       };
 
       setFilters((prevFilters) => ({
         ...prevFilters,
         animals: Object.entries(newAnimalFilters).map(([type, config]) => ({
           animalType: type,
-          offerConfigurations: [config],
+          offerConfiguration: config,
+          amenities: config.amenities,
         })),
       }));
 
@@ -171,7 +162,8 @@ const CaretakerList = () => {
       ...prevFilters,
       animals: selectedAnimalTypes.map((animalType) => ({
         animalType,
-        offerConfigurations: [newAnimalFilters[animalType]],
+        offerConfiguration: newAnimalFilters[animalType],
+        amenities: newAnimalFilters[animalType].amenities,
       })),
     }));
   };
@@ -263,10 +255,7 @@ const CaretakerList = () => {
                   loading={isLoading}
                   columns={columns}
                   locale={{
-                    emptyText: t("caretakerSearch.noCaretakers"),
-                    triggerDesc: t("triggerDesc"),
-                    triggerAsc: t("triggerAsc"),
-                    cancelSort: t("cancelSort"),
+                    emptyText: t("caretakerSearch.noCaretakers")
                   }}
                   dataSource={caretakers}
                   rowKey={(record) => record.accountData.email}

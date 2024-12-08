@@ -168,7 +168,7 @@
     "title": "Wybierz profil",
     "client": "Klient",
     "caretaker": "Opiekun",
-    "createCaretaker": "Utwórz profil opiekuna"
+    "createCaretaker": "Załóż profil opiekuna"
   },
 
   "profilePage": {
@@ -468,12 +468,14 @@
     "title": "Powiadomienia",
     "markAllAsRead": "Oznacz jako przeczytane",
     "noNotifications": "Brak powiadomień",
-    "care_reservation": "Dokonano rezerwacji opieki na jedną z Twoich ofert",
-    "care_update": "Cena została zaktualizowana w jednej z Twoich opiek",
-    "care_accepted": "Twoja opieka została zaakceptowana",
-    "care_rejected": "Twoja opieka została odrzucona",
-    "confirmation_needed": "Twoja opieka oczekuje na potwierdzenie rozpoczęcia",
-    "newNotification": "Masz nowe powiadomienie"
+    "care_reservation": "{{ user }} dokonał/a rezerwacji opieki na jedną z Twoich ofert",
+    "care_update": "{{ user }} zaproponował/a nową cenę dla jednej z Twoich opiek",
+    "care_accepted": "{{ user }} zaakceptował/a Twoją opiekę",
+    "care_rejected": "{{ user }} odrzucił/a Twoją opiekę",
+    "confirmation_needed": "Twoja opieka dla {{ user }} oczekuje na potwierdzenie rozpoczęcia",
+    "newNotification": "Masz nowe powiadomienie",
+    "unread": "Nieprzeczytane",
+    "read": "Przeczytane"
   },
 
   "termsAndConditions": "Polityka prywatności",

@@ -81,6 +81,10 @@ class API {
       credentials: "include",
     } as RequestInit;
     const response = await fetch(`${PATH_PREFIX}${path}`, options);
+    if (response.headers.get("Content-Length") === "0") {
+      return {} as T;
+    }
+
     const data = await response.json();
     if (!response.ok) {
       if (showToast !== false)
@@ -264,14 +268,17 @@ class API {
     const queryString = queryParams.toString();
     const requestBody = filters.animals?.map((animal) => ({
       animalType: animal.animalType,
-      offerConfigurations: animal.offerConfigurations.map((offer) => ({
-        ...offer,
-        minPrice: offer.minPrice ? offer.minPrice : 0.01,
-        maxPrice: offer.maxPrice ? offer.maxPrice : 99999.99,
-      })),
+      offerConfigurations: [
+        {
+          attributes: animal.offerConfiguration?.attributes,
+          minPrice: animal.offerConfiguration?.minPrice ?? 0.01,
+          maxPrice: animal.offerConfiguration?.maxPrice ?? 99999.99,
+        }
+      ],
       availabilities: filters.availabilities
         ? this.convertValuesToAvailabilityRanges(filters.availabilities)
         : [],
+      amenities: animal.offerConfiguration?.amenities
     }));
     return this.fetch<CaretakerBasicsResponse>(
       "POST",
@@ -857,7 +864,7 @@ class API {
     if (store.user.profile?.selected_profile) {
       this.authorizedFetch<void>(
         "POST",
-        "api/notifications/all-read",
+        "api/notifications/mark-read",
         undefined,
         {
           "Accept-Role": store.user.profile?.selected_profile,

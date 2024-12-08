@@ -4,12 +4,20 @@ import { Notification } from "../types/notification.types";
 import store from "../store/RootStore";
 
 class NotificationStore {
-  unread: Notification[] = [];
+  all: Notification[] = [];
   unreadChats: number = 0;
   openCareId: number | null = null;
 
   constructor() {
     makeAutoObservable(this);
+  }
+
+  get unread() {
+    return this.all.filter((notif) => !notif.read);
+  }
+
+  get read() {
+    return this.all.filter((notif) => notif.read);
   }
 
   async setup() {
@@ -22,7 +30,7 @@ class NotificationStore {
     try {
       const notifications = await api.getNotifications();
       if (notifications) {
-        this.unread = notifications.content;
+        this.all = notifications.content;
       }
     } catch (error) {
       console.error("Error while fetching notifications");
@@ -57,39 +65,42 @@ class NotificationStore {
     ) {
       location.reload();
     } else {
-      this.unread.unshift(notification);
+      this.all.unshift(notification);
     }
   }
 
-  async markAllAsRead() {
+  markAllAsRead() {
     try {
-      await api.markAllNotificationsAsRead();
-      this.reset();
+      api.markAllNotificationsAsRead();
+      this.all = this.all.map((notif) => ({ 
+        ...notif, 
+        read: true 
+      }));
     } catch (error) {
       console.error("Error");
     }
   }
 
-  async markCareNotificationsAsRead(careId: number) {
+  markCareNotificationsAsRead(careId: number) {
     const careNotificationIds = this.getCareNotifications(careId);
     try {
-      const deletedNotifications = await Promise.all(
-        careNotificationIds.map(async (notifId) => {
-          try {
-            return await api.markNotificationAsRead(notifId);
-          } catch (error) {
-            console.error(
-              `Failed to mark notification ${notifId} as read`,
-              error
-            );
-            return null;
-          }
-        })
-      );
-
-      this.removeNotifications(
-        deletedNotifications.map((notif) => notif!.notificationId)
-      );
+      careNotificationIds.map((notifId) => {
+        try {
+          api.markNotificationAsRead(notifId);
+        } catch (error) {
+          console.error(
+            `Failed to mark notification ${notifId} as read`,
+            error
+          );
+        }
+      });
+      this.all = this.all.map((notif) => {
+        if (careNotificationIds.includes(notif.notificationId)) {
+          return { ...notif, read: true };
+        } else {
+          return notif;
+        }
+      });
     } catch (error) {
       throw new Error(
         "Something went wrong while marking notifications as read"
@@ -97,14 +108,8 @@ class NotificationStore {
     }
   }
 
-  removeNotifications(notificationIds: number[]) {
-    this.unread = this.unread.filter(
-      (notif) => !notificationIds.includes(notif.notificationId)
-    );
-  }
-
   getCareNotifications(careId: number) {
-    return this.unread
+    return this.all
       .filter(
         (notif) => notif.objectType === "CARE" && notif.objectId === careId
       )
@@ -112,7 +117,7 @@ class NotificationStore {
   }
 
   reset() {
-    this.unread = [];
+    this.all = [];
   }
 }
 

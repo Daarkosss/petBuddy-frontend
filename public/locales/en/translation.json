@@ -461,12 +461,14 @@
     "title": "Notifications",
     "markAllAsRead": "Mark all as read",
     "noNotifications": "No notifications",
-    "care_reservation": "New reservation has been made for one of your cares",
-    "care_update": "Price has beeen updated in one of your cares",
-    "care_accepted": "Your care has been accepted",
-    "care_rejected": "Your care has been rejected",
+    "care_reservation": "{{ user }} has made reservation for one of your offers",
+    "care_update": "{{ user }} proposed new price for one of your offers",
+    "care_accepted": "{{ user }} accepted your care",
+    "care_rejected": "{{ user }} rejected your care",
     "confirmation_needed": "Your care is waiting for confirmation of begin",
-    "newNotification": "You have a new notification"
+    "newNotification": "You have a new notification",
+    "unread": "Unread",
+    "read": "Read"
   },
 
   "termsAndConditions": "Terms and conditions",
