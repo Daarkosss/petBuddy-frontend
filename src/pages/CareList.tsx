@@ -19,7 +19,6 @@ import UserInfoPill from "../components/UserInfoPill";
 import { CareSearchFilters, CareStatus } from "../types/care.types";
 import DatePicker, { DateObject } from "react-multi-date-picker";
 import highlightWeekends from "react-multi-date-picker/plugins/highlight_weekends";
-import DatePanel from "react-multi-date-picker/plugins/date_panel";
 import i18n from "../i18n";
 import {
   calendar_en,
@@ -53,15 +52,19 @@ const CareList = () => {
   });
 
   const onEmailsChanged = (values: string[]) => {
-    handleChangeFilters([{ filterName: "emails", filterNewValue: values }]);
+    setFilters({ 
+      ...filters, 
+      emails: values 
+    });
   };
 
   const onDailyPriceChanged = (value: string, filterName: string) => {
     const regex = /^\d{0,5}(\.\d{0,2})?$/;
     if (value === "." || regex.test(value)) {
-      handleChangeFilters([
-        { filterName: filterName, filterNewValue: value ?? 0 },
-      ]);
+      setFilters({ 
+        ...filters,
+        [filterName]: value ?? 0
+      });
     }
   };
 
@@ -72,12 +75,10 @@ const CareList = () => {
     if (value.length > 1 && value.charAt(0) === "0") {
       value = value.slice(1);
     }
-    handleChangeFilters([
-      {
-        filterName: filterName,
-        filterNewValue: value !== "" ? parseFloat(value) : undefined,
-      },
-    ]);
+    setFilters({ 
+      ...filters,
+      [filterName]: value
+    });
   };
 
   const careStatuses: CareStatus[] = [
@@ -150,89 +151,6 @@ const CareList = () => {
     }
   };
 
-  const handleChangeFilters = (changedFilters: HandleFiltersChangeProps[]) => {
-    const newFilters = {
-      animalTypes: filters.animalTypes,
-      caretakerStatuses: filters.caretakerStatuses,
-      clientStatuses: filters.clientStatuses,
-      minCreatedTime: filters.minCreatedTime,
-      maxCreatedTime: filters.maxCreatedTime,
-      minCareStart: filters.minCareStart,
-      maxCareStart: filters.maxCareStart,
-      minCareEnd: filters.minCareEnd,
-      maxCareEnd: filters.maxCareEnd,
-      minDailyPrice: filters.minDailyPrice,
-      maxDailyPrice: filters.maxDailyPrice,
-      emails: filters.emails,
-    };
-    changedFilters.map((newFilter) => {
-      switch (true) {
-        case newFilter.filterName === "animalTypes" ||
-          newFilter.filterName === "emails":
-          newFilters[newFilter.filterName] =
-            newFilter.filterNewValue as string[];
-          break;
-        case newFilter.filterName === "caretakerStatuses" ||
-          newFilter.filterName === "clientStatuses":
-          newFilters[newFilter.filterName] =
-            newFilter.filterNewValue as CareStatus[];
-          break;
-        case newFilter.filterName === "minDailyPrice" ||
-          newFilter.filterName === "maxDailyPrice":
-          newFilters[newFilter.filterName] = newFilter.filterNewValue as number;
-          break;
-        case newFilter.filterName === "minCreatedTime" ||
-          newFilter.filterName === "maxCreatedTime" ||
-          newFilter.filterName === "minCareStart" ||
-          newFilter.filterName === "maxCareStart" ||
-          newFilter.filterName === "minCareEnd" ||
-          newFilter.filterName === "maxCareEnd":
-          newFilters[newFilter.filterName] = newFilter.filterNewValue as string;
-          break;
-      }
-    });
-    setFilters(newFilters);
-  };
-
-  const handleDeselectFilter = (filterNames: string[]) => {
-    const newFilters = {
-      animalTypes: filters.animalTypes,
-      caretakerStatuses: filters.caretakerStatuses,
-      clientStatuses: filters.clientStatuses,
-      minCreatedTime: filters.minCreatedTime,
-      maxCreatedTime: filters.maxCreatedTime,
-      minCareStart: filters.minCareStart,
-      maxCareStart: filters.maxCareStart,
-      minCareEnd: filters.minCareEnd,
-      maxCareEnd: filters.maxCareEnd,
-      minDailyPrice: filters.minDailyPrice,
-      maxDailyPrice: filters.maxDailyPrice,
-      emails: filters.emails,
-    };
-    filterNames.map((filterName) => {
-      switch (true) {
-        case filterName === "animalTypes" ||
-          filterName === "emails" ||
-          filterName === "caretakerStatuses" ||
-          filterName === "clientStatuses":
-          newFilters[filterName] = [];
-          break;
-        case filterName === "minDailyPrice" || filterName === "maxDailyPrice":
-          newFilters[filterName] = undefined;
-          break;
-        case filterName === "minCreatedTime" ||
-          filterName === "maxCreatedTime" ||
-          filterName === "minCareStart" ||
-          filterName === "maxCareStart" ||
-          filterName === "minCareEnd" ||
-          filterName === "maxCareEnd":
-          newFilters[filterName] = "";
-          break;
-      }
-    });
-    setFilters(newFilters);
-  };
-
   useEffect(() => {
     fetchCares();
     store.selectedMenuOption = "cares";
@@ -267,55 +185,39 @@ const CareList = () => {
   ) => {
     if (dates.length === 1) {
       if (firstFilterName === "minCreatedTime") {
-        handleChangeFilters([
-          {
-            filterName: firstFilterName,
-            filterNewValue: formatDate(dates[0], false),
-          },
-          {
-            filterName: secondFilterName,
-            filterNewValue: "",
-          },
-        ]);
+        setFilters({
+          ...filters,
+          [firstFilterName]: formatDate(dates[0], false),
+          [secondFilterName]: "",
+        });
       } else {
-        handleChangeFilters([
-          {
-            filterName: firstFilterName,
-            filterNewValue: dates[0].format("YYYY-MM-DD"),
-          },
-          {
-            filterName: secondFilterName,
-            filterNewValue: "",
-          },
-        ]);
+        setFilters({
+          ...filters,
+          [firstFilterName]: dates[0].format("YYYY-MM-DD"),
+          [secondFilterName]: "",
+        });
       }
     } else {
       if (dates.length === 2) {
         if (firstFilterName === "minCreatedTime") {
-          handleChangeFilters([
-            {
-              filterName: firstFilterName,
-              filterNewValue: formatDate(dates[0], false),
-            },
-            {
-              filterName: secondFilterName,
-              filterNewValue: formatDate(dates[1], true),
-            },
-          ]);
+          setFilters({
+            ...filters,
+            [firstFilterName]: formatDate(dates[0], false),
+            [secondFilterName]: formatDate(dates[1], true),
+          });
         } else {
-          handleChangeFilters([
-            {
-              filterName: firstFilterName,
-              filterNewValue: dates[0].format("YYYY-MM-DD"),
-            },
-            {
-              filterName: secondFilterName,
-              filterNewValue: dates[1].format("YYYY-MM-DD"),
-            },
-          ]);
+          setFilters({
+            ...filters,
+            [firstFilterName]: dates[0].format("YYYY-MM-DD"),
+            [secondFilterName]: dates[1].format("YYYY-MM-DD"),
+          });
         }
       } else {
-        handleDeselectFilter([firstFilterName, secondFilterName]);
+        setFilters({
+          ...filters,
+          [firstFilterName]: "",
+          [secondFilterName]: "",
+        });
       }
     }
   };
@@ -331,37 +233,22 @@ const CareList = () => {
 
   const renderCareFilters = () => {
     return availableFilters.map((filterName, index) => {
-      switch (true) {
-        case filterName === "CareStart" ||
-          filterName === "CareEnd" ||
-          filterName === "CreatedTime":
+      switch (filterName) {
+        case "CareStart":
+        case "CareEnd":
+        case "CreatedTime":
           return (
             <div className="calendar-wrapper">
               <h3>{t(`careSearch.${filterName}`)}</h3>
               <DatePicker
                 maxDate={filterName === "CreatedTime" ? new Date() : undefined}
                 key={filterName}
-                onChange={(dates) => {
-                  if (filterName === "CareStart") {
-                    onDateChange(dates, "minCareStart", "maxCareStart");
-                  } else {
-                    if (filterName === "CareEnd") {
-                      onDateChange(dates, "minCareEnd", "maxCareEnd");
-                    } else {
-                      onDateChange(dates, "minCreatedTime", "maxCreatedTime");
-                    }
-                  }
-                }}
+                onChange={(dates) => onDateChange(dates, `min${filterName}`, `max${filterName}`)}
+                value={[filters[`min${filterName}`] || "", filters[`max${filterName}`] || ""]}
                 locale={i18n.language === "pl" ? calendar_pl : calendar_en}
-                style={{ maxWidth: 100 }}
                 range
                 plugins={[
                   highlightWeekends(),
-                  <DatePanel
-                    header={t("selectedDates")}
-                    style={{ maxWidth: 150 }}
-                    position="bottom"
-                  />,
                 ]}
                 render={(value, openCalendar) => (
                   <Tooltip
@@ -371,6 +258,14 @@ const CareList = () => {
                   >
                     <Input
                       value={value}
+                      allowClear
+                      onClear={() => {
+                        setFilters({
+                          ...filters,
+                          [`min${filterName}`]: "",
+                          [`max${filterName}`]: "",
+                        });
+                      }}
                       onFocus={openCalendar}
                       placeholder={t("placeholder.date")}
                     />
@@ -379,8 +274,8 @@ const CareList = () => {
               />
             </div>
           );
-        case filterName === "caretakerStatuses" ||
-          filterName === "clientStatuses":
+        case "caretakerStatuses":
+        case "clientStatuses":
           return (
             <Select
               key={`cs${index}`}
@@ -389,28 +284,23 @@ const CareList = () => {
               allowClear
               placeholder={t(`careSearch.${filterName}`)}
               onSelect={(value) => {
-                filters[filterName].push(value as CareStatus);
-                handleChangeFilters([
-                  {
-                    filterName: filterName,
-                    filterNewValue: filters[filterName],
-                  },
-                ]);
+                const newValues = [...filters[filterName], value];
+                setFilters({
+                  ...filters,
+                  [filterName]: newValues
+                 });
               }}
               onDeselect={(value: string) => {
-                handleChangeFilters([
-                  {
-                    filterName: filterName,
-                    filterNewValue: [
-                      ...filters[filterName].filter((val) => val !== value),
-                    ],
-                  },
-                ]);
+                setFilters({
+                  ...filters,
+                  [filterName]: filters[filterName].filter((val) => val !== value),
+                });
               }}
               onClear={() => {
-                handleChangeFilters([
-                  { filterName: filterName, filterNewValue: [] },
-                ]);
+                setFilters({
+                  ...filters,
+                  [filterName]: [],
+                });
               }}
             >
               {careStatuses.map((filterValue, indexStatus) => (
@@ -420,7 +310,7 @@ const CareList = () => {
               ))}
             </Select>
           );
-        case filterName === "animalTypes":
+        case "animalTypes":
           return (
             <Select
               key={`at${index}`}
@@ -429,28 +319,23 @@ const CareList = () => {
               allowClear
               placeholder={t(`careSearch.${filterName}`)}
               onSelect={(value) => {
-                filters[filterName].push(value);
-                handleChangeFilters([
-                  {
-                    filterName: filterName,
-                    filterNewValue: filters[filterName],
-                  },
-                ]);
+                const newValues = [...filters[filterName], value];
+                setFilters({
+                  ...filters,
+                  [filterName]: newValues,
+                });
               }}
               onDeselect={(value: string) =>
-                handleChangeFilters([
-                  {
-                    filterName: filterName,
-                    filterNewValue: [
-                      ...filters[filterName].filter((val) => val !== value),
-                    ],
-                  },
-                ])
+                setFilters({
+                  ...filters,
+                  [filterName]: filters[filterName].filter((val) => val !== value),
+                })
               }
               onClear={() =>
-                handleChangeFilters([
-                  { filterName: filterName, filterNewValue: [] },
-                ])
+                setFilters({
+                  ...filters,
+                  [filterName]: [],
+                })
               }
             >
               {store.animal.allAnimalTypes.map((animalType, indexAnimals) => (
@@ -461,7 +346,8 @@ const CareList = () => {
             </Select>
           );
 
-        case filterName === "minDailyPrice" || filterName === "maxDailyPrice":
+        case "minDailyPrice":
+        case "maxDailyPrice":
           return (
             <Tooltip
               key={`dpT${index}`}
@@ -482,7 +368,7 @@ const CareList = () => {
             </Tooltip>
           );
 
-        case filterName === "emails":
+        case "emails":
           return (
             <div key={`emd${index}`} className="care-list-emails">
               <Tooltip
@@ -520,7 +406,6 @@ const CareList = () => {
       }
     });
   };
-  //
 
   return (
     <div className="care-list-main-container">
@@ -532,16 +417,13 @@ const CareList = () => {
           value={pagingParams.sortBy}
           defaultValue="submittedAt"
           options={[
-            "id",
             "submittedAt",
             "caretakerStatus",
             "clientStatus",
             "careStart",
             "careEnd",
-            "description",
             "dailyPrice",
             "animal_animalType",
-            "selectedOptions",
             "caretaker_email",
             "client_email",
           ].map((sortName) => ({

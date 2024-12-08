@@ -235,10 +235,10 @@
     "careStart": "Rozpoczęcie opieki",
     "careEnd": "Zakończenie opieki",
     "description": "Opis",
-    "dailyPrice": "Dzienna cena",
+    "dailyPrice": "Cena za dzień",
     "animal_animalType": "Rodzaj zwierzęcia",
     "selectedOptions": "Wybrane opcje",
-    "caretaker_email": "Email Opiekuna",
+    "caretaker_email": "Email opiekuna",
     "client_email": "Email Klienta",
     "ASC": "Rosnąco",
     "DESC": "Malejąco"
