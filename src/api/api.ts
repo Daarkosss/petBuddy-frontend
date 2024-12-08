@@ -268,11 +268,11 @@ class API {
     const queryString = queryParams.toString();
     const requestBody = filters.animals?.map((animal) => ({
       animalType: animal.animalType,
-      offerConfigurations: animal.offerConfiguration && [
+      offerConfigurations: [
         {
-          attributes: animal.offerConfiguration.attributes,
-          minPrice: animal.offerConfiguration.minPrice ? animal.offerConfiguration.minPrice : 0.01,
-          maxPrice: animal.offerConfiguration.maxPrice ? animal.offerConfiguration.maxPrice : 99999.99,
+          attributes: animal.offerConfiguration?.attributes,
+          minPrice: animal.offerConfiguration?.minPrice ?? 0.01,
+          maxPrice: animal.offerConfiguration?.maxPrice ?? 99999.99,
         }
       ],
       availabilities: filters.availabilities
