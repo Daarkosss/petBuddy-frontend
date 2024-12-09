@@ -21,6 +21,7 @@ interface ChatBoxProperties {
   name: string;
   surname: string;
   profile: string;
+  didCurrentlyLoggedUserBlocked: (otherUserEmail: string) => boolean;
 }
 
 const ChatBox: React.FC<ChatBoxProperties> = ({
@@ -31,6 +32,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
   name,
   surname,
   profile,
+  didCurrentlyLoggedUserBlocked,
 }) => {
   const [wsClient, setWsClient] = useState<Client | null>(null);
   const [doesChatRoomExist, setDoesChatRoomExist] = useState<boolean | null>(
@@ -78,22 +80,18 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
   }, [wsClient, store.user.profile?.selected_profile]);
 
   const checkWhoBlocked = async () => {
-    const blockedUsers = await api.getBlockedUsers();
-    if (blockedUsers?.content) {
-      for (let i = 0; i < blockedUsers?.content.length; i++) {
-        if (blockedUsers.content[i].email === recipientEmail) {
-          setBlockInfo({
-            isChatRoomBlocked: true,
-            whichUserBlocked: {
-              name: store.user.profile?.firstName!,
-              surname: store.user.profile?.lastName!,
-              email: store.user.profile?.email!,
-            },
-          });
-          return;
-        }
-      }
-
+    const result = await didCurrentlyLoggedUserBlocked(recipientEmail);
+    console.log(result);
+    if (result) {
+      setBlockInfo({
+        isChatRoomBlocked: true,
+        whichUserBlocked: {
+          name: store.user.profile?.firstName!,
+          surname: store.user.profile?.lastName!,
+          email: store.user.profile?.email!,
+        },
+      });
+    } else {
       setBlockInfo({
         isChatRoomBlocked: true,
         whichUserBlocked: {

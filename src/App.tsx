@@ -46,6 +46,19 @@ const App = observer(() => {
     profile: undefined,
   });
 
+  const didCurrentlyLoggedUserBlocked = async (otherUserEmail: string) => {
+    const blockedUsers = await api.getBlockedUsers();
+    console.log(blockedUsers?.content);
+    if (blockedUsers?.content) {
+      for (let i = 0; i < blockedUsers?.content.length; i++) {
+        if (blockedUsers.content[i].email === otherUserEmail) {
+          return true;
+        }
+      }
+      return false;
+    }
+  };
+
   const handleSetOpenChat = (
     recipientEmail: string | undefined,
     profilePicture: string | undefined,
@@ -116,6 +129,7 @@ const App = observer(() => {
         <Header handleOpenChat={handleSetOpenChat} />
         {openChat.shouldOpenMaximizedChat && (
           <ChatBox
+            didCurrentlyLoggedUserBlocked={didCurrentlyLoggedUserBlocked}
             recipientEmail={openChat.recipientEmail!}
             profilePicture={
               openChat.profilePicture !== undefined
