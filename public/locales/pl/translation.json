@@ -479,5 +479,8 @@
   },
 
   "termsAndConditions": "Polityka prywatności",
-  "clickToZoom": "Naciśnij aby powiekszyć"
+  "clickToZoom": "Naciśnij aby powiekszyć",
+  "blockUser": "Zablokuj użytkownika",
+  "unblockUser": "Odblokuj użytkownika",
+  "youHaveBeenBlocked": "Użytkownik Cię zablokował"
 }

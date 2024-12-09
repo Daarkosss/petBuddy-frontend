@@ -472,5 +472,8 @@
   },
 
   "termsAndConditions": "Terms and conditions",
-  "clickToZoom": "Click to zoom"
+  "clickToZoom": "Click to zoom",
+  "blockUser": "Block user",
+  "unblockUser": "Unblock user",
+  "youHaveBeenBlocked": "User has blocked you"
 }
