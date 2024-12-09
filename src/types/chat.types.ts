@@ -13,17 +13,6 @@ export interface HandleSetOpenChat {
   ) => void;
 }
 
-export type ChatRoom = {
-  id: number;
-  chatterEmail: string;
-  chatterName: string;
-  chatterSurname: string;
-  lastMessageCreatedAt: string;
-  lastMessage: string;
-  lastMessageSendBy: string;
-  seenByPrincipal: boolean;
-};
-
 export type ChatMessage = {
   id: number;
   chatId: number;
@@ -52,6 +41,7 @@ export type WebsocketResponse = {
   content: ChatMessage;
   chatId?: number;
   joiningUserEmail?: string;
+  blockType?: string;
 };
 
 export type ChatsResponse = {
@@ -84,4 +74,12 @@ export type Chat = {
     createdAt: string;
     seenByRecipient: boolean;
   };
+  blocked: boolean;
+};
+
+export type ChatBlockInfo = {
+  isChatRoomBlocked: boolean;
+  whichUserBlocked:
+    | { name: string; surname: string; email: string }
+    | undefined;
 };
