@@ -21,7 +21,9 @@ interface ChatBoxProperties {
   name: string;
   surname: string;
   profile: string;
-  didCurrentlyLoggedUserBlocked: (otherUserEmail: string) => boolean;
+  didCurrentlyLoggedUserBlocked: (
+    otherUserEmail: string
+  ) => Promise<boolean | undefined>;
 }
 
 const ChatBox: React.FC<ChatBoxProperties> = ({
@@ -81,7 +83,6 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
 
   const checkWhoBlocked = async () => {
     const result = await didCurrentlyLoggedUserBlocked(recipientEmail);
-    console.log(result);
     if (result) {
       setBlockInfo({
         isChatRoomBlocked: true,
