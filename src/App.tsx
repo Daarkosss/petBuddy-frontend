@@ -49,7 +49,7 @@ const App = observer(() => {
   const [lastVisitedProfile, setLastVisitedProfile] = useState<
     string | undefined
   >(undefined);
-  const [triggerReloadProfilePage, setTriggerReload] = useState<boolean>(false);
+  const [triggerReload, setTriggerReload] = useState<boolean>(false);
 
   const handleBlockUnblockUser = async (
     userEmail: string,
@@ -61,7 +61,7 @@ const App = observer(() => {
         ? await api.blockUser(userEmail)
         : await api.unblockUser(userEmail);
       if (userEmail === lastVisitedProfile) {
-        setTriggerReload(!triggerReloadProfilePage);
+        setTriggerReload(!triggerReload);
       }
       if (onSuccess) {
         onSuccess();
@@ -154,7 +154,11 @@ const App = observer(() => {
   if (!store.isStarting) {
     return (
       <Layout>
-        <Header handleOpenChat={handleSetOpenChat} />
+        <Header
+          handleOpenChat={handleSetOpenChat}
+          handleBlockUnblockUser={handleBlockUnblockUser}
+          triggerReload={triggerReload}
+        />
         {openChat.shouldOpenMaximizedChat && (
           <ChatBox
             didCurrentlyLoggedUserBlocked={didCurrentlyLoggedUserBlocked}
@@ -247,7 +251,7 @@ const App = observer(() => {
                         setVisitingProfile={(profile: string) =>
                           setLastVisitedProfile(profile)
                         }
-                        triggerReload={triggerReloadProfilePage}
+                        triggerReload={triggerReload}
                         handleBlockUnblockUser={handleBlockUnblockUser}
                       />
                     }

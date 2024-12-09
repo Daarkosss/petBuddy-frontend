@@ -490,8 +490,11 @@
   "chatBlockade": "Chat blockade",
   "blockade": "Blockade",
   "notPossibleSendRequest": "It is not possible to send care request",
+  "blockedUsers": "Blocked users",
 
   "noChatHistory": "No chat history with",
   "chatIsBlockedBy": "Chat is blocked by",
-  "writeFirstMessage": "Write your first message"
+  "writeFirstMessage": "Write your first message",
+
+  "chatRooms": "Chat rooms"
 }

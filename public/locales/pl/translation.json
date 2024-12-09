@@ -496,8 +496,11 @@
   "chatBlockade": "Blokada chatu",
   "blockade": "Blokada",
   "notPossibleSendRequest": "Brak możliwości rezerwacji",
+  "blockedUsers": "Zablokowani użytkownicy",
 
   "noChatHistory": "Brak historii chatu z",
   "chatIsBlockedBy": "Chat jest zablokowany przez",
-  "writeFirstMessage": "Napisz pierwszą wiadomość"
+  "writeFirstMessage": "Napisz pierwszą wiadomość",
+
+  "chatRooms": "Chaty"
 }
