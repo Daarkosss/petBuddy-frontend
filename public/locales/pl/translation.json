@@ -188,7 +188,8 @@
     "rate": "Oceń- możesz ocenić opiekuna jedynie po pomyślnie zakończonej opiece",
     "noRatingsToShow": "Brak ocen do wyświetlenia",
     "page": "strona",
-    "noCaretakerProfile": "Nie posiadasz jeszcze profilu opiekuna"
+    "noCaretakerProfile": "Nie posiadasz jeszcze profilu opiekuna",
+    "noDescription": "Brak opisu"
   },
 
   "sort": {

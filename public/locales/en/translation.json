@@ -183,7 +183,8 @@
     "rate": "Rate- you can only rate caretaker after finished care",
     "noRatingsToShow": "There are no ratings to show",
     "page": "page",
-    "noCaretakerProfile": "Currently you do not have caretaker profile"
+    "noCaretakerProfile": "Currently you do not have caretaker profile",
+    "noDescription": "Description was not provided"
   },
 
   "sort": {

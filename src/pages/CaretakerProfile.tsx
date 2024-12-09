@@ -430,7 +430,9 @@ const CaretakerProfile: React.FC<CaretakerProfileProps> = ({
             )}
             <h4>{t("profilePage.description")}</h4>
             {profileData !== null && profileData !== undefined && (
-              <div>{profileData.description}</div>
+              <div>
+                {profileData.description ?? t("profilePage.noDescription")}
+              </div>
             )}
             <div>
               {isSmallScreen && (
