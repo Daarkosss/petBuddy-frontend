@@ -19,6 +19,7 @@ import TermsAndConditions from "./pages/TermsAndConditions";
 import ChatBox from "./components/ChatBox";
 import ChatMinimized from "./components/ChatMinimized";
 import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 
 const { Content } = Layout;
 
@@ -50,27 +51,18 @@ const App = observer(() => {
   >(undefined);
   const [triggerReloadProfilePage, setTriggerReload] = useState<boolean>(false);
 
-  const blockUser = async (userEmail: string) => {
+  const handleBlockUnblockUser = async (userEmail: string, option: string) => {
     try {
-      await api.blockUser(userEmail);
+      option === "blockUser"
+        ? await api.blockUser(userEmail)
+        : await api.unblockUser(userEmail);
       if (userEmail === lastVisitedProfile) {
         setTriggerReload(!triggerReloadProfilePage);
       }
+      toast.success(t(`success.${option}`));
     } catch (e: unknown) {
       if (e instanceof Error) {
-        console.error(e.message);
-      }
-    }
-  };
-
-  const unblockUser = async (userEmail: string) => {
-    try {
-      await api.unblockUser(userEmail);
-      if (userEmail === lastVisitedProfile) {
-        setTriggerReload(!triggerReloadProfilePage);
-      }
-    } catch (e: unknown) {
-      if (e instanceof Error) {
+        toast.error(t(`error.${option}`));
         console.error(e.message);
       }
     }
@@ -187,8 +179,7 @@ const App = observer(() => {
             name={openChat.name ?? ""}
             surname={openChat.surname ?? ""}
             profile={t(openChat.profile ?? "")}
-            blockUser={blockUser}
-            unblockUser={unblockUser}
+            handleBlockUnblockUser={handleBlockUnblockUser}
           />
         )}
         {openChat.shouldOpenMinimizedChat && (
@@ -251,8 +242,7 @@ const App = observer(() => {
                           setLastVisitedProfile(profile)
                         }
                         triggerReload={triggerReloadProfilePage}
-                        blockUser={blockUser}
-                        unblockUser={unblockUser}
+                        handleBlockUnblockUser={handleBlockUnblockUser}
                       />
                     }
                   />

@@ -42,8 +42,7 @@ interface CaretakerProfileProps {
   didCurrentlyLoggedUserBlocked?: (otherUserEmail: string) => Promise<boolean>;
   setVisitingProfile?: (profile: string) => void;
   triggerReload?: boolean;
-  blockUser?: (userEmail: string) => void;
-  unblockUser?: (userEmail: string) => void;
+  handleBlockUnblockUser?: (userEmail: string, option: string) => void;
 }
 
 const CaretakerProfile: React.FC<CaretakerProfileProps> = ({
@@ -51,8 +50,7 @@ const CaretakerProfile: React.FC<CaretakerProfileProps> = ({
   didCurrentlyLoggedUserBlocked,
   setVisitingProfile,
   triggerReload,
-  blockUser,
-  unblockUser,
+  handleBlockUnblockUser,
 }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -357,7 +355,10 @@ const CaretakerProfile: React.FC<CaretakerProfileProps> = ({
                               title={t("sureToUnblock")}
                               onConfirm={() => {
                                 setShowDeleteConfirmationPopup(false);
-                                unblockUser!(profileData.accountData.email);
+                                handleBlockUnblockUser!(
+                                  profileData.accountData.email,
+                                  "unblockUser"
+                                );
                               }}
                               onCancel={() =>
                                 setShowDeleteConfirmationPopup(false)
@@ -383,7 +384,10 @@ const CaretakerProfile: React.FC<CaretakerProfileProps> = ({
                             description={t("blockInfo")}
                             onConfirm={() => {
                               setShowDeleteConfirmationPopup(false);
-                              blockUser!(profileData.accountData.email);
+                              handleBlockUnblockUser!(
+                                profileData.accountData.email,
+                                "blockUser"
+                              );
                             }}
                             onCancel={() =>
                               setShowDeleteConfirmationPopup(false)

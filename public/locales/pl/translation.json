@@ -301,7 +301,8 @@
     "acceptCare": "Wystąpił błąd podczas akceptacji opieki",
     "rejectCare": "Wystąpił błąd podczas odrzucenia opieki",
     "changeProfilePicture": "Wystąpił błąd podczas zmieniania zdjęcia profilowego",
-    "confirmBeginOfCare": "Wystąpił błąd podczas potwierdzania rozpoczęcia opieki"
+    "confirmBeginOfCare": "Wystąpił błąd podczas potwierdzania rozpoczęcia opieki",
+    "blockUser": "Wystapił błąd przy próbie zablokowania użytkownika"
   },
 
   "success": {
@@ -319,7 +320,8 @@
     "acceptCare": "Opieka została pomyślnie zaakceptowana",
     "rejectCare": "Opieka została pomyślnie odrzucona",
     "changeProfilePicture": "Zdjęcie zostało pomyślnie zmienione",
-    "confirmBeginOfCare": "Rozpoczęcie opieki zostało pomyślnie potwierdzone"
+    "confirmBeginOfCare": "Rozpoczęcie opieki zostało pomyślnie potwierdzone",
+    "blockUser": "Użytkownik został pomyślnie zablokowany"
   },
 
   "dailyPrice": "Cena za dzień",

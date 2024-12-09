@@ -19,8 +19,7 @@ interface ChatBoxProperties {
   surname: string;
   profile: string;
   didCurrentlyLoggedUserBlocked: (otherUserEmail: string) => Promise<boolean>;
-  blockUser: (userEmail: string) => void;
-  unblockUser: (userEmail: string) => void;
+  handleBlockUnblockUser: (userEmail: string, option: string) => void;
 }
 
 const ChatBox: React.FC<ChatBoxProperties> = ({
@@ -32,8 +31,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
   surname,
   profile,
   didCurrentlyLoggedUserBlocked,
-  blockUser,
-  unblockUser,
+  handleBlockUnblockUser,
 }) => {
   const [wsClient, setWsClient] = useState<Client | null>(null);
   const [doesChatRoomExist, setDoesChatRoomExist] = useState<boolean | null>(
@@ -308,8 +306,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
               }}
               blockInfo={blockInfo}
               recipientEmail={recipientEmail}
-              blockUser={blockUser}
-              unblockUser={unblockUser}
+              handleBlockUnblockUser={handleBlockUnblockUser}
             />
             <ChatMessages
               messages={messages}

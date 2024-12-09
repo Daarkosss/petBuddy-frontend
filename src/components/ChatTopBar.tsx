@@ -8,7 +8,6 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
-import { api } from "../api/api";
 import store from "../store/RootStore";
 import { UserBlockInfo } from "../types";
 
@@ -21,8 +20,7 @@ interface ChatTopBarProps {
   onMinimize: () => void;
   blockInfo: UserBlockInfo;
   recipientEmail: string;
-  blockUser: (userEmail: string) => void;
-  unblockUser: (userEmail: string) => void;
+  handleBlockUnblockUser: (userEmail: string, option: string) => void;
 }
 
 const ChatTopBar: React.FC<ChatTopBarProps> = ({
@@ -34,8 +32,7 @@ const ChatTopBar: React.FC<ChatTopBarProps> = ({
   onMinimize,
   blockInfo,
   recipientEmail,
-  blockUser,
-  unblockUser,
+  handleBlockUnblockUser,
 }) => {
   const { t } = useTranslation();
   const [showDeleteConfirmationPopup, setShowDeleteConfirmationPopup] =
@@ -44,9 +41,9 @@ const ChatTopBar: React.FC<ChatTopBarProps> = ({
   const handleBlockUser = () => {
     setShowDeleteConfirmationPopup(false);
     if (!blockInfo.isBlocked) {
-      blockUser(recipientEmail);
+      handleBlockUnblockUser(recipientEmail, "blockUser");
     } else {
-      unblockUser(recipientEmail);
+      handleBlockUnblockUser(recipientEmail, "unblockUser");
     }
   };
 

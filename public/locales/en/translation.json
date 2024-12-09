@@ -295,7 +295,9 @@
     "updatePrice": "An error occurred while updating price",
     "acceptCare": "An error occurred while accepting care",
     "changeProfilePicture": "An error occured while changing profile picture",
-    "confirmBeginOfCare": "An error occurred while confirming begin of care"
+    "confirmBeginOfCare": "An error occurred while confirming begin of care",
+    "blockUser": "An error occured while blocking user",
+    "unblockUser": "An error occured while unblocking user"
   },
 
   "success": {
@@ -312,7 +314,9 @@
     "updatePrice": "Care price has been successfully updated",
     "acceptCare": "Care has been successfully accepted",
     "changeProfilePicture": "You have successfully changed your profile picture",
-    "confirmBeginOfCare": "Begin of care has been successfully confirmed"
+    "confirmBeginOfCare": "Begin of care has been successfully confirmed",
+    "blockUser": "User has been successfully blocked",
+    "unblockUser": "User has been successfully unblocked"
   },
 
   "dailyPrice": "Daily price",
