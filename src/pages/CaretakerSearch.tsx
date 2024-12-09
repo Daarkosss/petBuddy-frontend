@@ -201,7 +201,7 @@ const CaretakerList = () => {
                   record.accountData.email === store.user.profile?.email &&
                   store.user.profile?.selected_profile === "CLIENT"
                 ) {
-                  navigate(`/profile-client`);
+                  navigate("/profile-client");
                 } else {
                   navigate(`/profile-caretaker/${record.accountData.email}`);
                 }

@@ -32,11 +32,6 @@ const BlockedUsersBadge: React.FC<BlockedUsersBadgeProps> = ({
     total: 0,
   });
 
-  const [pagingParams, setPagingParams] = useState({
-    page: 0,
-    size: 5,
-  });
-
   const getBlockedUsers = async (userDataLike?: string) => {
     await api.getBlockedUsers().then((data) => {
       if (data !== undefined) {
@@ -58,13 +53,6 @@ const BlockedUsersBadge: React.FC<BlockedUsersBadgeProps> = ({
     gBlockedUsers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [triggerReload]);
-
-  const handleOnPageChange = (page: number, pageSize?: number) => {
-    setPagingParams({
-      page: page - 1,
-      size: pageSize || 5,
-    });
-  };
 
   return (
     <Badge count={0} overflowCount={0} className="notification-badge">
@@ -111,7 +99,6 @@ const BlockedUsersBadge: React.FC<BlockedUsersBadgeProps> = ({
                 current: pagination.current,
                 pageSize: pagination.size,
                 total: pagination.total,
-                onChange: handleOnPageChange,
               }}
               renderItem={(item) => (
                 <List.Item

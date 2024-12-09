@@ -87,9 +87,9 @@ const CaretakerProfile: React.FC<CaretakerProfileProps> = ({
       setBlockInfo({
         isBlocked: true,
         whichUserBlocked: {
-          name: store.user.profile?.firstName!,
-          surname: store.user.profile?.lastName!,
-          email: store.user.profile?.email!,
+          name: store.user.profile!.firstName!,
+          surname: store.user.profile!.lastName!,
+          email: store.user.profile!.email!,
         },
       });
     } else {
@@ -114,7 +114,6 @@ const CaretakerProfile: React.FC<CaretakerProfileProps> = ({
       if (data.accountData.profilePicture !== null) {
         setProfilePicture(data.accountData.profilePicture.url);
       }
-      console.log(data.blocked);
       if (data.blocked) {
         checkWhoBlocked(
           data.accountData.name,

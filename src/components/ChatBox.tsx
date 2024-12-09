@@ -84,9 +84,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
 
   const checkWhoBlocked = async () => {
     const result = await didCurrentlyLoggedUserBlocked(recipientEmail);
-    console.log(result);
     if (result) {
-      console.log("jest");
       setBlockInfo({
         isBlocked: true,
         whichUserBlocked: {
