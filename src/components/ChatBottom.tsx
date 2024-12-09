@@ -7,9 +7,13 @@ import { useTranslation } from "react-i18next";
 
 interface ChatBottomParameters {
   onSend: (input: string) => void;
+  isChatRoomBlocked: boolean;
 }
 
-const ChatBottom: React.FC<ChatBottomParameters> = ({ onSend }) => {
+const ChatBottom: React.FC<ChatBottomParameters> = ({
+  onSend,
+  isChatRoomBlocked,
+}) => {
   const { t } = useTranslation();
   const [input, setInput] = useState<string>("");
 
@@ -26,21 +30,30 @@ const ChatBottom: React.FC<ChatBottomParameters> = ({ onSend }) => {
     <div className="chat-bottom-container">
       <MoreOutlined size={90} />
       <Input
+        disabled={isChatRoomBlocked}
         placeholder={`${t("placeholder.writeMessage")}...`}
         onChange={(event) => setInput(event.target.value)}
         onKeyDown={(e) => onKeyDown(e.code)}
         value={input}
       />
-      <Button
-        type="primary"
-        className="send-message-button"
-        onClick={() => {
-          setInput("");
-          onSend(input);
-        }}
-      >
-        <SendOutlined />
-      </Button>
+      {!isChatRoomBlocked && (
+        <Button
+          type="primary"
+          className="send-message-button"
+          onClick={() => {
+            setInput("");
+            onSend(input);
+          }}
+        >
+          <SendOutlined />
+        </Button>
+      )}
+
+      {isChatRoomBlocked && (
+        <Button disabled type="primary">
+          <SendOutlined />
+        </Button>
+      )}
     </div>
   );
 };
