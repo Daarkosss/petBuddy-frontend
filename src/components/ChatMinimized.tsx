@@ -1,4 +1,4 @@
-import { BorderOutlined, CloseOutlined, MenuOutlined } from "@ant-design/icons";
+import { BorderOutlined, CloseOutlined } from "@ant-design/icons";
 import React from "react";
 import "../scss/components/_chatMinimized.scss";
 

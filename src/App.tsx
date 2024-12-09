@@ -51,13 +51,20 @@ const App = observer(() => {
   >(undefined);
   const [triggerReloadProfilePage, setTriggerReload] = useState<boolean>(false);
 
-  const handleBlockUnblockUser = async (userEmail: string, option: string) => {
+  const handleBlockUnblockUser = async (
+    userEmail: string,
+    option: string,
+    onSuccess?: () => void
+  ) => {
     try {
       option === "blockUser"
         ? await api.blockUser(userEmail)
         : await api.unblockUser(userEmail);
       if (userEmail === lastVisitedProfile) {
         setTriggerReload(!triggerReloadProfilePage);
+      }
+      if (onSuccess) {
+        onSuccess();
       }
       toast.success(t(`success.${option}`));
     } catch (e: unknown) {
@@ -70,7 +77,6 @@ const App = observer(() => {
 
   const didCurrentlyLoggedUserBlocked = async (otherUserEmail: string) => {
     const blockedUsers = await api.getBlockedUsers();
-    console.log(blockedUsers?.content);
     if (blockedUsers?.content) {
       for (let i = 0; i < blockedUsers?.content.length; i++) {
         if (blockedUsers.content[i].email === otherUserEmail) {
