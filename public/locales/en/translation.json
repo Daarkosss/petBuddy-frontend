@@ -483,7 +483,7 @@
   "youHaveBeenBlocked": "User has blocked you",
   "sureToBlock": "Are you sure you want to block this user?",
   "sureToUnblock": "Are you sure you want to unblock this user?",
-  "blockInfo": "If you block this user you and the user will not be able to correspond with each other, as well as send care reservation requests",
+  "blockInfo": "If you block this user you and the user will not be able to correspond with each other or send care reservation requests",
 
   "blockSendRequest": "Blocking user prevents sending care request",
   "blockOpenChat": "Blocking user prevents opening chat",
