@@ -368,7 +368,6 @@ class API {
     }
   }
 
-  //TODO: popraw
   async getCaretakerRatings(
     email: string,
     page: number | null,
