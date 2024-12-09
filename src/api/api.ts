@@ -308,7 +308,11 @@ class API {
     try {
       const response = await this.fetch<CaretakerDetailsDTO>(
         "GET",
-        `api/caretaker/${email}`
+        `api/caretaker/${email}`,
+        undefined,
+        store.user.jwtToken
+          ? { Authorization: `Bearer ${store.user.jwtToken}` }
+          : undefined
       );
       return {
         ...response,
