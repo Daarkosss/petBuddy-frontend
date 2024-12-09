@@ -3,7 +3,8 @@ import { useEffect } from "react";
 import { useRef } from "react";
 import Message from "./Message";
 import "../scss/components/_chatMessages.scss";
-import { ChatMessage } from "../types/chat.types";
+import { ChatBlockInfo, ChatMessage } from "../types/chat.types";
+import { useTranslation } from "react-i18next";
 
 interface ChatBoxContent {
   messages: ChatMessage[];
@@ -11,6 +12,7 @@ interface ChatBoxContent {
   recipientSurname: string;
   lastSeenMessageId?: number;
   profilePicture: string | null;
+  blockInfo: ChatBlockInfo;
 }
 
 const ChatMessages: React.FC<ChatBoxContent> = ({
@@ -19,7 +21,9 @@ const ChatMessages: React.FC<ChatBoxContent> = ({
   recipientSurname,
   lastSeenMessageId,
   profilePicture,
+  blockInfo,
 }) => {
+  const { t } = useTranslation();
   const scrollDownThroughChat = () => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
@@ -28,7 +32,10 @@ const ChatMessages: React.FC<ChatBoxContent> = ({
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => scrollDownThroughChat(), [messages]);
+  useEffect(
+    () => scrollDownThroughChat(),
+    [messages, blockInfo.isChatRoomBlocked]
+  );
 
   return (
     <div className="chat-messages-container">
@@ -49,10 +56,18 @@ const ChatMessages: React.FC<ChatBoxContent> = ({
           />
         </div>
       ))}
-      {messages.length === 0 && (
+      {messages.length === 0 && !blockInfo.isChatRoomBlocked && (
         <div className="chat-messages-no-chat-history">
-          Brak historii chatu z{" "}
-          {`${recipientName} ${recipientSurname}. Napisz pierwszą wiadomość`}
+          {`${t("noChatHistory")} ${recipientName} ${recipientSurname}. ${t(
+            "writeFirstMessage"
+          )}`}
+        </div>
+      )}
+      {blockInfo.isChatRoomBlocked && (
+        <div className="chat-messages-blocked">
+          {`${t("chatIsBlockedBy")} ${blockInfo.whichUserBlocked?.name} ${
+            blockInfo.whichUserBlocked?.surname
+          }`}
         </div>
       )}
       <div ref={messagesEndRef} />
