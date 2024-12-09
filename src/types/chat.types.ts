@@ -76,10 +76,3 @@ export type Chat = {
   };
   blocked: boolean;
 };
-
-export type ChatBlockInfo = {
-  isChatRoomBlocked: boolean;
-  whichUserBlocked:
-    | { name: string; surname: string; email: string }
-    | undefined;
-};

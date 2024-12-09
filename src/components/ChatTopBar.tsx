@@ -9,8 +9,8 @@ import {
 } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 import { api } from "../api/api";
-import { ChatBlockInfo } from "../types/chat.types";
 import store from "../store/RootStore";
+import { UserBlockInfo } from "../types";
 
 interface ChatTopBarProps {
   profilePicture: string | null;
@@ -19,7 +19,7 @@ interface ChatTopBarProps {
   profile: string;
   onClose: () => void;
   onMinimize: () => void;
-  blockInfo: ChatBlockInfo;
+  blockInfo: UserBlockInfo;
   recipientEmail: string;
 }
 
@@ -39,7 +39,7 @@ const ChatTopBar: React.FC<ChatTopBarProps> = ({
 
   const handleBlockUser = () => {
     setShowDeleteConfirmationPopup(false);
-    if (!blockInfo.isChatRoomBlocked) {
+    if (!blockInfo.isBlocked) {
       blockUser();
     } else {
       unblockUser();
@@ -69,7 +69,7 @@ const ChatTopBar: React.FC<ChatTopBarProps> = ({
   const items = [
     {
       key: "blockuser",
-      label: blockInfo.isChatRoomBlocked
+      label: blockInfo.isBlocked
         ? blockInfo.whichUserBlocked?.email !== store.user.profile?.email
           ? t("youHaveBeenBlocked")
           : t("unblockUser")
@@ -77,7 +77,7 @@ const ChatTopBar: React.FC<ChatTopBarProps> = ({
       onClick: () => setShowDeleteConfirmationPopup(true),
       danger: true,
       disabled:
-        blockInfo.isChatRoomBlocked &&
+        blockInfo.isBlocked &&
         blockInfo.whichUserBlocked?.email !== store.user.profile?.email,
     },
   ];
@@ -98,12 +98,8 @@ const ChatTopBar: React.FC<ChatTopBarProps> = ({
           <Popconfirm
             open={showDeleteConfirmationPopup}
             className="options-top-menu-confirm-block-user"
-            title={
-              blockInfo.isChatRoomBlocked
-                ? t("sureToUnblock")
-                : t("sureToBlock")
-            }
-            description={!blockInfo.isChatRoomBlocked ? t("blockInfo") : null}
+            title={blockInfo.isBlocked ? t("sureToUnblock") : t("sureToBlock")}
+            description={!blockInfo.isBlocked ? t("blockInfo") : null}
             onConfirm={() => {
               handleBlockUser();
             }}

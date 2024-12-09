@@ -3,8 +3,9 @@ import { useEffect } from "react";
 import { useRef } from "react";
 import Message from "./Message";
 import "../scss/components/_chatMessages.scss";
-import { ChatBlockInfo, ChatMessage } from "../types/chat.types";
+import { ChatMessage } from "../types/chat.types";
 import { useTranslation } from "react-i18next";
+import { UserBlockInfo } from "../types";
 
 interface ChatBoxContent {
   messages: ChatMessage[];
@@ -12,7 +13,7 @@ interface ChatBoxContent {
   recipientSurname: string;
   lastSeenMessageId?: number;
   profilePicture: string | null;
-  blockInfo: ChatBlockInfo;
+  blockInfo: UserBlockInfo;
 }
 
 const ChatMessages: React.FC<ChatBoxContent> = ({
@@ -32,10 +33,7 @@ const ChatMessages: React.FC<ChatBoxContent> = ({
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  useEffect(
-    () => scrollDownThroughChat(),
-    [messages, blockInfo.isChatRoomBlocked]
-  );
+  useEffect(() => scrollDownThroughChat(), [messages, blockInfo.isBlocked]);
 
   return (
     <div className="chat-messages-container">
@@ -56,14 +54,14 @@ const ChatMessages: React.FC<ChatBoxContent> = ({
           />
         </div>
       ))}
-      {messages.length === 0 && !blockInfo.isChatRoomBlocked && (
+      {messages.length === 0 && !blockInfo.isBlocked && (
         <div className="chat-messages-no-chat-history">
           {`${t("noChatHistory")} ${recipientName} ${recipientSurname}. ${t(
             "writeFirstMessage"
           )}`}
         </div>
       )}
-      {blockInfo.isChatRoomBlocked && (
+      {blockInfo.isBlocked && (
         <div className="chat-messages-blocked">
           {`${t("chatIsBlockedBy")} ${blockInfo.whichUserBlocked?.name} ${
             blockInfo.whichUserBlocked?.surname

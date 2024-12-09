@@ -19,6 +19,7 @@ import TermsAndConditions from "./pages/TermsAndConditions";
 import ChatBox from "./components/ChatBox";
 import ChatMinimized from "./components/ChatMinimized";
 import { useTranslation } from "react-i18next";
+import { UserBlockInfo } from "./types";
 
 const { Content } = Layout;
 
@@ -45,17 +46,40 @@ const App = observer(() => {
     surname: undefined,
     profile: undefined,
   });
+  const [blockInfo, setBlockInfo] = useState<UserBlockInfo>({
+    isBlocked: false,
+    whichUserBlocked: undefined,
+  });
 
-  const didCurrentlyLoggedUserBlocked = async (otherUserEmail: string) => {
+  const didCurrentlyLoggedUserBlocked = async (
+    otherUserName: string,
+    otherUserSurname: string,
+    otherUserEmail: string
+  ) => {
     const blockedUsers = await api.getBlockedUsers();
     console.log(blockedUsers?.content);
     if (blockedUsers?.content) {
       for (let i = 0; i < blockedUsers?.content.length; i++) {
         if (blockedUsers.content[i].email === otherUserEmail) {
-          return true;
+          setBlockInfo({
+            isBlocked: true,
+            whichUserBlocked: {
+              name: store.user.profile?.firstName!,
+              surname: store.user.profile?.lastName!,
+              email: store.user.profile?.email!,
+            },
+          });
+          return;
         }
       }
-      return false;
+      setBlockInfo({
+        isBlocked: true,
+        whichUserBlocked: {
+          name: otherUserName,
+          surname: otherUserSurname,
+          email: otherUserEmail,
+        },
+      });
     }
   };
 
@@ -129,6 +153,18 @@ const App = observer(() => {
         <Header handleOpenChat={handleSetOpenChat} />
         {openChat.shouldOpenMaximizedChat && (
           <ChatBox
+            blockInfo={blockInfo}
+            setBlockInfo={(
+              isBlocked: boolean,
+              whichUserBlocked:
+                | { name: string; surname: string; email: string }
+                | undefined
+            ) =>
+              setBlockInfo({
+                isBlocked: isBlocked,
+                whichUserBlocked: whichUserBlocked,
+              })
+            }
             didCurrentlyLoggedUserBlocked={didCurrentlyLoggedUserBlocked}
             recipientEmail={openChat.recipientEmail!}
             profilePicture={
