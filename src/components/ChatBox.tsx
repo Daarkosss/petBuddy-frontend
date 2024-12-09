@@ -18,18 +18,9 @@ interface ChatBoxProperties {
   name: string;
   surname: string;
   profile: string;
-  didCurrentlyLoggedUserBlocked: (
-    otherUserName: string,
-    otherUserSurname: string,
-    otherUserEmail: string
-  ) => Promise<void>;
-  blockInfo: UserBlockInfo;
-  setBlockInfo: (
-    isBlocked: boolean,
-    whichUserBlocked:
-      | { name: string; surname: string; email: string }
-      | undefined
-  ) => void;
+  didCurrentlyLoggedUserBlocked: (otherUserEmail: string) => Promise<boolean>;
+  blockUser: (userEmail: string) => void;
+  unblockUser: (userEmail: string) => void;
 }
 
 const ChatBox: React.FC<ChatBoxProperties> = ({
@@ -41,8 +32,8 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
   surname,
   profile,
   didCurrentlyLoggedUserBlocked,
-  blockInfo,
-  setBlockInfo,
+  blockUser,
+  unblockUser,
 }) => {
   const [wsClient, setWsClient] = useState<Client | null>(null);
   const [doesChatRoomExist, setDoesChatRoomExist] = useState<boolean | null>(
@@ -54,6 +45,10 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
   const messagesRef = useRef(messages);
   const [lastSeenMessage, setLastSeenMessage] = useState<number | undefined>();
   const { timeZone } = Intl.DateTimeFormat().resolvedOptions();
+  const [blockInfo, setBlockInfo] = useState<UserBlockInfo>({
+    isBlocked: false,
+    whichUserBlocked: undefined,
+  });
 
   useEffect(() => {
     wsClientRef.current = wsClient;
@@ -85,32 +80,28 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wsClient, store.user.profile?.selected_profile]);
 
-  // const checkWhoBlocked = async () => {
-  //   const result = await didCurrentlyLoggedUserBlocked(
-  //     name,
-  //     surname,
-  //     recipientEmail
-  //   );
-  //   if (result) {
-  //     setBlockInfo({
-  //       isChatRoomBlocked: true,
-  //       whichUserBlocked: {
-  //         name: store.user.profile?.firstName!,
-  //         surname: store.user.profile?.lastName!,
-  //         email: store.user.profile?.email!,
-  //       },
-  //     });
-  //   } else {
-  //     setBlockInfo({
-  //       isChatRoomBlocked: true,
-  //       whichUserBlocked: {
-  //         name: name,
-  //         surname: surname,
-  //         email: recipientEmail,
-  //       },
-  //     });
-  //   }
-  // };
+  const checkWhoBlocked = async () => {
+    const result = await didCurrentlyLoggedUserBlocked(recipientEmail);
+    if (result) {
+      setBlockInfo({
+        isBlocked: true,
+        whichUserBlocked: {
+          name: store.user.profile?.firstName!,
+          surname: store.user.profile?.lastName!,
+          email: store.user.profile?.email!,
+        },
+      });
+    } else {
+      setBlockInfo({
+        isBlocked: true,
+        whichUserBlocked: {
+          name: name,
+          surname: surname,
+          email: recipientEmail,
+        },
+      });
+    }
+  };
 
   const checkIfChatRoomExists = async () => {
     try {
@@ -118,9 +109,9 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
       setChatId(data.id);
       setDoesChatRoomExist(true);
       if (data.blocked) {
-        didCurrentlyLoggedUserBlocked(name, surname, recipientEmail);
+        checkWhoBlocked();
       } else {
-        setBlockInfo(false, undefined);
+        setBlockInfo({ isBlocked: false, whichUserBlocked: undefined });
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -129,7 +120,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
         if (match !== null && match[1] === "404") {
           setDoesChatRoomExist(false);
           setMessages([]); //in case we open open chat when previous was opened
-          setBlockInfo(false, undefined); //because blocked user will not be able to open chat with the user that blocked them
+          setBlockInfo({ isBlocked: false, whichUserBlocked: undefined }); //because blocked user will not be able to open chat with the user that blocked them
         }
       }
     }
@@ -186,10 +177,13 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
             if (data.type === "BLOCK") {
               switch (data.blockType) {
                 case "BLOCKED":
-                  didCurrentlyLoggedUserBlocked(name, surname, recipientEmail);
+                  checkWhoBlocked();
                   break;
                 case "UNBLOCKED":
-                  setBlockInfo(false, undefined);
+                  setBlockInfo({
+                    isBlocked: false,
+                    whichUserBlocked: undefined,
+                  });
               }
             }
           }
@@ -314,6 +308,8 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
               }}
               blockInfo={blockInfo}
               recipientEmail={recipientEmail}
+              blockUser={blockUser}
+              unblockUser={unblockUser}
             />
             <ChatMessages
               messages={messages}

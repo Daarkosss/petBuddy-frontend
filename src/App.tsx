@@ -19,7 +19,6 @@ import TermsAndConditions from "./pages/TermsAndConditions";
 import ChatBox from "./components/ChatBox";
 import ChatMinimized from "./components/ChatMinimized";
 import { useTranslation } from "react-i18next";
-import { UserBlockInfo } from "./types";
 
 const { Content } = Layout;
 
@@ -46,41 +45,48 @@ const App = observer(() => {
     surname: undefined,
     profile: undefined,
   });
-  const [blockInfo, setBlockInfo] = useState<UserBlockInfo>({
-    isBlocked: false,
-    whichUserBlocked: undefined,
-  });
+  const [lastVisitedProfile, setLastVisitedProfile] = useState<
+    string | undefined
+  >(undefined);
+  const [triggerReloadProfilePage, setTriggerReload] = useState<boolean>(false);
 
-  const didCurrentlyLoggedUserBlocked = async (
-    otherUserName: string,
-    otherUserSurname: string,
-    otherUserEmail: string
-  ) => {
+  const blockUser = async (userEmail: string) => {
+    try {
+      await api.blockUser(userEmail);
+      if (userEmail === lastVisitedProfile) {
+        setTriggerReload(!triggerReloadProfilePage);
+      }
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        console.error(e.message);
+      }
+    }
+  };
+
+  const unblockUser = async (userEmail: string) => {
+    try {
+      await api.unblockUser(userEmail);
+      if (userEmail === lastVisitedProfile) {
+        setTriggerReload(!triggerReloadProfilePage);
+      }
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        console.error(e.message);
+      }
+    }
+  };
+
+  const didCurrentlyLoggedUserBlocked = async (otherUserEmail: string) => {
     const blockedUsers = await api.getBlockedUsers();
     console.log(blockedUsers?.content);
     if (blockedUsers?.content) {
       for (let i = 0; i < blockedUsers?.content.length; i++) {
         if (blockedUsers.content[i].email === otherUserEmail) {
-          setBlockInfo({
-            isBlocked: true,
-            whichUserBlocked: {
-              name: store.user.profile?.firstName!,
-              surname: store.user.profile?.lastName!,
-              email: store.user.profile?.email!,
-            },
-          });
-          return;
+          return true;
         }
       }
-      setBlockInfo({
-        isBlocked: true,
-        whichUserBlocked: {
-          name: otherUserName,
-          surname: otherUserSurname,
-          email: otherUserEmail,
-        },
-      });
     }
+    return false;
   };
 
   const handleSetOpenChat = (
@@ -153,18 +159,6 @@ const App = observer(() => {
         <Header handleOpenChat={handleSetOpenChat} />
         {openChat.shouldOpenMaximizedChat && (
           <ChatBox
-            blockInfo={blockInfo}
-            setBlockInfo={(
-              isBlocked: boolean,
-              whichUserBlocked:
-                | { name: string; surname: string; email: string }
-                | undefined
-            ) =>
-              setBlockInfo({
-                isBlocked: isBlocked,
-                whichUserBlocked: whichUserBlocked,
-              })
-            }
             didCurrentlyLoggedUserBlocked={didCurrentlyLoggedUserBlocked}
             recipientEmail={openChat.recipientEmail!}
             profilePicture={
@@ -193,6 +187,8 @@ const App = observer(() => {
             name={openChat.name ?? ""}
             surname={openChat.surname ?? ""}
             profile={t(openChat.profile ?? "")}
+            blockUser={blockUser}
+            unblockUser={unblockUser}
           />
         )}
         {openChat.shouldOpenMinimizedChat && (
@@ -246,7 +242,18 @@ const App = observer(() => {
                   <Route
                     path="/profile-caretaker/:caretakerEmail"
                     element={
-                      <CaretakerProfile handleSetOpenChat={handleSetOpenChat} />
+                      <CaretakerProfile
+                        handleSetOpenChat={handleSetOpenChat}
+                        didCurrentlyLoggedUserBlocked={
+                          didCurrentlyLoggedUserBlocked
+                        }
+                        setVisitingProfile={(profile: string) =>
+                          setLastVisitedProfile(profile)
+                        }
+                        triggerReload={triggerReloadProfilePage}
+                        blockUser={blockUser}
+                        unblockUser={unblockUser}
+                      />
                     }
                   />
                   <Route
