@@ -1,5 +1,18 @@
 @use "../helpers/variables" as v;
 
+.options-top-menu-basic {
+  cursor: pointer;
+  color: v.$blue-medium;
+
+  &:hover {
+    color: v.$blue-light;
+  }
+}
+
+.options-top-menu {
+  @extend .options-top-menu-basic;
+}
+
 .chat-top-bar-container {
   background-color: v.$blue-dark;
   color: v.$white;
@@ -18,6 +31,13 @@
       margin: 10px;
       width: 40px;
       color: v.$blue-medium;
+
+      .options-top-small-container-left {
+        max-width: 100px;
+        .options-top-menu-confirm-block-user {
+          max-width: 100px;
+        }
+      }
     }
 
     .options-top-small-container-right {
@@ -27,6 +47,10 @@
       flex-direction: row;
       justify-content: space-between;
       color: v.$blue-medium;
+      .options-top-small-container-minimize,
+      .options-top-small-container-close {
+        @extend .options-top-menu-basic;
+      }
     }
   }
 

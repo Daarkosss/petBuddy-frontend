@@ -7,7 +7,11 @@ import { Client, Stomp } from "@stomp/stompjs";
 import sockJS from "sockjs-client";
 import store from "../store/RootStore";
 import { api, PATH_PREFIX } from "../api/api";
-import { ChatMessage, WebsocketResponse } from "../types/chat.types";
+import {
+  ChatBlockInfo,
+  ChatMessage,
+  WebsocketResponse,
+} from "../types/chat.types";
 
 interface ChatBoxProperties {
   recipientEmail: string;
@@ -38,6 +42,10 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
   const messagesRef = useRef(messages);
   const [lastSeenMessage, setLastSeenMessage] = useState<number | undefined>();
   const { timeZone } = Intl.DateTimeFormat().resolvedOptions();
+  const [blockInfo, setBlockInfo] = useState<ChatBlockInfo>({
+    isChatRoomBlocked: false,
+    whichUserBlocked: undefined,
+  });
 
   useEffect(() => {
     wsClientRef.current = wsClient;
@@ -69,17 +77,58 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wsClient, store.user.profile?.selected_profile]);
 
+  const checkWhoBlocked = async () => {
+    const blockedUsers = await api.getBlockedUsers();
+    if (blockedUsers?.content) {
+      for (let i = 0; i < blockedUsers?.content.length; i++) {
+        if (blockedUsers.content[i].email === recipientEmail) {
+          setBlockInfo({
+            isChatRoomBlocked: true,
+            whichUserBlocked: {
+              name: store.user.profile?.firstName!,
+              surname: store.user.profile?.lastName!,
+              email: store.user.profile?.email!,
+            },
+          });
+          return;
+        }
+      }
+
+      setBlockInfo({
+        isChatRoomBlocked: true,
+        whichUserBlocked: {
+          name: name,
+          surname: surname,
+          email: recipientEmail,
+        },
+      });
+    }
+  };
+
   const checkIfChatRoomExists = async () => {
     try {
       const data = await api.getChatRoomWithGivenUser(recipientEmail, timeZone);
       setChatId(data.id);
       setDoesChatRoomExist(true);
+      if (data.blocked) {
+        checkWhoBlocked();
+      } else {
+        setBlockInfo({
+          isChatRoomBlocked: false,
+          whichUserBlocked: undefined,
+        });
+      }
     } catch (error: unknown) {
       if (error instanceof Error) {
         const regex = /Status code: ([0-9]{3})/;
         const match = error.message.match(regex);
         if (match !== null && match[1] === "404") {
           setDoesChatRoomExist(false);
+          setMessages([]); //in case we open open chat when previous was opened
+          setBlockInfo({
+            isChatRoomBlocked: false,
+            whichUserBlocked: undefined,
+          }); //because blocked user will not be able to open chat with the user that blocked them
         }
       }
     }
@@ -117,6 +166,7 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
       `/user/topic/messages/${chatId}`,
       (message) => {
         const data: WebsocketResponse = JSON.parse(message.body);
+        console.log(data);
         if (data.type === "SEND") {
           if (
             (data.content.senderEmail === store.user.profile?.email &&
@@ -131,6 +181,19 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
         } else {
           if (data.type === "JOIN") {
             handleJoin(data.joiningUserEmail);
+          } else {
+            if (data.type === "BLOCK") {
+              switch (data.blockType) {
+                case "BLOCKED":
+                  checkWhoBlocked();
+                  break;
+                case "UNBLOCKED":
+                  setBlockInfo({
+                    isChatRoomBlocked: false,
+                    whichUserBlocked: undefined,
+                  });
+              }
+            }
           }
         }
       },
@@ -251,6 +314,8 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
               onMinimize={() => {
                 onMinimize();
               }}
+              blockInfo={blockInfo}
+              recipientEmail={recipientEmail}
             />
             <ChatMessages
               messages={messages}
@@ -258,8 +323,12 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
               recipientSurname={surname}
               lastSeenMessageId={lastSeenMessage}
               profilePicture={profilePicture}
+              blockInfo={blockInfo}
             />
-            <ChatBottom onSend={onSend} />
+            <ChatBottom
+              onSend={onSend}
+              isChatRoomBlocked={blockInfo.isChatRoomBlocked}
+            />
           </div>
         )}
       </div>
