@@ -20,20 +20,16 @@ const ChatMinimized: React.FC<MinimizedChatProps> = ({
   return (
     <div className="chat-minimized-box-main-container">
       <div className="chat-minimized-options-top-big-container">
-        <div className="chat-minimized-options-top-small-container-left">
-          <MenuOutlined />
+        <div className="chat-minimized-inner-container">
+          <h5 className="chat-minimized-inner-container-user-nick">
+            {name} {surname}
+          </h5>
+          <p>{profile}</p>
         </div>
         <div className="chat-minimized-options-top-small-container-right">
           <BorderOutlined onClick={() => onMaximize()} />
           <CloseOutlined onClick={() => onClose()} />
         </div>
-      </div>
-
-      <div className="chat-minimized-inner-container">
-        <h5 className="chat-minimized-inner-container-user-nick">
-          {name} {surname}
-        </h5>
-        <p>{profile}</p>
       </div>
     </div>
   );
