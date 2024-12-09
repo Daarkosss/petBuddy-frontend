@@ -475,5 +475,12 @@
   "clickToZoom": "Click to zoom",
   "blockUser": "Block user",
   "unblockUser": "Unblock user",
-  "youHaveBeenBlocked": "User has blocked you"
+  "youHaveBeenBlocked": "User has blocked you",
+  "sureToBlock": "Are you sure you want to block this user?",
+  "sureToUnblock": "Are you sure you want to unblock this user?",
+  "blockInfo": "If you block this user you and the user will not be able to correspond with each other, as well as send care reservation requests",
+
+  "noChatHistory": "No chat history with",
+  "chatIsBlockedBy": "Chat is blocked by",
+  "writeFirstMessage": "Write your first message"
 }

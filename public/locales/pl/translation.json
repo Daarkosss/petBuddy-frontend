@@ -480,7 +480,15 @@
 
   "termsAndConditions": "Polityka prywatności",
   "clickToZoom": "Naciśnij aby powiekszyć",
+
   "blockUser": "Zablokuj użytkownika",
   "unblockUser": "Odblokuj użytkownika",
-  "youHaveBeenBlocked": "Użytkownik Cię zablokował"
+  "youHaveBeenBlocked": "Użytkownik Cię zablokował",
+  "sureToBlock": "Czy na pewno chcesz zablokować tego użytkownika?",
+  "sureToUnblock": "Czy na pewno chcesz odblokować tego użytkownika?",
+  "blockInfo": "Jeśli zablokujesz tego użytkownika, nie będziecie mogli wysyłać do siebie wiadomości, ani składać prośby rezerwacji opieki",
+
+  "noChatHistory": "Brak historii chatu z",
+  "chatIsBlockedBy": "Chat jest zablokowany przez",
+  "writeFirstMessage": "Napisz pierwszą wiadomość"
 }
