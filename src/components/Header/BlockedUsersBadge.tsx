@@ -89,7 +89,7 @@ const BlockedUsersBadge: React.FC<BlockedUsersBadgeProps> = ({
             <LoadingOutlined />
           </div>
         ) : (
-          <div className="chat-badge-modal-content-container">
+          <div className="blocked-badge-modal-content-container">
             <Search
               placeholder={t("placeholder.inputSearchedText")}
               onSearch={getBlockedUsers}
@@ -103,7 +103,7 @@ const BlockedUsersBadge: React.FC<BlockedUsersBadgeProps> = ({
               allowClear
             />
             <List
-              className="chat-badge-chat-list"
+              className="blocked-badge-list"
               itemLayout="vertical"
               dataSource={users}
               locale={{ emptyText: t("noData") }}
@@ -115,9 +115,9 @@ const BlockedUsersBadge: React.FC<BlockedUsersBadgeProps> = ({
               }}
               renderItem={(item) => (
                 <List.Item
-                  className="chat-badge-list-item"
+                  className="blocked-badge-list-item"
                   extra={
-                    <div className="chat-badge-extra">
+                    <div className="blocked-badge-extra">
                       <Popconfirm
                         title={t("sureToUnblock")}
                         onConfirm={() => {
@@ -132,7 +132,7 @@ const BlockedUsersBadge: React.FC<BlockedUsersBadgeProps> = ({
                       >
                         <Button
                           type="primary"
-                          className="profile-action-button"
+                          className="blocked-action-button"
                         >
                           {t("unblockUser")}
                         </Button>
@@ -153,19 +153,12 @@ const BlockedUsersBadge: React.FC<BlockedUsersBadgeProps> = ({
                       />
                     }
                     title={
-                      <div className="chat-badge-title">
+                      <div className="blocked-badge-title">
                         {item.name} {item.surname}
                       </div>
                     }
                     description={item.email}
                   />
-                  {/* <ChatListTile
-                    chatterName={item.chatter.name}
-                    lastMessageCreatedAt={item.lastMessage.createdAt}
-                    lastMessage={item.lastMessage.content}
-                    lastMessageSendBy={item.lastMessage.senderEmail}
-                    seenByRecipient={item.lastMessage.seenByRecipient}
-                  /> */}
                 </List.Item>
               )}
             />
