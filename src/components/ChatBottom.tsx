@@ -36,7 +36,11 @@ const ChatBottom: React.FC<ChatBottomParameters> = ({
         onKeyDown={(e) => onKeyDown(e.code)}
         value={input}
       />
-      {!isChatRoomBlocked && (
+      {isChatRoomBlocked ? (
+        <Button disabled type="primary">
+          <SendOutlined />
+        </Button>
+      ) : (   
         <Button
           type="primary"
           className="send-message-button"
@@ -45,12 +49,6 @@ const ChatBottom: React.FC<ChatBottomParameters> = ({
             onSend(input);
           }}
         >
-          <SendOutlined />
-        </Button>
-      )}
-
-      {isChatRoomBlocked && (
-        <Button disabled type="primary">
           <SendOutlined />
         </Button>
       )}

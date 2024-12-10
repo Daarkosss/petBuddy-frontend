@@ -20,11 +20,6 @@ interface ChatTopBarProps {
   onMinimize: () => void;
   blockInfo: UserBlockInfo;
   recipientEmail: string;
-  handleBlockUnblockUser: (
-    userEmail: string,
-    option: string,
-    onSuccess?: () => void
-  ) => void;
   setBlockInfo: (
     isBlocked: boolean,
     name: string,
@@ -42,7 +37,6 @@ const ChatTopBar: React.FC<ChatTopBarProps> = ({
   onMinimize,
   blockInfo,
   recipientEmail,
-  handleBlockUnblockUser,
   setBlockInfo,
 }) => {
   const { t } = useTranslation();
@@ -52,18 +46,18 @@ const ChatTopBar: React.FC<ChatTopBarProps> = ({
   const handleBlockUser = () => {
     setShowDeleteConfirmationPopup(false);
     if (!blockInfo.isBlocked) {
-      handleBlockUnblockUser(recipientEmail, "blockUser", () =>
+      store.blocked.blockUser(recipientEmail).then(() => {
         setBlockInfo(
           true,
           store.user.profile!.firstName!,
           store.user.profile!.lastName!,
           store.user.profile!.email!
-        )
-      );
+        );
+      });
     } else {
-      handleBlockUnblockUser(recipientEmail, "unblockUser", () =>
-        setBlockInfo(false, "", "", "")
-      );
+      store.blocked.unblockUser(recipientEmail).then(() => {
+        setBlockInfo(false, "", "", "");
+      });
     }
   };
 

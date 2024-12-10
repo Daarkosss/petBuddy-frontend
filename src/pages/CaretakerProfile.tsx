@@ -21,13 +21,13 @@ import {
   CaretakerDetails,
   CaretakerRatingsResponse,
   OfferWithId,
-  UserBlockInfo,
 } from "../types";
 import OfferCard from "../components/Offer/OfferCard";
 import ImgCrop from "antd-img-crop";
 import { handleFilePreview, hasFilePhotoType } from "../functions/imageHandle";
 import OfferManagement from "./OfferManagement";
 import { toast } from "react-toastify";
+import { observer } from "mobx-react-lite";
 
 interface CaretakerProfileProps {
   handleSetOpenChat?: (
@@ -39,19 +39,9 @@ interface CaretakerProfileProps {
     shouldOpenMaximizedChat?: boolean,
     shouldOpenMinimizedChat?: boolean
   ) => void;
-  didCurrentlyLoggedUserBlocked?: (otherUserEmail: string) => Promise<boolean>;
-  setVisitingProfile?: (profile: string) => void;
-  triggerReload?: boolean;
-  handleBlockUnblockUser?: (userEmail: string, option: string) => void;
 }
 
-const CaretakerProfile: React.FC<CaretakerProfileProps> = ({
-  handleSetOpenChat,
-  didCurrentlyLoggedUserBlocked,
-  setVisitingProfile,
-  triggerReload,
-  handleBlockUnblockUser,
-}) => {
+const CaretakerProfile: React.FC<CaretakerProfileProps> = observer(({ handleSetOpenChat }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { caretakerEmail } = useParams();
@@ -69,59 +59,17 @@ const CaretakerProfile: React.FC<CaretakerProfileProps> = ({
   );
 
   const [profilePicture, setProfilePicture] = useState<string | null>(null);
-
-  const [blockInfo, setBlockInfo] = useState<UserBlockInfo>({
-    isBlocked: false,
-    whichUserBlocked: undefined,
-  });
-  const [showDeleteConfirmationPopup, setShowDeleteConfirmationPopup] =
-    useState<boolean>(false);
-
-  const checkWhoBlocked = async (
-    otherUserName: string,
-    otherUserSurname: string,
-    otherUserEmail: string
-  ) => {
-    const result = await didCurrentlyLoggedUserBlocked!(otherUserEmail);
-    if (result) {
-      setBlockInfo({
-        isBlocked: true,
-        whichUserBlocked: {
-          name: store.user.profile!.firstName!,
-          surname: store.user.profile!.lastName!,
-          email: store.user.profile!.email!,
-        },
-      });
-    } else {
-      setBlockInfo({
-        isBlocked: true,
-        whichUserBlocked: {
-          name: otherUserName,
-          surname: otherUserSurname,
-          email: otherUserEmail,
-        },
-      });
-    }
-  };
+  const [showDeleteConfirmationPopup, setShowDeleteConfirmationPopup] = useState<boolean>(false);
 
   const getCaretakerDetails = (email: string) => {
     api.getCaretakerDetails(email).then((data) => {
-      if (setVisitingProfile) {
-        setVisitingProfile(data.accountData.email);
-      }
       setProfileData(data);
       setOffers(data.offers);
       if (data.accountData.profilePicture !== null) {
         setProfilePicture(data.accountData.profilePicture.url);
       }
-      if (data.blocked) {
-        checkWhoBlocked(
-          data.accountData.name,
-          data.accountData.surname,
-          data.accountData.email
-        );
-      } else {
-        setBlockInfo!({ isBlocked: false, whichUserBlocked: undefined });
+      if (data.blocked !== undefined) {
+        store.blocked.visitedUserEmail = email;
       }
     });
   };
@@ -177,7 +125,7 @@ const CaretakerProfile: React.FC<CaretakerProfileProps> = ({
     return () => mediaQuery.removeEventListener("change", handleChange);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [triggerReload]);
+  }, []);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleCustomPhotoRequest = async (options: any) => {
@@ -253,7 +201,7 @@ const CaretakerProfile: React.FC<CaretakerProfileProps> = ({
                   </ImgCrop>
                   <div>
                     <Button
-                      disabled={blockInfo.isBlocked}
+                      disabled={store.blocked.isVisitedUserBlocked}
                       type="primary"
                       className="profile-action-button"
                       onClick={() => {
@@ -313,21 +261,20 @@ const CaretakerProfile: React.FC<CaretakerProfileProps> = ({
                           {t("profilePage.followCaretaker")}
                         </Button>
 
-                        {blockInfo.isBlocked && (
+                        {store.blocked.isVisitedUserBlocked && (
                           <Popover
                             content={t("blockOpenChat")}
                             title={
-                              blockInfo.whichUserBlocked?.email ===
-                              store.user.profile.email
+                              store.blocked.isBlockedByUser(profileData.accountData.email)
                                 ? t("chatBlockade")
                                 : t("youHaveBeenBlocked")
                             }
                           >
-                            <Button>{t("chatBlockade")}</Button>
+                            <Button disabled>{t("chatBlockade")}</Button>
                           </Popover>
                         )}
 
-                        {!blockInfo.isBlocked && (
+                        {!store.blocked.isVisitedUserBlocked && (
                           <Button
                             type="primary"
                             className="profile-action-button"
@@ -346,18 +293,14 @@ const CaretakerProfile: React.FC<CaretakerProfileProps> = ({
                           </Button>
                         )}
 
-                        {blockInfo.isBlocked &&
-                          blockInfo.whichUserBlocked?.email ===
-                            store.user.profile.email && (
+                        {store.blocked.isVisitedUserBlocked &&
+                          store.blocked.isBlockedByUser(profileData.accountData.email) && (
                             <Popconfirm
                               open={showDeleteConfirmationPopup}
                               title={t("sureToUnblock")}
                               onConfirm={() => {
                                 setShowDeleteConfirmationPopup(false);
-                                handleBlockUnblockUser!(
-                                  profileData.accountData.email,
-                                  "unblockUser"
-                                );
+                                store.blocked.unblockUser(profileData.accountData.email);
                               }}
                               onCancel={() =>
                                 setShowDeleteConfirmationPopup(false)
@@ -376,17 +319,14 @@ const CaretakerProfile: React.FC<CaretakerProfileProps> = ({
                               </Button>
                             </Popconfirm>
                           )}
-                        {!blockInfo.isBlocked && (
+                        {!store.blocked.isVisitedUserBlocked && (
                           <Popconfirm
                             open={showDeleteConfirmationPopup}
                             title={t("sureToBlock")}
                             description={t("blockInfo")}
                             onConfirm={() => {
                               setShowDeleteConfirmationPopup(false);
-                              handleBlockUnblockUser!(
-                                profileData.accountData.email,
-                                "blockUser"
-                              );
+                              store.blocked.blockUser(profileData.accountData.email);
                             }}
                             onCancel={() =>
                               setShowDeleteConfirmationPopup(false)
@@ -463,7 +403,7 @@ const CaretakerProfile: React.FC<CaretakerProfileProps> = ({
                               offer={element}
                               handleUpdateOffer={() => {}}
                               canBeEdited={false}
-                              isBlocked={blockInfo.isBlocked}
+                              isBlocked={store.blocked.isVisitedUserBlocked}
                             />
                           </div>
                         ))
@@ -575,7 +515,7 @@ const CaretakerProfile: React.FC<CaretakerProfileProps> = ({
                             offer={element}
                             handleUpdateOffer={() => {}}
                             canBeEdited={false}
-                            isBlocked={blockInfo.isBlocked}
+                            isBlocked={store.blocked.isVisitedUserBlocked}
                           />
                         </div>
                       ))
@@ -595,6 +535,6 @@ const CaretakerProfile: React.FC<CaretakerProfileProps> = ({
       )}
     </div>
   );
-};
+});
 
 export default CaretakerProfile;
