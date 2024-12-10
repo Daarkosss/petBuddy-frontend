@@ -1,5 +1,14 @@
 @use "../helpers/variables" as v;
 
+button.ant-pagination-item-link {
+  background-color: v.$blue-medium !important;
+
+  &:hover {
+    background-color: v.$blue-light !important;
+    cursor: pointer;
+  }
+}
+
 .profile-container {
   display: flex;
   height: calc(100vh - 64px);
@@ -179,19 +188,19 @@
       text-wrap: wrap;
     }
 
-    .profile-comments-page {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: end;
-      gap: 10px;
+    // .profile-comments-page {
+    //   display: flex;
+    //   flex-direction: column;
+    //   justify-content: center;
+    //   align-items: end;
+    //   gap: 10px;
 
-      .profile-comments-page-buttons {
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-      }
-    }
+    //   .profile-comments-page-buttons {
+    //     display: flex;
+    //     justify-content: center;
+    //     gap: 10px;
+    //   }
+    // }
   }
 
   .profile-right {

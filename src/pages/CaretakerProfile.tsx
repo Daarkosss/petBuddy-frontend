@@ -10,9 +10,9 @@ import {
   Image,
   Popover,
   Popconfirm,
+  List,
 } from "antd";
 import { PictureOutlined, UserOutlined } from "@ant-design/icons";
-import CommentContainer from "../components/CommentContainer";
 import RoundedLine from "../components/RoundedLine";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -28,6 +28,7 @@ import ImgCrop from "antd-img-crop";
 import { handleFilePreview, hasFilePhotoType } from "../functions/imageHandle";
 import OfferManagement from "./OfferManagement";
 import { toast } from "react-toastify";
+import { round } from "lodash";
 
 interface CaretakerProfileProps {
   handleSetOpenChat?: (
@@ -60,15 +61,39 @@ const CaretakerProfile: React.FC<CaretakerProfileProps> = ({
 
   const [isMyProfile, setIsMyProfile] = useState<boolean | null>(null);
 
-  const [page, setPage] = useState<number>(0);
-  const size = 10;
   const [ratings, setRatings] = useState<CaretakerRatingsResponse>();
 
   const [isFollowed, setIsFollowed] = useState<boolean>(false);
 
+  const [pagination, setPagination] = useState({
+    size: 5,
+    current: 1,
+    total: 0,
+  });
+
+  const [pagingParams, setPagingParams] = useState({
+    page: 0,
+    size: 5,
+  });
+
   const [isSmallScreen, setIsSmallScreen] = useState(
     window.matchMedia("(max-width: 780px)").matches
   );
+
+  const handleOnPageChange = (page: number, pageSize?: number) => {
+    setPagingParams({
+      page: page - 1,
+      size: pageSize || 5,
+    });
+  };
+
+  useEffect(() => {
+    const getRatings = async () => {
+      await getCaretakerRatings();
+    };
+    getRatings();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pagingParams]);
 
   const handleFollow = async () => {
     if (profileData?.accountData.email) {
@@ -170,26 +195,21 @@ const CaretakerProfile: React.FC<CaretakerProfileProps> = ({
     });
   };
 
-  const getCaretakerRatings = (
-    email: string,
-    page: number | null,
-    size: number | null
-  ) => {
-    api.getCaretakerRatings(email, page, size, null, null).then((data) => {
-      setRatings({ ...data });
-    });
-  };
-
-  useEffect(() => {
-    if (isMyProfile !== null) {
-      getCaretakerRatings(
-        isMyProfile ? store.user.profile!.selected_profile! : caretakerEmail!,
-        page,
-        size
-      );
+  const getCaretakerRatings = async () => {
+    if (profileData) {
+      api
+        .getCaretakerRatings(profileData.accountData.email, pagingParams)
+        .then((data) => {
+          console.log(data);
+          setRatings({ ...data });
+          setPagination({
+            size: data.pageable.pageSize,
+            current: data.pageable.pageNumber + 1,
+            total: data.totalElements,
+          });
+        });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page]);
+  };
 
   useEffect(() => {
     // If user is visiting their profile
@@ -200,7 +220,6 @@ const CaretakerProfile: React.FC<CaretakerProfileProps> = ({
       // Which profile page should be showed
       if (store.user.profile!.selected_profile === "CARETAKER") {
         getCaretakerDetails(store.user.profile!.email!);
-        getCaretakerRatings(store.user.profile!.email!, page, size);
       } else if (store.user.profile!.selected_profile === "CLIENT") {
         navigate("/profile-client");
       }
@@ -208,7 +227,6 @@ const CaretakerProfile: React.FC<CaretakerProfileProps> = ({
       // If userEmail has been provided
       if (caretakerEmail !== null && caretakerEmail !== undefined) {
         getCaretakerDetails(caretakerEmail);
-        getCaretakerRatings(caretakerEmail, page, size);
         setIsMyProfile(false);
       }
     }
@@ -225,7 +243,7 @@ const CaretakerProfile: React.FC<CaretakerProfileProps> = ({
 
   useEffect(() => {
     checkIfFollowed();
-
+    getCaretakerRatings();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profileData]);
 
@@ -338,7 +356,9 @@ const CaretakerProfile: React.FC<CaretakerProfileProps> = ({
                   <span>
                     (
                     {`${
-                      profileData.avgRating !== null ? profileData.avgRating : 0
+                      profileData.avgRating !== null
+                        ? round(profileData.avgRating, 2)
+                        : 0
                     }/ 5.0`}
                     )
                   </span>
@@ -392,7 +412,7 @@ const CaretakerProfile: React.FC<CaretakerProfileProps> = ({
                                 : t("youHaveBeenBlocked")
                             }
                           >
-                            <Button>{t("chatBlockade")}</Button>
+                            <Button disabled>{t("chatBlockade")}</Button>
                           </Popover>
                         )}
 
@@ -563,62 +583,51 @@ const CaretakerProfile: React.FC<CaretakerProfileProps> = ({
                     {t("profilePage.rate")}
                   </Link>
                 )}
-              <div className="profile-comments-container">
-                {ratings && ratings.content.length > 0 ? (
-                  ratings!.content.map((element, index) => (
-                    <div key={index}>
-                      <CommentContainer
-                        clientEmail={element.clientEmail}
-                        rating={element.rating}
-                        comment={element.comment}
-                      />
-                    </div>
-                  ))
-                ) : (
-                  <div>{t("profilePage.noRatingsToShow")}</div>
-                )}
-              </div>
-              {ratings !== null &&
-                ratings !== undefined &&
-                ratings.content.length > 0 && (
-                  <div className="profile-comments-page">
-                    <div className="profile-comments-page-buttons">
-                      <Button
-                        type="primary"
-                        className="profile-action-button"
-                        onClick={() => {
-                          if (page > 0) {
-                            setPage((prevPage) => prevPage - 1);
+              <List
+                itemLayout="vertical"
+                dataSource={ratings?.content}
+                locale={{ emptyText: t("noData") }}
+                pagination={{
+                  current: pagination.current,
+                  pageSize: pagination.size,
+                  total: pagination.total,
+                  onChange: handleOnPageChange,
+                }}
+                renderItem={(item) => (
+                  <List.Item
+                    className="chat-badge-list-item"
+                    extra={
+                      <div className="chat-badge-extra">
+                        <Rate disabled allowHalf value={item.rating} />
+                      </div>
+                    }
+                    style={{ display: "flex", flexDirection: "row" }}
+                  >
+                    <List.Item.Meta
+                      avatar={
+                        <Avatar
+                          src={item.client.accountData.profilePicture?.url}
+                          icon={
+                            item.client.accountData.profilePicture
+                              ?.url ? null : (
+                              <UserOutlined />
+                            )
                           }
-                        }}
-                      >
-                        {"<"}
-                      </Button>
-                      <Button
-                        type="primary"
-                        className="profile-action-button"
-                        onClick={() => {
-                          if (ratings !== null) {
-                            if (
-                              page + 1 <
-                              Math.floor(profileData.numberOfRatings / size)
-                            ) {
-                              setPage((prevPage) => prevPage + 1);
-                            }
-                          }
-                        }}
-                      >
-                        {">"}
-                      </Button>
-                    </div>
-                    <div>
-                      {t("profilePage.page")}:{" "}
-                      {`${page + 1} / ${Math.floor(
-                        profileData.numberOfRatings / size
-                      )}`}
-                    </div>
-                  </div>
+                          size={50}
+                        />
+                      }
+                      title={
+                        <div className="chat-badge-title">
+                          {item.client.accountData.name}{" "}
+                          {item.client.accountData.surname}
+                        </div>
+                      }
+                      description={item.client.accountData.email}
+                    />
+                    {item.comment}
+                  </List.Item>
                 )}
+              />
             </div>
           </div>
 
