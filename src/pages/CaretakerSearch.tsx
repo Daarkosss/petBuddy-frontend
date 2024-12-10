@@ -119,7 +119,9 @@ const CaretakerList = () => {
 
   useEffect(() => {
     fetchCaretakers();
-    getFollowedCaretakers();
+    if (store.user.profile?.selected_profile === "CLIENT") {
+      getFollowedCaretakers();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagingParams]);
 
@@ -304,6 +306,66 @@ const CaretakerList = () => {
     },
   ];
 
+  const items = [
+    {
+      key: "list",
+      label: t("caretakerSearch.list"),
+      children: (
+        <div className="caretaker-content">
+          <Table
+            loading={isLoading}
+            columns={columns}
+            locale={{
+              emptyText: t("caretakerSearch.noCaretakers"),
+            }}
+            dataSource={caretakers}
+            rowKey={(record) => record.accountData.email}
+            pagination={{
+              current: pagination.current,
+              pageSize: pagination.pageSize,
+              total: pagination.total,
+              showSizeChanger: true,
+              locale: {
+                items_per_page: t("perPage"),
+              },
+            }}
+            scroll={{ x: "max-content" }}
+            onChange={handleTableChange}
+          />
+        </div>
+      ),
+    },
+    {
+      key: "map",
+      label: t("caretakerSearch.map"),
+      children: (
+        <MapWithCaretakers caretakers={caretakers} center={mapCenter} />
+      ),
+    },
+  ];
+
+  if (store.user.profile?.selected_profile === "CLIENT") {
+    items.push({
+      key: "followed",
+      label: t("caretakerSearch.followed"),
+      children: (
+        <div className="follow-caretaker-content">
+          <Table
+            loading={isLoading}
+            columns={columnsFollowedCaretakers}
+            locale={{
+              emptyText: t("caretakerSearch.noCaretakers"),
+            }}
+            dataSource={followedCaretakers}
+            rowKey={(record) => record.email}
+            scroll={{ x: "max-content" }}
+            onChange={handleTableChange}
+          />
+        </div>
+      ),
+    });
+  }
+
   return (
     <div className="caretaker-container">
       {selectedTab !== "followed" && (
@@ -319,67 +381,12 @@ const CaretakerList = () => {
       )}
       <Tabs
         style={{ width: "100%" }}
-        centered={windowInnerWidth > 500}
+        centered={windowInnerWidth > 500 || items.length <= 2}
         size="small"
         onChange={(tabKey) => {
           setSelectedTab(tabKey);
         }}
-        items={[
-          {
-            key: "list",
-            label: t("caretakerSearch.list"),
-            children: (
-              <div className="caretaker-content">
-                <Table
-                  loading={isLoading}
-                  columns={columns}
-                  locale={{
-                    emptyText: t("caretakerSearch.noCaretakers"),
-                  }}
-                  dataSource={caretakers}
-                  rowKey={(record) => record.accountData.email}
-                  pagination={{
-                    current: pagination.current,
-                    pageSize: pagination.pageSize,
-                    total: pagination.total,
-                    showSizeChanger: true,
-                    locale: {
-                      items_per_page: t("perPage"),
-                    },
-                  }}
-                  scroll={{ x: "max-content" }}
-                  onChange={handleTableChange}
-                />
-              </div>
-            ),
-          },
-          {
-            key: "map",
-            label: t("caretakerSearch.map"),
-            children: (
-              <MapWithCaretakers caretakers={caretakers} center={mapCenter} />
-            ),
-          },
-          {
-            key: "followed",
-            label: t("caretakerSearch.followed"),
-            children: (
-              <div className="follow-caretaker-content">
-                <Table
-                  loading={isLoading}
-                  columns={columnsFollowedCaretakers}
-                  locale={{
-                    emptyText: t("caretakerSearch.noCaretakers"),
-                  }}
-                  dataSource={followedCaretakers}
-                  rowKey={(record) => record.email}
-                  scroll={{ x: "max-content" }}
-                  onChange={handleTableChange}
-                />
-              </div>
-            ),
-          },
-        ]}
+        items={items}
       />
     </div>
   );

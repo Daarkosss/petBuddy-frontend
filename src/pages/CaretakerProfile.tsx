@@ -224,7 +224,9 @@ const CaretakerProfile: React.FC<CaretakerProfileProps> = ({
   }, [triggerReload]);
 
   useEffect(() => {
-    checkIfFollowed();
+    if (store.user.profile?.selected_profile === "CLIENT") {
+      checkIfFollowed();
+    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profileData]);
