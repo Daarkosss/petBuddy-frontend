@@ -134,24 +134,15 @@ const CaretakerProfile: React.FC<CaretakerProfileProps> = ({
     }
   };
 
-  const checkIfFollowed = async () => {
-    const response = await api.getFollowedCaretakers();
-    if (response) {
-      for (let i = 0; i < response.length; i++) {
-        if (response[i].email === profileData?.accountData.email) {
-          setIsFollowed(true);
-          return true;
-        }
-      }
-    }
-    setIsFollowed(false);
-    return false;
-  };
-
   const getCaretakerDetails = (email: string) => {
     api.getCaretakerDetails(email).then((data) => {
       if (setVisitingProfile) {
         setVisitingProfile(data.accountData.email);
+      }
+
+      //it can be true, false or null
+      if (data.followed !== null) {
+        setIsFollowed(data.followed);
       }
       setProfileData(data);
       setOffers(data.offers);
@@ -222,14 +213,6 @@ const CaretakerProfile: React.FC<CaretakerProfileProps> = ({
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [triggerReload]);
-
-  useEffect(() => {
-    if (store.user.profile?.selected_profile === "CLIENT") {
-      checkIfFollowed();
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [profileData]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleCustomPhotoRequest = async (options: any) => {

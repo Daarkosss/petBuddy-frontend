@@ -21,7 +21,6 @@ import {
   CaretakerRatingsResponse,
   AvailabilityValues,
   RelatedUsers,
-  BlockedUsers,
 } from "../types";
 import {
   CareDTO,
@@ -895,16 +894,8 @@ class API {
     }
   }
 
-  async getBlockedUsers(): Promise<BlockedUsers | undefined> {
-    const queryParams = new URLSearchParams({
-      page: "0",
-      size: "1000000",
-    });
-
-    return this.authorizedFetch<BlockedUsers>(
-      "GET",
-      `api/user/block?${queryParams}`
-    );
+  async getBlockedUsers(): Promise<AccountDataDTO[] | undefined> {
+    return this.authorizedFetch<AccountDataDTO[]>("GET", "api/user/block");
   }
 
   async blockUser(username: string): Promise<void> {
