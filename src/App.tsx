@@ -77,9 +77,9 @@ const App = observer(() => {
 
   const didCurrentlyLoggedUserBlocked = async (otherUserEmail: string) => {
     const blockedUsers = await api.getBlockedUsers();
-    if (blockedUsers?.content) {
-      for (let i = 0; i < blockedUsers?.content.length; i++) {
-        if (blockedUsers.content[i].email === otherUserEmail) {
+    if (blockedUsers) {
+      for (let i = 0; i < blockedUsers.length; i++) {
+        if (blockedUsers[i].email === otherUserEmail) {
           return true;
         }
       }

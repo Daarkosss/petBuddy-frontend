@@ -828,7 +828,7 @@ class API {
   }
 
   async getBlockedUsers(): Promise<AccountDataDTO[] | undefined> {
-    return this.authorizedFetch<AccountDataDTO[]>("GET", `api/user/block`);
+    return this.authorizedFetch<AccountDataDTO[]>("GET", "api/user/block");
   }
 
   async blockUser(username: string): Promise<void> {
