@@ -26,6 +26,7 @@ const CaretakerList = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [mapCenter, setMapCenter] = useState<[number, number]>();
   const [selectedTab, setSelectedTab] = useState<string>("list");
+  const [windowInnerWidth, setWindowInnerWidth] = useState(window.innerWidth);
 
   const [pagingParams, setPagingParams] = useState({
     page: 0,
@@ -105,6 +106,15 @@ const CaretakerList = () => {
 
   useEffect(() => {
     store.selectedMenuOption = "caretakerSearch";
+
+    const handleResize = () => {
+      setWindowInnerWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
   useEffect(() => {
@@ -272,9 +282,6 @@ const CaretakerList = () => {
             <h4>
               {record.name} {record.surname}
             </h4>
-            {/* <p>
-              {record.address.city}, {record.address.voivodeship.toString()}
-            </p> */}
             <Button
               className="view-details-button"
               type="primary"
@@ -295,30 +302,6 @@ const CaretakerList = () => {
         </div>
       ),
     },
-    // {
-    //   title: t("rating"),
-    //   dataIndex: "avgRating",
-    //   key: "avgRating",
-    //   render: (rating: number | null, record: AccountDataDTO) => (
-    //     <div className="caretaker-rating">
-    //       {rating ? (
-    //         <>
-    //           <div className="caretaker-rating-stars">
-    //             <Rate disabled allowHalf value={rating} />
-    //           </div>
-    //           <span className="caretaker-rating-value">
-    //             {rating.toFixed(2)}
-    //           </span>
-    //         </>
-    //       ) : (
-    //         <>
-    //           <Rate disabled allowHalf value={0} />
-    //           <p>{t("noRatings")}</p>
-    //         </>
-    //       )}
-    //     </div>
-    //   ),
-    // },
   ];
 
   return (
@@ -336,7 +319,7 @@ const CaretakerList = () => {
       )}
       <Tabs
         style={{ width: "100%" }}
-        centered
+        centered={windowInnerWidth > 500}
         size="small"
         onChange={(tabKey) => {
           setSelectedTab(tabKey);
@@ -371,10 +354,17 @@ const CaretakerList = () => {
             ),
           },
           {
+            key: "map",
+            label: t("caretakerSearch.map"),
+            children: (
+              <MapWithCaretakers caretakers={caretakers} center={mapCenter} />
+            ),
+          },
+          {
             key: "followed",
             label: t("caretakerSearch.followed"),
             children: (
-              <div className="caretaker-content">
+              <div className="follow-caretaker-content">
                 <Table
                   loading={isLoading}
                   columns={columnsFollowedCaretakers}
@@ -387,13 +377,6 @@ const CaretakerList = () => {
                   onChange={handleTableChange}
                 />
               </div>
-            ),
-          },
-          {
-            key: "map",
-            label: t("caretakerSearch.map"),
-            children: (
-              <MapWithCaretakers caretakers={caretakers} center={mapCenter} />
             ),
           },
         ]}
