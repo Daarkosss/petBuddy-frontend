@@ -313,7 +313,7 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
           )
         ) : isBlocked ? (
           <Popover content={t("blockSendRequest")} title={t("blockade")}>
-            <Button>{t("blockade")}</Button>
+            <Button disabled>{t("blockade")}</Button>
           </Popover>
         ) : (
           <Tooltip title={getTooltipText()}>
