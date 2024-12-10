@@ -8,7 +8,9 @@ import {
 } from "./offer.types";
 
 export type CaretakerRatingDTO = {
-  clientEmail: string;
+  client: {
+    accountData: AccountDataDTO;
+  };
   caretakerEmail: string;
   rating: number;
   comment: string;
@@ -120,4 +122,9 @@ export type CaretakerFormFields = {
   phoneNumber: string;
   description: string;
   address: AddressDTO;
+};
+
+export type Rating = {
+  rating: number;
+  comment: string;
 };

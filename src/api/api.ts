@@ -22,6 +22,8 @@ import {
   AvailabilityValues,
   RelatedUsers,
   BlockedUsers,
+  Rating,
+  CaretakerRatingDTO,
 } from "../types";
 import {
   CareDTO,
@@ -370,30 +372,25 @@ class API {
 
   async getCaretakerRatings(
     email: string,
-    page: number | null,
-    size: number | null,
-    sortDirection: string | null,
-    sortBy: string[] | null
+    pagingParams: PagingParams
   ): Promise<CaretakerRatingsResponse> {
     try {
-      let endpoint = `api/rating/${email}`;
-      if (page !== null) {
-        endpoint = endpoint.concat(`page=${page}`);
+      const queryParams = new URLSearchParams({
+        page: pagingParams.page.toString(),
+        size: pagingParams.size.toString(),
+      });
+
+      if (pagingParams.sortBy) {
+        queryParams.append("sortBy", pagingParams.sortBy);
       }
 
-      if (size !== null) {
-        endpoint = endpoint.concat("", `&size=${size}`);
-      }
-      if (sortDirection !== null) {
-        endpoint = endpoint.concat("", `&sortDirection=${sortDirection}`);
+      if (pagingParams.sortDirection) {
+        queryParams.append("sortDirection", pagingParams.sortDirection);
       }
 
-      if (sortBy !== null) {
-        endpoint = endpoint.concat("", `&sortBy=${sortBy}`);
-      }
       const response = await this.fetch<CaretakerRatingsResponse>(
         "GET",
-        endpoint
+        `api/rating/${email}?${queryParams}`
       );
       return response;
     } catch (error: unknown) {
@@ -470,6 +467,22 @@ class API {
           "An unknown error occurred while fetching caretaker profile"
         );
       }
+    }
+  }
+
+  async rateCaretaker(
+    careId: number,
+    rating: number,
+    comment: string
+  ): Promise<Rating | undefined> {
+    if (store.user.profile?.selected_profile) {
+      const response = await this.authorizedFetch<CaretakerRatingDTO>(
+        "POST",
+        `api/rating/${careId}`,
+        { rating: rating, comment: comment },
+        { "Accept-Role": store.user.profile?.selected_profile }
+      );
+      return response;
     }
   }
 
