@@ -205,7 +205,8 @@
     "maxPrice": "Max price",
     "noCaretakers": "There are no caretakers for selected filters",
     "list": "Caretaker list",
-    "map": "Caretaker map"
+    "map": "Caretaker map",
+    "followed": "Followed caretakers"
   },
 
   "careSearch": {

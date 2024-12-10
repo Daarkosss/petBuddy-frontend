@@ -210,7 +210,8 @@
     "maxPrice": "Maksymalna cena",
     "noCaretakers": "Brak opiekunów dla podanych parametrów",
     "list": "Lista opiekunów",
-    "map": "Mapa opiekunów"
+    "map": "Mapa opiekunów",
+    "followed": "Obserwowani opiekunowie"
   },
 
   "careSearch": {
