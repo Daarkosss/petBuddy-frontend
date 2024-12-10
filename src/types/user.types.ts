@@ -43,3 +43,10 @@ export type RelatedUsers = {
   numberOfElements: number;
   empty: boolean;
 };
+
+export type UserBlockInfo = {
+  isBlocked: boolean;
+  whichUserBlocked:
+    | { name: string; surname: string; email: string }
+    | undefined;
+};

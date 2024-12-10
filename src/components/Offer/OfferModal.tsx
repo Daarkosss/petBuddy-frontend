@@ -22,6 +22,7 @@ type OfferModalProps = {
   ) => void;
   isModalOpen: boolean;
   closeModal: () => void;
+  isBlocked?: boolean;
 };
 
 const OfferModal: React.FC<OfferModalProps> = ({
@@ -31,6 +32,7 @@ const OfferModal: React.FC<OfferModalProps> = ({
   isModalOpen,
   closeModal,
   canBeEdited = true,
+  isBlocked = false,
 }) => {
   const [isEditingDescription, setIsEditingDescription] = useState(false);
   const [isEditingAmenities, setIsEditingAmenities] = useState(false);
@@ -153,9 +155,9 @@ const OfferModal: React.FC<OfferModalProps> = ({
                 </Button>
               </Space>
             </div>
-          ) : 
+          ) : (
             offer.description
-          }
+          )}
         </div>
         <div className="offer-field">
           <div className="label">
@@ -252,6 +254,7 @@ const OfferModal: React.FC<OfferModalProps> = ({
                   handleUpdateConfiguration={handleUpdateConfiguration}
                   canBeEdited={canBeEdited}
                   availabilities={offer.availabilities}
+                  isBlocked={isBlocked}
                 />
               ),
             },

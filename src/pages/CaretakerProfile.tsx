@@ -1,27 +1,56 @@
 import React, { useEffect, useState } from "react";
 import store from "../store/RootStore";
 import "../scss/pages/_profile.scss";
-import { Button, Card, Rate, Upload, Avatar, Image } from "antd";
+import {
+  Button,
+  Card,
+  Rate,
+  Upload,
+  Avatar,
+  Image,
+  Popover,
+  Popconfirm,
+} from "antd";
 import { PictureOutlined, UserOutlined } from "@ant-design/icons";
 import CommentContainer from "../components/CommentContainer";
 import RoundedLine from "../components/RoundedLine";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { api } from "../api/api";
 import {
   CaretakerDetails,
   CaretakerRatingsResponse,
   OfferWithId,
+  UserBlockInfo,
 } from "../types";
 import OfferCard from "../components/Offer/OfferCard";
 import ImgCrop from "antd-img-crop";
 import { handleFilePreview, hasFilePhotoType } from "../functions/imageHandle";
 import OfferManagement from "./OfferManagement";
 import { toast } from "react-toastify";
-import { HandleSetOpenChat } from "../types/chat.types";
 
-const CaretakerProfile: React.FC<HandleSetOpenChat> = ({
+interface CaretakerProfileProps {
+  handleSetOpenChat?: (
+    recipientEmail: string | undefined,
+    profilePicture: string | undefined,
+    name: string | undefined,
+    surname: string | undefined,
+    profile: string | undefined,
+    shouldOpenMaximizedChat?: boolean,
+    shouldOpenMinimizedChat?: boolean
+  ) => void;
+  didCurrentlyLoggedUserBlocked?: (otherUserEmail: string) => Promise<boolean>;
+  setVisitingProfile?: (profile: string) => void;
+  triggerReload?: boolean;
+  handleBlockUnblockUser?: (userEmail: string, option: string) => void;
+}
+
+const CaretakerProfile: React.FC<CaretakerProfileProps> = ({
   handleSetOpenChat,
+  didCurrentlyLoggedUserBlocked,
+  setVisitingProfile,
+  triggerReload,
+  handleBlockUnblockUser,
 }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -35,18 +64,99 @@ const CaretakerProfile: React.FC<HandleSetOpenChat> = ({
   const size = 10;
   const [ratings, setRatings] = useState<CaretakerRatingsResponse>();
 
+  const [isFollowed, setIsFollowed] = useState<boolean>(false);
+
   const [isSmallScreen, setIsSmallScreen] = useState(
     window.matchMedia("(max-width: 780px)").matches
   );
 
+  const handleFollow = async () => {
+    if (profileData?.accountData.email) {
+      try {
+        await api.followCaretaker(profileData?.accountData.email);
+        setIsFollowed(true);
+        toast.success(t("success.followCaretaker"));
+      } catch (e: unknown) {
+        if (e instanceof Error) {
+          toast.error(t("error.followCaretaker"));
+        }
+      }
+    }
+  };
+
+  const handleUnfollow = async () => {
+    if (profileData?.accountData.email) {
+      try {
+        await api.unfollowCaretaker(profileData?.accountData.email);
+        setIsFollowed(false);
+        toast.success(t("success.unfollowCaretaker"));
+      } catch (e: unknown) {
+        if (e instanceof Error) {
+          toast.error(t("error.unfollowCaretaker"));
+        }
+      }
+    }
+  };
+
   const [profilePicture, setProfilePicture] = useState<string | null>(null);
+
+  const [blockInfo, setBlockInfo] = useState<UserBlockInfo>({
+    isBlocked: false,
+    whichUserBlocked: undefined,
+  });
+  const [showDeleteConfirmationPopup, setShowDeleteConfirmationPopup] =
+    useState<boolean>(false);
+
+  const checkWhoBlocked = async (
+    otherUserName: string,
+    otherUserSurname: string,
+    otherUserEmail: string
+  ) => {
+    const result = await didCurrentlyLoggedUserBlocked!(otherUserEmail);
+    if (result) {
+      setBlockInfo({
+        isBlocked: true,
+        whichUserBlocked: {
+          name: store.user.profile!.firstName!,
+          surname: store.user.profile!.lastName!,
+          email: store.user.profile!.email!,
+        },
+      });
+    } else {
+      setBlockInfo({
+        isBlocked: true,
+        whichUserBlocked: {
+          name: otherUserName,
+          surname: otherUserSurname,
+          email: otherUserEmail,
+        },
+      });
+    }
+  };
 
   const getCaretakerDetails = (email: string) => {
     api.getCaretakerDetails(email).then((data) => {
+      if (setVisitingProfile) {
+        setVisitingProfile(data.accountData.email);
+      }
+
+      //it can be true, false or null
+      if (data.followed !== null) {
+        setIsFollowed(data.followed);
+      }
       setProfileData(data);
       setOffers(data.offers);
       if (data.accountData.profilePicture !== null) {
         setProfilePicture(data.accountData.profilePicture.url);
+      }
+      if (data.blocked) {
+        checkWhoBlocked(
+          data.accountData.name,
+          data.accountData.surname,
+          data.accountData.email
+        );
+      } else {
+        setBlockInfo!({ isBlocked: false, whichUserBlocked: undefined });
       }
     });
   };
@@ -102,7 +212,7 @@ const CaretakerProfile: React.FC<HandleSetOpenChat> = ({
     return () => mediaQuery.removeEventListener("change", handleChange);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [triggerReload]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleCustomPhotoRequest = async (options: any) => {
@@ -178,6 +288,7 @@ const CaretakerProfile: React.FC<HandleSetOpenChat> = ({
                   </ImgCrop>
                   <div>
                     <Button
+                      disabled={blockInfo.isBlocked}
                       type="primary"
                       className="profile-action-button"
                       onClick={() => {
@@ -230,28 +341,124 @@ const CaretakerProfile: React.FC<HandleSetOpenChat> = ({
                   {!isMyProfile &&
                     store.user.profile?.selected_profile === "CLIENT" && (
                       <div className="profile-actions">
-                        <Button
-                          type="primary"
-                          className="profile-action-button"
-                        >
-                          {t("profilePage.followCaretaker")}
-                        </Button>
-                        <Button
-                          type="primary"
-                          className="profile-action-button"
-                          onClick={() => {
-                            handleSetOpenChat!(
-                              profileData.accountData.email,
-                              profileData.accountData.profilePicture?.url ||
-                                undefined,
-                              profileData.accountData.name,
-                              profileData.accountData.surname,
-                              "caretaker"
-                            );
-                          }}
-                        >
-                          {t("profilePage.openChat")}
-                        </Button>
+                        {!isFollowed && (
+                          <Button
+                            type="primary"
+                            className="profile-action-button"
+                            onClick={() => handleFollow()}
+                          >
+                            {t("profilePage.followCaretaker")}
+                          </Button>
+                        )}
+
+                        {isFollowed && (
+                          <Popconfirm
+                            title={t("profilePage.unfollowCaretaker")}
+                            description={t("profilePage.sureToUnfollow")}
+                            onConfirm={() => {
+                              handleUnfollow();
+                            }}
+                            okText={t("yes")}
+                            cancelText={t("no")}
+                          >
+                            <Button danger type="primary">
+                              {t("profilePage.unfollowCaretaker")}
+                            </Button>
+                          </Popconfirm>
+                        )}
+
+                        {blockInfo.isBlocked && (
+                          <Popover
+                            content={t("blockOpenChat")}
+                            title={
+                              blockInfo.whichUserBlocked?.email ===
+                              store.user.profile.email
+                                ? t("chatBlockade")
+                                : t("youHaveBeenBlocked")
+                            }
+                          >
+                            <Button>{t("chatBlockade")}</Button>
+                          </Popover>
+                        )}
+
+                        {!blockInfo.isBlocked && (
+                          <Button
+                            type="primary"
+                            className="profile-action-button"
+                            onClick={() => {
+                              handleSetOpenChat!(
+                                profileData.accountData.email,
+                                profileData.accountData.profilePicture?.url ||
+                                  undefined,
+                                profileData.accountData.name,
+                                profileData.accountData.surname,
+                                "caretaker"
+                              );
+                            }}
+                          >
+                            {t("profilePage.openChat")}
+                          </Button>
+                        )}
+
+                        {blockInfo.isBlocked &&
+                          blockInfo.whichUserBlocked?.email ===
+                            store.user.profile.email && (
+                            <Popconfirm
+                              open={showDeleteConfirmationPopup}
+                              title={t("sureToUnblock")}
+                              onConfirm={() => {
+                                setShowDeleteConfirmationPopup(false);
+                                handleBlockUnblockUser!(
+                                  profileData.accountData.email,
+                                  "unblockUser"
+                                );
+                              }}
+                              onCancel={() =>
+                                setShowDeleteConfirmationPopup(false)
+                              }
+                              okText={t("yes")}
+                              cancelText={t("no")}
+                            >
+                              <Button
+                                type="primary"
+                                className="profile-action-button"
+                                onClick={() => {
+                                  setShowDeleteConfirmationPopup(true);
+                                }}
+                              >
+                                {t("unblockUser")}
+                              </Button>
+                            </Popconfirm>
+                          )}
+                        {!blockInfo.isBlocked && (
+                          <Popconfirm
+                            open={showDeleteConfirmationPopup}
+                            title={t("sureToBlock")}
+                            description={t("blockInfo")}
+                            onConfirm={() => {
+                              setShowDeleteConfirmationPopup(false);
+                              handleBlockUnblockUser!(
+                                profileData.accountData.email,
+                                "blockUser"
+                              );
+                            }}
+                            onCancel={() =>
+                              setShowDeleteConfirmationPopup(false)
+                            }
+                            okText={t("yes")}
+                            cancelText={t("no")}
+                          >
+                            <Button
+                              type="primary"
+                              className="profile-action-button"
+                              onClick={() =>
+                                setShowDeleteConfirmationPopup(true)
+                              }
+                            >
+                              {t("blockUser")}
+                            </Button>
+                          </Popconfirm>
+                        )}
                       </div>
                     )}
                 </div>
@@ -280,7 +487,9 @@ const CaretakerProfile: React.FC<HandleSetOpenChat> = ({
             )}
             <h4>{t("profilePage.description")}</h4>
             {profileData !== null && profileData !== undefined && (
-              <div>{profileData.description}</div>
+              <div>
+                {profileData.description ?? t("profilePage.noDescription")}
+              </div>
             )}
             <div>
               {isSmallScreen && (
@@ -308,6 +517,7 @@ const CaretakerProfile: React.FC<HandleSetOpenChat> = ({
                               offer={element}
                               handleUpdateOffer={() => {}}
                               canBeEdited={false}
+                              isBlocked={blockInfo.isBlocked}
                             />
                           </div>
                         ))
@@ -330,11 +540,13 @@ const CaretakerProfile: React.FC<HandleSetOpenChat> = ({
               <h1>{t("profilePage.ratings")}</h1>
               {isMyProfile === false &&
                 store.user.profile?.selected_profile === "CLIENT" && (
-                  <div className="profile-add-a-comment">
-                    <Button type="primary" className="add-button">
-                      {t("profilePage.rate")}
-                    </Button>
-                  </div>
+                  <Link
+                    to={"/cares"}
+                    className="profile-add-a-comment"
+                    style={{ textDecoration: "none" }}
+                  >
+                    {t("profilePage.rate")}
+                  </Link>
                 )}
               <div className="profile-comments-container">
                 {ratings && ratings.content.length > 0 ? (
@@ -417,6 +629,7 @@ const CaretakerProfile: React.FC<HandleSetOpenChat> = ({
                             offer={element}
                             handleUpdateOffer={() => {}}
                             canBeEdited={false}
+                            isBlocked={blockInfo.isBlocked}
                           />
                         </div>
                       ))

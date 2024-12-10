@@ -95,6 +95,7 @@ const ChatBadge = observer<ChatBadgeProperties>(({ handleOpenChat }) => {
         open={isModalOpen}
         onCancel={() => setIsModalOpen(false)}
         footer={[]}
+        title={t("chatRooms")}
       >
         {isLoading === true ? (
           <div
