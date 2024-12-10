@@ -19,7 +19,6 @@ import TermsAndConditions from "./pages/TermsAndConditions";
 import ChatBox from "./components/ChatBox";
 import ChatMinimized from "./components/ChatMinimized";
 import { useTranslation } from "react-i18next";
-import { toast } from "react-toastify";
 
 const { Content } = Layout;
 
@@ -46,46 +45,6 @@ const App = observer(() => {
     surname: undefined,
     profile: undefined,
   });
-  const [lastVisitedProfile, setLastVisitedProfile] = useState<
-    string | undefined
-  >(undefined);
-  const [triggerReload, setTriggerReload] = useState<boolean>(false);
-
-  const handleBlockUnblockUser = async (
-    userEmail: string,
-    option: string,
-    onSuccess?: () => void
-  ) => {
-    try {
-      option === "blockUser"
-        ? await api.blockUser(userEmail)
-        : await api.unblockUser(userEmail);
-      if (userEmail === lastVisitedProfile) {
-        setTriggerReload(!triggerReload);
-      }
-      if (onSuccess) {
-        onSuccess();
-      }
-      toast.success(t(`success.${option}`));
-    } catch (e: unknown) {
-      if (e instanceof Error) {
-        toast.error(t(`error.${option}`));
-        console.error(e.message);
-      }
-    }
-  };
-
-  const didCurrentlyLoggedUserBlocked = async (otherUserEmail: string) => {
-    const blockedUsers = await api.getBlockedUsers();
-    if (blockedUsers) {
-      for (let i = 0; i < blockedUsers.length; i++) {
-        if (blockedUsers[i].email === otherUserEmail) {
-          return true;
-        }
-      }
-    }
-    return false;
-  };
 
   const handleSetOpenChat = (
     recipientEmail: string | undefined,
@@ -137,6 +96,12 @@ const App = observer(() => {
           } catch (error) {
             console.error(`Failed to setup notifications: ${error}`);
           }
+
+          try {
+            await store.blocked.fetchBlockedUsers();
+          } catch (error) {
+            console.error(`Failed to fetch blocked users: ${error}`);
+          }
         } else {
           store.user.reset();
         }
@@ -156,12 +121,9 @@ const App = observer(() => {
       <Layout>
         <Header
           handleOpenChat={handleSetOpenChat}
-          handleBlockUnblockUser={handleBlockUnblockUser}
-          triggerReload={triggerReload}
         />
         {openChat.shouldOpenMaximizedChat && (
           <ChatBox
-            didCurrentlyLoggedUserBlocked={didCurrentlyLoggedUserBlocked}
             recipientEmail={openChat.recipientEmail!}
             profilePicture={
               openChat.profilePicture !== undefined
@@ -189,7 +151,6 @@ const App = observer(() => {
             name={openChat.name ?? ""}
             surname={openChat.surname ?? ""}
             profile={t(openChat.profile ?? "")}
-            handleBlockUnblockUser={handleBlockUnblockUser}
           />
         )}
         {openChat.shouldOpenMinimizedChat && (
@@ -245,14 +206,6 @@ const App = observer(() => {
                     element={
                       <CaretakerProfile
                         handleSetOpenChat={handleSetOpenChat}
-                        didCurrentlyLoggedUserBlocked={
-                          didCurrentlyLoggedUserBlocked
-                        }
-                        setVisitingProfile={(profile: string) =>
-                          setLastVisitedProfile(profile)
-                        }
-                        triggerReload={triggerReload}
-                        handleBlockUnblockUser={handleBlockUnblockUser}
                       />
                     }
                   />

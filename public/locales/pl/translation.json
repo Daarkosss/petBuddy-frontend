@@ -305,6 +305,7 @@
     "changeProfilePicture": "Wystąpił błąd podczas zmieniania zdjęcia profilowego",
     "confirmBeginOfCare": "Wystąpił błąd podczas potwierdzania rozpoczęcia opieki",
     "blockUser": "Wystapił błąd przy próbie zablokowania użytkownika",
+    "unblockUser": "Wystapił błąd przy próbie odblokowania użytkownika",
     "followCaretaker": "Wystąpił błąd przy próbie zaobserwowania opiekuna",
     "unfollowCaretaker": "Wystąpił błąd przy próbie zakończenia obserwowania opiekuna"
   },
@@ -326,6 +327,7 @@
     "changeProfilePicture": "Zdjęcie zostało pomyślnie zmienione",
     "confirmBeginOfCare": "Rozpoczęcie opieki zostało pomyślnie potwierdzone",
     "blockUser": "Użytkownik został pomyślnie zablokowany",
+    "unblockUser": "Użytkownik został pomyślnie odblokowany",
     "followCaretaker": "Opiekun został pomyślnie zaobserwowany",
     "unfollowCaretaker": "Opiekun pomyślnie przestał być obserwowany"
   },

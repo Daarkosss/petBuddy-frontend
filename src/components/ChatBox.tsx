@@ -18,12 +18,6 @@ interface ChatBoxProperties {
   name: string;
   surname: string;
   profile: string;
-  didCurrentlyLoggedUserBlocked: (otherUserEmail: string) => Promise<boolean>;
-  handleBlockUnblockUser: (
-    userEmail: string,
-    option: string,
-    onSuccess?: () => void
-  ) => void;
 }
 
 const ChatBox: React.FC<ChatBoxProperties> = ({
@@ -34,8 +28,6 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
   name,
   surname,
   profile,
-  didCurrentlyLoggedUserBlocked,
-  handleBlockUnblockUser,
 }) => {
   const [wsClient, setWsClient] = useState<Client | null>(null);
   const [doesChatRoomExist, setDoesChatRoomExist] = useState<boolean | null>(
@@ -83,7 +75,8 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
   }, [wsClient, store.user.profile?.selected_profile]);
 
   const checkWhoBlocked = async () => {
-    const result = await didCurrentlyLoggedUserBlocked(recipientEmail);
+    await store.blocked.fetchBlockedUsers();
+    const result = store.blocked.isBlockedByUser(recipientEmail);
     if (result) {
       setBlockInfo({
         isBlocked: true,
@@ -321,7 +314,6 @@ const ChatBox: React.FC<ChatBoxProperties> = ({
               }}
               blockInfo={blockInfo}
               recipientEmail={recipientEmail}
-              handleBlockUnblockUser={handleBlockUnblockUser}
               setBlockInfo={(
                 isBlocked: boolean,
                 name: string,
