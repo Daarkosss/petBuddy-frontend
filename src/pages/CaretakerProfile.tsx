@@ -136,8 +136,6 @@ const CaretakerProfile: React.FC<CaretakerProfileProps> = ({
 
   const checkIfFollowed = async () => {
     const response = await api.getFollowedCaretakers();
-    console.log(response);
-    console.log(profileData?.accountData.email);
     if (response) {
       for (let i = 0; i < response.length; i++) {
         if (response[i].email === profileData?.accountData.email) {
@@ -227,6 +225,8 @@ const CaretakerProfile: React.FC<CaretakerProfileProps> = ({
 
   useEffect(() => {
     checkIfFollowed();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profileData]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
