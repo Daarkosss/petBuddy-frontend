@@ -21,6 +21,9 @@ import {
   CaretakerRatingsResponse,
   AvailabilityValues,
   RelatedUsers,
+  BlockedUsers,
+  Rating,
+  CaretakerRatingDTO,
 } from "../types";
 import {
   CareDTO,
@@ -41,9 +44,9 @@ import {
   NumberOfUnreadChats,
 } from "../types/notification.types";
 import {
+  Chat,
   ChatMessage,
   ChatMessagesResponse,
-  ChatRoom,
   ChatsResponse,
 } from "../types/chat.types";
 
@@ -85,6 +88,7 @@ class API {
       return {} as T;
     }
 
+    if (response.status === 204) return {} as T;
     const data = await response.json();
     if (!response.ok) {
       if (showToast !== false)
@@ -114,7 +118,7 @@ class API {
           ...headers,
           Authorization: `Bearer ${store.user.jwtToken}`,
         },
-        false
+        showToast
       );
     } else {
       if (showToast !== false) toast.error("No user token available");
@@ -162,7 +166,7 @@ class API {
   async getChatRoomWithGivenUser(
     participantEmail: string,
     acceptTimezone: string | null
-  ): Promise<ChatRoom> {
+  ): Promise<Chat> {
     try {
       const headers: HeadersInit = {
         "Accept-Role": store.user.profile!.selected_profile!,
@@ -170,7 +174,7 @@ class API {
       if (acceptTimezone) {
         headers["Accept-Timezone"] = acceptTimezone;
       }
-      const response = await this.authorizedFetch<ChatRoom>(
+      const response = await this.authorizedFetch<Chat>(
         "GET",
         `api/chat/${participantEmail}`,
         null,
@@ -273,12 +277,12 @@ class API {
           attributes: animal.offerConfiguration?.attributes,
           minPrice: animal.offerConfiguration?.minPrice ?? 0.01,
           maxPrice: animal.offerConfiguration?.maxPrice ?? 99999.99,
-        }
+        },
       ],
       availabilities: filters.availabilities
         ? this.convertValuesToAvailabilityRanges(filters.availabilities)
         : [],
-      amenities: animal.offerConfiguration?.amenities
+      amenities: animal.offerConfiguration?.amenities,
     }));
     return this.fetch<CaretakerBasicsResponse>(
       "POST",
@@ -306,7 +310,11 @@ class API {
     try {
       const response = await this.fetch<CaretakerDetailsDTO>(
         "GET",
-        `api/caretaker/${email}`
+        `api/caretaker/${email}`,
+        undefined,
+        store.user.jwtToken
+          ? { Authorization: `Bearer ${store.user.jwtToken}` }
+          : undefined
       );
       return {
         ...response,
@@ -354,7 +362,7 @@ class API {
       return response;
     } catch (error: unknown) {
       if (error instanceof Error) {
-        throw new Error(`Failed to fetch caretaker profile: ${error.message}`);
+        throw new Error(`Failed to fetch client profile: ${error.message}`);
       }
       throw new Error(
         "An unknown error occurred while fetching caretaker profile"
@@ -362,42 +370,119 @@ class API {
     }
   }
 
-  //TODO: popraw
   async getCaretakerRatings(
     email: string,
-    page: number | null,
-    size: number | null,
-    sortDirection: string | null,
-    sortBy: string[] | null
+    pagingParams: PagingParams
   ): Promise<CaretakerRatingsResponse> {
     try {
-      let endpoint = `api/rating/${email}`;
-      if (page !== null) {
-        endpoint = endpoint.concat(`page=${page}`);
+      const queryParams = new URLSearchParams({
+        page: pagingParams.page.toString(),
+        size: pagingParams.size.toString(),
+      });
+
+      if (pagingParams.sortBy) {
+        queryParams.append("sortBy", pagingParams.sortBy);
       }
 
-      if (size !== null) {
-        endpoint = endpoint.concat("", `&size=${size}`);
-      }
-      if (sortDirection !== null) {
-        endpoint = endpoint.concat("", `&sortDirection=${sortDirection}`);
+      if (pagingParams.sortDirection) {
+        queryParams.append("sortDirection", pagingParams.sortDirection);
       }
 
-      if (sortBy !== null) {
-        endpoint = endpoint.concat("", `&sortBy=${sortBy}`);
-      }
       const response = await this.fetch<CaretakerRatingsResponse>(
         "GET",
-        endpoint
+        `api/rating/${email}?${queryParams}`
       );
       return response;
     } catch (error: unknown) {
       if (error instanceof Error) {
-        throw new Error(`Failed to fetch caretaker profile: ${error.message}`);
+        throw new Error(`Failed to fetch caretaker ratings: ${error.message}`);
       }
       throw new Error(
         "An unknown error occurred while fetching caretaker profile"
       );
+    }
+  }
+
+  async followCaretaker(caretakerEmail: string): Promise<string[] | undefined> {
+    if (store.user.profile?.selected_profile) {
+      try {
+        const response = await this.authorizedFetch<string[]>(
+          "POST",
+          `api/client/follow/${caretakerEmail}`,
+          undefined,
+          { "Accept-Role": store.user.profile.selected_profile }
+        );
+        return response;
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          throw new Error(`Failed to follow caretaker: ${error.message}`);
+        }
+        throw new Error(
+          "An unknown error occurred while fetching caretaker profile"
+        );
+      }
+    }
+  }
+
+  async unfollowCaretaker(
+    caretakerEmail: string
+  ): Promise<string[] | undefined> {
+    if (store.user.profile?.selected_profile) {
+      try {
+        const response = await this.authorizedFetch<string[]>(
+          "DELETE",
+          `api/client/unfollow/${caretakerEmail}`,
+          undefined,
+          { "Accept-Role": store.user.profile.selected_profile }
+        );
+        return response;
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          throw new Error(`Failed to unfollow caretaker: ${error.message}`);
+        }
+        throw new Error(
+          "An unknown error occurred while fetching caretaker profile"
+        );
+      }
+    }
+  }
+
+  async getFollowedCaretakers(): Promise<AccountDataDTO[] | undefined> {
+    if (store.user.profile?.selected_profile) {
+      try {
+        const response = await this.authorizedFetch<AccountDataDTO[]>(
+          "GET",
+          "api/client/follow",
+          undefined,
+          { "Accept-Role": store.user.profile.selected_profile }
+        );
+        return response;
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          throw new Error(
+            `Failed to get followed caretakers: ${error.message}`
+          );
+        }
+        throw new Error(
+          "An unknown error occurred while fetching caretaker profile"
+        );
+      }
+    }
+  }
+
+  async rateCaretaker(
+    careId: number,
+    rating: number,
+    comment: string
+  ): Promise<Rating | undefined> {
+    if (store.user.profile?.selected_profile) {
+      const response = await this.authorizedFetch<CaretakerRatingDTO>(
+        "POST",
+        `api/rating/${careId}`,
+        { rating: rating, comment: comment },
+        { "Accept-Role": store.user.profile?.selected_profile }
+      );
+      return response;
     }
   }
 
@@ -821,6 +906,26 @@ class API {
         { "Accept-Role": store.user.profile?.selected_profile }
       );
     }
+  }
+
+  async getBlockedUsers(): Promise<BlockedUsers | undefined> {
+    const queryParams = new URLSearchParams({
+      page: "0",
+      size: "1000000",
+    });
+
+    return this.authorizedFetch<BlockedUsers>(
+      "GET",
+      `api/user/block?${queryParams}`
+    );
+  }
+
+  async blockUser(username: string): Promise<void> {
+    return this.authorizedFetch<void>("POST", `api/user/block/${username}`);
+  }
+
+  async unblockUser(username: string): Promise<void> {
+    return this.authorizedFetch<void>("DELETE", `api/user/block/${username}`);
   }
 
   async getNotifications(): Promise<NotificationDTO | undefined> {

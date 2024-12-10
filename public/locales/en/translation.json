@@ -60,7 +60,7 @@
     "ADULT 1-8 YEARS": "Adult 1-8 years",
     "ADULT >2 YEARS": "Adult > 2 years",
 
-    "SENIOR >8 YEAR": "Senior > 8 years"
+    "SENIOR >8 YEARS": "Senior > 8 years"
   },
 
   "WATER": {
@@ -169,6 +169,8 @@
   "profilePage": {
     "changeImage": "Change image",
     "followCaretaker": "Follow",
+    "unfollowCaretaker": "Unfollow",
+    "sureToUnfollow": "Are you sure you want to unfollow this user?",
     "openChat": "Open chat",
     "userCaretakerProfile": "User caretaker profile",
     "userClientProfile": "Client profile",
@@ -180,10 +182,11 @@
     "noOffersToShow": "Currently there are no offers to show",
     "addOffer": "Add offer",
     "ratings": "Ratings",
-    "rate": "Rate",
+    "rate": "Rate- you can only rate caretaker after they confirm begin of care. Click to visit your cares history",
     "noRatingsToShow": "There are no ratings to show",
     "page": "page",
-    "noCaretakerProfile": "Currently you do not have caretaker profile"
+    "noCaretakerProfile": "Currently you do not have caretaker profile",
+    "noDescription": "Description was not provided"
   },
 
   "sort": {
@@ -202,7 +205,8 @@
     "maxPrice": "Max price",
     "noCaretakers": "There are no caretakers for selected filters",
     "list": "Caretaker list",
-    "map": "Caretaker map"
+    "map": "Caretaker map",
+    "followed": "Followed caretakers"
   },
 
   "careSearch": {
@@ -294,7 +298,12 @@
     "updatePrice": "An error occurred while updating price",
     "acceptCare": "An error occurred while accepting care",
     "changeProfilePicture": "An error occured while changing profile picture",
-    "confirmBeginOfCare": "An error occurred while confirming begin of care"
+    "confirmBeginOfCare": "An error occurred while confirming begin of care",
+    "blockUser": "An error occured while blocking user",
+    "unblockUser": "An error occured while unblocking user",
+    "followCaretaker": "An error occured while trying to follow user",
+    "unfollowCaretaker": "An error occured while trying to unfollow user",
+    "rate": "An error occured while trying to rate caretaker"
   },
 
   "success": {
@@ -311,7 +320,12 @@
     "updatePrice": "Care price has been successfully updated",
     "acceptCare": "Care has been successfully accepted",
     "changeProfilePicture": "You have successfully changed your profile picture",
-    "confirmBeginOfCare": "Begin of care has been successfully confirmed"
+    "confirmBeginOfCare": "Begin of care has been successfully confirmed",
+    "blockUser": "User has been successfully blocked",
+    "unblockUser": "User has been successfully unblocked",
+    "followCaretaker": "User has been successfully followed",
+    "unfollowCaretaker": "User has been successfully unfollowed",
+    "rate": "You have succesfully rated caretaker"
   },
 
   "dailyPrice": "Daily price",
@@ -405,7 +419,13 @@
     "careStartsTomorrow": "Care starts tomorrow.",
     "rememberToConfirmBeginOfCare": "Don't forget to confirm begin of care. You can do it only tomorrow.",
     "caretakerShouldConfirmBeginOfCare": "Caretaker should confirm begin of care tomorrow.",
-    "ifCaretakerDoesntConfirm": "If you don't confirm begin of care, care will be cancelled."
+    "ifCaretakerDoesntConfirm": "If you don't confirm begin of care, care will be cancelled.",
+    "rate": "Rate caretaker",
+    "rateNotAllowed": "You cannot rate caretaker yet",
+    "rateNotAllowedInfo": "You will be able to rate caretaker after they confirm begin of care",
+    "writeAComment": "Write a comment",
+    "submit": "Submit",
+    "setRating": "Set rating"
   },
 
   "careReservation": {
@@ -472,5 +492,24 @@
   },
 
   "termsAndConditions": "Terms and conditions",
-  "clickToZoom": "Click to zoom"
+  "clickToZoom": "Click to zoom",
+  "blockUser": "Block user",
+  "unblockUser": "Unblock user",
+  "youHaveBeenBlocked": "User has blocked you",
+  "sureToBlock": "Are you sure you want to block this user?",
+  "sureToUnblock": "Are you sure you want to unblock this user?",
+  "blockInfo": "If you block this user you and the user will not be able to correspond with each other or send care reservation requests",
+
+  "blockSendRequest": "Blocking user prevents sending care request",
+  "blockOpenChat": "Blocking user prevents opening chat",
+  "chatBlockade": "Chat blockade",
+  "blockade": "Blockade",
+  "notPossibleSendRequest": "It is not possible to send care request",
+  "blockedUsers": "Blocked users",
+
+  "noChatHistory": "No chat history with",
+  "chatIsBlockedBy": "Chat is blocked by",
+  "writeFirstMessage": "Write your first message",
+
+  "chatRooms": "Chat rooms"
 }

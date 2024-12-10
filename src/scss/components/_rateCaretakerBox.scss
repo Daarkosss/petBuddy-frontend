@@ -1,0 +1,21 @@
+@use "../helpers/variables" as v;
+
+.rate-caretaker-box-description {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  .rate-caretaker-box-rating {
+    width: 200px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+.rate-caretaker-box-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  gap: 10px;
+}

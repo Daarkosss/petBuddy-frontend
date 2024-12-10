@@ -5,7 +5,10 @@ import { TablePaginationConfig, ColumnsType } from "antd/es/table/interface";
 import { api } from "../api/api";
 import { useTranslation } from "react-i18next";
 import { CaretakerBasics } from "../models/Caretaker";
-import { CaretakerSearchFilters, OfferConfiguration,
+import {
+  AccountDataDTO,
+  CaretakerSearchFilters,
+  OfferConfiguration,
 } from "../types";
 import CaretakerFilters from "../components/CaretakerFilters";
 import store from "../store/RootStore";
@@ -17,8 +20,12 @@ const CaretakerList = () => {
   const navigate = useNavigate();
 
   const [caretakers, setCaretakers] = useState<CaretakerBasics[]>([]);
+  const [followedCaretakers, setFollowedCaretakers] = useState<
+    AccountDataDTO[]
+  >([]);
   const [isLoading, setIsLoading] = useState(false);
   const [mapCenter, setMapCenter] = useState<[number, number]>();
+  const [selectedTab, setSelectedTab] = useState<string>("list");
 
   const [pagingParams, setPagingParams] = useState({
     page: 0,
@@ -33,12 +40,19 @@ const CaretakerList = () => {
     total: 0,
   });
 
+  const getFollowedCaretakers = async () => {
+    const response = await api.getFollowedCaretakers();
+    if (response) {
+      setFollowedCaretakers(response);
+    }
+  };
+
   const loadFiltersFromSession = () => {
     const sessionFilters = sessionStorage.getItem("caretakerFilters");
     if (sessionFilters) {
       return JSON.parse(sessionFilters);
     } else {
-      return { 
+      return {
         personalDataLike: "",
         cityLike: "",
         voivodeship: undefined,
@@ -48,9 +62,13 @@ const CaretakerList = () => {
     }
   };
 
-  const [filters, setFilters] = useState<CaretakerSearchFilters>(loadFiltersFromSession());
+  const [filters, setFilters] = useState<CaretakerSearchFilters>(
+    loadFiltersFromSession()
+  );
 
-  const [animalFilters, setAnimalFilters] = useState<Record<string, OfferConfiguration>>({});
+  const [animalFilters, setAnimalFilters] = useState<
+    Record<string, OfferConfiguration>
+  >({});
 
   const assignFiltersToAnimals = async () => {
     setFilters((prevFilters) => ({
@@ -91,6 +109,7 @@ const CaretakerList = () => {
 
   useEffect(() => {
     fetchCaretakers();
+    getFollowedCaretakers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagingParams]);
 
@@ -193,9 +212,16 @@ const CaretakerList = () => {
             <Button
               className="view-details-button"
               type="primary"
-              onClick={() =>
-                navigate(`/profile-caretaker/${record.accountData.email}`)
-              }
+              onClick={() => {
+                if (
+                  record.accountData.email === store.user.profile?.email &&
+                  store.user.profile?.selected_profile === "CLIENT"
+                ) {
+                  navigate("/profile-client");
+                } else {
+                  navigate(`/profile-caretaker/${record.accountData.email}`);
+                }
+              }}
             >
               {t("viewDetails")}
             </Button>
@@ -230,21 +256,91 @@ const CaretakerList = () => {
     },
   ];
 
+  const columnsFollowedCaretakers: ColumnsType<AccountDataDTO> = [
+    {
+      title: t("caretaker"),
+      key: "caretaker",
+      render: (_: unknown, record: AccountDataDTO) => (
+        <div className="caretaker-list-item">
+          <div className="profile-picture">
+            <img
+              src={record.profilePicture?.url || "/images/default-avatar.png"}
+              alt="avatar"
+            />
+          </div>
+          <div>
+            <h4>
+              {record.name} {record.surname}
+            </h4>
+            {/* <p>
+              {record.address.city}, {record.address.voivodeship.toString()}
+            </p> */}
+            <Button
+              className="view-details-button"
+              type="primary"
+              onClick={() => {
+                if (
+                  record.email === store.user.profile?.email &&
+                  store.user.profile?.selected_profile === "CLIENT"
+                ) {
+                  navigate("/profile-client");
+                } else {
+                  navigate(`/profile-caretaker/${record.email}`);
+                }
+              }}
+            >
+              {t("viewDetails")}
+            </Button>
+          </div>
+        </div>
+      ),
+    },
+    // {
+    //   title: t("rating"),
+    //   dataIndex: "avgRating",
+    //   key: "avgRating",
+    //   render: (rating: number | null, record: AccountDataDTO) => (
+    //     <div className="caretaker-rating">
+    //       {rating ? (
+    //         <>
+    //           <div className="caretaker-rating-stars">
+    //             <Rate disabled allowHalf value={rating} />
+    //           </div>
+    //           <span className="caretaker-rating-value">
+    //             {rating.toFixed(2)}
+    //           </span>
+    //         </>
+    //       ) : (
+    //         <>
+    //           <Rate disabled allowHalf value={0} />
+    //           <p>{t("noRatings")}</p>
+    //         </>
+    //       )}
+    //     </div>
+    //   ),
+    // },
+  ];
+
   return (
     <div className="caretaker-container">
-      <CaretakerFilters
-        filters={filters}
-        animalFilters={animalFilters}
-        onFiltersChange={setFilters}
-        onAnimalFiltersChange={updateAnimalFilters}
-        onAnimalTypesChange={handleAnimalTypesChange}
-        onSortChange={handleSortChange}
-        onSearch={handleSearch}
-      />
+      {selectedTab !== "followed" && (
+        <CaretakerFilters
+          filters={filters}
+          animalFilters={animalFilters}
+          onFiltersChange={setFilters}
+          onAnimalFiltersChange={updateAnimalFilters}
+          onAnimalTypesChange={handleAnimalTypesChange}
+          onSortChange={handleSortChange}
+          onSearch={handleSearch}
+        />
+      )}
       <Tabs
         style={{ width: "100%" }}
         centered
         size="small"
+        onChange={(tabKey) => {
+          setSelectedTab(tabKey);
+        }}
         items={[
           {
             key: "list",
@@ -255,7 +351,7 @@ const CaretakerList = () => {
                   loading={isLoading}
                   columns={columns}
                   locale={{
-                    emptyText: t("caretakerSearch.noCaretakers")
+                    emptyText: t("caretakerSearch.noCaretakers"),
                   }}
                   dataSource={caretakers}
                   rowKey={(record) => record.accountData.email}
@@ -268,6 +364,25 @@ const CaretakerList = () => {
                       items_per_page: t("perPage"),
                     },
                   }}
+                  scroll={{ x: "max-content" }}
+                  onChange={handleTableChange}
+                />
+              </div>
+            ),
+          },
+          {
+            key: "followed",
+            label: t("caretakerSearch.followed"),
+            children: (
+              <div className="caretaker-content">
+                <Table
+                  loading={isLoading}
+                  columns={columnsFollowedCaretakers}
+                  locale={{
+                    emptyText: t("caretakerSearch.noCaretakers"),
+                  }}
+                  dataSource={followedCaretakers}
+                  rowKey={(record) => record.email}
                   scroll={{ x: "max-content" }}
                   onChange={handleTableChange}
                 />
