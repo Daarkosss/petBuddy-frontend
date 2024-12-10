@@ -170,6 +170,7 @@
     "changeImage": "Change image",
     "followCaretaker": "Follow",
     "unfollowCaretaker": "Unfollow",
+    "sureToUnfollow": "Are you sure you want to unfollow this user?",
     "openChat": "Open chat",
     "userCaretakerProfile": "User caretaker profile",
     "userClientProfile": "Client profile",

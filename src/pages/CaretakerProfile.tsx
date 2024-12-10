@@ -367,13 +367,19 @@ const CaretakerProfile: React.FC<CaretakerProfileProps> = ({
                         )}
 
                         {isFollowed && (
-                          <Button
-                            type="primary"
-                            className="profile-action-button"
-                            onClick={() => handleUnfollow()}
+                          <Popconfirm
+                            title={t("profilePage.unfollowCaretaker")}
+                            description={t("profilePage.sureToUnfollow")}
+                            onConfirm={() => {
+                              handleUnfollow();
+                            }}
+                            okText={t("yes")}
+                            cancelText={t("no")}
                           >
-                            {t("profilePage.unfollowCaretaker")}
-                          </Button>
+                            <Button danger type="primary">
+                              {t("profilePage.unfollowCaretaker")}
+                            </Button>
+                          </Popconfirm>
                         )}
 
                         {blockInfo.isBlocked && (
