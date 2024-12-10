@@ -64,9 +64,39 @@ const CaretakerProfile: React.FC<CaretakerProfileProps> = ({
   const size = 10;
   const [ratings, setRatings] = useState<CaretakerRatingsResponse>();
 
+  const [isFollowed, setIsFollowed] = useState<boolean>(false);
+
   const [isSmallScreen, setIsSmallScreen] = useState(
     window.matchMedia("(max-width: 780px)").matches
   );
+
+  const handleFollow = async () => {
+    if (profileData?.accountData.email) {
+      try {
+        await api.followCaretaker(profileData?.accountData.email);
+        setIsFollowed(true);
+        toast.success(t("success.followCaretaker"));
+      } catch (e: unknown) {
+        if (e instanceof Error) {
+          toast.error(t("error.followCaretaker"));
+        }
+      }
+    }
+  };
+
+  const handleUnfollow = async () => {
+    if (profileData?.accountData.email) {
+      try {
+        await api.unfollowCaretaker(profileData?.accountData.email);
+        setIsFollowed(false);
+        toast.success(t("success.unfollowCaretaker"));
+      } catch (e: unknown) {
+        if (e instanceof Error) {
+          toast.error(t("error.unfollowCaretaker"));
+        }
+      }
+    }
+  };
 
   const [profilePicture, setProfilePicture] = useState<string | null>(null);
 
@@ -102,6 +132,22 @@ const CaretakerProfile: React.FC<CaretakerProfileProps> = ({
         },
       });
     }
+  };
+
+  const checkIfFollowed = async () => {
+    const response = await api.getFollowedCaretakers();
+    console.log(response);
+    console.log(profileData?.accountData.email);
+    if (response) {
+      for (let i = 0; i < response.length; i++) {
+        if (response[i].email === profileData?.accountData.email) {
+          setIsFollowed(true);
+          return true;
+        }
+      }
+    }
+    setIsFollowed(false);
+    return false;
   };
 
   const getCaretakerDetails = (email: string) => {
@@ -178,6 +224,10 @@ const CaretakerProfile: React.FC<CaretakerProfileProps> = ({
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [triggerReload]);
+
+  useEffect(() => {
+    checkIfFollowed();
+  }, [profileData]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleCustomPhotoRequest = async (options: any) => {
@@ -306,12 +356,25 @@ const CaretakerProfile: React.FC<CaretakerProfileProps> = ({
                   {!isMyProfile &&
                     store.user.profile?.selected_profile === "CLIENT" && (
                       <div className="profile-actions">
-                        <Button
-                          type="primary"
-                          className="profile-action-button"
-                        >
-                          {t("profilePage.followCaretaker")}
-                        </Button>
+                        {!isFollowed && (
+                          <Button
+                            type="primary"
+                            className="profile-action-button"
+                            onClick={() => handleFollow()}
+                          >
+                            {t("profilePage.followCaretaker")}
+                          </Button>
+                        )}
+
+                        {isFollowed && (
+                          <Button
+                            type="primary"
+                            className="profile-action-button"
+                            onClick={() => handleUnfollow()}
+                          >
+                            {t("profilePage.unfollowCaretaker")}
+                          </Button>
+                        )}
 
                         {blockInfo.isBlocked && (
                           <Popover
