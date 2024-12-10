@@ -1,11 +1,14 @@
-import { LoadingOutlined, StopOutlined, UserOutlined } from "@ant-design/icons";
+import {
+  LoadingOutlined,
+  SearchOutlined,
+  StopOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import { Avatar, Badge, Button, Input, List, Modal, Popconfirm } from "antd";
 import { useEffect, useState } from "react";
 import { api } from "../../api/api";
 import { useTranslation } from "react-i18next";
 import { AccountDataDTO } from "../../types";
-
-const { Search } = Input;
 
 interface BlockedUsersBadgeProps {
   handleBlockUnblockUser: (
@@ -23,27 +26,51 @@ const BlockedUsersBadge: React.FC<BlockedUsersBadgeProps> = ({
   const { t } = useTranslation();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [users, setBlockedUsers] = useState<AccountDataDTO[]>([]);
+  const [filteredBlockedUsers, setFilteredBlockedUsers] = useState<
+    AccountDataDTO[]
+  >([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [searchValue, setSearchValue] = useState<string | null>(null);
+
+  //to remember last provided input in case we unblock user after filtering
+  const [searchedValue, setSearchedValue] = useState<string>("");
 
   const [pagination, setPagination] = useState({
-    size: 5,
+    size: 2,
     current: 1,
-    total: 0,
+    total: filteredBlockedUsers.length,
   });
 
-  const getBlockedUsers = async (userDataLike?: string) => {
+  const getBlockedUsers = async () => {
     await api.getBlockedUsers().then((data) => {
       if (data !== undefined) {
-        setBlockedUsers([...data.content]);
-        setPagination({
-          size: data.pageable.pageSize,
-          current: data.pageable.pageNumber + 1,
-          total: data.totalElements,
-        });
+        setBlockedUsers([...data]);
+        handleFilter(searchedValue, data);
       }
       setIsLoading(false);
     });
+  };
+
+  const handleOnPageChange = (page: number) => {
+    setPagination({
+      ...pagination,
+      current: page,
+    });
+  };
+
+  const handleFilter = (searchValue: string, usersArray: AccountDataDTO[]) => {
+    if (searchValue !== "") {
+      const loweredSearchedValue = searchValue.toLocaleLowerCase();
+      setFilteredBlockedUsers([
+        ...usersArray.filter(
+          (blockedUser) =>
+            blockedUser.email.toLocaleLowerCase().match(loweredSearchedValue) ||
+            blockedUser.name.toLocaleLowerCase().match(loweredSearchedValue) ||
+            blockedUser.surname.toLocaleLowerCase().match(loweredSearchedValue)
+        ),
+      ]);
+    } else {
+      setFilteredBlockedUsers([...usersArray]);
+    }
   };
 
   useEffect(() => {
@@ -53,6 +80,13 @@ const BlockedUsersBadge: React.FC<BlockedUsersBadgeProps> = ({
     gBlockedUsers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [triggerReload]);
+
+  useEffect(() => {
+    setPagination({
+      ...pagination,
+      total: filteredBlockedUsers.length,
+    });
+  }, [filteredBlockedUsers]);
 
   return (
     <Badge count={0} overflowCount={0} className="notification-badge">
@@ -78,27 +112,29 @@ const BlockedUsersBadge: React.FC<BlockedUsersBadgeProps> = ({
           </div>
         ) : (
           <div className="blocked-badge-modal-content-container">
-            <Search
+            <Input
+              addonAfter={<SearchOutlined />}
               placeholder={t("placeholder.inputSearchedText")}
-              onSearch={getBlockedUsers}
-              enterButton
-              loading={isLoading}
-              onChange={(e) => setSearchValue(e.target.value)}
+              onChange={(e) => {
+                setSearchedValue(e.target.value);
+                handleFilter(e.target.value, users);
+              }}
               onClear={() => {
-                setSearchValue(null);
-                getBlockedUsers(undefined);
+                setSearchedValue("");
+                setFilteredBlockedUsers([...users]);
               }}
               allowClear
             />
             <List
               className="blocked-badge-list"
               itemLayout="vertical"
-              dataSource={users}
+              dataSource={filteredBlockedUsers}
               locale={{ emptyText: t("noData") }}
               pagination={{
                 current: pagination.current,
                 pageSize: pagination.size,
                 total: pagination.total,
+                onChange: handleOnPageChange,
               }}
               renderItem={(item) => (
                 <List.Item
