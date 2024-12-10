@@ -96,6 +96,12 @@ const App = observer(() => {
           } catch (error) {
             console.error(`Failed to setup notifications: ${error}`);
           }
+
+          try {
+            await store.blocked.fetchBlockedUsers();
+          } catch (error) {
+            console.error(`Failed to fetch blocked users: ${error}`);
+          }
         } else {
           store.user.reset();
         }
@@ -113,7 +119,9 @@ const App = observer(() => {
   if (!store.isStarting) {
     return (
       <Layout>
-        <Header handleOpenChat={handleSetOpenChat} />
+        <Header
+          handleOpenChat={handleSetOpenChat}
+        />
         {openChat.shouldOpenMaximizedChat && (
           <ChatBox
             recipientEmail={openChat.recipientEmail!}
@@ -196,7 +204,9 @@ const App = observer(() => {
                   <Route
                     path="/profile-caretaker/:caretakerEmail"
                     element={
-                      <CaretakerProfile handleSetOpenChat={handleSetOpenChat} />
+                      <CaretakerProfile
+                        handleSetOpenChat={handleSetOpenChat}
+                      />
                     }
                   />
                   <Route

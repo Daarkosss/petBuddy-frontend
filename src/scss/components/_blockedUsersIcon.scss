@@ -1,0 +1,60 @@
+@use "../helpers/variables" as v;
+
+.blocked-users-wrapper {
+  cursor: pointer;
+  color: v.$blue-dark;
+  display: flex;
+
+  &:hover {
+    color: v.$blue-light;
+  }
+}
+
+.blocked-badge-list-item {
+  &:hover {
+    cursor: pointer;
+  }
+  .blocked-badge-title {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+  }
+  .blocked-badge-extra {
+    display: flex;
+    flex-direction: column;
+    @media (max-width: 350px) {
+      flex-direction: row;
+      gap: 10px;
+      width: 100%;
+      align-items: start;
+    }
+
+    .blocked-action-button {
+      background-color: rgb(182, 32, 32) !important;
+
+      &:hover {
+        background-color: red !important;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.blocked-badge-modal-content-container {
+  margin-top: 30px;
+
+  .blocked-badge-list {
+    margin-top: 10px;
+  }
+
+  button.ant-btn,
+  button.ant-pagination-item-link {
+    background-color: v.$blue-medium !important;
+
+    &:hover {
+      background-color: v.$blue-light !important;
+      cursor: pointer;
+    }
+  }
+}

@@ -2,11 +2,13 @@ import { makeAutoObservable } from "mobx";
 import UserStore from "./UserStore";
 import AnimalStore from "./AnimalStore";
 import NotificationStore from "./NotificationStore";
+import BlockedUsersStore from "./BlockedUsers";
 
 class RootStore {
   user: UserStore;
   animal: AnimalStore;
   notification: NotificationStore;
+  blocked: BlockedUsersStore;
   private _isStarting = true;
   private _selectedMenuOption = "";
 
@@ -15,12 +17,14 @@ class RootStore {
     this.user = new UserStore();
     this.animal = new AnimalStore();
     this.notification = new NotificationStore();
+    this.blocked = new BlockedUsersStore();
   }
 
   reset() { 
     this.user.reset();
     this.animal.reset();
     this.notification.reset();
+    this.blocked.reset();
   }
 
   get isStarting() {

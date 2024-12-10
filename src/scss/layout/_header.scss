@@ -71,7 +71,7 @@
   }
 
   @media (max-width: 480px) {
-    padding: 0 10px;
+    padding: 0 5px;
 
     .right-corner {
       gap: 15px;
@@ -79,6 +79,14 @@
 
     .auth-button {
       font-size: 11px;
+    }
+
+    .menu-mobile {
+      left: 5px;
+    }
+
+    .logo {
+      margin-left: 30px;
     }
   }
 }
