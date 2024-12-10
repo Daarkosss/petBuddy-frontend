@@ -10,6 +10,7 @@ import { useState } from "react";
 import NotificationBadge from "./NotificationBadge";
 import ChatBadge from "./ChatBadge";
 import store from "../../store/RootStore";
+import BlockedUsersIcon from "./BlockedUsersIcon";
 
 interface PageHeaderProperties {
   handleOpenChat: (
@@ -109,6 +110,9 @@ const PageHeader = observer<PageHeaderProperties>(({ handleOpenChat }) => {
       <div className="right-corner">
         {keycloak.authenticated && (
           <>
+            {store.user.profile?.selected_profile !== null && (
+              <BlockedUsersIcon/>
+            )}
             {store.user.profile?.selected_profile !== null && (
               <ChatBadge handleOpenChat={handleOpenChat} />
             )}

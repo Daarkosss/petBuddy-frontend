@@ -185,10 +185,11 @@
     "noOffersToShow": "Brak ofert do wyświetlenia",
     "addOffer": "Dodaj ofertę",
     "ratings": "Oceny",
-    "rate": "Oceń",
+    "rate": "Oceń- możesz ocenić opiekuna jedynie po pomyślnie zakończonej opiece",
     "noRatingsToShow": "Brak ocen do wyświetlenia",
     "page": "strona",
-    "noCaretakerProfile": "Nie posiadasz jeszcze profilu opiekuna"
+    "noCaretakerProfile": "Nie posiadasz jeszcze profilu opiekuna",
+    "noDescription": "Brak opisu"
   },
 
   "sort": {
@@ -300,7 +301,9 @@
     "acceptCare": "Wystąpił błąd podczas akceptacji opieki",
     "rejectCare": "Wystąpił błąd podczas odrzucenia opieki",
     "changeProfilePicture": "Wystąpił błąd podczas zmieniania zdjęcia profilowego",
-    "confirmBeginOfCare": "Wystąpił błąd podczas potwierdzania rozpoczęcia opieki"
+    "confirmBeginOfCare": "Wystąpił błąd podczas potwierdzania rozpoczęcia opieki",
+    "blockUser": "Wystapił błąd przy próbie zablokowania użytkownika",
+    "unblockUser": "Wystapił błąd przy próbie odblokowania użytkownika"
   },
 
   "success": {
@@ -318,7 +321,9 @@
     "acceptCare": "Opieka została pomyślnie zaakceptowana",
     "rejectCare": "Opieka została pomyślnie odrzucona",
     "changeProfilePicture": "Zdjęcie zostało pomyślnie zmienione",
-    "confirmBeginOfCare": "Rozpoczęcie opieki zostało pomyślnie potwierdzone"
+    "confirmBeginOfCare": "Rozpoczęcie opieki zostało pomyślnie potwierdzone",
+    "blockUser": "Użytkownik został pomyślnie zablokowany",
+    "unblockUser": "Użytkownik został pomyślnie odblokowany"
   },
 
   "dailyPrice": "Cena za dzień",
@@ -479,5 +484,25 @@
   },
 
   "termsAndConditions": "Polityka prywatności",
-  "clickToZoom": "Naciśnij aby powiekszyć"
+  "clickToZoom": "Naciśnij aby powiekszyć",
+
+  "blockUser": "Zablokuj użytkownika",
+  "unblockUser": "Odblokuj użytkownika",
+  "youHaveBeenBlocked": "Użytkownik Cię zablokował",
+  "sureToBlock": "Czy na pewno chcesz zablokować tego użytkownika?",
+  "sureToUnblock": "Czy na pewno chcesz odblokować tego użytkownika?",
+  "blockInfo": "Jeśli zablokujesz tego użytkownika, nie będziecie mogli wysyłać do siebie wiadomości, ani składać prośby rezerwacji opieki",
+
+  "blockSendRequest": "Blokada użytkownika nie pozwala na złożenie rezerwacji opieki",
+  "blockOpenChat": "Blokada użytkownika uniemożliwia otworzenie chatu",
+  "chatBlockade": "Blokada chatu",
+  "blockade": "Blokada",
+  "notPossibleSendRequest": "Brak możliwości rezerwacji",
+  "blockedUsers": "Zablokowani użytkownicy",
+
+  "noChatHistory": "Brak historii chatu z",
+  "chatIsBlockedBy": "Chat jest zablokowany przez",
+  "writeFirstMessage": "Napisz pierwszą wiadomość",
+
+  "chatRooms": "Chaty"
 }

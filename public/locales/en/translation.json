@@ -180,10 +180,11 @@
     "noOffersToShow": "Currently there are no offers to show",
     "addOffer": "Add offer",
     "ratings": "Ratings",
-    "rate": "Rate",
+    "rate": "Rate- you can only rate caretaker after finished care",
     "noRatingsToShow": "There are no ratings to show",
     "page": "page",
-    "noCaretakerProfile": "Currently you do not have caretaker profile"
+    "noCaretakerProfile": "Currently you do not have caretaker profile",
+    "noDescription": "Description was not provided"
   },
 
   "sort": {
@@ -294,7 +295,9 @@
     "updatePrice": "An error occurred while updating price",
     "acceptCare": "An error occurred while accepting care",
     "changeProfilePicture": "An error occured while changing profile picture",
-    "confirmBeginOfCare": "An error occurred while confirming begin of care"
+    "confirmBeginOfCare": "An error occurred while confirming begin of care",
+    "blockUser": "An error occured while blocking user",
+    "unblockUser": "An error occured while unblocking user"
   },
 
   "success": {
@@ -311,7 +314,9 @@
     "updatePrice": "Care price has been successfully updated",
     "acceptCare": "Care has been successfully accepted",
     "changeProfilePicture": "You have successfully changed your profile picture",
-    "confirmBeginOfCare": "Begin of care has been successfully confirmed"
+    "confirmBeginOfCare": "Begin of care has been successfully confirmed",
+    "blockUser": "User has been successfully blocked",
+    "unblockUser": "User has been successfully unblocked"
   },
 
   "dailyPrice": "Daily price",
@@ -472,5 +477,24 @@
   },
 
   "termsAndConditions": "Terms and conditions",
-  "clickToZoom": "Click to zoom"
+  "clickToZoom": "Click to zoom",
+  "blockUser": "Block user",
+  "unblockUser": "Unblock user",
+  "youHaveBeenBlocked": "User has blocked you",
+  "sureToBlock": "Are you sure you want to block this user?",
+  "sureToUnblock": "Are you sure you want to unblock this user?",
+  "blockInfo": "If you block this user you and the user will not be able to correspond with each other or send care reservation requests",
+
+  "blockSendRequest": "Blocking user prevents sending care request",
+  "blockOpenChat": "Blocking user prevents opening chat",
+  "chatBlockade": "Chat blockade",
+  "blockade": "Blockade",
+  "notPossibleSendRequest": "It is not possible to send care request",
+  "blockedUsers": "Blocked users",
+
+  "noChatHistory": "No chat history with",
+  "chatIsBlockedBy": "Chat is blocked by",
+  "writeFirstMessage": "Write your first message",
+
+  "chatRooms": "Chat rooms"
 }

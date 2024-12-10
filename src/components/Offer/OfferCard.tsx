@@ -12,15 +12,16 @@ type OfferCardProps = {
   offer: OfferWithId;
   canBeEdited?: boolean;
   handleUpdateOffer: (updatedOffer: OfferWithId, isDeleted?: boolean) => void;
+  isBlocked?: boolean;
 };
 
 const OfferCard: React.FC<OfferCardProps> = ({
   offer,
   handleUpdateOffer,
   canBeEdited = true,
+  isBlocked = false,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const handleDeleteOffer = async () => {
     try {
       const deletedOffer = await api.deleteOffer(offer.id);
@@ -86,13 +87,15 @@ const OfferCard: React.FC<OfferCardProps> = ({
         actions={actions}
       >
         <Meta
-          title={canBeEdited
-            ? t(`yourOffers.${offer.animal.animalType}`)
-            : t(`caretakerOffers.${offer.animal.animalType}`)
+          title={
+            canBeEdited
+              ? t(`yourOffers.${offer.animal.animalType}`)
+              : t(`caretakerOffers.${offer.animal.animalType}`)
           }
-          description={offer.description.length <= 40 
-            ? offer.description 
-            : `${offer.description.substring(0, 40)}...`
+          description={
+            offer.description.length <= 40
+              ? offer.description
+              : `${offer.description.substring(0, 40)}...`
           }
         />
       </Card>
@@ -103,6 +106,7 @@ const OfferCard: React.FC<OfferCardProps> = ({
         handleUpdateOffer={handleUpdateOffer}
         handleUpdateConfiguration={handleUpdateConfiguration}
         canBeEdited={canBeEdited}
+        isBlocked={isBlocked}
       />
     </div>
   );

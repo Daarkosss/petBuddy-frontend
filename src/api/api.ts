@@ -41,9 +41,9 @@ import {
   NumberOfUnreadChats,
 } from "../types/notification.types";
 import {
+  Chat,
   ChatMessage,
   ChatMessagesResponse,
-  ChatRoom,
   ChatsResponse,
 } from "../types/chat.types";
 
@@ -85,6 +85,7 @@ class API {
       return {} as T;
     }
 
+    if (response.status === 204) return {} as T;
     const data = await response.json();
     if (!response.ok) {
       if (showToast !== false)
@@ -114,7 +115,7 @@ class API {
           ...headers,
           Authorization: `Bearer ${store.user.jwtToken}`,
         },
-        false
+        showToast
       );
     } else {
       if (showToast !== false) toast.error("No user token available");
@@ -162,7 +163,7 @@ class API {
   async getChatRoomWithGivenUser(
     participantEmail: string,
     acceptTimezone: string | null
-  ): Promise<ChatRoom> {
+  ): Promise<Chat> {
     try {
       const headers: HeadersInit = {
         "Accept-Role": store.user.profile!.selected_profile!,
@@ -170,7 +171,7 @@ class API {
       if (acceptTimezone) {
         headers["Accept-Timezone"] = acceptTimezone;
       }
-      const response = await this.authorizedFetch<ChatRoom>(
+      const response = await this.authorizedFetch<Chat>(
         "GET",
         `api/chat/${participantEmail}`,
         null,
@@ -273,12 +274,12 @@ class API {
           attributes: animal.offerConfiguration?.attributes,
           minPrice: animal.offerConfiguration?.minPrice ?? 0.01,
           maxPrice: animal.offerConfiguration?.maxPrice ?? 99999.99,
-        }
+        },
       ],
       availabilities: filters.availabilities
         ? this.convertValuesToAvailabilityRanges(filters.availabilities)
         : [],
-      amenities: animal.offerConfiguration?.amenities
+      amenities: animal.offerConfiguration?.amenities,
     }));
     return this.fetch<CaretakerBasicsResponse>(
       "POST",
@@ -306,7 +307,11 @@ class API {
     try {
       const response = await this.fetch<CaretakerDetailsDTO>(
         "GET",
-        `api/caretaker/${email}`
+        `api/caretaker/${email}`,
+        undefined,
+        store.user.jwtToken
+          ? { Authorization: `Bearer ${store.user.jwtToken}` }
+          : undefined
       );
       return {
         ...response,
@@ -362,7 +367,6 @@ class API {
     }
   }
 
-  //TODO: popraw
   async getCaretakerRatings(
     email: string,
     page: number | null,
@@ -821,6 +825,18 @@ class API {
         { "Accept-Role": store.user.profile?.selected_profile }
       );
     }
+  }
+
+  async getBlockedUsers(): Promise<AccountDataDTO[] | undefined> {
+    return this.authorizedFetch<AccountDataDTO[]>("GET", "api/user/block");
+  }
+
+  async blockUser(username: string): Promise<void> {
+    return this.authorizedFetch<void>("POST", `api/user/block/${username}`);
+  }
+
+  async unblockUser(username: string): Promise<void> {
+    return this.authorizedFetch<void>("DELETE", `api/user/block/${username}`);
   }
 
   async getNotifications(): Promise<NotificationDTO | undefined> {

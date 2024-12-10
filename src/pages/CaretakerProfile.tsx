@@ -1,11 +1,20 @@
 import React, { useEffect, useState } from "react";
 import store from "../store/RootStore";
 import "../scss/pages/_profile.scss";
-import { Button, Card, Rate, Upload, Avatar, Image } from "antd";
+import {
+  Button,
+  Card,
+  Rate,
+  Upload,
+  Avatar,
+  Image,
+  Popover,
+  Popconfirm,
+} from "antd";
 import { PictureOutlined, UserOutlined } from "@ant-design/icons";
 import CommentContainer from "../components/CommentContainer";
 import RoundedLine from "../components/RoundedLine";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { api } from "../api/api";
 import {
@@ -18,11 +27,21 @@ import ImgCrop from "antd-img-crop";
 import { handleFilePreview, hasFilePhotoType } from "../functions/imageHandle";
 import OfferManagement from "./OfferManagement";
 import { toast } from "react-toastify";
-import { HandleSetOpenChat } from "../types/chat.types";
+import { observer } from "mobx-react-lite";
 
-const CaretakerProfile: React.FC<HandleSetOpenChat> = ({
-  handleSetOpenChat,
-}) => {
+interface CaretakerProfileProps {
+  handleSetOpenChat?: (
+    recipientEmail: string | undefined,
+    profilePicture: string | undefined,
+    name: string | undefined,
+    surname: string | undefined,
+    profile: string | undefined,
+    shouldOpenMaximizedChat?: boolean,
+    shouldOpenMinimizedChat?: boolean
+  ) => void;
+}
+
+const CaretakerProfile: React.FC<CaretakerProfileProps> = observer(({ handleSetOpenChat }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { caretakerEmail } = useParams();
@@ -40,6 +59,7 @@ const CaretakerProfile: React.FC<HandleSetOpenChat> = ({
   );
 
   const [profilePicture, setProfilePicture] = useState<string | null>(null);
+  const [showDeleteConfirmationPopup, setShowDeleteConfirmationPopup] = useState<boolean>(false);
 
   const getCaretakerDetails = (email: string) => {
     api.getCaretakerDetails(email).then((data) => {
@@ -47,6 +67,9 @@ const CaretakerProfile: React.FC<HandleSetOpenChat> = ({
       setOffers(data.offers);
       if (data.accountData.profilePicture !== null) {
         setProfilePicture(data.accountData.profilePicture.url);
+      }
+      if (data.blocked !== undefined) {
+        store.blocked.visitedUserEmail = email;
       }
     });
   };
@@ -178,6 +201,7 @@ const CaretakerProfile: React.FC<HandleSetOpenChat> = ({
                   </ImgCrop>
                   <div>
                     <Button
+                      disabled={store.blocked.isVisitedUserBlocked}
                       type="primary"
                       className="profile-action-button"
                       onClick={() => {
@@ -236,22 +260,91 @@ const CaretakerProfile: React.FC<HandleSetOpenChat> = ({
                         >
                           {t("profilePage.followCaretaker")}
                         </Button>
-                        <Button
-                          type="primary"
-                          className="profile-action-button"
-                          onClick={() => {
-                            handleSetOpenChat!(
-                              profileData.accountData.email,
-                              profileData.accountData.profilePicture?.url ||
-                                undefined,
-                              profileData.accountData.name,
-                              profileData.accountData.surname,
-                              "caretaker"
-                            );
-                          }}
-                        >
-                          {t("profilePage.openChat")}
-                        </Button>
+
+                        {store.blocked.isVisitedUserBlocked && (
+                          <Popover
+                            content={t("blockOpenChat")}
+                            title={
+                              store.blocked.isBlockedByUser(profileData.accountData.email)
+                                ? t("chatBlockade")
+                                : t("youHaveBeenBlocked")
+                            }
+                          >
+                            <Button disabled>{t("chatBlockade")}</Button>
+                          </Popover>
+                        )}
+
+                        {!store.blocked.isVisitedUserBlocked && (
+                          <Button
+                            type="primary"
+                            className="profile-action-button"
+                            onClick={() => {
+                              handleSetOpenChat!(
+                                profileData.accountData.email,
+                                profileData.accountData.profilePicture?.url ||
+                                  undefined,
+                                profileData.accountData.name,
+                                profileData.accountData.surname,
+                                "caretaker"
+                              );
+                            }}
+                          >
+                            {t("profilePage.openChat")}
+                          </Button>
+                        )}
+
+                        {store.blocked.isVisitedUserBlocked &&
+                          store.blocked.isBlockedByUser(profileData.accountData.email) && (
+                            <Popconfirm
+                              open={showDeleteConfirmationPopup}
+                              title={t("sureToUnblock")}
+                              onConfirm={() => {
+                                setShowDeleteConfirmationPopup(false);
+                                store.blocked.unblockUser(profileData.accountData.email);
+                              }}
+                              onCancel={() =>
+                                setShowDeleteConfirmationPopup(false)
+                              }
+                              okText={t("yes")}
+                              cancelText={t("no")}
+                            >
+                              <Button
+                                type="primary"
+                                className="profile-action-button"
+                                onClick={() => {
+                                  setShowDeleteConfirmationPopup(true);
+                                }}
+                              >
+                                {t("unblockUser")}
+                              </Button>
+                            </Popconfirm>
+                          )}
+                        {!store.blocked.isVisitedUserBlocked && (
+                          <Popconfirm
+                            open={showDeleteConfirmationPopup}
+                            title={t("sureToBlock")}
+                            description={t("blockInfo")}
+                            onConfirm={() => {
+                              setShowDeleteConfirmationPopup(false);
+                              store.blocked.blockUser(profileData.accountData.email);
+                            }}
+                            onCancel={() =>
+                              setShowDeleteConfirmationPopup(false)
+                            }
+                            okText={t("yes")}
+                            cancelText={t("no")}
+                          >
+                            <Button
+                              type="primary"
+                              className="profile-action-button"
+                              onClick={() =>
+                                setShowDeleteConfirmationPopup(true)
+                              }
+                            >
+                              {t("blockUser")}
+                            </Button>
+                          </Popconfirm>
+                        )}
                       </div>
                     )}
                 </div>
@@ -280,7 +373,9 @@ const CaretakerProfile: React.FC<HandleSetOpenChat> = ({
             )}
             <h4>{t("profilePage.description")}</h4>
             {profileData !== null && profileData !== undefined && (
-              <div>{profileData.description}</div>
+              <div>
+                {profileData.description ?? t("profilePage.noDescription")}
+              </div>
             )}
             <div>
               {isSmallScreen && (
@@ -308,6 +403,7 @@ const CaretakerProfile: React.FC<HandleSetOpenChat> = ({
                               offer={element}
                               handleUpdateOffer={() => {}}
                               canBeEdited={false}
+                              isBlocked={store.blocked.isVisitedUserBlocked}
                             />
                           </div>
                         ))
@@ -330,11 +426,13 @@ const CaretakerProfile: React.FC<HandleSetOpenChat> = ({
               <h1>{t("profilePage.ratings")}</h1>
               {isMyProfile === false &&
                 store.user.profile?.selected_profile === "CLIENT" && (
-                  <div className="profile-add-a-comment">
-                    <Button type="primary" className="add-button">
-                      {t("profilePage.rate")}
-                    </Button>
-                  </div>
+                  <Link
+                    to={"/cares"}
+                    className="profile-add-a-comment"
+                    style={{ textDecoration: "none" }}
+                  >
+                    {t("profilePage.rate")}
+                  </Link>
                 )}
               <div className="profile-comments-container">
                 {ratings && ratings.content.length > 0 ? (
@@ -417,6 +515,7 @@ const CaretakerProfile: React.FC<HandleSetOpenChat> = ({
                             offer={element}
                             handleUpdateOffer={() => {}}
                             canBeEdited={false}
+                            isBlocked={store.blocked.isVisitedUserBlocked}
                           />
                         </div>
                       ))
@@ -436,6 +535,6 @@ const CaretakerProfile: React.FC<HandleSetOpenChat> = ({
       )}
     </div>
   );
-};
+});
 
 export default CaretakerProfile;

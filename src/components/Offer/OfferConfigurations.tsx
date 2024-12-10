@@ -33,6 +33,7 @@ type ConfigurationsProps = {
   handleUpdateOffer: (newOffer: OfferWithId) => void;
   handleUpdateConfiguration: (newOffer: OfferConfigurationWithId) => void;
   canBeEdited: boolean;
+  isBlocked?: boolean;
 };
 
 const OfferConfigurations: React.FC<ConfigurationsProps> = ({
@@ -43,9 +44,12 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
   handleUpdateOffer,
   handleUpdateConfiguration,
   canBeEdited = true,
+  isBlocked = false,
 }) => {
   const { t } = useTranslation();
-  const [editingKey, setEditingKey] = useState<number | null | undefined>(undefined);
+  const [editingKey, setEditingKey] = useState<number | null | undefined>(
+    undefined
+  );
   const [form] = Form.useForm();
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -168,6 +172,9 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
   };
 
   const getTooltipText = () => {
+    if (isBlocked) {
+      return t("blockSendRequest");
+    }
     if (availabilities.length === 0) {
       return t("noAvailability");
     } else if (store.user.profile?.selected_profile !== "CLIENT") {
@@ -204,9 +211,12 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
             />
           </Form.Item>
         ) : values ? (
-          values.map((value) => <span key={`${attributeKey}.${value}`}>
-            {t(`${attributeKey}.${value}`)}<br/>
-          </span>)
+          values.map((value) => (
+            <span key={`${attributeKey}.${value}`}>
+              {t(`${attributeKey}.${value}`)}
+              <br />
+            </span>
+          ))
         ) : (
           ""
         );
@@ -245,7 +255,7 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
       render: (_: number, record: OfferConfigurationWithOptionalId) => {
         const editable = isEditing(record);
         return editable ? (
-          <NumericFormItem name="dailyPrice" width={120}/>
+          <NumericFormItem name="dailyPrice" width={120} />
         ) : (
           record.dailyPrice
         );
@@ -303,23 +313,26 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
               </Popconfirm>
             </Space>
           )
-        ) : (
+        ) :(
           <Tooltip title={getTooltipText()}>
             <Button
               type="primary"
-              onClick={() => navigate(
-                `/care/reservation/${caretakerEmail}`,
-                { 
-                  state: { 
+              onClick={() =>
+                navigate(`/care/reservation/${caretakerEmail}`, {
+                  state: {
                     animalType,
                     dailyPrice: record.dailyPrice,
                     animalAttributes: record.selectedOptions,
-                    availabilities: availabilities
-                  } 
-                }
-              )}
+                    availabilities: availabilities,
+                  },
+                })
+              }
               loading={isLoading}
-              disabled={availabilities.length === 0 || store.user.profile?.selected_profile !== "CLIENT"}
+              disabled={
+                isBlocked ||
+                availabilities.length === 0 ||
+                store.user.profile?.selected_profile !== "CLIENT"
+              }
             >
               {t("sendRequest")}
             </Button>
