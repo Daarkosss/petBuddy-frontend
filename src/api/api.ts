@@ -359,7 +359,7 @@ class API {
       return response;
     } catch (error: unknown) {
       if (error instanceof Error) {
-        throw new Error(`Failed to fetch caretaker profile: ${error.message}`);
+        throw new Error(`Failed to fetch client profile: ${error.message}`);
       }
       throw new Error(
         "An unknown error occurred while fetching caretaker profile"
@@ -397,11 +397,78 @@ class API {
       return response;
     } catch (error: unknown) {
       if (error instanceof Error) {
-        throw new Error(`Failed to fetch caretaker profile: ${error.message}`);
+        throw new Error(`Failed to fetch caretaker ratings: ${error.message}`);
       }
       throw new Error(
         "An unknown error occurred while fetching caretaker profile"
       );
+    }
+  }
+
+  async followCaretaker(caretakerEmail: string): Promise<string[] | undefined> {
+    if (store.user.profile?.selected_profile) {
+      try {
+        const response = await this.authorizedFetch<string[]>(
+          "POST",
+          `api/client/follow/${caretakerEmail}`,
+          undefined,
+          { "Accept-Role": store.user.profile.selected_profile }
+        );
+        return response;
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          throw new Error(`Failed to follow caretaker: ${error.message}`);
+        }
+        throw new Error(
+          "An unknown error occurred while fetching caretaker profile"
+        );
+      }
+    }
+  }
+
+  async unfollowCaretaker(
+    caretakerEmail: string
+  ): Promise<string[] | undefined> {
+    if (store.user.profile?.selected_profile) {
+      try {
+        const response = await this.authorizedFetch<string[]>(
+          "DELETE",
+          `api/client/unfollow/${caretakerEmail}`,
+          undefined,
+          { "Accept-Role": store.user.profile.selected_profile }
+        );
+        return response;
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          throw new Error(`Failed to unfollow caretaker: ${error.message}`);
+        }
+        throw new Error(
+          "An unknown error occurred while fetching caretaker profile"
+        );
+      }
+    }
+  }
+
+  async getFollowedCaretakers(): Promise<AccountDataDTO[] | undefined> {
+    if (store.user.profile?.selected_profile) {
+      try {
+        const response = await this.authorizedFetch<AccountDataDTO[]>(
+          "GET",
+          "api/client/follow",
+          undefined,
+          { "Accept-Role": store.user.profile.selected_profile }
+        );
+        return response;
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          throw new Error(
+            `Failed to get followed caretakers: ${error.message}`
+          );
+        }
+        throw new Error(
+          "An unknown error occurred while fetching caretaker profile"
+        );
+      }
     }
   }
 

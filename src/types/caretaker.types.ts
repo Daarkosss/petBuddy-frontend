@@ -48,7 +48,8 @@ export type CaretakerDetailsDTO = CaretakerBasicsDTO & {
   description: string;
   offers: OfferDTOWithId[];
   offerPhotos: Photo[];
-  blocked?: boolean;
+  blocked: boolean | null;
+  followed: boolean | null;
 };
 
 export type CaretakerDetails = Omit<CaretakerDetailsDTO, "offers"> & {
