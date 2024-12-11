@@ -169,6 +169,8 @@
   "profilePage": {
     "changeImage": "Change image",
     "followCaretaker": "Follow",
+    "unfollowCaretaker": "Unfollow",
+    "sureToUnfollow": "Are you sure you want to unfollow this user?",
     "openChat": "Open chat",
     "userCaretakerProfile": "User caretaker profile",
     "userClientProfile": "Client profile",
@@ -297,7 +299,9 @@
     "changeProfilePicture": "An error occured while changing profile picture",
     "confirmBeginOfCare": "An error occurred while confirming begin of care",
     "blockUser": "An error occured while blocking user",
-    "unblockUser": "An error occured while unblocking user"
+    "unblockUser": "An error occured while unblocking user",
+    "followCaretaker": "An error occured while trying to follow user",
+    "unfollowCaretaker": "An error occured while trying to unfollow user"
   },
 
   "success": {
@@ -316,7 +320,9 @@
     "changeProfilePicture": "You have successfully changed your profile picture",
     "confirmBeginOfCare": "Begin of care has been successfully confirmed",
     "blockUser": "User has been successfully blocked",
-    "unblockUser": "User has been successfully unblocked"
+    "unblockUser": "User has been successfully unblocked",
+    "followCaretaker": "User has been successfully followed",
+    "unfollowCaretaker": "User has been successfully unfollowed"
   },
 
   "dailyPrice": "Daily price",
