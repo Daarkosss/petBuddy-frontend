@@ -294,17 +294,7 @@ const CaretakerProfile: React.FC<CaretakerProfileProps> = observer(
                     {!isMyProfile &&
                       store.user.profile?.selected_profile === "CLIENT" && (
                         <div className="profile-actions">
-                          {!isFollowed && (
-                            <Button
-                              type="primary"
-                              className="profile-action-button"
-                              onClick={() => handleFollow()}
-                            >
-                              {t("profilePage.followCaretaker")}
-                            </Button>
-                          )}
-
-                          {isFollowed && (
+                          {isFollowed ? (
                             <Popconfirm
                               title={t("profilePage.unfollowCaretaker")}
                               description={t("profilePage.sureToUnfollow")}
@@ -318,6 +308,14 @@ const CaretakerProfile: React.FC<CaretakerProfileProps> = observer(
                                 {t("profilePage.unfollowCaretaker")}
                               </Button>
                             </Popconfirm>
+                          ) : (
+                            <Button
+                              type="primary"
+                              className="profile-action-button"
+                              onClick={() => handleFollow()}
+                            >
+                              {t("profilePage.followCaretaker")}
+                            </Button>
                           )}
 
                           {store.blocked.isVisitedUserBlocked && (
