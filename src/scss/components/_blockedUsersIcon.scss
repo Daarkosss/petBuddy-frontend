@@ -1,5 +1,15 @@
 @use "../helpers/variables" as v;
 
+.blocked-users-wrapper {
+  cursor: pointer;
+  color: v.$blue-dark;
+  display: flex;
+
+  &:hover {
+    color: v.$blue-light;
+  }
+}
+
 .blocked-badge-list-item {
   &:hover {
     cursor: pointer;
