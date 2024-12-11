@@ -140,7 +140,6 @@ const CaretakerProfile: React.FC<CaretakerProfileProps> = observer(
         api
           .getCaretakerRatings(profileData.accountData.email, pagingParams)
           .then((data) => {
-            console.log(data);
             setRatings({ ...data });
             setPagination({
               size: data.pageable.pageSize,
