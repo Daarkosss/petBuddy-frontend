@@ -1,63 +1,49 @@
-import { LoadingOutlined, StopOutlined, UserOutlined } from "@ant-design/icons";
-import { Avatar, Badge, Button, Input, List, Modal, Popconfirm } from "antd";
+import { LoadingOutlined, SearchOutlined, StopOutlined, UserOutlined } from "@ant-design/icons";
+import { Avatar, Button, Input, List, Modal, Popconfirm } from "antd";
 import { useEffect, useState } from "react";
-import { api } from "../../api/api";
 import { useTranslation } from "react-i18next";
-import { AccountDataDTO } from "../../types";
+import store from "../../store/RootStore";
+import { observer } from "mobx-react-lite";
 
-const { Search } = Input;
 
-interface BlockedUsersBadgeProps {
-  handleBlockUnblockUser: (
-    userEmail: string,
-    option: string,
-    onSuccess?: () => void
-  ) => void;
-  triggerReload: boolean;
-}
-
-const BlockedUsersBadge: React.FC<BlockedUsersBadgeProps> = ({
-  handleBlockUnblockUser,
-  triggerReload,
-}) => {
+const BlockedUsersIcon = observer(() => {
   const { t } = useTranslation();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [users, setBlockedUsers] = useState<AccountDataDTO[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [searchValue, setSearchValue] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [pagination, setPagination] = useState({
-    size: 5,
+    size: 2,
     current: 1,
-    total: 0,
+    total: store.blocked.filteredUsers.length,
   });
 
-  const getBlockedUsers = async (userDataLike?: string) => {
-    await api.getBlockedUsers().then((data) => {
-      if (data !== undefined) {
-        setBlockedUsers([...data.content]);
-        setPagination({
-          size: data.pageable.pageSize,
-          current: data.pageable.pageNumber + 1,
-          total: data.totalElements,
-        });
-      }
-      setIsLoading(false);
+  const handleOnPageChange = (page: number) => {
+    setPagination({
+      ...pagination,
+      current: page,
     });
   };
 
   useEffect(() => {
-    const gBlockedUsers = async () => {
-      await getBlockedUsers();
-    };
-    gBlockedUsers();
+    setPagination({
+      ...pagination,
+      total: store.blocked.filteredUsers.length,
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [triggerReload]);
+  }, [store.blocked.filteredUsers]);
+
+  const handleUnblockUser = (userEmail: string) => {
+    setIsLoading(true);
+    store.blocked.unblockUser(userEmail).then(() => {
+      setIsLoading(false);
+      setIsModalOpen(false);
+    });
+  };
 
   return (
-    <Badge count={0} overflowCount={0} className="notification-badge">
+    <div className="blocked-users-wrapper">
       <StopOutlined
-        style={{ fontSize: "24px" }}
+        style={{ fontSize: "23px" }}
         onClick={() => setIsModalOpen(true)}
       />
       <Modal
@@ -66,7 +52,7 @@ const BlockedUsersBadge: React.FC<BlockedUsersBadgeProps> = ({
         footer={[]}
         title={t("blockedUsers")}
       >
-        {isLoading === true ? (
+        {isLoading ? (
           <div
             style={{
               display: "flex",
@@ -78,27 +64,27 @@ const BlockedUsersBadge: React.FC<BlockedUsersBadgeProps> = ({
           </div>
         ) : (
           <div className="blocked-badge-modal-content-container">
-            <Search
+            <Input
+              addonAfter={<SearchOutlined />}
               placeholder={t("placeholder.inputSearchedText")}
-              onSearch={getBlockedUsers}
-              enterButton
-              loading={isLoading}
-              onChange={(e) => setSearchValue(e.target.value)}
+              onChange={(e) => {
+                store.blocked.searchValue = e.target.value;
+              }}
               onClear={() => {
-                setSearchValue(null);
-                getBlockedUsers(undefined);
+                store.blocked.searchValue = "";
               }}
               allowClear
             />
             <List
               className="blocked-badge-list"
               itemLayout="vertical"
-              dataSource={users}
+              dataSource={store.blocked.filteredUsers}
               locale={{ emptyText: t("noData") }}
               pagination={{
                 current: pagination.current,
                 pageSize: pagination.size,
                 total: pagination.total,
+                onChange: handleOnPageChange,
               }}
               renderItem={(item) => (
                 <List.Item
@@ -107,13 +93,7 @@ const BlockedUsersBadge: React.FC<BlockedUsersBadgeProps> = ({
                     <div className="blocked-badge-extra">
                       <Popconfirm
                         title={t("sureToUnblock")}
-                        onConfirm={() => {
-                          handleBlockUnblockUser!(
-                            item.email,
-                            "unblockUser",
-                            () => getBlockedUsers()
-                          );
-                        }}
+                        onConfirm={() => handleUnblockUser(item.email)}
                         okText={t("yes")}
                         cancelText={t("no")}
                       >
@@ -152,8 +132,8 @@ const BlockedUsersBadge: React.FC<BlockedUsersBadgeProps> = ({
           </div>
         )}
       </Modal>
-    </Badge>
+    </div>
   );
-};
+});
 
-export default BlockedUsersBadge;
+export default BlockedUsersIcon;

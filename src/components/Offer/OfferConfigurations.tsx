@@ -9,7 +9,6 @@ import {
   Form,
   TableColumnsType,
   Tooltip,
-  Popover,
 } from "antd";
 import {
   AvailabilityValues,
@@ -173,6 +172,9 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
   };
 
   const getTooltipText = () => {
+    if (isBlocked) {
+      return t("blockSendRequest");
+    }
     if (availabilities.length === 0) {
       return t("noAvailability");
     } else if (store.user.profile?.selected_profile !== "CLIENT") {
@@ -311,10 +313,6 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
               </Popconfirm>
             </Space>
           )
-        ) : isBlocked ? (
-          <Popover content={t("blockSendRequest")} title={t("blockade")}>
-            <Button disabled>{t("blockade")}</Button>
-          </Popover>
         ) : (
           <Tooltip title={getTooltipText()}>
             <Button
@@ -331,6 +329,7 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
               }
               loading={isLoading}
               disabled={
+                isBlocked ||
                 availabilities.length === 0 ||
                 store.user.profile?.selected_profile !== "CLIENT"
               }

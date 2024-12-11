@@ -14,7 +14,6 @@
     color: v.$white;
     background-color: v.$blue-medium;
   }
-  
 
   @media (max-width: 1024px) {
     flex-direction: column;
@@ -43,7 +42,7 @@
       width: 95%;
     }
   }
-  
+
   .filters {
     display: flex;
     flex-direction: column;
@@ -51,7 +50,9 @@
     gap: 15px;
     width: 100%;
 
-    .input-field, .ant-select, .ant-select-selector {
+    .input-field,
+    .ant-select,
+    .ant-select-selector {
       width: 100%;
     }
 
@@ -90,27 +91,40 @@
     }
   }
 
+  .follow-caretaker-content {
+    max-width: 80%;
+    margin: auto;
+
+    @media (max-width: 1024px) {
+      max-width: 80%;
+    }
+
+    @media (max-width: 768px) {
+      overflow-y: auto;
+      max-width: 100%;
+    }
+  }
+
   .caretaker-list-item {
     display: flex;
     align-items: center;
   }
 
-    .profile-picture {
-      width: 150px;
-      height: 150px;
+  .profile-picture {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin-right: 20px;
+    background-color: v.$grey-light;
+    color: v.$white;
+
+    img {
+      width: 100%;
+      height: 100%;
       border-radius: 50%;
-      margin-right: 20px;
-      background-color: v.$grey-light;
-      color: v.$white;
-
-      img {
-        width: 100%;
-        height: 100%;
-        border-radius: 50%;
-        border: 3px solid v.$blue-dark;
-      }
+      border: 3px solid v.$blue-dark;
     }
-
+  }
 
   .caretaker-rating {
     display: flex;

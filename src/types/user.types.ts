@@ -44,23 +44,11 @@ export type RelatedUsers = {
   empty: boolean;
 };
 
-export type BlockedUsers = {
-  totalElements: number;
-  totalPages: number;
-  size: number;
-  content: AccountDataDTO[];
-  number: number;
-  sort: SortDTO;
-  first: boolean;
-  last: boolean;
-  numberOfElements: number;
-  pageable: PageableDTO;
-  empty: boolean;
-};
-
 export type UserBlockInfo = {
   isBlocked: boolean;
-  whichUserBlocked:
-    | { name: string; surname: string; email: string }
-    | undefined;
+  whichUserBlocked?: { 
+    name: string;
+    surname: string;
+    email: string;
+  };
 };

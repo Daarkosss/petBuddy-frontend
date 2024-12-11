@@ -21,7 +21,7 @@ import {
   CaretakerRatingsResponse,
   AvailabilityValues,
   RelatedUsers,
-  BlockedUsers,
+  CaretakerBasicsDTO,
   Rating,
   CaretakerRatingDTO,
 } from "../types";
@@ -447,10 +447,10 @@ class API {
     }
   }
 
-  async getFollowedCaretakers(): Promise<AccountDataDTO[] | undefined> {
+  async getFollowedCaretakers(): Promise<CaretakerBasicsDTO[] | undefined> {
     if (store.user.profile?.selected_profile) {
       try {
-        const response = await this.authorizedFetch<AccountDataDTO[]>(
+        const response = await this.authorizedFetch<CaretakerBasicsDTO[]>(
           "GET",
           "api/client/follow",
           undefined,
@@ -908,16 +908,8 @@ class API {
     }
   }
 
-  async getBlockedUsers(): Promise<BlockedUsers | undefined> {
-    const queryParams = new URLSearchParams({
-      page: "0",
-      size: "1000000",
-    });
-
-    return this.authorizedFetch<BlockedUsers>(
-      "GET",
-      `api/user/block?${queryParams}`
-    );
+  async getBlockedUsers(): Promise<AccountDataDTO[] | undefined> {
+    return this.authorizedFetch<AccountDataDTO[]>("GET", "api/user/block");
   }
 
   async blockUser(username: string): Promise<void> {

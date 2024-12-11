@@ -243,7 +243,7 @@ const CareList = () => {
         case "CareEnd":
         case "CreatedTime":
           return (
-            <div className="calendar-wrapper">
+            <div className="calendar-wrapper" key={filterName}>
               <h3>{t(`careSearch.${filterName}`)}</h3>
               <DatePicker
                 maxDate={filterName === "CreatedTime" ? new Date() : undefined}
@@ -466,7 +466,7 @@ const CareList = () => {
           }
         >
           {["ASC", "DESC"].map((sortName, indexAnimals) => (
-            <Select.Option key={indexAnimals} value={sortName}>
+            <Select.Option key={`${sortName}${indexAnimals}`} value={sortName}>
               {t(`careSearch.${sortName}`)}
             </Select.Option>
           ))}
