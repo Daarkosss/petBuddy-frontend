@@ -206,7 +206,8 @@
     "noCaretakers": "There are no caretakers for selected filters",
     "list": "Caretaker list",
     "map": "Caretaker map",
-    "followed": "Followed caretakers"
+    "followed": "Followed caretakers",
+    "noFollowedCaretakers": "You do not follow any caretaker"
   },
 
   "careSearch": {

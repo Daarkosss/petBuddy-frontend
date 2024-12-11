@@ -211,7 +211,8 @@
     "noCaretakers": "Brak opiekunów dla podanych parametrów",
     "list": "Lista opiekunów",
     "map": "Mapa opiekunów",
-    "followed": "Obserwowani opiekunowie"
+    "followed": "Obserwowani opiekunowie",
+    "noFollowedCaretakers": "Nie obserwujesz żadnego opiekuna"
   },
 
   "careSearch": {
