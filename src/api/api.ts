@@ -21,6 +21,7 @@ import {
   CaretakerRatingsResponse,
   AvailabilityValues,
   RelatedUsers,
+  CaretakerBasicsDTO,
 } from "../types";
 import {
   CareDTO,
@@ -449,10 +450,10 @@ class API {
     }
   }
 
-  async getFollowedCaretakers(): Promise<AccountDataDTO[] | undefined> {
+  async getFollowedCaretakers(): Promise<CaretakerBasicsDTO[] | undefined> {
     if (store.user.profile?.selected_profile) {
       try {
-        const response = await this.authorizedFetch<AccountDataDTO[]>(
+        const response = await this.authorizedFetch<CaretakerBasicsDTO[]>(
           "GET",
           "api/client/follow",
           undefined,
