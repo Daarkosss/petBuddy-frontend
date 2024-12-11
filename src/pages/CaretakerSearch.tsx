@@ -16,8 +16,13 @@ const CaretakerList = () => {
   const navigate = useNavigate();
 
   const [caretakers, setCaretakers] = useState<CaretakerBasics[]>([]);
+  const [followedCaretakers, setFollowedCaretakers] = useState<
+    CaretakerBasics[]
+  >([]);
   const [isLoading, setIsLoading] = useState(false);
   const [mapCenter, setMapCenter] = useState<[number, number]>();
+  const [selectedTab, setSelectedTab] = useState<string>("list");
+  const [windowInnerWidth, setWindowInnerWidth] = useState(window.innerWidth);
 
   const [pagingParams, setPagingParams] = useState({
     page: 0,
@@ -31,6 +36,27 @@ const CaretakerList = () => {
     pageSize: 10,
     total: 0,
   });
+
+  const [followedPagination, setFollowedPagination] = useState({
+    current: 1,
+    pageSize: 10,
+  });
+
+  const handleOnFollowedPageChange = (page: number, pageSize: number) => {
+    setFollowedPagination({
+      current: page,
+      pageSize: pageSize,
+    });
+  };
+
+  const getFollowedCaretakers = async () => {
+    const response = await api.getFollowedCaretakers();
+    if (response) {
+      setFollowedCaretakers(
+        response.map((caretaker) => new CaretakerBasics(caretaker))
+      );
+    }
+  };
 
   const loadFiltersFromSession = () => {
     const sessionFilters = sessionStorage.getItem("caretakerFilters");
@@ -90,10 +116,22 @@ const CaretakerList = () => {
 
   useEffect(() => {
     store.selectedMenuOption = "caretakerSearch";
+
+    const handleResize = () => {
+      setWindowInnerWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
   useEffect(() => {
     fetchCaretakers();
+    if (store.user.profile?.selected_profile === "CLIENT") {
+      getFollowedCaretakers();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagingParams]);
 
@@ -240,58 +278,165 @@ const CaretakerList = () => {
     },
   ];
 
+  const columnsFollowedCaretakers: ColumnsType<CaretakerBasics> = [
+    {
+      title: t("caretaker"),
+      key: "caretaker",
+      render: (_: unknown, record: CaretakerBasics) => (
+        <div className="caretaker-list-item">
+          <div className="profile-picture">
+            <img
+              src={
+                record.accountData.profilePicture?.url ||
+                "/images/default-avatar.png"
+              }
+              alt="avatar"
+            />
+          </div>
+          <div>
+            <h4>
+              {record.accountData.name} {record.accountData.surname}
+            </h4>
+            <p>
+              {record.address.city}, {record.address.voivodeship.toString()}
+            </p>
+            <Button
+              className="view-details-button"
+              type="primary"
+              onClick={() => {
+                if (
+                  record.accountData.email === store.user.profile?.email &&
+                  store.user.profile?.selected_profile === "CLIENT"
+                ) {
+                  navigate("/profile-client");
+                } else {
+                  navigate(`/profile-caretaker/${record.accountData.email}`);
+                }
+              }}
+            >
+              {t("viewDetails")}
+            </Button>
+          </div>
+        </div>
+      ),
+    },
+    {
+      title: t("rating"),
+      dataIndex: "avgRating",
+      key: "avgRating",
+      render: (rating: number | null, record: CaretakerBasics) => (
+        <div className="caretaker-rating">
+          {rating ? (
+            <>
+              <div className="caretaker-rating-stars">
+                <Rate disabled allowHalf value={rating} />
+                <span>({record.numberOfRatings})</span>
+              </div>
+              <span className="caretaker-rating-value">
+                {rating.toFixed(2)}
+              </span>
+            </>
+          ) : (
+            <>
+              <Rate disabled allowHalf value={0} />
+              <p>{t("noRatings")}</p>
+            </>
+          )}
+        </div>
+      ),
+    },
+  ];
+
+  const items = [
+    {
+      key: "list",
+      label: t("caretakerSearch.list"),
+      children: (
+        <div className="caretaker-content">
+          <Table
+            loading={isLoading}
+            columns={columns}
+            locale={{
+              emptyText: t("caretakerSearch.noCaretakers"),
+            }}
+            dataSource={caretakers}
+            rowKey={(record) => record.accountData.email}
+            pagination={{
+              current: pagination.current,
+              pageSize: pagination.pageSize,
+              total: pagination.total,
+              showSizeChanger: true,
+              locale: {
+                items_per_page: t("perPage"),
+              },
+            }}
+            scroll={{ x: "max-content" }}
+            onChange={handleTableChange}
+          />
+        </div>
+      ),
+    },
+    {
+      key: "map",
+      label: t("caretakerSearch.map"),
+      children: (
+        <MapWithCaretakers caretakers={caretakers} center={mapCenter} />
+      ),
+    },
+  ];
+
+  if (store.user.profile?.selected_profile === "CLIENT") {
+    items.push({
+      key: "followed",
+      label: t("caretakerSearch.followed"),
+      children: (
+        <div className="follow-caretaker-content">
+          <Table
+            loading={isLoading}
+            columns={columnsFollowedCaretakers}
+            locale={{
+              emptyText: t("caretakerSearch.noFollowedCaretakers"),
+            }}
+            dataSource={followedCaretakers}
+            rowKey={(record) => record.accountData.email}
+            pagination={{
+              current: followedPagination.current,
+              pageSize: followedPagination.pageSize,
+              showSizeChanger: true,
+              locale: {
+                items_per_page: t("perPage"),
+              },
+              onChange: handleOnFollowedPageChange,
+            }}
+            scroll={{ x: "max-content" }}
+            onChange={handleTableChange}
+          />
+        </div>
+      ),
+    });
+  }
+
   return (
     <div className="caretaker-container">
-      <CaretakerFilters
-        filters={filters}
-        animalFilters={animalFilters}
-        onFiltersChange={setFilters}
-        onAnimalFiltersChange={updateAnimalFilters}
-        onAnimalTypesChange={handleAnimalTypesChange}
-        onSortChange={handleSortChange}
-        onSearch={handleSearch}
-      />
+      {selectedTab !== "followed" && (
+        <CaretakerFilters
+          filters={filters}
+          animalFilters={animalFilters}
+          onFiltersChange={setFilters}
+          onAnimalFiltersChange={updateAnimalFilters}
+          onAnimalTypesChange={handleAnimalTypesChange}
+          onSortChange={handleSortChange}
+          onSearch={handleSearch}
+        />
+      )}
       <Tabs
         style={{ width: "100%" }}
-        centered
+        centered={windowInnerWidth > 500 || items.length <= 2}
         size="small"
-        items={[
-          {
-            key: "list",
-            label: t("caretakerSearch.list"),
-            children: (
-              <div className="caretaker-content">
-                <Table
-                  loading={isLoading}
-                  columns={columns}
-                  locale={{
-                    emptyText: t("caretakerSearch.noCaretakers"),
-                  }}
-                  dataSource={caretakers}
-                  rowKey={(record) => record.accountData.email}
-                  pagination={{
-                    current: pagination.current,
-                    pageSize: pagination.pageSize,
-                    total: pagination.total,
-                    showSizeChanger: true,
-                    locale: {
-                      items_per_page: t("perPage"),
-                    },
-                  }}
-                  scroll={{ x: "max-content" }}
-                  onChange={handleTableChange}
-                />
-              </div>
-            ),
-          },
-          {
-            key: "map",
-            label: t("caretakerSearch.map"),
-            children: (
-              <MapWithCaretakers caretakers={caretakers} center={mapCenter} />
-            ),
-          },
-        ]}
+        onChange={(tabKey) => {
+          setSelectedTab(tabKey);
+        }}
+        items={items}
       />
     </div>
   );

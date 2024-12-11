@@ -52,18 +52,18 @@ const CareList = () => {
   });
 
   const onEmailsChanged = (values: string[]) => {
-    setFilters({ 
-      ...filters, 
-      emails: values 
+    setFilters({
+      ...filters,
+      emails: values,
     });
   };
 
   const onDailyPriceChanged = (value: string, filterName: string) => {
     const regex = /^\d{0,5}(\.\d{0,2})?$/;
     if (value === "." || regex.test(value)) {
-      setFilters({ 
+      setFilters({
         ...filters,
-        [filterName]: value ?? 0
+        [filterName]: value ?? 0,
       });
     }
   };
@@ -75,9 +75,9 @@ const CareList = () => {
     if (value.length > 1 && value.charAt(0) === "0") {
       value = value.slice(1);
     }
-    setFilters({ 
+    setFilters({
       ...filters,
-      [filterName]: value
+      [filterName]: value,
     });
   };
 
@@ -238,18 +238,21 @@ const CareList = () => {
         case "CareEnd":
         case "CreatedTime":
           return (
-            <div className="calendar-wrapper">
+            <div className="calendar-wrapper" key={filterName}>
               <h3>{t(`careSearch.${filterName}`)}</h3>
               <DatePicker
                 maxDate={filterName === "CreatedTime" ? new Date() : undefined}
                 key={filterName}
-                onChange={(dates) => onDateChange(dates, `min${filterName}`, `max${filterName}`)}
-                value={[filters[`min${filterName}`] || "", filters[`max${filterName}`] || ""]}
+                onChange={(dates) =>
+                  onDateChange(dates, `min${filterName}`, `max${filterName}`)
+                }
+                value={[
+                  filters[`min${filterName}`] || "",
+                  filters[`max${filterName}`] || "",
+                ]}
                 locale={i18n.language === "pl" ? calendar_pl : calendar_en}
                 range
-                plugins={[
-                  highlightWeekends(),
-                ]}
+                plugins={[highlightWeekends()]}
                 render={(value, openCalendar) => (
                   <Tooltip
                     className="care-list-date"
@@ -287,13 +290,15 @@ const CareList = () => {
                 const newValues = [...filters[filterName], value];
                 setFilters({
                   ...filters,
-                  [filterName]: newValues
-                 });
+                  [filterName]: newValues,
+                });
               }}
               onDeselect={(value: string) => {
                 setFilters({
                   ...filters,
-                  [filterName]: filters[filterName].filter((val) => val !== value),
+                  [filterName]: filters[filterName].filter(
+                    (val) => val !== value
+                  ),
                 });
               }}
               onClear={() => {
@@ -328,7 +333,9 @@ const CareList = () => {
               onDeselect={(value: string) =>
                 setFilters({
                   ...filters,
-                  [filterName]: filters[filterName].filter((val) => val !== value),
+                  [filterName]: filters[filterName].filter(
+                    (val) => val !== value
+                  ),
                 })
               }
               onClear={() =>
@@ -454,7 +461,7 @@ const CareList = () => {
           }
         >
           {["ASC", "DESC"].map((sortName, indexAnimals) => (
-            <Select.Option key={indexAnimals} value={sortName}>
+            <Select.Option key={`${sortName}${indexAnimals}`} value={sortName}>
               {t(`careSearch.${sortName}`)}
             </Select.Option>
           ))}
