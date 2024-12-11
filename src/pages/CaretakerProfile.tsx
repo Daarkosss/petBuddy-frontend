@@ -179,10 +179,9 @@ const CaretakerProfile: React.FC<CaretakerProfileProps> = observer(
       return () => mediaQuery.removeEventListener("change", handleChange);
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [triggerReload]);
+    }, []);
 
     useEffect(() => {
-      checkIfFollowed();
       getCaretakerRatings();
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [profileData]);
