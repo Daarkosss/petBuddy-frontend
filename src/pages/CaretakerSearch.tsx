@@ -96,7 +96,6 @@ const CaretakerList = () => {
     try {
       await assignFiltersToAnimals();
       const data = await api.getCaretakers(pagingParams, filters);
-      console.log(data);
       setCaretakers(
         data.caretakers.content.map(
           (caretaker) => new CaretakerBasics(caretaker)
