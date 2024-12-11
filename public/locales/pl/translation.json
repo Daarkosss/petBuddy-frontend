@@ -187,7 +187,7 @@
     "noOffersToShow": "Brak ofert do wyświetlenia",
     "addOffer": "Dodaj ofertę",
     "ratings": "Oceny",
-    "rate": "Oceń- możesz ocenić opiekuna jedynie po pomyślnie zakończonej opiece",
+    "rate": "Oceń- możesz ocenić opiekuna jedynie po potwierdzonym rozpoczęciu opieki. Kiknij aby przejść do swojej historii opiek",
     "noRatingsToShow": "Brak ocen do wyświetlenia",
     "page": "strona",
     "noCaretakerProfile": "Nie posiadasz jeszcze profilu opiekuna",
@@ -309,7 +309,8 @@
     "blockUser": "Wystapił błąd przy próbie zablokowania użytkownika",
     "unblockUser": "Wystapił błąd przy próbie odblokowania użytkownika",
     "followCaretaker": "Wystąpił błąd przy próbie zaobserwowania opiekuna",
-    "unfollowCaretaker": "Wystąpił błąd przy próbie zakończenia obserwowania opiekuna"
+    "unfollowCaretaker": "Wystąpił błąd przy próbie zakończenia obserwowania opiekuna",
+    "rate": "Wystąpił błąd podczas oceniania opiekuna"
   },
 
   "success": {
@@ -331,7 +332,8 @@
     "blockUser": "Użytkownik został pomyślnie zablokowany",
     "unblockUser": "Użytkownik został pomyślnie odblokowany",
     "followCaretaker": "Opiekun został pomyślnie zaobserwowany",
-    "unfollowCaretaker": "Opiekun pomyślnie przestał być obserwowany"
+    "unfollowCaretaker": "Opiekun pomyślnie przestał być obserwowany",
+    "rate": "Opiekun został pomyślnie oceniony"
   },
 
   "dailyPrice": "Cena za dzień",
@@ -425,7 +427,13 @@
     "careStartsTomorrow": "Opieka rozpoczyna się już jutro.",
     "rememberToConfirmBeginOfCare": "Nie zapomnij potwierdzić rozpoczęcia opieki. Możesz to zrobić tylko jutro.",
     "caretakerShouldConfirmBeginOfCare": "Opiekun powinien jutro potwierdzić rozpoczęcie opieki.",
-    "ifCaretakerDoesntConfirm": "Jezeli nie potwierdzisz rozpoczęcia opieki, zostanie ona anulowana."
+    "ifCaretakerDoesntConfirm": "Jezeli nie potwierdzisz rozpoczęcia opieki, zostanie ona anulowana.",
+    "rate": "Oceń opiekuna",
+    "rateNotAllowed": "Nie można ocenić opiekuna",
+    "rateNotAllowedInfo": "Opiekuna będzie można ocenić dopiero po potwierdzeniu przez niego rozpoczęcia opieki",
+    "writeAComment": "Napisz komentarz",
+    "submit": "Prześlij ocenę",
+    "setRating": "Ustaw ocenę"
   },
 
   "careReservation": {
