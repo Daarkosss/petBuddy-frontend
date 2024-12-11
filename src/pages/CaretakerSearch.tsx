@@ -5,11 +5,7 @@ import { TablePaginationConfig, ColumnsType } from "antd/es/table/interface";
 import { api } from "../api/api";
 import { useTranslation } from "react-i18next";
 import { CaretakerBasics } from "../models/Caretaker";
-import {
-  AccountDataDTO,
-  CaretakerSearchFilters,
-  OfferConfiguration,
-} from "../types";
+import { CaretakerSearchFilters, OfferConfiguration } from "../types";
 import CaretakerFilters from "../components/CaretakerFilters";
 import store from "../store/RootStore";
 import { toast } from "react-toastify";
@@ -21,7 +17,7 @@ const CaretakerList = () => {
 
   const [caretakers, setCaretakers] = useState<CaretakerBasics[]>([]);
   const [followedCaretakers, setFollowedCaretakers] = useState<
-    AccountDataDTO[]
+    CaretakerBasics[]
   >([]);
   const [isLoading, setIsLoading] = useState(false);
   const [mapCenter, setMapCenter] = useState<[number, number]>();
@@ -41,10 +37,24 @@ const CaretakerList = () => {
     total: 0,
   });
 
+  const [followedPagination, setFollowedPagination] = useState({
+    current: 1,
+    pageSize: 10,
+  });
+
+  const handleOnFollowedPageChange = (page: number, pageSize: number) => {
+    setFollowedPagination({
+      current: page,
+      pageSize: pageSize,
+    });
+  };
+
   const getFollowedCaretakers = async () => {
     const response = await api.getFollowedCaretakers();
     if (response) {
-      setFollowedCaretakers(response);
+      setFollowedCaretakers(
+        response.map((caretaker) => new CaretakerBasics(caretaker))
+      );
     }
   };
 
@@ -86,6 +96,7 @@ const CaretakerList = () => {
     try {
       await assignFiltersToAnimals();
       const data = await api.getCaretakers(pagingParams, filters);
+      console.log(data);
       setCaretakers(
         data.caretakers.content.map(
           (caretaker) => new CaretakerBasics(caretaker)
@@ -268,39 +279,70 @@ const CaretakerList = () => {
     },
   ];
 
-  const columnsFollowedCaretakers: ColumnsType<AccountDataDTO> = [
+  const columnsFollowedCaretakers: ColumnsType<CaretakerBasics> = [
     {
       title: t("caretaker"),
       key: "caretaker",
-      render: (_: unknown, record: AccountDataDTO) => (
+      render: (_: unknown, record: CaretakerBasics) => (
         <div className="caretaker-list-item">
           <div className="profile-picture">
             <img
-              src={record.profilePicture?.url || "/images/default-avatar.png"}
+              src={
+                record.accountData.profilePicture?.url ||
+                "/images/default-avatar.png"
+              }
               alt="avatar"
             />
           </div>
           <div>
             <h4>
-              {record.name} {record.surname}
+              {record.accountData.name} {record.accountData.surname}
             </h4>
+            <p>
+              {record.address.city}, {record.address.voivodeship.toString()}
+            </p>
             <Button
               className="view-details-button"
               type="primary"
               onClick={() => {
                 if (
-                  record.email === store.user.profile?.email &&
+                  record.accountData.email === store.user.profile?.email &&
                   store.user.profile?.selected_profile === "CLIENT"
                 ) {
                   navigate("/profile-client");
                 } else {
-                  navigate(`/profile-caretaker/${record.email}`);
+                  navigate(`/profile-caretaker/${record.accountData.email}`);
                 }
               }}
             >
               {t("viewDetails")}
             </Button>
           </div>
+        </div>
+      ),
+    },
+    {
+      title: t("rating"),
+      dataIndex: "avgRating",
+      key: "avgRating",
+      render: (rating: number | null, record: CaretakerBasics) => (
+        <div className="caretaker-rating">
+          {rating ? (
+            <>
+              <div className="caretaker-rating-stars">
+                <Rate disabled allowHalf value={rating} />
+                <span>({record.numberOfRatings})</span>
+              </div>
+              <span className="caretaker-rating-value">
+                {rating.toFixed(2)}
+              </span>
+            </>
+          ) : (
+            <>
+              <Rate disabled allowHalf value={0} />
+              <p>{t("noRatings")}</p>
+            </>
+          )}
         </div>
       ),
     },
@@ -354,10 +396,19 @@ const CaretakerList = () => {
             loading={isLoading}
             columns={columnsFollowedCaretakers}
             locale={{
-              emptyText: t("caretakerSearch.noCaretakers"),
+              emptyText: t("caretakerSearch.noFollowedCaretakers"),
             }}
             dataSource={followedCaretakers}
-            rowKey={(record) => record.email}
+            rowKey={(record) => record.accountData.email}
+            pagination={{
+              current: followedPagination.current,
+              pageSize: followedPagination.pageSize,
+              showSizeChanger: true,
+              locale: {
+                items_per_page: t("perPage"),
+              },
+              onChange: handleOnFollowedPageChange,
+            }}
             scroll={{ x: "max-content" }}
             onChange={handleTableChange}
           />
