@@ -186,7 +186,8 @@
     "noRatingsToShow": "There are no ratings to show",
     "page": "page",
     "noCaretakerProfile": "Currently you do not have caretaker profile",
-    "noDescription": "Description was not provided"
+    "noDescription": "Description was not provided",
+    "viewFinancialStats": "View your financial statistics"
   },
 
   "sort": {
