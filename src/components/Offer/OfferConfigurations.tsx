@@ -313,7 +313,7 @@ const OfferConfigurations: React.FC<ConfigurationsProps> = ({
               </Popconfirm>
             </Space>
           )
-        ) :(
+        ) : (
           <Tooltip title={getTooltipText()}>
             <Button
               type="primary"

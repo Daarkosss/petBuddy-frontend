@@ -8,6 +8,8 @@ import {
   Select,
   Input,
   Tooltip,
+  Popover,
+  Modal,
 } from "antd";
 import { api } from "../api/api";
 import { useTranslation } from "react-i18next";
@@ -24,6 +26,7 @@ import {
   calendar_en,
   calendar_pl,
 } from "../components/Calendar/calendarTranslations";
+import RateCaretakerBox from "../components/RateCaretakerBox";
 
 export interface HandleFiltersChangeProps {
   filterName: string;
@@ -50,6 +53,8 @@ const CareList = () => {
     maxDailyPrice: undefined,
     emails: [],
   });
+  const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
+  const [careToRateIndex, setCareToRateIndex] = useState<number | null>(null);
 
   const onEmailsChanged = (values: string[]) => {
     setFilters({
@@ -479,6 +484,18 @@ const CareList = () => {
         </div>
       </div>
       <div className="cares-list-container">
+        <Modal
+          title={t("care.rate")}
+          open={isOfferModalOpen}
+          onCancel={() => setIsOfferModalOpen(false)}
+          footer={null}
+          maskClosable={false}
+        >
+          <RateCaretakerBox
+            onSubmit={() => setIsOfferModalOpen(false)}
+            careId={careToRateIndex ?? undefined}
+          />
+        </Modal>
         <Spin spinning={isLoading} fullscreen />
         <h1 className="cares-title">{t("care.yourCares")}</h1>
         {cares.length > 0 ? (
@@ -501,15 +518,47 @@ const CareList = () => {
                 <List.Item
                   key={care.id}
                   className="item"
-                  actions={[
-                    <Button
-                      className="view-details-button"
-                      type="primary"
-                      onClick={() => navigate(`/care/${care.id}`)}
-                    >
-                      {t("viewDetails")}
-                    </Button>,
-                  ]}
+                  actions={
+                    care.caretaker.email === store.user.profile?.email
+                      ? [
+                          <Button
+                            className="view-details-button"
+                            type="primary"
+                            onClick={() => navigate(`/care/${care.id}`)}
+                          >
+                            {t("viewDetails")}
+                          </Button>,
+                        ]
+                      : [
+                          <Button
+                            className="view-details-button"
+                            type="primary"
+                            onClick={() => navigate(`/care/${care.id}`)}
+                          >
+                            {t("viewDetails")}
+                          </Button>,
+
+                          care.caretakerStatus !== "CONFIRMED" ? (
+                            <Popover
+                              content={t("care.rateNotAllowedInfo")}
+                              title={t("care.rateNotAllowed")}
+                            >
+                              <Button disabled>{t("care.rate")}</Button>
+                            </Popover>
+                          ) : (
+                            <Button
+                              className="view-details-button"
+                              type="primary"
+                              onClick={() => {
+                                setCareToRateIndex(care.id);
+                                setIsOfferModalOpen(true);
+                              }}
+                            >
+                              {t("care.rate")}
+                            </Button>
+                          ),
+                        ]
+                  }
                   extra={
                     <img
                       className="animal-image"
