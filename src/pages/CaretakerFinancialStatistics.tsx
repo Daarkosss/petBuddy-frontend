@@ -356,7 +356,7 @@ const CaretakerFinancialStatistics = () => {
             </div>
           </div>
         ) : (
-          <h2 className="no-revenues">{t("noRevenueData")}</h2>
+          <h2 className="no-cares">{t("noRevenueData")}</h2>
         )}
       </div>
     </div>
