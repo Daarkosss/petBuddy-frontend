@@ -445,7 +445,7 @@ const CaretakerProfile: React.FC<CaretakerProfileProps> = observer(
                       type="primary"
                       className="profile-action-button"
                       onClick={() => {
-                        // navigate("/caretaker/form");
+                        navigate("/caretaker-monthly-revenue");
                       }}
                     >
                       {t("profilePage.viewFinancialStats")}

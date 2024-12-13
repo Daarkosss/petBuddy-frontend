@@ -19,6 +19,7 @@ import TermsAndConditions from "./pages/TermsAndConditions";
 import ChatBox from "./components/ChatBox";
 import ChatMinimized from "./components/ChatMinimized";
 import { useTranslation } from "react-i18next";
+import CaretakerFinancialStatistics from "./pages/CaretakerFinancialStatistics";
 
 const { Content } = Layout;
 
@@ -119,9 +120,7 @@ const App = observer(() => {
   if (!store.isStarting) {
     return (
       <Layout>
-        <Header
-          handleOpenChat={handleSetOpenChat}
-        />
+        <Header handleOpenChat={handleSetOpenChat} />
         {openChat.shouldOpenMaximizedChat && (
           <ChatBox
             recipientEmail={openChat.recipientEmail!}
@@ -204,9 +203,7 @@ const App = observer(() => {
                   <Route
                     path="/profile-caretaker/:caretakerEmail"
                     element={
-                      <CaretakerProfile
-                        handleSetOpenChat={handleSetOpenChat}
-                      />
+                      <CaretakerProfile handleSetOpenChat={handleSetOpenChat} />
                     }
                   />
                   <Route
@@ -215,6 +212,12 @@ const App = observer(() => {
                       <ClientProfile handleSetOpenChat={handleSetOpenChat} />
                     }
                   />
+                  {store.user.profile.selected_profile === "CARETAKER" && (
+                    <Route
+                      path="/caretaker-monthly-revenue"
+                      element={<CaretakerFinancialStatistics />}
+                    />
+                  )}
                   <Route
                     path="/terms-and-conditions"
                     element={<TermsAndConditions />}
