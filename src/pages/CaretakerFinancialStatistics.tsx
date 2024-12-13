@@ -13,7 +13,6 @@ import {
   calendar_pl,
 } from "../components/Calendar/calendarTranslations";
 import { FinancialFilters } from "../types";
-import "../scss/components/_caretakerFinancialStaistics.scss";
 import {
   Chart as ChartJS,
   BarElement,
@@ -22,7 +21,7 @@ import {
   CategoryScale,
   LinearScale,
 } from "chart.js/auto";
-import { Bar, Line } from "react-chartjs-2";
+import { Bar } from "react-chartjs-2";
 
 ChartJS.register(BarElement, Tt, Legend, CategoryScale, LinearScale);
 export interface HandleFiltersChangeProps {
@@ -186,7 +185,7 @@ const CaretakerFinancialStatistics = () => {
                 plugins={[highlightWeekends()]}
                 render={(value, openCalendar) => (
                   <Tooltip
-                    className="care-list-date"
+                    className="revenue-date"
                     trigger={["focus"]}
                     title={t(`careSearch.${filterName}`)}
                   >
@@ -212,7 +211,7 @@ const CaretakerFinancialStatistics = () => {
           return (
             <Select
               key={`at${index}`}
-              className="cares-filters"
+              className="revenues-filters"
               mode="multiple"
               allowClear
               placeholder={t(`careSearch.${filterName}`)}
@@ -257,7 +256,7 @@ const CaretakerFinancialStatistics = () => {
               <Input
                 key={`dp${index}`}
                 addonAfter={`zł ${filterName.substring(0, 3)}`}
-                className="care-list-daily-price"
+                className="revenue-daily-price"
                 placeholder={t(`careSearch.${filterName}`)}
                 value={filters[filterName] ?? undefined}
                 onChange={(e) =>
@@ -270,7 +269,7 @@ const CaretakerFinancialStatistics = () => {
 
         case "emails":
           return (
-            <div key={`emd${index}`} className="care-list-emails">
+            <div key={`emd${index}`} className="revenue-emails">
               <Tooltip
                 key="emT"
                 trigger={["focus"]}
@@ -306,8 +305,8 @@ const CaretakerFinancialStatistics = () => {
     });
   };
   return (
-    <div className="care-list-main-container">
-      <div className="care-list-sidebar">
+    <div className="revenue-main-container">
+      <div className="revenue-sidebar">
         <h2>{t("filters")}</h2>
         <div className="filters">
           {renderMonthlyRevenueFilters()}
@@ -320,9 +319,9 @@ const CaretakerFinancialStatistics = () => {
           </Button>
         </div>
       </div>
-      <div className="cares-list-container">
+      <div className="revenue-container">
         <Spin spinning={isLoading} fullscreen />
-        <h1 className="cares-title">{t("yourRevenue")}</h1>
+        <h1 className="revenue-title">{t("yourRevenue")}</h1>
         {Object.keys(monthlyRevenue).length > 0 ? (
           <div className="revenue-plot-sum-container">
             <div className="revenue-plot-background">
@@ -358,7 +357,7 @@ const CaretakerFinancialStatistics = () => {
             </div>
           </div>
         ) : (
-          <h2 className="no-cares">{t("noRevenueData")}</h2>
+          <h2 className="no-revenues">{t("noRevenueData")}</h2>
         )}
       </div>
     </div>
