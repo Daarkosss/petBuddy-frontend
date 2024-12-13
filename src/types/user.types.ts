@@ -24,6 +24,10 @@ export type UploadFileWithBlob = {
   blob: string;
 };
 
+export type MonthlyRevenue = {
+  monthlyRevenue: { [key: string]: number };
+};
+
 export type RelatedUsers = {
   content: [
     {
@@ -46,7 +50,7 @@ export type RelatedUsers = {
 
 export type UserBlockInfo = {
   isBlocked: boolean;
-  whichUserBlocked?: { 
+  whichUserBlocked?: {
     name: string;
     surname: string;
     email: string;

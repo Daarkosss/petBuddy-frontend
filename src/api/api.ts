@@ -24,6 +24,8 @@ import {
   CaretakerBasicsDTO,
   Rating,
   CaretakerRatingDTO,
+  MonthlyRevenue,
+  FinancialFilters,
 } from "../types";
 import {
   CareDTO,
@@ -745,6 +747,52 @@ class API {
     stringifiedArray += array[array.length - 1];
     return stringifiedArray;
   };
+
+  async getMonthlyRevenue(
+    filters: FinancialFilters
+  ): Promise<MonthlyRevenue | undefined> {
+    if (store.user.profile?.selected_profile) {
+      const queryParams = new URLSearchParams();
+
+      if (filters.animalTypes.length > 0) {
+        queryParams.append(
+          "animalTypes",
+          this.convertArrayToQueryParam(filters.animalTypes)
+        );
+      }
+
+      if (filters.emails.length > 0) {
+        queryParams.append(
+          "emails",
+          this.convertArrayToQueryParam(filters.emails)
+        );
+      }
+
+      if (filters.minCareStart !== "" && filters.minCareStart !== undefined) {
+        queryParams.append("minCareStart", filters.minCareStart!);
+      }
+
+      if (filters.maxCareStart !== "" && filters.maxCareStart !== undefined) {
+        queryParams.append("maxCareStart", filters.maxCareStart!);
+      }
+
+      if (filters.minDailyPrice !== undefined) {
+        queryParams.append("minDailyPrice", filters.minDailyPrice!.toString());
+      }
+      if (filters.maxDailyPrice !== undefined) {
+        queryParams.append("maxDailyPrice", filters.maxDailyPrice!.toString());
+      }
+
+      const queryString = queryParams.toString();
+
+      return this.authorizedFetch<MonthlyRevenue>(
+        "GET",
+        `api/care/monthly-revenue?${queryString}`,
+        undefined,
+        { "Accept-Role": store.user.profile.selected_profile }
+      );
+    }
+  }
 
   async getCares(
     pagingParams: PagingParams,
