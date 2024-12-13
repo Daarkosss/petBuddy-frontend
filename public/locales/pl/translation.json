@@ -280,6 +280,11 @@
   "aboutUs": "O nas",
   "profile": "Profil",
 
+  "yourRevenue": "Twój Przychód",
+  "revenue": "Przychód",
+  "noRevenueData": "Brak danych dotyczących Twojego przychodu",
+  "revenueSum": "Przychód wyniósł łacznie:",
+
   "date": "Data",
   "selectedDates": "Wybrane daty",
   "availableDates": "Dostępne terminy",

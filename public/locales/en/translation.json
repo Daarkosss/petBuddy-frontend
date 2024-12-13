@@ -275,6 +275,11 @@
   "aboutUs": "About Us",
   "profile": "Profile",
 
+  "yourRevenue": "Your revenue",
+  "revenue": "Revenue",
+  "noRevenueData": "No revenue data",
+  "revenueSum": "A total of",
+
   "date": "Date",
   "selectedDates": "Selected dates",
   "availableDates": "Available dates",
