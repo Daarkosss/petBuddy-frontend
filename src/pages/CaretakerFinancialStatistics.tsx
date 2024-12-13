@@ -84,6 +84,7 @@ const CaretakerFinancialStatistics = () => {
 
   useEffect(() => {
     fetchMonthlyRevenue();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language]);
 
   const fetchMonthlyRevenue = async () => {
@@ -133,7 +134,6 @@ const CaretakerFinancialStatistics = () => {
     secondFilterName: string
   ) => {
     if (dates.length === 1) {
-      console.log(dates.toString());
       setFilters({
         ...filters,
         minCareStart: dates[0].toString(),
@@ -157,7 +157,6 @@ const CaretakerFinancialStatistics = () => {
   };
 
   useEffect(() => {
-    console.log(filters);
     const dates = [];
     if (filters.minCareStart) dates.push(new Date(filters.minCareStart));
     if (filters.maxCareStart) dates.push(new Date(filters.maxCareStart));
