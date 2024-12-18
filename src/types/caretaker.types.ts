@@ -16,6 +16,15 @@ export type CaretakerRatingDTO = {
   comment: string;
 };
 
+export type FinancialFilters = {
+  animalTypes: string[];
+  minCareStart?: string;
+  maxCareStart?: string;
+  minDailyPrice?: number;
+  maxDailyPrice?: number;
+  emails: string[];
+};
+
 export type CaretakerRatingsResponse = {
   totalPages: number;
   totalElements: number;

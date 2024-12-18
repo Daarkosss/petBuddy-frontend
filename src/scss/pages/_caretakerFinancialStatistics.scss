@@ -1,0 +1,135 @@
+@use "../helpers/variables" as v;
+
+.revenue-plot-sum-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  gap: 15px;
+
+  .revenue-plot-background {
+    margin: auto;
+    background-color: white;
+    border-radius: 4px;
+    position: relative;
+    width: 90%;
+    height: 500px;
+  }
+
+  .revenue-sum {
+    font-size: large;
+    color: white;
+  }
+}
+
+.revenue-main-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    justify-content: start;
+  }
+
+  .revenue-sidebar {
+    margin-left: 10px;
+    margin-top: 99px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    width: 400px;
+    height: max-content;
+    padding: 20px;
+    border: 1px solid v.$grey-light;
+    background-color: v.$white;
+    border-radius: 10px;
+
+    @media (max-width: 1024px) {
+      margin: auto;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      width: 400px;
+    }
+
+    @media (max-width: 480px) {
+      margin-top: 10px;
+      margin-bottom: 10px;
+      width: 95%;
+    }
+  }
+
+  .filters {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+
+    .input-field,
+    .ant-select,
+    .ant-select-selector {
+      width: 100%;
+    }
+
+    .revenue-emails {
+      width: 100%;
+    }
+
+    .calendar-wrapper {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+
+      .rmdp-container {
+        width: 100%;
+      }
+    }
+
+    h3 {
+      font-size: 1.3rem;
+      text-align: center;
+    }
+  }
+
+  .revenue-container {
+    width: 100%;
+    margin: 3vh;
+    gap: 3vh;
+
+    h1 {
+      color: v.$white;
+    }
+
+    @media (max-width: 1024px) {
+      margin: 0;
+    }
+
+    .no-revenues {
+      text-align: center;
+      color: v.$blue-very-light;
+    }
+  }
+}
+
+.revenues-filters {
+  min-width: 200px;
+}
+
+.ant-input-group-addon {
+  color: v.$white !important;
+  background-color: v.$blue-medium !important;
+}
+
+.revenue-title {
+  text-align: center;
+  margin-bottom: 24px;
+  color: #333;
+}

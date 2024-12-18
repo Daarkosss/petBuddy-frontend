@@ -186,7 +186,8 @@
     "noRatingsToShow": "There are no ratings to show",
     "page": "page",
     "noCaretakerProfile": "Currently you do not have caretaker profile",
-    "noDescription": "Description was not provided"
+    "noDescription": "Description was not provided",
+    "viewFinancialStats": "View your financial statistics"
   },
 
   "sort": {
@@ -273,6 +274,11 @@
   "searchCaretakers": "Search caretakers",
   "aboutUs": "About Us",
   "profile": "Profile",
+
+  "yourRevenue": "Your revenue",
+  "revenue": "Revenue",
+  "noRevenueData": "No revenue data",
+  "revenueSum": "A total of",
 
   "date": "Date",
   "selectedDates": "Selected dates",

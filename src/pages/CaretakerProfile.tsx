@@ -439,6 +439,19 @@ const CaretakerProfile: React.FC<CaretakerProfileProps> = observer(
               </div>
               <div>
                 <h2>{t("profilePage.userCaretakerProfile")}</h2>
+                {isMyProfile === true && (
+                  <div>
+                    <Button
+                      type="primary"
+                      className="profile-action-button"
+                      onClick={() => {
+                        navigate("/caretaker-monthly-revenue");
+                      }}
+                    >
+                      {t("profilePage.viewFinancialStats")}
+                    </Button>
+                  </div>
+                )}
                 <RoundedLine
                   width={"100%"}
                   height={"2px"}

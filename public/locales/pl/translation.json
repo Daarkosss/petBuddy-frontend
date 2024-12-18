@@ -191,7 +191,8 @@
     "noRatingsToShow": "Brak ocen do wyświetlenia",
     "page": "strona",
     "noCaretakerProfile": "Nie posiadasz jeszcze profilu opiekuna",
-    "noDescription": "Brak opisu"
+    "noDescription": "Brak opisu",
+    "viewFinancialStats": "Zobacz swoje statystyki finansowe"
   },
 
   "sort": {
@@ -278,6 +279,11 @@
   "searchCaretakers": "Wyszukaj opiekunów",
   "aboutUs": "O nas",
   "profile": "Profil",
+
+  "yourRevenue": "Twój Przychód",
+  "revenue": "Przychód",
+  "noRevenueData": "Brak danych dotyczących Twojego przychodu",
+  "revenueSum": "Przychód wyniósł łacznie:",
 
   "date": "Data",
   "selectedDates": "Wybrane daty",
